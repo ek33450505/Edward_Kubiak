@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/refactored-spoon/static/css/main.9916bcce.css",
+    "main.js": "/refactored-spoon/static/js/main.f7e9dd36.js",
+    "static/js/511.6c464508.chunk.js": "/refactored-spoon/static/js/511.6c464508.chunk.js",
+    "static/media/runBuddy.png": "/refactored-spoon/static/media/runBuddy.aad6041739da1f06b288.png",
+    "static/media/recipeSearch.png": "/refactored-spoon/static/media/recipeSearch.d26e4879477c4a11f25e.png",
+    "static/media/Brand.webp": "/refactored-spoon/static/media/Brand.cd6be07be49e4721d72b.webp",
+    "static/media/background.svg": "/refactored-spoon/static/media/background.2b536010b4ea6bce9f0c.svg",
+    "index.html": "/refactored-spoon/index.html",
+    "main.9916bcce.css.map": "/refactored-spoon/static/css/main.9916bcce.css.map",
+    "main.f7e9dd36.js.map": "/refactored-spoon/static/js/main.f7e9dd36.js.map",
+    "511.6c464508.chunk.js.map": "/refactored-spoon/static/js/511.6c464508.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9916bcce.css",
+    "static/js/main.f7e9dd36.js"
+  ]
+}
