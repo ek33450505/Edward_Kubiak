@@ -1,0 +1,367 @@
+/* General Styles */
+body,
+html,
+main {
+  color: #ffffff;
+  text-align: center;
+}
+
+main {
+  padding: 20px;
+  background: url("./Images/background.svg") center center / cover fixed;
+  height: 100vh;
+  overflow: auto;
+}
+
+h1 {
+  padding-bottom: 25px;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+p {
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+/* Navbar Styles */
+.navBar-main {
+  border-bottom: 2px solid #444;
+  color: #ffffff;
+  background-color: #333;
+}
+
+.navBar-main .navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 10px 20px;
+  color: #ffffff;
+  transition: color 0.3s ease;
+}
+
+.navBar-main .navbar-brand:hover,
+.navBar-main .navbar-brand:focus,
+.navBar-main .navbar-brand.active {
+  color: yellow;
+}
+
+.navBar-main .nav-link {
+  position: relative;
+  padding: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  color: #ffffff;
+  font-size: 1.2em;
+}
+
+.navBar-main .nav-link:hover,
+.navBar-main .nav-link:focus,
+.navBar-main .nav-link.active {
+  color: yellow;
+}
+
+.navBar-main .nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  display: block;
+  margin-top: 2px;
+  right: 0;
+  background: yellow;
+  transition: width 0.3s;
+}
+
+.navBar-main .nav-link:hover::after,
+.navBar-main .nav-link:focus::after,
+.navBar-main .nav-link.active::after {
+  width: 90%;
+  display: block;
+  align-items: center;
+}
+
+.navbar-toggler-icon {
+  background-color: gray;
+  border-radius: 4px;
+}
+
+.brandLogo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+
+/* Styling Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: #2c2c2c;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+/* Home Styles */
+
+.home-container .homename {
+  padding-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.hometext {
+  padding-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  color: yellow;
+}
+
+.hometext,
+.intro-text {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.hometext-skills {
+  padding-top: 60px;
+  text-align: center;
+}
+
+.hometext-skills h2 {
+  border-bottom: 2px solid yellow;
+  padding-bottom: 10px;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.hometext-skills li {
+  font-size: 1.1em;
+  padding-top: 10px;
+}
+
+/* Resume Styles */
+.resume-container {
+  background-color: #f9f9f9;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 15px;
+  overflow: auto;
+  margin: 0 auto;
+}
+
+.resume-card {
+  padding: 5px;
+}
+
+.resume-container h2 {
+  text-align: center;
+  padding: 5px;
+}
+
+.resume-container h3 {
+  font-size: 1.5em;
+  color: #204056;
+  margin-top: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.resume-container p {
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+.resume-container a {
+  color: #205081;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.resume-header {
+  font-size: 3em;
+  color: #205081;
+}
+
+.contact-info {
+  font-size: 1em;
+  padding-top: 5px;
+  border-bottom: 2px dashed #ccc;
+}
+
+.contact-info a {
+  color: #205081;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+  color: blue;
+}
+
+.section-title {
+  font-size: 2em;
+  color: #204056;
+  border-bottom: 1px solid #eee;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 10px;
+  font-size: 1.2em;
+}
+
+.skill-item {
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: 1em;
+}
+
+.responsibilityText {
+  font-size: 1em;
+  padding-top: 5px;
+  text-align: left;
+}
+
+.faEnvelope,
+.faPhone,
+.faMapMarkerAlt {
+  margin-right: 5px;
+  color: #6c757d;
+}
+
+/* About Me Styles */
+.about-container {
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.about-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.about-container p {
+  font-size: 1.4em;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.about-container a {
+  color: #205081;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+/* Contact Form Styles */
+.contact-container {
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto;
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.contact-container .form-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.contact-container .form-control {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.contact-container .form-control:focus {
+  border-color: #205081;
+  box-shadow: 0 0 5px rgba(32, 80, 129, 0.5);
+}
+
+.contact-container .btn-primary {
+  background-color: #205081;
+  border-color: #205081;
+  font-size: 16px;
+  border-radius: 4px;
+  margin-top: 10px;
+  width: 25%;
+}
+
+.contact-container .btn-primary:hover {
+  background-color: #1a4072;
+  border-color: #1a4072;
+}
+
+.contact-container .form-group {
+  margin-bottom: 15px;
+}
+
+/* hide ul tags */
+ul {
+  list-style-type: none;
+}
+
+/* Project Card Styles */
+.project-card {
+  background-color: whitesmoke;
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.project-card:hover {
+  transform: scale(1.05);
+}
+
+.project-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.project-image {
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .navBar-main .nav-link {
+    display: block;
+    width: 100%;
+  }
+
+  .hometext,
+  .intro-text {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .navBar-main .navbar-toggle {
+    display: block;
+  }
+
+  .homename h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
