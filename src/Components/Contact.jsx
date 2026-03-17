@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
-import emailjs from "@emailjs/browser";
 
 const Contact = () => {
   const navigate = useNavigate();
@@ -19,39 +18,45 @@ const Contact = () => {
     setContact((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSending(true);
     setStatus({ type: "", message: "" });
 
-    emailjs
-      .send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        {
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
           name: contact.name,
           email: contact.email,
           message: contact.message,
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          setStatus({
-            type: "success",
-            message: "Message sent successfully! Redirecting...",
-          });
-          setContact({ name: "", email: "", message: "" });
-          setTimeout(() => navigate("/"), 2000);
-        },
-        () => {
-          setStatus({
-            type: "error",
-            message: "Failed to send. Please try again or email me directly.",
-          });
-        }
-      )
-      .finally(() => setSending(false));
+          subject: `Portfolio contact from ${contact.name}`,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus({
+          type: "success",
+          message: "Message sent successfully! Redirecting...",
+        });
+        setContact({ name: "", email: "", message: "" });
+        setTimeout(() => navigate("/"), 2000);
+      } else {
+        throw new Error(data.message);
+      }
+    } catch {
+      setStatus({
+        type: "error",
+        message: "Failed to send. Please try again or email me directly.",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (

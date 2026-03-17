@@ -5,7 +5,6 @@
   "type": "module",
   "homepage": "https://ek33450505.github.io/Edward_Kubiak",
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.2.1",
     "gh-pages": "^6.1.1",
     "lucide-react": "^0.577.0",
