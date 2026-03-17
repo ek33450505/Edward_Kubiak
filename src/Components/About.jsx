@@ -34,13 +34,16 @@ const About = () => {
                   The Developer
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
-                  I&apos;m a MERN full stack developer with deep experience across
-                  front-end and back-end systems. I specialize in building scalable
-                  applications and breathing new life into legacy codebases&mdash;transforming
-                  Angular, PHP, and jQuery systems into modern React architectures.
+                  I&apos;m a full stack developer who thrives at the intersection of
+                  building new things and breathing life into legacy systems. My
+                  day-to-day spans React, Node.js, Python, and Flask — but what
+                  gets me most excited is the integration of AI into development
+                  workflows. I&apos;ve built AI assistants powered by Claude API and
+                  Ollama, experimented with RAG pipelines and voice synthesis, and
+                  I use AI-augmented tooling daily to write better code faster.
                 </p>
                 <p className="mt-4 text-slate-300 leading-relaxed">
-                  Currently at{" "}
+                  At{" "}
                   <a
                     href="https://www.metasolutions.net/"
                     target="_blank"
@@ -49,9 +52,10 @@ const About = () => {
                   >
                     META Solutions
                   </a>
-                  , I improve application performance and user experience by
-                  transitioning legacy systems to modern architectures. My toolkit
-                  spans React, Node.js, Python, AI/LLM integration, and more.
+                  , I architect and maintain a portfolio of production applications
+                  serving thousands of users across Ohio&apos;s K-12 education
+                  system — from data validation platforms and scenario reference tools
+                  to E-Rate dashboards and PowerSchool customizations.
                 </p>
               </div>
             </div>
@@ -72,10 +76,10 @@ const About = () => {
                   Columbus, Ohio
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
-                  Based in Columbus, I&apos;m dedicated to contributing to innovative
-                  projects and collaborating with diverse teams to drive technological
-                  advancements. I believe the best software is built at the intersection
-                  of technical excellence and genuine human empathy.
+                  Based in Columbus, I&apos;m drawn to collaborative teams that
+                  value craft and continuous learning. I believe the best software
+                  comes from understanding the people who use it — not just the
+                  technology behind it.
                 </p>
               </div>
             </div>
@@ -97,8 +101,9 @@ const About = () => {
                     Family
                   </h2>
                   <p className="text-slate-300 leading-relaxed text-sm">
-                    Proud father of two wonderful kids. I cherish time with my family,
-                    exploring the outdoors, and creating lasting memories together.
+                    Proud father of two. When I&apos;m not at a keyboard, I&apos;m
+                    exploring the outdoors with my kids and creating memories that
+                    remind me why I do what I do.
                   </p>
                 </div>
               </div>
@@ -116,12 +121,13 @@ const About = () => {
                 </div>
                 <div>
                   <h2 className="font-display text-lg font-bold text-slate-100 mb-3">
-                    Endurance
+                    Trail Runner
                   </h2>
                   <p className="text-slate-300 leading-relaxed text-sm">
-                    Trail ultramarathon runner and CrossFit enthusiast. The discipline
-                    and endurance required for these pursuits push me to set ambitious
-                    goals in every aspect of life.
+                    Ultramarathon and trail runner. There&apos;s nothing like 30
+                    miles of singletrack to put a stubborn bug in perspective. The
+                    discipline and mental endurance these runs demand carry over into
+                    every aspect of my work and life.
                   </p>
                 </div>
               </div>

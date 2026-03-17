@@ -1,11 +1,51 @@
 import { motion } from "motion/react";
-import { Mail, MapPin, Download } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 
 const skills = {
-  Frontend: ["React 19", "Vite", "TypeScript", "Tailwind CSS", "AngularJS", "jQuery"],
-  Backend: ["Node.js", "Express", "Python", "PHP", "REST APIs"],
-  Data: ["SQLite", "MongoDB", "SQL", "BigQuery"],
-  "AI & Tools": ["Claude API", "Ollama", "Git", "CI/CD", "Playwright"],
+  Frontend: [
+    "React 18/19",
+    "Vite",
+    "TypeScript",
+    "Tailwind CSS",
+    "Bootstrap 5",
+    "React Bootstrap",
+    "MUI",
+    "TanStack Table",
+    "React Router",
+    "AngularJS",
+    "jQuery",
+    "DataTables",
+  ],
+  Backend: [
+    "Node.js",
+    "Express 4/5",
+    "Python",
+    "Flask",
+    "PHP",
+    "REST API Design",
+    "Docker",
+    "Docker Compose",
+  ],
+  Data: [
+    "SQLite",
+    "PostgreSQL",
+    "MongoDB",
+    "BigQuery",
+    "SQL",
+    "AES-256 Encryption",
+  ],
+  "AI & Tools": [
+    "Claude API",
+    "Ollama",
+    "RAG / Embeddings",
+    "ElevenLabs TTS",
+    "Git",
+    "CI/CD",
+    "Jest",
+    "Vitest",
+    "Playwright",
+    "Claude Code",
+  ],
 };
 
 const skillColors = {
@@ -27,26 +67,29 @@ const experience = [
     role: "Application Developer",
     company: "META Solutions",
     location: "Columbus, OH",
-    period: "August 2022 - Present",
+    period: "August 2022 — Present",
     highlights: [
-      "Led the transformation of CrossCheck from AngularJS to React, serving ~4,200 users across 900+ Ohio school districts.",
-      "Built AI-powered tools integrating Claude API and Ollama for intelligent developer workflows.",
-      "Revamped internal applications with React 19, Vite, and Express 5, improving performance and maintainability.",
-      "Modernized legacy Angular, PHP, and jQuery systems into modern JavaScript stacks.",
+      "Led the full transformation of CrossCheck, an EMIS data validation platform, from AngularJS to React — serving approximately 4,200 users across 900+ Ohio school districts.",
+      "Architect and maintain a portfolio of five production web applications spanning React, Flask, Express, PostgreSQL, and jQuery/DataTables stacks.",
+      "Built SES-Wiki from the ground up — a React 19 + Express 5 reference tool for EMIS scenario charts with JSON data persistence, automated backups, and comprehensive test coverage.",
+      "Developed the Customization Web Store (CWS), an internal catalog platform for browsing and requesting PowerSchool customizations, built with React 19 and Vite.",
+      "Modernized the E-Rate dashboard — a Docker Compose monorepo with dual React frontends and a Flask/PostgreSQL backend for managing federal telecom discount program data.",
+      "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder system deployed across client school districts.",
+      "Integrate AI/LLM capabilities into developer workflows using Claude API, Ollama, and custom tooling to accelerate development and code quality.",
     ],
   },
 ];
 
 const education = [
   {
-    degree: "Full Stack Web Development",
+    degree: "Full Stack Web Development Certificate",
     institution: "The Ohio State University",
-    period: "Jan 2022 - Jul 2022",
+    period: "January 2022 — July 2022",
   },
   {
     degree: "Bachelor of Science",
     institution: "Ohio University",
-    period: "Aug 2005 - Jun 2009",
+    period: "August 2005 — June 2009",
   },
 ];
 
@@ -90,10 +133,13 @@ const Resume = () => (
           Summary
         </h2>
         <p className="text-slate-300 leading-relaxed">
-          Application Developer with extensive full-stack experience building and
-          modernizing web applications. Specializing in React, Node.js, and AI/LLM
-          integration. Currently transforming legacy systems into modern architectures
-          at META Solutions, serving thousands of users across Ohio school districts.
+          Application Developer with full-stack expertise across React, Node.js,
+          Python, and AI/LLM integration. I architect, build, and maintain a
+          portfolio of production web applications at META Solutions that serve
+          thousands of users across Ohio&apos;s education system. I specialize in
+          modernizing legacy systems — transforming AngularJS, PHP, and jQuery
+          codebases into modern React architectures — and integrating AI
+          capabilities into development workflows using Claude API and Ollama.
         </p>
       </motion.div>
 
@@ -116,7 +162,9 @@ const Resume = () => (
               transition={{ duration: 0.4, delay: 0.25 + i * 0.08 }}
               className="p-5 rounded-xl border border-slate-800/60 bg-slate-900/30"
             >
-              <h3 className={`font-display text-sm font-bold tracking-wider mb-3 ${labelColors[category]}`}>
+              <h3
+                className={`font-display text-sm font-bold tracking-wider mb-3 ${labelColors[category]}`}
+              >
                 {category}
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -162,9 +210,12 @@ const Resume = () => (
                 {job.period}
               </span>
             </div>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {job.highlights.map((h, i) => (
-                <li key={i} className="text-sm text-slate-300 leading-relaxed pl-4 relative">
+                <li
+                  key={i}
+                  className="text-sm text-slate-300 leading-relaxed pl-4 relative"
+                >
                   <span className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-amber-400/40" />
                   {h}
                 </li>

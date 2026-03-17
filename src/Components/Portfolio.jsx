@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { ExternalLink, Github, Bot, Database, Globe, Terminal, BarChart3, ShoppingBag } from "lucide-react";
+import { ExternalLink, Github, Bot, Database, Globe, Terminal, BarChart3, ShoppingBag, DollarSign } from "lucide-react";
 
 const projects = [
   {
@@ -48,6 +48,15 @@ const projects = [
     tech: ["React 19", "Vite"],
     icon: ShoppingBag,
     color: "amber",
+    category: "professional",
+  },
+  {
+    title: "E-Rate Dashboard",
+    description:
+      "Full-stack dashboard for managing federal E-Rate telecom discount program data. Docker Compose monorepo with dual React frontends, Flask API, and PostgreSQL database.",
+    tech: ["React", "Flask", "PostgreSQL", "Docker", "TypeScript", "MUI"],
+    icon: DollarSign,
+    color: "sky",
     category: "professional",
   },
   {
