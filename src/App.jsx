@@ -148,7 +148,7 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <Router basename="/Kubiak-Portfolio">
+    <Router basename="/Edward_Kubiak">
       <div className="noise-bg gradient-mesh min-h-screen">
         <NavBar />
         <main className="pt-20">
