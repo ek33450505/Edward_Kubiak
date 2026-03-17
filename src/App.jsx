@@ -9,7 +9,7 @@ import About from "./Components/About";
 import Portfolio from "./Components/Portfolio";
 import Resume from "./Components/Resume";
 import Contact from "./Components/Contact";
-import BrandingImage from "./Images/Brand.webp";
+import BrandingImage from "./Images/Brand.svg";
 
 const navLinks = [
   { to: "/about", label: "About" },
