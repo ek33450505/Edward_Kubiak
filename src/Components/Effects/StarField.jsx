@@ -93,7 +93,7 @@ function GalaxyCore() {
         <NebulaCloud
           count={250}
           radius={5}
-          color="#fbbf24"
+          color="#00FFC2"
           speed={0.00025}
         />
       </group>

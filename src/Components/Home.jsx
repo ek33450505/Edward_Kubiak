@@ -130,14 +130,14 @@ const Home = () => {
             >
               <Link
                 to="/projects"
-                className="group inline-flex items-center gap-2 px-6 py-3 bg-amber-400 text-slate-950 font-display text-sm tracking-wider uppercase font-bold rounded-lg hover:bg-amber-300 hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] transition-all duration-300"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-amber-400 text-slate-950 font-display text-sm tracking-wider uppercase font-bold rounded-lg hover:bg-amber-300 hover:shadow-[0_0_30px_rgba(0,255,194,0.3)] transition-all duration-300"
               >
                 See What I&apos;ve Built
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 font-display text-sm tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 hover:shadow-[0_0_20px_rgba(251,191,36,0.1)] transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 font-display text-sm tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 hover:shadow-[0_0_20px_rgba(0,255,194,0.1)] transition-all duration-300"
               >
                 Let&apos;s Build Something
               </Link>
@@ -157,15 +157,15 @@ const Home = () => {
               <div className="w-64 h-64 lg:w-80 lg:h-80 relative">
                 <div className="absolute inset-0 border border-slate-700/50 rounded-2xl rotate-6" />
                 <div className="absolute inset-4 border border-amber-400/20 rounded-2xl -rotate-3" />
-                <div className="absolute inset-8 bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl backdrop-blur-sm flex items-center justify-center shadow-[0_0_80px_rgba(251,191,36,0.06)]">
+                <div className="absolute inset-8 bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl backdrop-blur-sm flex items-center justify-center shadow-[0_0_80px_rgba(0,255,194,0.06)]">
                   <div className="text-center">
                     <motion.p
                       className="font-display text-6xl lg:text-7xl font-bold text-amber-400"
                       animate={{
                         textShadow: [
-                          "0 0 20px rgba(251,191,36,0.3)",
-                          "0 0 40px rgba(251,191,36,0.5)",
-                          "0 0 20px rgba(251,191,36,0.3)",
+                          "0 0 20px rgba(0,255,194,0.3)",
+                          "0 0 40px rgba(0,255,194,0.5)",
+                          "0 0 20px rgba(0,255,194,0.3)",
                         ],
                       }}
                       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -208,7 +208,7 @@ const Home = () => {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className="group p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-amber-400/30 hover:bg-slate-800/40 hover:shadow-[0_0_30px_rgba(251,191,36,0.06)] transition-all duration-300"
+              className="group p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-amber-400/30 hover:bg-slate-800/40 hover:shadow-[0_0_30px_rgba(0,255,194,0.06)] transition-all duration-300"
             >
               <item.icon
                 size={24}

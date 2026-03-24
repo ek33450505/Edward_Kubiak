@@ -8,7 +8,7 @@ import { useState, useRef } from "react";
 export default function CardSpotlight({
   children,
   className = "",
-  spotlightColor = "rgba(251, 191, 36, 0.08)",
+  spotlightColor = "rgba(0, 255, 194, 0.08)",
   spotlightSize = 250,
 }) {
   const ref = useRef(null);

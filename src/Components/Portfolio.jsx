@@ -130,7 +130,7 @@ const colorMap = {
     bg: "bg-amber-400/10",
     text: "text-amber-400",
     badge: "bg-amber-400/10 text-amber-400",
-    spotlight: "rgba(251, 191, 36, 0.08)",
+    spotlight: "rgba(0, 255, 194, 0.08)",
   },
   teal: {
     bg: "bg-teal-400/10",
@@ -236,7 +236,7 @@ function Portfolio() {
                   tiltMaxAngleY={6}
                   glareEnable
                   glareMaxOpacity={0.08}
-                  glareColor="#fbbf24"
+                  glareColor="#00FFC2"
                   glarePosition="all"
                   glareBorderRadius="12px"
                   scale={1.02}
