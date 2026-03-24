@@ -12,6 +12,7 @@ const containerVariants = {
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  exit: { opacity: 0, y: -10, transition: { duration: 0.2 } },
 };
 
 const projects = [
@@ -201,12 +202,14 @@ function Portfolio() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.15 }}
-          className="mt-8 flex gap-2"
+          className="mt-8 flex flex-wrap gap-2"
         >
           {filters.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setFilter(key)}
+              role="tab"
+              aria-selected={filter === key}
               className={`px-4 py-2 font-display text-xs tracking-widest uppercase rounded-lg border transition-all duration-300 cursor-pointer ${
                 filter === key
                   ? "bg-amber-400 text-slate-950 border-amber-400 font-bold"
@@ -227,10 +230,15 @@ function Portfolio() {
           initial="hidden"
           animate="show"
         >
+          {filtered.length === 0 && (
+            <div className="col-span-2 py-20 text-center text-slate-500 font-display text-sm tracking-wider">
+              No projects in this category yet.
+            </div>
+          )}
           {filtered.map((project) => {
             const colors = colorMap[project.color];
             return (
-              <motion.div key={project.title} variants={cardVariants}>
+              <motion.div key={project.title} variants={cardVariants} className="group">
                 <Tilt
                   tiltMaxAngleX={6}
                   tiltMaxAngleY={6}

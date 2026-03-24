@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
 
 const Contact = () => {
-  const navigate = useNavigate();
   const [contact, setContact] = useState({
     name: "",
     email: "",
@@ -36,16 +34,16 @@ const Contact = () => {
           email: contact.email,
           message: contact.message,
           subject: `Portfolio contact from ${contact.name}`,
+          botcheck: "",
         }),
       });
       const data = await res.json();
       if (data.success) {
         setStatus({
           type: "success",
-          message: "Message sent successfully! Redirecting...",
+          message: "Message sent! I'll be in touch soon.",
         });
         setContact({ name: "", email: "", message: "" });
-        setTimeout(() => navigate("/"), 2000);
       } else {
         throw new Error(data.message);
       }
@@ -121,6 +119,7 @@ const Contact = () => {
               onChange={handleChange}
               required
               placeholder="Your name"
+              maxLength={100}
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800/60 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/20 transition-all duration-300"
             />
           </div>
@@ -140,6 +139,7 @@ const Contact = () => {
               onChange={handleChange}
               required
               placeholder="your@email.com"
+              maxLength={254}
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800/60 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/20 transition-all duration-300"
             />
           </div>
@@ -159,6 +159,7 @@ const Contact = () => {
               onChange={handleChange}
               required
               placeholder="Tell me about your project — what are you building, and what's the biggest challenge?"
+              maxLength={5000}
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800/60 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/20 transition-all duration-300 resize-none"
             />
           </div>

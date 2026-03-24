@@ -1,5 +1,5 @@
 import { useRef, useMemo, Suspense } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Stars, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -58,7 +58,6 @@ function NebulaCloud({ count = 300, radius = 6, color, speed = 0.0002 }) {
 function GalaxyCore() {
   const groupRef = useRef();
   const mouse = useRef({ x: 0, y: 0 });
-  const { viewport } = useThree();
 
   // Track mouse position normalized to -1..1
   useFrame((state) => {

@@ -20,17 +20,6 @@
     radial-gradient(ellipse at 50% 80%, rgba(52, 211, 153, 0.04) 0%, transparent 50%);
 }
 
-/* Animated gradient border */
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.gradient-border {
-  background: linear-gradient(135deg, #00FFC2, #38bdf8, #34d399, #fb7185, #00FFC2);
-  background-size: 300% 300%;
-  animation: gradient-shift 6s ease infinite;
-}
 
 /* Page transition wrapper */
 .page-content {

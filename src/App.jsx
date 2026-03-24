@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { HashRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Github, Menu, X } from "lucide-react";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
@@ -22,6 +22,16 @@ const navLinks = [
 function NavBar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+
+  // Close menu on route change (back/forward nav)
+  useEffect(() => { setOpen(false); }, [location.pathname]);
+
+  // Close menu on Escape key
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/60 backdrop-blur-xl bg-slate-950/80">
@@ -64,10 +74,10 @@ function NavBar() {
             href="https://github.com/ek33450505"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="GitHub profile (opens in new tab)"
             className="ml-4 p-2 text-slate-400 hover:text-amber-400 transition-colors"
-            title="GitHub"
           >
-            <Github size={20} />
+            <Github size={20} aria-hidden="true" />
           </a>
         </div>
 
@@ -112,7 +122,7 @@ function NavBar() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 py-3 text-slate-400 hover:text-amber-400 font-display text-sm tracking-widest uppercase transition-colors"
               >
-                <Github size={18} /> GITHUB
+                <Github size={18} aria-hidden="true" /> GITHUB
               </a>
             </div>
           </motion.div>
@@ -149,7 +159,7 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <Router basename="/Edward_Kubiak">
+    <Router>
       <div className="noise-bg gradient-mesh min-h-screen">
         <ScrollProgress />
         <NavBar />
@@ -168,9 +178,10 @@ function App() {
                 href="https://github.com/ek33450505"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub profile (opens in new tab)"
                 className="hover:text-amber-400 transition-colors"
               >
-                <Github size={16} />
+                <Github size={16} aria-hidden="true" />
               </a>
             </div>
           </div>
