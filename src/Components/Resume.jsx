@@ -36,15 +36,18 @@ const skills = {
   ],
   "AI & Tools": [
     "Claude API",
+    "Claude Code",
+    "CAST Agent Framework",
     "Ollama",
     "RAG / Embeddings",
+    "Shell Scripting",
+    "Hook Architecture",
     "ElevenLabs TTS",
     "Git",
     "CI/CD",
     "Jest",
     "Vitest",
     "Playwright",
-    "Claude Code",
   ],
 };
 
@@ -75,6 +78,7 @@ const experience = [
       "Launched the Customization Web Store (CWS) — an internal React 19 + Vite platform that streamlined PowerSchool customization requests, replacing a manual email-based workflow.",
       "Modernized the E-Rate dashboard into a Docker Compose monorepo architecture — dual React frontends and a Flask/PostgreSQL backend — helping districts track and capture federal telecom discount funding.",
       "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder — a notification system deployed across multiple client school districts.",
+      "Architect of CAST (Claude Agent Specialist Team) — a fully shell-based 29-agent framework embedded into Claude Code via three enforcement hooks. Automatic specialist dispatch, post-write code review enforcement, and hard-blocked raw git commits. Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) for real-time observability: live agent activity stream, 30-day token burn analytics by model tier, and delegation savings tracking.",
       "Pioneer AI-augmented development workflows — engineered TARUS (dual-LLM assistant) and PromptBot (prompt optimizer), and leverage Claude Code daily as an AI pair programmer to accelerate velocity and code quality.",
     ],
   },
@@ -134,12 +138,13 @@ const Resume = () => (
           Summary
         </h2>
         <p className="text-slate-300 leading-relaxed">
-          Full Stack Developer and AI practitioner who architects, ships, and
+          Full Stack Developer and AI systems engineer who architects, ships, and
           maintains five production web applications at META Solutions — serving
           4,200+ users across 900+ Ohio school districts. I specialize in
-          modernizing legacy systems (AngularJS, PHP, jQuery → React 19) and
-          integrating LLM capabilities into developer workflows using Claude API,
-          Ollama, and Claude Code.
+          modernizing legacy systems (AngularJS, PHP, jQuery → React 19),
+          integrating LLM capabilities into developer workflows, and building
+          AI infrastructure — including CAST, a fully shell-based 29-agent
+          framework for Claude Code, and its real-time observability dashboard.
         </p>
       </motion.div>
 

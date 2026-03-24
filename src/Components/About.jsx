@@ -37,12 +37,14 @@ const About = () => {
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
                   I&apos;m a full stack developer who architects production
-                  applications and resurrects legacy systems. My daily toolkit
+                  applications and builds AI infrastructure. My daily toolkit
                   spans React 19, Node.js, Python, and Flask — but what drives
-                  me is pushing AI into real development workflows. I engineered
-                  TARUS, a dual-LLM assistant powered by Claude API and Ollama,
-                  explored RAG pipelines and voice synthesis, and I ship code
-                  faster every day using Claude Code as my AI pair programmer.
+                  me is pushing AI into real developer workflows at the systems
+                  level. I built CAST, a fully shell-based 29-agent framework
+                  that embeds an entire specialist team into Claude Code via
+                  hook architecture, and the Claude Code Dashboard — a React 19
+                  + TypeScript observability UI with live SSE agent streams and
+                  token analytics.
                 </p>
                 <p className="mt-4 text-slate-300 leading-relaxed">
                   At{" "}

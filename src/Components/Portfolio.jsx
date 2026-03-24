@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { ExternalLink, Github, Bot, Database, Globe, Terminal, BarChart3, ShoppingBag, DollarSign, Network, LayoutDashboard } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
@@ -219,12 +219,13 @@ function Portfolio() {
         </motion.div>
 
         {/* Project grid */}
+        <AnimatePresence mode="wait">
         <motion.div
+          key={filter}
           className="mt-10 grid md:grid-cols-2 gap-5"
           variants={containerVariants}
           initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
+          animate="show"
         >
           {filtered.map((project) => {
             const colors = colorMap[project.color];
@@ -321,6 +322,7 @@ function Portfolio() {
             );
           })}
         </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
