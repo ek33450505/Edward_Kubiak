@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Github, Menu, X } from "lucide-react";
+import ScrollProgress from "./Components/Effects/ScrollProgress";
 import "./App.css";
 
 import Home from "./Components/Home";
@@ -150,6 +151,7 @@ function App() {
   return (
     <Router basename="/Edward_Kubiak">
       <div className="noise-bg gradient-mesh min-h-screen">
+        <ScrollProgress />
         <NavBar />
         <main className="pt-20">
           <AnimatedRoutes />

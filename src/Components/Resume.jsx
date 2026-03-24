@@ -69,13 +69,13 @@ const experience = [
     location: "Columbus, OH",
     period: "August 2022 — Present",
     highlights: [
-      "Led the full transformation of CrossCheck, an EMIS data validation platform, from AngularJS to React — serving approximately 4,200 users across 900+ Ohio school districts.",
-      "Architect and maintain a portfolio of five production web applications spanning React, Flask, Express, PostgreSQL, and jQuery/DataTables stacks.",
-      "Built SES-Wiki from the ground up — a React 19 + Express 5 reference tool for EMIS scenario charts with JSON data persistence, automated backups, and comprehensive test coverage.",
-      "Developed the Customization Web Store (CWS), an internal catalog platform for browsing and requesting PowerSchool customizations, built with React 19 and Vite.",
-      "Modernized the E-Rate dashboard — a Docker Compose monorepo with dual React frontends and a Flask/PostgreSQL backend for managing federal telecom discount program data.",
-      "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder system deployed across client school districts.",
-      "Integrate AI/LLM capabilities into developer workflows using Claude API, Ollama, and custom tooling to accelerate development and code quality.",
+      "Spearheaded the complete migration of CrossCheck from AngularJS to React — a mission-critical EMIS validation platform now serving 4,200+ users across 900+ Ohio school districts.",
+      "Architect and maintain five production web applications across React, Flask, Express, PostgreSQL, and jQuery/DataTables — each serving Ohio's K-12 education ecosystem.",
+      "Engineered SES-Wiki from the ground up — a React 19 + Express 5 reference tool for EMIS scenario charts, complete with JSON persistence, automated backups, and comprehensive Vitest test coverage.",
+      "Launched the Customization Web Store (CWS) — an internal React 19 + Vite platform that streamlined PowerSchool customization requests, replacing a manual email-based workflow.",
+      "Modernized the E-Rate dashboard into a Docker Compose monorepo architecture — dual React frontends and a Flask/PostgreSQL backend — helping districts track and capture federal telecom discount funding.",
+      "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder — a notification system deployed across multiple client school districts.",
+      "Pioneer AI-augmented development workflows — engineered TARUS (dual-LLM assistant) and PromptBot (prompt optimizer), and leverage Claude Code daily as an AI pair programmer to accelerate velocity and code quality.",
     ],
   },
 ];
@@ -125,7 +125,8 @@ const Resume = () => (
       {/* Summary */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.5, delay: 0.1 }}
         className="mt-10 p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
       >
@@ -133,21 +134,21 @@ const Resume = () => (
           Summary
         </h2>
         <p className="text-slate-300 leading-relaxed">
-          Application Developer with full-stack expertise across React, Node.js,
-          Python, and AI/LLM integration. I architect, build, and maintain a
-          portfolio of production web applications at META Solutions that serve
-          thousands of users across Ohio&apos;s education system. I specialize in
-          modernizing legacy systems — transforming AngularJS, PHP, and jQuery
-          codebases into modern React architectures — and integrating AI
-          capabilities into development workflows using Claude API and Ollama.
+          Full Stack Developer and AI practitioner who architects, ships, and
+          maintains five production web applications at META Solutions — serving
+          4,200+ users across 900+ Ohio school districts. I specialize in
+          modernizing legacy systems (AngularJS, PHP, jQuery → React 19) and
+          integrating LLM capabilities into developer workflows using Claude API,
+          Ollama, and Claude Code.
         </p>
       </motion.div>
 
       {/* Skills grid */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5, delay: 0.1 }}
         className="mt-8"
       >
         <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
@@ -158,8 +159,9 @@ const Resume = () => (
             <motion.div
               key={category}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.25 + i * 0.08 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.4, delay: i * 0.08 }}
               className="p-5 rounded-xl border border-slate-800/60 bg-slate-900/30"
             >
               <h3
@@ -185,8 +187,9 @@ const Resume = () => (
       {/* Experience */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5 }}
         className="mt-8"
       >
         <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
@@ -212,13 +215,17 @@ const Resume = () => (
             </div>
             <ul className="space-y-3">
               {job.highlights.map((h, i) => (
-                <li
+                <motion.li
                   key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: i * 0.05 }}
                   className="text-sm text-slate-300 leading-relaxed pl-4 relative"
                 >
                   <span className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-amber-400/40" />
                   {h}
-                </li>
+                </motion.li>
               ))}
             </ul>
           </div>
@@ -228,8 +235,9 @@ const Resume = () => (
       {/* Education */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5 }}
         className="mt-8 mb-8"
       >
         <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">

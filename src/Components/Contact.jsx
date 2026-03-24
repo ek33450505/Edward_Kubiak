@@ -69,11 +69,12 @@ const Contact = () => {
           transition={{ duration: 0.5 }}
         >
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            Get in <span className="text-amber-400">Touch</span>
+            Let&apos;s Build <span className="text-amber-400">Something</span>
           </h1>
           <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
           <p className="mt-4 text-slate-400">
-            Have a project in mind or want to connect? Send me a message.
+            Whether you need a full-stack developer, an AI-powered tool, or a
+            legacy system rescued from the past — I&apos;d love to hear about it.
           </p>
         </motion.div>
 
@@ -157,7 +158,7 @@ const Contact = () => {
               value={contact.message}
               onChange={handleChange}
               required
-              placeholder="Tell me about your project or idea..."
+              placeholder="Tell me about your project — what are you building, and what's the biggest challenge?"
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800/60 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/20 transition-all duration-300 resize-none"
             />
           </div>
@@ -171,7 +172,7 @@ const Contact = () => {
               "Sending..."
             ) : (
               <>
-                Send Message
+                Send It
                 <Send size={16} className="group-hover:translate-x-1 transition-transform" />
               </>
             )}

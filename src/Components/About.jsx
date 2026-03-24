@@ -17,13 +17,15 @@ const About = () => {
           <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
         </motion.div>
 
-        {/* Bio cards */}
+        {/* Bio cards — scroll-triggered */}
         <div className="mt-12 space-y-6">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            whileHover={{ x: 4, transition: { duration: 0.2 } }}
+            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-amber-400/10 text-amber-400 shrink-0 mt-1">
@@ -34,13 +36,13 @@ const About = () => {
                   The Developer
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
-                  I&apos;m a full stack developer who thrives at the intersection of
-                  building new things and breathing life into legacy systems. My
-                  day-to-day spans React, Node.js, Python, and Flask — but what
-                  gets me most excited is the integration of AI into development
-                  workflows. I&apos;ve built AI assistants powered by Claude API and
-                  Ollama, experimented with RAG pipelines and voice synthesis, and
-                  I use AI-augmented tooling daily to write better code faster.
+                  I&apos;m a full stack developer who architects production
+                  applications and resurrects legacy systems. My daily toolkit
+                  spans React 19, Node.js, Python, and Flask — but what drives
+                  me is pushing AI into real development workflows. I engineered
+                  TARUS, a dual-LLM assistant powered by Claude API and Ollama,
+                  explored RAG pipelines and voice synthesis, and I ship code
+                  faster every day using Claude Code as my AI pair programmer.
                 </p>
                 <p className="mt-4 text-slate-300 leading-relaxed">
                   At{" "}
@@ -52,20 +54,22 @@ const About = () => {
                   >
                     META Solutions
                   </a>
-                  , I architect and maintain a portfolio of production applications
-                  serving thousands of users across Ohio&apos;s K-12 education
-                  system — from data validation platforms and scenario reference tools
-                  to E-Rate dashboards and PowerSchool customizations.
+                  , I architect and maintain five production applications serving
+                  4,200+ users across 900+ Ohio school districts — from the
+                  CrossCheck data validation platform to E-Rate dashboards, EMIS
+                  scenario tools, and PowerSchool customizations.
                 </p>
               </div>
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            whileHover={{ x: 4, transition: { duration: 0.2 } }}
+            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-sky-400/10 text-sky-400 shrink-0 mt-1">
@@ -76,10 +80,10 @@ const About = () => {
                   Columbus, Ohio
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
-                  Based in Columbus, I&apos;m drawn to collaborative teams that
-                  value craft and continuous learning. I believe the best software
-                  comes from understanding the people who use it — not just the
-                  technology behind it.
+                  Based in Columbus, I gravitate toward teams that value craft,
+                  ship iteratively, and never stop learning. I believe the best
+                  software emerges from understanding the humans who depend on
+                  it — not just the stack behind it.
                 </p>
               </div>
             </div>
@@ -87,10 +91,12 @@ const About = () => {
 
           <div className="grid sm:grid-cols-2 gap-6">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.45 }}
-              className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
             >
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-rose-400/10 text-rose-400 shrink-0 mt-1">
@@ -110,10 +116,12 @@ const About = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.55 }}
-              className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
             >
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-emerald-400/10 text-emerald-400 shrink-0 mt-1">
@@ -125,9 +133,9 @@ const About = () => {
                   </h2>
                   <p className="text-slate-300 leading-relaxed text-sm">
                     Ultramarathon and trail runner. There&apos;s nothing like 30
-                    miles of singletrack to put a stubborn bug in perspective. The
-                    discipline and mental endurance these runs demand carry over into
-                    every aspect of my work and life.
+                    miles of singletrack to put a stubborn bug in perspective.
+                    The patience and endurance these runs demand translate
+                    directly into how I approach complex problems at work.
                   </p>
                 </div>
               </div>
