@@ -56,12 +56,30 @@ function CurrentlyBuilding() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("https://api.github.com/users/ek33450505/events?per_page=30")
-      .then((res) => {
+
+    async function loadActivity() {
+      // Try pre-built static file first (generated at deploy time, no rate limit)
+      try {
+        const staticRes = await fetch("/Edward_Kubiak/github-activity.json");
+        if (staticRes.ok) {
+          const staticData = await staticRes.json();
+          if (Array.isArray(staticData) && staticData.length > 0) {
+            if (!cancelled) {
+              setEvents(staticData);
+              setLoading(false);
+            }
+            return;
+          }
+        }
+      } catch {
+        // static file unavailable — fall through to live API
+      }
+
+      // Fallback: live GitHub API
+      try {
+        const res = await fetch("https://api.github.com/users/ek33450505/events?per_page=30");
         if (!res.ok) throw new Error("API error");
-        return res.json();
-      })
-      .then((data) => {
+        const data = await res.json();
         if (cancelled) return;
         const pushEvents = data
           .filter((e) => e.type === "PushEvent" && e.payload?.commits?.length > 0)
@@ -73,22 +91,25 @@ function CurrentlyBuilding() {
             message: e.payload.commits[0].message.split("\n")[0],
             time: e.created_at,
           }));
-        setEvents(pushEvents);
-        setLoading(false);
-      })
-      .catch(() => {
+        if (!cancelled) {
+          setEvents(pushEvents);
+          setLoading(false);
+        }
+      } catch {
         if (!cancelled) {
           setError(true);
           setLoading(false);
         }
-      });
+      }
+    }
+
+    loadActivity();
     return () => {
       cancelled = true;
     };
   }, []);
 
-  // Hide section entirely on error or if no push events found
-  if (!loading && (error || events.length === 0)) return null;
+  const showFallback = !loading && (error || events.length === 0);
 
   return (
     <motion.section
@@ -105,7 +126,7 @@ function CurrentlyBuilding() {
             <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
               Currently Building
             </h2>
-            {!loading && (
+            {!loading && !showFallback && (
               <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-emerald-400/15 text-emerald-400 border border-emerald-400/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 Live
@@ -134,6 +155,21 @@ function CurrentlyBuilding() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Fallback card when API fails or no events */}
+      {showFallback && (
+        <div className="p-4 rounded-xl border border-slate-800/60 bg-slate-900/30">
+          <a
+            href="https://github.com/ek33450505"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-amber-400 transition-colors"
+          >
+            View my latest activity on GitHub
+            <ExternalLink size={13} />
+          </a>
         </div>
       )}
 

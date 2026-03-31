@@ -1,0 +1,59 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 */6 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch GitHub activity and write static JSON
+        run: |
+          curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/users/ek33450505/events?per_page=30" \
+            -o raw_events.json
+          node -e "
+            const fs = require('fs');
+            const events = JSON.parse(fs.readFileSync('raw_events.json', 'utf8'));
+            const pushEvents = events
+              .filter(e => e.type === 'PushEvent' && e.payload?.commits?.length > 0)
+              .slice(0, 5)
+              .map(e => ({
+                id: e.id,
+                repo: e.repo.name.replace('ek33450505/', ''),
+                repoFull: e.repo.name,
+                message: e.payload.commits[0].message.split('\n')[0],
+                time: e.created_at
+              }));
+            fs.writeFileSync('public/github-activity.json', JSON.stringify(pushEvents));
+            console.log('Wrote', pushEvents.length, 'events');
+          "
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
