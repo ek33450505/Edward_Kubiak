@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ExternalLink, Github, Bot, Database, Globe, Terminal, BarChart3, ShoppingBag, DollarSign, Network, LayoutDashboard } from "lucide-react";
+import { ExternalLink, Github, Star, Bot, Database, Globe, Terminal, BarChart3, ShoppingBag, DollarSign, Network, LayoutDashboard } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 
@@ -19,24 +19,30 @@ const projects = [
   {
     title: "CAST — Claude Agent Team",
     description:
-      "29-agent specialist team embedded into Claude Code at the hook layer. Three enforcement hooks intercept every prompt — dispatching the right specialist automatically, enforcing post-write code review, and hard-blocking raw git commits. Built to make quality controls infrastructure, not habits.",
-    tech: ["Claude Code", "Bash", "Hook Architecture", "Node.js"],
+      "16-agent specialist framework embedded into Claude Code at the hook layer. Four enforcement hooks intercept every prompt — dispatching the right specialist automatically, enforcing post-write code review, and hard-blocking raw git commits. Hook-driven enforcement architecture with local-first SQLite cast.db, per-agent persistent memory, model-driven dispatch (no routing tables), and Homebrew distribution. Install: brew tap ek33450505/cast && brew install cast",
+    tech: ["Claude Code", "Bash", "Hook Architecture", "Node.js", "SQLite", "BATS"],
     icon: Network,
     color: "violet",
     category: "personal",
     featured: true,
+    aiEngineering: true,
     github: "https://github.com/ek33450505/claude-agent-team",
+    githubRepo: { owner: "ek33450505", repo: "claude-agent-team" },
+    stats: ["16 Agents", "4 Hooks", "255 Tests", "16 Commands", "7 Skills", "v3.0.0"],
   },
   {
     title: "Claude Code Dashboard",
     description:
-      "Real-time observability UI for CAST. Live SSE stream of agent dispatches, 30-day token burn analytics by model tier, delegation savings tracking, and per-agent memory indicators. See exactly what your AI development setup is doing — and what it's costing.",
-    tech: ["React 19", "TypeScript", "Vite", "Express", "SSE", "Recharts"],
+      "Observability layer for CAST — a 10-page React 19 + TypeScript UI with real-time SSE activity feed, session cost tracking, per-agent scorecards, Cmd+K global search, and a privacy audit showing your cloud vs. local API ratio. 13+ Express API endpoint categories. Gracefully degrades when CAST is not installed. v1.0.0",
+    tech: ["React 19", "TypeScript", "Vite", "Express", "SSE", "Recharts", "better-sqlite3"],
     icon: LayoutDashboard,
     color: "teal",
     category: "personal",
     featured: true,
+    aiEngineering: true,
     github: "https://github.com/ek33450505/claude-code-dashboard",
+    githubRepo: { owner: "ek33450505", repo: "claude-code-dashboard" },
+    stats: ["10 Pages", "13+ APIs", "SSE Live Feed", "v1.0.0"],
   },
   {
     title: "TARUS",
@@ -46,6 +52,8 @@ const projects = [
     icon: Bot,
     color: "amber",
     category: "personal",
+    aiEngineering: true,
+    stats: ["Dual-LLM", "Real-time Streaming", "SQLite Persistence"],
   },
   {
     title: "TARS-Lite",
@@ -55,6 +63,8 @@ const projects = [
     icon: Terminal,
     color: "sky",
     category: "personal",
+    aiEngineering: true,
+    stats: ["100% Local", "Zero Cloud"],
   },
   {
     title: "CrossCheck",
@@ -64,6 +74,7 @@ const projects = [
     icon: BarChart3,
     color: "emerald",
     category: "professional",
+    stats: ["4,200+ Users", "900+ Districts"],
   },
   {
     title: "SES-Wiki",
@@ -73,6 +84,7 @@ const projects = [
     icon: Database,
     color: "rose",
     category: "professional",
+    stats: ["React 19", "Express 5", "Full Test Coverage"],
   },
   {
     title: "CWS",
@@ -82,6 +94,7 @@ const projects = [
     icon: ShoppingBag,
     color: "amber",
     category: "professional",
+    stats: ["React 19", "Vite"],
   },
   {
     title: "E-Rate Dashboard",
@@ -91,6 +104,7 @@ const projects = [
     icon: DollarSign,
     color: "sky",
     category: "professional",
+    stats: ["Docker Compose", "Dual Frontend", "Flask + PostgreSQL"],
   },
   {
     title: "PromptBot",
@@ -100,7 +114,10 @@ const projects = [
     icon: Terminal,
     color: "sky",
     github: "https://github.com/ek33450505/promptbot",
+    githubRepo: { owner: "ek33450505", repo: "promptbot" },
     category: "personal",
+    aiEngineering: true,
+    stats: ["Python CLI", "Prompt Optimization"],
   },
   {
     title: "Run Buddy",
@@ -111,7 +128,9 @@ const projects = [
     color: "emerald",
     link: "https://ek33450505.github.io/run-buddy/",
     github: "https://github.com/ek33450505/run-buddy",
+    githubRepo: { owner: "ek33450505", repo: "run-buddy" },
     category: "personal",
+    stats: ["HTML", "CSS"],
   },
   {
     title: "Recipe Search",
@@ -122,7 +141,9 @@ const projects = [
     color: "rose",
     link: "https://drspookyfox.github.io/RecipeSearch/",
     github: "https://github.com/drspookyfox/RecipeSearch",
+    githubRepo: { owner: "drspookyfox", repo: "RecipeSearch" },
     category: "personal",
+    stats: ["Vanilla JS", "Third-party API"],
   },
 ];
 
@@ -131,36 +152,42 @@ const colorMap = {
     bg: "bg-amber-400/10",
     text: "text-amber-400",
     badge: "bg-amber-400/10 text-amber-400",
+    stat: "bg-amber-400/8 text-amber-400/70 border-amber-400/15",
     spotlight: "rgba(0, 255, 194, 0.08)",
   },
   teal: {
     bg: "bg-teal-400/10",
     text: "text-teal-400",
     badge: "bg-teal-400/10 text-teal-400",
+    stat: "bg-teal-400/8 text-teal-400/70 border-teal-400/15",
     spotlight: "rgba(45, 212, 191, 0.1)",
   },
   violet: {
     bg: "bg-violet-400/10",
     text: "text-violet-400",
     badge: "bg-violet-400/10 text-violet-400",
+    stat: "bg-violet-400/8 text-violet-400/70 border-violet-400/15",
     spotlight: "rgba(167, 139, 250, 0.1)",
   },
   sky: {
     bg: "bg-sky-400/10",
     text: "text-sky-400",
     badge: "bg-sky-400/10 text-sky-400",
+    stat: "bg-sky-400/8 text-sky-400/70 border-sky-400/15",
     spotlight: "rgba(56, 189, 248, 0.08)",
   },
   emerald: {
     bg: "bg-emerald-400/10",
     text: "text-emerald-400",
     badge: "bg-emerald-400/10 text-emerald-400",
+    stat: "bg-emerald-400/8 text-emerald-400/70 border-emerald-400/15",
     spotlight: "rgba(52, 211, 153, 0.08)",
   },
   rose: {
     bg: "bg-rose-400/10",
     text: "text-rose-400",
     badge: "bg-rose-400/10 text-rose-400",
+    stat: "bg-rose-400/8 text-rose-400/70 border-rose-400/15",
     spotlight: "rgba(251, 113, 133, 0.08)",
   },
 };
@@ -168,9 +195,165 @@ const colorMap = {
 const filters = [
   { key: "all", label: "All" },
   { key: "featured", label: "Featured" },
+  { key: "ai-engineering", label: "AI Engineering" },
   { key: "professional", label: "Professional" },
   { key: "personal", label: "Personal" },
 ];
+
+function useGitHubStars(owner, repo) {
+  const [stars, setStars] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!owner || !repo) {
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    fetch(`https://api.github.com/repos/${owner}/${repo}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("API error");
+        return res.json();
+      })
+      .then((data) => {
+        if (!cancelled) {
+          setStars(data.stargazers_count ?? null);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [owner, repo]);
+
+  return { stars, loading };
+}
+
+function StarBadge({ owner, repo }) {
+  const { stars, loading } = useGitHubStars(owner, repo);
+  if (loading || stars === null) return null;
+  return (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">
+      <Star size={10} className="fill-amber-400" />
+      {stars}
+    </span>
+  );
+}
+
+function ProjectCard({ project }) {
+  const colors = colorMap[project.color];
+  return (
+    <motion.div key={project.title} variants={cardVariants} className="group">
+      <Tilt
+        tiltMaxAngleX={6}
+        tiltMaxAngleY={6}
+        glareEnable
+        glareMaxOpacity={0.08}
+        glareColor="#00FFC2"
+        glarePosition="all"
+        glareBorderRadius="12px"
+        scale={1.02}
+        transitionSpeed={400}
+      >
+        <CardSpotlight
+          className={`p-6 rounded-xl border bg-slate-900/30 transition-all duration-300 ${
+            project.featured
+              ? "border-amber-400/25 hover:border-amber-400/50 shadow-[0_0_30px_rgba(251,191,36,0.04)]"
+              : "border-slate-800/60 hover:border-slate-700"
+          }`}
+          spotlightColor={colors.spotlight}
+        >
+          {/* Icon + title */}
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-lg ${colors.bg}`}>
+                <project.icon size={20} className={colors.text} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="font-display text-lg font-bold text-slate-100">
+                    {project.title}
+                  </h3>
+                  {project.featured && (
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-amber-400/15 text-amber-400 border border-amber-400/20">
+                      Featured
+                    </span>
+                  )}
+                  {project.githubRepo && (
+                    <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />
+                  )}
+                </div>
+                <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
+                  {project.category}{project.aiEngineering ? " · AI Engineering" : ""}
+                </span>
+              </div>
+            </div>
+
+            {/* Links */}
+            <div className="flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors"
+                  title="Source Code"
+                >
+                  <Github size={16} />
+                </a>
+              )}
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors"
+                  title="Live Site"
+                >
+                  <ExternalLink size={16} />
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Description */}
+          <p className="text-sm text-slate-400 leading-relaxed mb-3">
+            {project.description}
+          </p>
+
+          {/* Metric stat chips */}
+          {project.stats && project.stats.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {project.stats.map((stat) => (
+                <span
+                  key={stat}
+                  className={`px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider border ${colors.stat}`}
+                >
+                  {stat}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Tech badges */}
+          <div className="flex flex-wrap gap-2">
+            {project.tech.map((t) => (
+              <span
+                key={t}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-display tracking-wider ${colors.badge}`}
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </CardSpotlight>
+      </Tilt>
+    </motion.div>
+  );
+}
 
 function Portfolio() {
   const [filter, setFilter] = useState("all");
@@ -180,6 +363,8 @@ function Portfolio() {
       ? projects
       : filter === "featured"
       ? projects.filter((p) => p.featured)
+      : filter === "ai-engineering"
+      ? projects.filter((p) => p.aiEngineering)
       : projects.filter((p) => p.category === filter);
 
   return (
@@ -223,113 +408,22 @@ function Portfolio() {
 
         {/* Project grid */}
         <AnimatePresence mode="wait">
-        <motion.div
-          key={filter}
-          className="mt-10 grid md:grid-cols-2 gap-5"
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
-          {filtered.length === 0 && (
-            <div className="col-span-2 py-20 text-center text-slate-500 font-display text-sm tracking-wider">
-              No projects in this category yet.
-            </div>
-          )}
-          {filtered.map((project) => {
-            const colors = colorMap[project.color];
-            return (
-              <motion.div key={project.title} variants={cardVariants} className="group">
-                <Tilt
-                  tiltMaxAngleX={6}
-                  tiltMaxAngleY={6}
-                  glareEnable
-                  glareMaxOpacity={0.08}
-                  glareColor="#00FFC2"
-                  glarePosition="all"
-                  glareBorderRadius="12px"
-                  scale={1.02}
-                  transitionSpeed={400}
-                >
-                  <CardSpotlight
-                    className={`p-6 rounded-xl border bg-slate-900/30 transition-all duration-300 ${
-                      project.featured
-                        ? "border-amber-400/25 hover:border-amber-400/50 shadow-[0_0_30px_rgba(251,191,36,0.04)]"
-                        : "border-slate-800/60 hover:border-slate-700"
-                    }`}
-                    spotlightColor={colors.spotlight}
-                  >
-                    {/* Icon + title */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${colors.bg}`}>
-                          <project.icon size={20} className={colors.text} />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-display text-lg font-bold text-slate-100">
-                              {project.title}
-                            </h3>
-                            {project.featured && (
-                              <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-amber-400/15 text-amber-400 border border-amber-400/20">
-                                Featured
-                              </span>
-                            )}
-                          </div>
-                          <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
-                            {project.category}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Links */}
-                      <div className="flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
-                        {project.github && (
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors"
-                            title="Source Code"
-                          >
-                            <Github size={16} />
-                          </a>
-                        )}
-                        {project.link && (
-                          <a
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors"
-                            title="Live Site"
-                          >
-                            <ExternalLink size={16} />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm text-slate-400 leading-relaxed mb-4">
-                      {project.description}
-                    </p>
-
-                    {/* Tech badges */}
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.map((t) => (
-                        <span
-                          key={t}
-                          className={`px-2.5 py-1 rounded-md text-[11px] font-display tracking-wider ${colors.badge}`}
-                        >
-                          {t}
-                        </span>
-                        ))}
-                    </div>
-                  </CardSpotlight>
-                </Tilt>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+          <motion.div
+            key={filter}
+            className="mt-10 grid md:grid-cols-2 gap-5"
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+          >
+            {filtered.length === 0 && (
+              <div className="col-span-2 py-20 text-center text-slate-500 font-display text-sm tracking-wider">
+                No projects in this category yet.
+              </div>
+            )}
+            {filtered.map((project) => (
+              <ProjectCard key={project.title} project={project} />
+            ))}
+          </motion.div>
         </AnimatePresence>
       </div>
     </div>

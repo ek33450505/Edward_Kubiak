@@ -7,11 +7,14 @@ const skills = {
     "Vite",
     "TypeScript",
     "Tailwind CSS",
+    "Framer Motion",
+    "TanStack Query v5",
+    "React Router v6/v7",
+    "cmdk",
     "Bootstrap 5",
     "React Bootstrap",
     "MUI",
     "TanStack Table",
-    "React Router",
     "AngularJS",
     "jQuery",
     "DataTables",
@@ -22,6 +25,8 @@ const skills = {
     "Python",
     "Flask",
     "PHP",
+    "Server-Sent Events (SSE)",
+    "better-sqlite3",
     "REST API Design",
     "Docker",
     "Docker Compose",
@@ -37,11 +42,12 @@ const skills = {
   "AI & Tools": [
     "Claude API",
     "Claude Code",
-    "CAST Agent Framework",
+    "CAST Agent Framework v3.0 (16 agents, Homebrew)",
     "Ollama",
     "RAG / Embeddings",
     "Shell Scripting",
     "Hook Architecture",
+    "BATS (Bash Automated Testing System)",
     "ElevenLabs TTS",
     "Git",
     "CI/CD",
@@ -78,7 +84,7 @@ const experience = [
       "Launched the Customization Web Store (CWS) — an internal React 19 + Vite platform that streamlined PowerSchool customization requests, replacing a manual email-based workflow.",
       "Modernized the E-Rate dashboard into a Docker Compose monorepo architecture — dual React frontends and a Flask/PostgreSQL backend — helping districts track and capture federal telecom discount funding.",
       "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder — a notification system deployed across multiple client school districts.",
-      "Architect of CAST (Claude Agent Specialist Team) — a fully shell-based 29-agent framework embedded into Claude Code via three enforcement hooks. Automatic specialist dispatch, post-write code review enforcement, and hard-blocked raw git commits. Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) for real-time observability: live agent activity stream, 30-day token burn analytics by model tier, and delegation savings tracking.",
+      "Architect of CAST (Claude Agent Specialist Team) v3.0 — a fully shell-based 16-agent specialist framework embedded into Claude Code via four enforcement hooks. Automatic specialist dispatch, post-write code review enforcement, and hard-blocked raw git commits. 255 BATS tests (0 failures), 16 CLI commands, 7 agent skills, Homebrew distribution (brew install cast). Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) — a 10-page observability UI with real-time SSE activity stream, session cost tracking, per-agent scorecards, and Cmd+K global search.",
       "Pioneer AI-augmented development workflows — engineered TARUS (dual-LLM assistant) and PromptBot (prompt optimizer), and leverage Claude Code daily as an AI pair programmer to accelerate velocity and code quality.",
     ],
   },
@@ -143,8 +149,9 @@ const Resume = () => (
           4,200+ users across 900+ Ohio school districts. I specialize in
           modernizing legacy systems (AngularJS, PHP, jQuery → React 19),
           integrating LLM capabilities into developer workflows, and building
-          AI infrastructure — including CAST, a fully shell-based 29-agent
-          framework for Claude Code, and its real-time observability dashboard.
+          AI infrastructure — including CAST v3.0, a fully shell-based 16-agent
+          specialist framework for Claude Code with Homebrew distribution, and its
+          10-page real-time observability dashboard.
         </p>
       </motion.div>
 

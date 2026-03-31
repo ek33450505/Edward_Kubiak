@@ -1,7 +1,7 @@
-import { useRef, lazy, Suspense } from "react";
+import { useRef, lazy, Suspense, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Code2, Layers, RefreshCw, Brain } from "lucide-react";
+import { ArrowRight, Code2, Layers, RefreshCw, Brain, GitCommit, ExternalLink } from "lucide-react";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
 const StarField = lazy(() => import("./Effects/StarField"));
@@ -32,6 +32,151 @@ const competencies = [
       "Built dual-LLM assistants with Claude API & Ollama. AI-augmented development with Claude Code daily.",
   },
 ];
+
+function timeAgo(dateString) {
+  const now = new Date();
+  const then = new Date(dateString);
+  const diffMs = now - then;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHr = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHr / 24);
+
+  if (diffDay > 30) return `${Math.floor(diffDay / 30)}mo ago`;
+  if (diffDay > 0) return `${diffDay}d ago`;
+  if (diffHr > 0) return `${diffHr}h ago`;
+  if (diffMin > 0) return `${diffMin}m ago`;
+  return "just now";
+}
+
+function CurrentlyBuilding() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("https://api.github.com/users/ek33450505/events?per_page=30")
+      .then((res) => {
+        if (!res.ok) throw new Error("API error");
+        return res.json();
+      })
+      .then((data) => {
+        if (cancelled) return;
+        const pushEvents = data
+          .filter((e) => e.type === "PushEvent" && e.payload?.commits?.length > 0)
+          .slice(0, 5)
+          .map((e) => ({
+            id: e.id,
+            repo: e.repo.name.replace("ek33450505/", ""),
+            repoFull: e.repo.name,
+            message: e.payload.commits[0].message.split("\n")[0],
+            time: e.created_at,
+          }));
+        setEvents(pushEvents);
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setError(true);
+          setLoading(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Hide section entirely on error or if no push events found
+  if (!loading && (error || events.length === 0)) return null;
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5 }}
+      className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
+    >
+      {/* Section heading */}
+      <div className="mb-6 flex items-center gap-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
+              Currently Building
+            </h2>
+            {!loading && (
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-emerald-400/15 text-emerald-400 border border-emerald-400/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live
+              </span>
+            )}
+          </div>
+          <div className="mt-2 w-16 h-0.5 bg-amber-400/60" />
+        </div>
+      </div>
+
+      {/* Loading skeleton */}
+      {loading && (
+        <div className="space-y-3">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 animate-pulse"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-4 h-4 rounded bg-slate-700/60 shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-3 bg-slate-700/60 rounded w-1/4" />
+                  <div className="h-3 bg-slate-700/40 rounded w-3/4" />
+                </div>
+                <div className="h-3 bg-slate-700/40 rounded w-12 shrink-0" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Activity feed */}
+      {!loading && events.length > 0 && (
+        <div className="space-y-2">
+          {events.map((event, i) => (
+            <motion.div
+              key={event.id}
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: i * 0.06 }}
+              className="group flex items-start gap-3 p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700 hover:bg-slate-800/30 transition-all duration-200"
+            >
+              <GitCommit
+                size={14}
+                className="text-amber-400/60 shrink-0 mt-0.5"
+              />
+              <div className="flex-1 min-w-0">
+                <a
+                  href={`https://github.com/ek33450505/${event.repo}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-display text-[11px] tracking-wider text-amber-400/80 hover:text-amber-400 transition-colors uppercase inline-flex items-center gap-1"
+                >
+                  {event.repo}
+                  <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+                <p className="text-sm text-slate-400 leading-snug mt-0.5 truncate">
+                  {event.message}
+                </p>
+              </div>
+              <span className="font-display text-[10px] tracking-wider text-slate-600 shrink-0 pt-0.5">
+                {timeAgo(event.time)}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+      )}
+    </motion.section>
+  );
+}
 
 const Home = () => {
   const heroRef = useRef(null);
@@ -224,6 +369,9 @@ const Home = () => {
           ))}
         </div>
       </section>
+
+      {/* Currently Building — live GitHub activity feed */}
+      <CurrentlyBuilding />
     </div>
   );
 };
