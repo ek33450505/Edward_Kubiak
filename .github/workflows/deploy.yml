@@ -43,6 +43,11 @@ jobs:
           node << 'EOF'
           const fs = require('fs');
           const events = JSON.parse(fs.readFileSync('raw_events.json', 'utf8'));
+          if (!Array.isArray(events)) {
+            console.error('GitHub API did not return an array:', JSON.stringify(events).slice(0, 200));
+            fs.writeFileSync('public/github-activity.json', JSON.stringify([]));
+            process.exit(0);
+          }
           const pushEvents = events
             .filter(e => e.type === 'PushEvent' && e.payload && e.payload.commits && e.payload.commits.length > 0)
             .slice(0, 5)
