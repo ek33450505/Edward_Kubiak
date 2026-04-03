@@ -1,5 +1,5 @@
 import { useRef, lazy, Suspense, useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Code2, Layers, RefreshCw, Brain, GitCommit, ExternalLink } from "lucide-react";
 
@@ -23,7 +23,7 @@ const competencies = [
     icon: RefreshCw,
     title: "Legacy Modernization",
     description:
-      "Migrated CrossCheck from AngularJS to React, serving 4,200+ users across 900+ districts",
+      "Migrated CrossCheck from AngularJS to React, serving 4,200+ users across 900+ Ohio school districts",
   },
   {
     icon: Brain,
@@ -175,7 +175,7 @@ function CurrentlyBuilding() {
 
       {/* Activity feed */}
       {!loading && events.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-2" aria-live="polite">
           {events.map((event, i) => (
             <motion.div
               key={event.id}
@@ -216,6 +216,7 @@ function CurrentlyBuilding() {
 
 const Home = () => {
   const heroRef = useRef(null);
+  const reducedMotion = useReducedMotion();
 
   // Parallax: hero content scrolls slower, decoration floats differently
   const { scrollYProgress } = useScroll({
@@ -263,29 +264,33 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold leading-tight tracking-tight"
             >
-              {"Full Stack".split("").map((char, i) => (
-                <motion.span
-                  key={`fs-${i}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.15 + i * 0.03 }}
-                >
-                  {char}
-                </motion.span>
-              ))}
+              {reducedMotion
+                ? "Full Stack"
+                : "Full Stack".split("").map((char, i) => (
+                    <motion.span
+                      key={`fs-${i}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.15 + i * 0.03 }}
+                    >
+                      {char}
+                    </motion.span>
+                  ))}
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-sky-400">
-                {"Developer".split("").map((char, i) => (
-                  <motion.span
-                    key={`dev-${i}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.45 + i * 0.04 }}
-                    className="inline-block"
-                  >
-                    {char}
-                  </motion.span>
-                ))}
+                {reducedMotion
+                  ? "Developer"
+                  : "Developer".split("").map((char, i) => (
+                      <motion.span
+                        key={`dev-${i}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: 0.45 + i * 0.04 }}
+                        className="inline-block"
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
               </span>
               <br />
               <span className="text-slate-400 text-3xl sm:text-4xl lg:text-5xl">
@@ -328,6 +333,7 @@ const Home = () => {
           {/* Right column - decorative element with parallax */}
           <div className="md:col-span-5 hidden md:flex items-center justify-center">
             <motion.div
+              aria-hidden="true"
               initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}

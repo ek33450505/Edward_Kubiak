@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ExternalLink, Github, Star, Bot, Database, Globe, Terminal, BarChart3, ShoppingBag, DollarSign, Network, LayoutDashboard } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
@@ -55,12 +55,12 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-agents",
     githubRepo: { owner: "ek33450505", repo: "cast-agents" },
-    stats: ["17 Agents", "Homebrew Install", "Claude Code"],
+    stats: ["16 Agents", "Homebrew Install", "Claude Code"],
   },
   {
     title: "cast-observe",
     description:
-      "Session-level observability layer for Claude Code — tracks cost, agent run history, and token spend locally via SQLite. Install: brew tap ek33450505/cast-observe && brew install cast-observe",
+      "Lightweight CLI-installable observability layer for Claude Code — tracks session cost, agent run history, and token spend in a local SQLite database. No UI required; designed as the data backend that the Claude Code Dashboard reads from. Install: brew tap ek33450505/cast-observe && brew install cast-observe",
     tech: ["Bash", "Shell", "SQLite"],
     icon: BarChart3,
     color: "teal",
@@ -95,7 +95,7 @@ const projects = [
     github: "https://github.com/ek33450505/cast-site",
     githubRepo: { owner: "ek33450505", repo: "cast-site" },
     link: "https://cast-site-iota.vercel.app",
-    stats: ["TypeScript", "Vercel"],
+    stats: ["Marketing Site", "Vercel Deploy"],
   },
   {
     title: "TARUS",
@@ -106,7 +106,7 @@ const projects = [
     color: "amber",
     category: "personal",
     aiEngineering: true,
-    stats: ["Dual-LLM", "Real-time Streaming", "SQLite Persistence"],
+    stats: ["Private", "Dual-LLM", "Real-time Streaming", "SQLite Persistence"],
   },
   {
     title: "TARS-Lite",
@@ -117,7 +117,7 @@ const projects = [
     color: "sky",
     category: "personal",
     aiEngineering: true,
-    stats: ["100% Local", "Zero Cloud"],
+    stats: ["Private", "100% Local", "Zero Cloud"],
   },
   {
     title: "CrossCheck",
@@ -175,7 +175,7 @@ const projects = [
   {
     title: "Run Buddy",
     description:
-      "A responsive fitness landing page built with semantic HTML and CSS. One of my earliest projects showcasing front-end fundamentals.",
+      "A responsive fitness landing page built with semantic HTML and CSS. One of my earliest projects showcasing frontend fundamentals.",
     tech: ["HTML", "CSS"],
     icon: Globe,
     color: "emerald",
@@ -298,17 +298,18 @@ function StarBadge({ owner, repo }) {
 
 function ProjectCard({ project }) {
   const colors = colorMap[project.color];
+  const reducedMotion = useReducedMotion();
   return (
     <motion.div key={project.title} variants={cardVariants} className="group">
       <Tilt
-        tiltMaxAngleX={6}
-        tiltMaxAngleY={6}
-        glareEnable
+        tiltMaxAngleX={reducedMotion ? 0 : 6}
+        tiltMaxAngleY={reducedMotion ? 0 : 6}
+        glareEnable={!reducedMotion}
         glareMaxOpacity={0.08}
         glareColor="#00FFC2"
         glarePosition="all"
         glareBorderRadius="12px"
-        scale={1.02}
+        scale={reducedMotion ? 1 : 1.02}
         transitionSpeed={400}
       >
         <CardSpotlight
@@ -353,9 +354,9 @@ function ProjectCard({ project }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors"
-                  title="Source Code"
+                  aria-label="View source code on GitHub (opens in new tab)"
                 >
-                  <Github size={16} />
+                  <Github size={16} aria-hidden="true" />
                 </a>
               )}
               {project.link && (
@@ -364,9 +365,9 @@ function ProjectCard({ project }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors"
-                  title="Live Site"
+                  aria-label="View live site (opens in new tab)"
                 >
-                  <ExternalLink size={16} />
+                  <ExternalLink size={16} aria-hidden="true" />
                 </a>
               )}
             </div>
@@ -437,6 +438,7 @@ function Portfolio() {
 
         {/* Filter tabs */}
         <motion.div
+          role="tablist"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.15 }}

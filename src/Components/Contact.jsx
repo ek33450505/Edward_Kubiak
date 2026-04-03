@@ -50,7 +50,7 @@ const Contact = () => {
     } catch {
       setStatus({
         type: "error",
-        message: "Failed to send. Please try again or email me directly.",
+        message: "Failed to send. Please try again or email EK33433450805@mailfence.com directly.",
       });
     } finally {
       setSending(false);
@@ -59,7 +59,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-2xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -88,9 +88,9 @@ const Contact = () => {
             }`}
           >
             {status.type === "success" ? (
-              <CheckCircle size={18} />
+              <CheckCircle size={18} aria-hidden="true" />
             ) : (
-              <AlertCircle size={18} />
+              <AlertCircle size={18} aria-hidden="true" />
             )}
             <span className="text-sm">{status.message}</span>
           </motion.div>
@@ -118,6 +118,7 @@ const Contact = () => {
               value={contact.name}
               onChange={handleChange}
               required
+              autoComplete="name"
               placeholder="Your name"
               maxLength={100}
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800/60 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/20 transition-all duration-300"
@@ -138,6 +139,7 @@ const Contact = () => {
               value={contact.email}
               onChange={handleChange}
               required
+              autoComplete="email"
               placeholder="your@email.com"
               maxLength={254}
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800/60 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/20 transition-all duration-300"

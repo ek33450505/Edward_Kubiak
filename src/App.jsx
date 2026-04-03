@@ -54,6 +54,7 @@ function NavBar() {
             <Link
               key={to}
               to={to}
+              aria-current={location.pathname === to ? "page" : undefined}
               className={`relative px-4 py-2 font-display text-xs tracking-widest uppercase transition-colors duration-300 ${
                 location.pathname === to
                   ? "text-amber-400"
@@ -86,6 +87,7 @@ function NavBar() {
           onClick={() => setOpen(!open)}
           className="md:hidden p-2 text-slate-400 hover:text-amber-400 transition-colors"
           aria-label="Toggle menu"
+          aria-expanded={open}
         >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -107,6 +109,7 @@ function NavBar() {
                   key={to}
                   to={to}
                   onClick={() => setOpen(false)}
+                  aria-current={location.pathname === to ? "page" : undefined}
                   className={`font-display text-sm tracking-widest uppercase py-3 border-b border-slate-800/40 transition-colors ${
                     location.pathname === to
                       ? "text-amber-400"
@@ -134,6 +137,17 @@ function NavBar() {
 
 function AnimatedRoutes() {
   const location = useLocation();
+
+  useEffect(() => {
+    const titles = {
+      "/": "Edward Kubiak — Full Stack Developer & AI Engineer",
+      "/about": "About — Edward Kubiak",
+      "/projects": "Projects — Edward Kubiak",
+      "/resume": "Resume — Edward Kubiak",
+      "/contact": "Contact — Edward Kubiak",
+    };
+    document.title = titles[location.pathname] || "Edward Kubiak";
+  }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait">
@@ -174,6 +188,12 @@ function App() {
               &copy; {new Date().getFullYear()} EDWARD KUBIAK
             </p>
             <div className="flex items-center gap-4">
+              <Link
+                to="/contact"
+                className="font-display text-xs tracking-wider uppercase hover:text-amber-400 transition-colors"
+              >
+                Contact
+              </Link>
               <a
                 href="https://github.com/ek33450505"
                 target="_blank"

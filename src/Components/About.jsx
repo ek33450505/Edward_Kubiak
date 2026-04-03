@@ -1,7 +1,8 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { MapPin, Briefcase, Heart, Mountain } from "lucide-react";
 
 const About = () => {
+  const reducedMotion = useReducedMotion();
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
       <div className="max-w-4xl mx-auto px-6">
@@ -24,7 +25,7 @@ const About = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            whileHover={{ x: 4, transition: { duration: 0.2 } }}
+            whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
             className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
@@ -40,7 +41,7 @@ const About = () => {
                   applications and builds AI infrastructure. My daily toolkit
                   spans React 19, Node.js, Python, and Flask — but what drives
                   me is pushing AI into real developer workflows at the systems
-                  level. I built CAST, a fully shell-based 29-agent framework
+                  level. I built CAST, a shell-native 16-agent framework
                   that embeds an entire specialist team into Claude Code via
                   hook architecture, and the Claude Code Dashboard — a React 19
                   + TypeScript observability UI with live SSE agent streams and
@@ -70,7 +71,7 @@ const About = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            whileHover={{ x: 4, transition: { duration: 0.2 } }}
+            whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
             className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
@@ -97,7 +98,7 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5 }}
-              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
               className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
             >
               <div className="flex items-start gap-4">
@@ -122,7 +123,7 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
               className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
             >
               <div className="flex items-start gap-4">
