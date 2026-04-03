@@ -19,7 +19,7 @@ const projects = [
   {
     title: "CAST — Claude Agent Team",
     description:
-      "16-agent specialist framework embedded into Claude Code at the hook layer. Four enforcement hooks intercept every prompt — dispatching the right specialist automatically, enforcing post-write code review, and hard-blocking raw git commits. Hook-driven enforcement architecture with local-first SQLite cast.db, per-agent persistent memory, model-driven dispatch (no routing tables), and Homebrew distribution. Install: brew tap ek33450505/cast && brew install cast",
+      "Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 17 specialist agents, 4 enforcement hooks, and model-driven dispatch — no routing tables, no cloud. The full ecosystem is also available as modular Homebrew packages: install only what you need (cast-agents, cast-hooks, cast-observe, cast-security, cast-dash). brew tap ek33450505/cast && brew install cast",
     tech: ["Claude Code", "Bash", "Hook Architecture", "Node.js", "SQLite", "BATS"],
     icon: Network,
     color: "violet",
@@ -47,67 +47,72 @@ const projects = [
   {
     title: "cast-agents",
     description:
-      "Standalone distribution of the 17 CAST specialist agents — commit, debug, review, plan, and more. Drop them into any Claude Code setup via Homebrew. Install: brew tap ek33450505/cast-agents && brew install cast-agents",
+      "Part of the open-source CAST ecosystem — install just the agents, nothing else. 17 specialist Claude Code agents (commit, debug, review, plan, and more) distributed as a standalone Homebrew package. Mix and match CAST modules to build your own stack. brew tap ek33450505/cast-agents && brew install cast-agents",
     tech: ["Claude Code", "Bash", "Shell"],
     icon: Network,
     color: "violet",
     category: "personal",
+    castEcosystem: true,
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-agents",
     githubRepo: { owner: "ek33450505", repo: "cast-agents" },
-    stats: ["16 Agents", "Homebrew Install", "Claude Code"],
+    stats: ["Open Source", "16 Agents", "Homebrew Install", "Claude Code"],
   },
   {
     title: "cast-observe",
     description:
-      "Lightweight CLI-installable observability layer for Claude Code — tracks session cost, agent run history, and token spend in a local SQLite database. No UI required; designed as the data backend that the Claude Code Dashboard reads from. Install: brew tap ek33450505/cast-observe && brew install cast-observe",
+      "Part of the open-source CAST ecosystem — install just the observability layer. Tracks session cost, agent run history, and token spend in local SQLite. Use standalone or pair with cast-dash for a full terminal monitoring stack. Also serves as the data backend for the Claude Code Dashboard. brew tap ek33450505/cast-observe && brew install cast-observe",
     tech: ["Bash", "Shell", "SQLite"],
     icon: BarChart3,
     color: "teal",
     category: "personal",
+    castEcosystem: true,
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-observe",
     githubRepo: { owner: "ek33450505", repo: "cast-observe" },
-    stats: ["Cost Tracking", "SQLite", "Homebrew Install"],
+    stats: ["Open Source", "Cost Tracking", "SQLite", "Homebrew Install"],
   },
   {
     title: "cast-security",
     description:
-      "Security hooks and audit trail for Claude Code. Policy gates that hard-block dangerous operations, PII redaction, and a local tamper-evident log of every agent action.",
+      "Part of the open-source CAST ecosystem — install just the security layer. Policy gates that hard-block dangerous operations, PII redaction, and a tamper-evident audit log of every agent action. Drop in alongside any other CAST module or use standalone. brew tap ek33450505/cast-security && brew install cast-security",
     tech: ["Bash", "Shell", "Hook Architecture"],
     icon: Terminal,
     color: "rose",
     category: "personal",
+    castEcosystem: true,
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-security",
     githubRepo: { owner: "ek33450505", repo: "cast-security" },
-    stats: ["Policy Gates", "Audit Trail", "PII Redaction"],
+    stats: ["Open Source", "Policy Gates", "Audit Trail", "PII Redaction"],
   },
   {
     title: "cast-hooks",
     description:
-      "13 production Claude Code hook scripts — observability pipeline, safety policy gates, agent dispatch directives, and BATS-tested automation. Drop into any Claude Code setup via Homebrew. Install: brew tap ek33450505/cast-hooks && brew install cast-hooks",
+      "Part of the open-source CAST ecosystem — install just the hooks. 13 production Claude Code hook scripts: observability pipeline, safety policy gates, and agent dispatch directives. Works standalone without the full framework, fully BATS-tested. brew tap ek33450505/cast-hooks && brew install cast-hooks",
     tech: ["Bash", "Shell", "Hook Architecture", "BATS"],
     icon: Terminal,
     color: "rose",
     category: "personal",
+    castEcosystem: true,
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-hooks",
     githubRepo: { owner: "ek33450505", repo: "cast-hooks" },
-    stats: ["13 Hooks", "Observability", "Safety Gates", "Homebrew Install"],
+    stats: ["Open Source", "13 Hooks", "Observability", "Safety Gates", "Homebrew Install"],
   },
   {
     title: "cast-dash",
     description:
-      "Terminal UI dashboard for Claude Code — an htop-style 4-panel live display built with Python + Textual. Shows active sessions, agent run history, token spend, and hook health in real time from the local cast.db. Install: brew tap ek33450505/cast-dash && brew install cast-dash",
+      "Part of the open-source CAST ecosystem — install just the terminal dashboard. An htop-style 4-panel live display built with Python + Textual showing active sessions, agent history, token spend, and hook health. Pair with cast-observe or use standalone against any cast.db. brew tap ek33450505/cast-dash && brew install cast-dash",
     tech: ["Python", "Textual", "SQLite", "Shell"],
     icon: BarChart3,
     color: "teal",
     category: "personal",
+    castEcosystem: true,
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-dash",
     githubRepo: { owner: "ek33450505", repo: "cast-dash" },
-    stats: ["4-Panel TUI", "Live Data", "SQLite", "Homebrew Install"],
+    stats: ["Open Source", "4-Panel TUI", "Live Data", "SQLite", "Homebrew Install"],
   },
   {
     title: "cast-site",
@@ -360,6 +365,11 @@ function ProjectCard({ project }) {
                   {project.featured && (
                     <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-amber-400/15 text-amber-400 border border-amber-400/20">
                       Featured
+                    </span>
+                  )}
+                  {project.castEcosystem && (
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-violet-400/15 text-violet-400 border border-violet-400/20">
+                      CAST Ecosystem
                     </span>
                   )}
                   {project.githubRepo && (
