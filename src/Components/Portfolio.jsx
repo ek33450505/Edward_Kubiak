@@ -84,6 +84,32 @@ const projects = [
     stats: ["Policy Gates", "Audit Trail", "PII Redaction"],
   },
   {
+    title: "cast-hooks",
+    description:
+      "13 production Claude Code hook scripts — observability pipeline, safety policy gates, agent dispatch directives, and BATS-tested automation. Drop into any Claude Code setup via Homebrew. Install: brew tap ek33450505/cast-hooks && brew install cast-hooks",
+    tech: ["Bash", "Shell", "Hook Architecture", "BATS"],
+    icon: Terminal,
+    color: "rose",
+    category: "personal",
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/cast-hooks",
+    githubRepo: { owner: "ek33450505", repo: "cast-hooks" },
+    stats: ["13 Hooks", "Observability", "Safety Gates", "Homebrew Install"],
+  },
+  {
+    title: "cast-dash",
+    description:
+      "Terminal UI dashboard for Claude Code — an htop-style 4-panel live display built with Python + Textual. Shows active sessions, agent run history, token spend, and hook health in real time from the local cast.db. Install: brew tap ek33450505/cast-dash && brew install cast-dash",
+    tech: ["Python", "Textual", "SQLite", "Shell"],
+    icon: BarChart3,
+    color: "teal",
+    category: "personal",
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/cast-dash",
+    githubRepo: { owner: "ek33450505", repo: "cast-dash" },
+    stats: ["4-Panel TUI", "Live Data", "SQLite", "Homebrew Install"],
+  },
+  {
     title: "cast-site",
     description:
       "Marketing and documentation site for the CAST ecosystem — built with TypeScript and deployed on Vercel.",

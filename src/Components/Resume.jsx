@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import { motion } from "motion/react";
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Download } from "lucide-react";
+import { useReactToPrint } from "react-to-print";
 
 const skills = {
   Frontend: [
@@ -42,10 +44,11 @@ const skills = {
   "AI & Tools": [
     "Claude API",
     "Claude Code",
-    "CAST Agent Framework v3.0 (16 agents, Homebrew)",
+    "CAST Agent Framework v4.2 (17 agents, Homebrew)",
     "Ollama",
     "RAG / Embeddings",
     "Shell Scripting",
+    "Textual (Python TUI)",
     "Hook Architecture",
     "BATS (Bash Automated Testing System)",
     "ElevenLabs TTS",
@@ -103,9 +106,13 @@ const education = [
   },
 ];
 
-const Resume = () => (
+const Resume = () => {
+  const resumeRef = useRef(null);
+  const handlePrint = useReactToPrint({ contentRef: resumeRef });
+
+  return (
   <div className="min-h-[calc(100vh-80px)] py-20">
-    <div className="max-w-4xl mx-auto px-6">
+    <div className="max-w-4xl mx-auto px-6" ref={resumeRef}>
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -130,6 +137,13 @@ const Resume = () => (
             </span>
           </div>
         </div>
+        <button
+          onClick={handlePrint}
+          className="flex items-center gap-2 px-4 py-2 bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/20 hover:border-amber-400/40 rounded-lg text-sm font-medium transition-all duration-200 print:hidden self-start sm:self-end"
+        >
+          <Download className="w-4 h-4" />
+          Download PDF
+        </button>
       </motion.div>
 
       {/* Summary */}
@@ -274,6 +288,7 @@ const Resume = () => (
       </motion.div>
     </div>
   </div>
-);
+  );
+};
 
 export default Resume;
