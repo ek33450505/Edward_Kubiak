@@ -100,7 +100,7 @@ const education = [
     period: "January 2022 — July 2022",
   },
   {
-    degree: "Bachelor of Science in Geological Science",
+    degree: "Bachelor of Arts and Science in Geological Science",
     institution: "Ohio University",
     period: "August 2005 — June 2009",
   },
@@ -108,7 +108,24 @@ const education = [
 
 const Resume = () => {
   const resumeRef = useRef(null);
-  const handlePrint = useReactToPrint({ contentRef: resumeRef });
+  const handlePrint = useReactToPrint({
+    contentRef: resumeRef,
+    pageStyle: `
+      @page { margin: 1.5cm; }
+      @media print {
+        * {
+          background: white !important;
+          background-color: white !important;
+          color: #111 !important;
+          border-color: #ddd !important;
+          box-shadow: none !important;
+          text-shadow: none !important;
+        }
+        a { color: #222 !important; text-decoration: none !important; }
+        span[class], div[class] { opacity: 1 !important; }
+      }
+    `,
+  });
 
   return (
   <div className="min-h-[calc(100vh-80px)] py-20">
