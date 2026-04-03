@@ -115,20 +115,6 @@ const projects = [
     stats: ["Open Source", "4-Panel TUI", "Live Data", "SQLite", "Homebrew Install"],
   },
   {
-    title: "cast-site",
-    description:
-      "Marketing and documentation site for the CAST ecosystem — built with TypeScript and deployed on Vercel.",
-    tech: ["TypeScript", "Vite"],
-    icon: Globe,
-    color: "amber",
-    category: "personal",
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/cast-site",
-    githubRepo: { owner: "ek33450505", repo: "cast-site" },
-    link: "https://cast-site-iota.vercel.app",
-    stats: ["Marketing Site", "Vercel Deploy"],
-  },
-  {
     title: "TARUS",
     description:
       "AI assistant I engineered from scratch with dual-LLM architecture — Claude API for cloud intelligence, Ollama for private local inference. Features real-time streaming, SQLite conversation persistence, and a React 19 + Vite frontend.",
