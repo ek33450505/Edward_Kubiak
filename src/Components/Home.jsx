@@ -29,7 +29,7 @@ const competencies = [
     icon: Brain,
     title: "AI / LLM Integration",
     description:
-      "Built dual-LLM assistants with Claude API & Ollama. AI-augmented development with Claude Code daily.",
+      "Architect of the CAST ecosystem — 17 specialist agents, modular Homebrew packages, and a real-time observability dashboard for Claude Code.",
   },
 ];
 
@@ -304,8 +304,10 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.8 }}
               className="mt-6 text-lg text-slate-400 max-w-lg leading-relaxed"
             >
-              I build AI-powered web applications and modernize legacy systems
-              serving 4,200+ users across 900+ Ohio school districts.
+              By day, I build production education technology for Ohio school
+              districts at META Solutions. By night, I build open-source
+              infrastructure for AI-native development — including the CAST
+              ecosystem, a modular agent framework for Claude Code.
             </motion.p>
 
             <motion.div

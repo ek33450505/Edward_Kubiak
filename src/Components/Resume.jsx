@@ -1,7 +1,5 @@
-import { useRef } from "react";
 import { motion } from "motion/react";
-import { Mail, MapPin, Download } from "lucide-react";
-import { useReactToPrint } from "react-to-print";
+import { Mail, MapPin } from "lucide-react";
 
 const skills = {
   Frontend: [
@@ -87,7 +85,7 @@ const experience = [
       "Launched the Customization Web Store (CWS) — an internal React 19 + Vite platform that streamlined PowerSchool customization requests, replacing a manual email-based workflow.",
       "Modernized the E-Rate dashboard into a Docker Compose monorepo architecture — dual React frontends and a Flask/PostgreSQL backend — helping districts track and capture federal telecom discount funding.",
       "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder — a notification system deployed across multiple client school districts.",
-      "Architect of CAST (Claude Agent Specialist Team) v3.0 — a shell-native 16-agent specialist framework embedded into Claude Code via four enforcement hooks. Automatic specialist dispatch, post-write code review enforcement, and hard-blocked raw git commits. 255 BATS tests (0 failures), 16 CLI commands, 7 agent skills, Homebrew distribution (brew install cast). Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) — a 10-page observability UI with real-time SSE activity stream, session cost tracking, per-agent scorecards, and Cmd+K global search.",
+      "Architect of CAST (Claude Agent Specialist Team) v4.2 — a shell-native 17-agent specialist framework embedded into Claude Code via four enforcement hooks. Automatic specialist dispatch, post-write code review enforcement, and hard-blocked raw git commits. 255 BATS tests (0 failures), 16 Commands, 7 agent skills, Homebrew distribution (brew install cast). Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) — a 10-page observability UI with real-time SSE activity stream, session cost tracking, per-agent scorecards, and Cmd+K global search.",
       "Pioneered AI-augmented development workflows — engineered TARUS (dual-LLM assistant) and PromptBot (prompt optimizer), and leverage Claude Code daily as an AI pair programmer to accelerate velocity and code quality.",
     ],
   },
@@ -107,29 +105,9 @@ const education = [
 ];
 
 const Resume = () => {
-  const resumeRef = useRef(null);
-  const handlePrint = useReactToPrint({
-    contentRef: resumeRef,
-    pageStyle: `
-      @page { margin: 1.5cm; }
-      @media print {
-        * {
-          background: white !important;
-          background-color: white !important;
-          color: #111 !important;
-          border-color: #ddd !important;
-          box-shadow: none !important;
-          text-shadow: none !important;
-        }
-        a { color: #222 !important; text-decoration: none !important; }
-        span[class], div[class] { opacity: 1 !important; }
-      }
-    `,
-  });
-
   return (
   <div className="min-h-[calc(100vh-80px)] py-20">
-    <div className="max-w-4xl mx-auto px-6" ref={resumeRef}>
+    <div className="max-w-4xl mx-auto px-6">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -154,13 +132,6 @@ const Resume = () => {
             </span>
           </div>
         </div>
-        <button
-          onClick={handlePrint}
-          className="flex items-center gap-2 px-4 py-2 bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/20 hover:border-amber-400/40 rounded-lg text-sm font-medium transition-all duration-200 print:hidden self-start sm:self-end"
-        >
-          <Download className="w-4 h-4" />
-          Download PDF
-        </button>
       </motion.div>
 
       {/* Summary */}
@@ -180,7 +151,7 @@ const Resume = () => {
           4,200+ users across 900+ Ohio school districts. I specialize in
           modernizing legacy systems (AngularJS, PHP, jQuery → React 19),
           integrating LLM capabilities into developer workflows, and building
-          AI infrastructure — including CAST v3.0, a shell-native 16-agent
+          AI infrastructure — including CAST v4.2, a shell-native 17-agent
           specialist framework for Claude Code with Homebrew distribution, and its
           10-page real-time observability dashboard.
         </p>

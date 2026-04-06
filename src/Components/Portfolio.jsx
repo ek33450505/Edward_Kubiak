@@ -28,7 +28,8 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/claude-agent-team",
     githubRepo: { owner: "ek33450505", repo: "claude-agent-team" },
-    stats: ["16 Agents", "4 Hooks", "255 Tests", "16 Commands", "7 Skills", "v3.0.0"],
+    castEcosystem: true,
+    stats: ["17 Agents", "4 Hooks", "255 Tests", "16 Commands", "7 Skills", "v4.2"],
   },
   {
     title: "Claude Code Dashboard",
@@ -40,14 +41,16 @@ const projects = [
     category: "personal",
     featured: true,
     aiEngineering: true,
+    castEcosystem: true,
     github: "https://github.com/ek33450505/claude-code-dashboard",
     githubRepo: { owner: "ek33450505", repo: "claude-code-dashboard" },
+    link: "https://cast-site-iota.vercel.app/",
     stats: ["10 Pages", "13+ APIs", "SSE Live Feed", "v1.0.0"],
   },
   {
     title: "cast-agents",
     description:
-      "Part of the open-source CAST ecosystem — install just the agents, nothing else. 17 specialist Claude Code agents (commit, debug, review, plan, and more) distributed as a standalone Homebrew package. Mix and match CAST modules to build your own stack. brew tap ek33450505/cast-agents && brew install cast-agents",
+      "Part of the open-source CAST ecosystem — install just the agents, nothing else. All 17 specialist Claude Code agents (commit, debug, review, plan, and more) distributed as a standalone Homebrew package. Mix and match CAST modules to build your own stack. brew tap ek33450505/cast-agents && brew install cast-agents",
     tech: ["Claude Code", "Bash", "Shell"],
     icon: Network,
     color: "violet",
@@ -56,7 +59,7 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-agents",
     githubRepo: { owner: "ek33450505", repo: "cast-agents" },
-    stats: ["Open Source", "16 Agents", "Homebrew Install", "Claude Code"],
+    stats: ["Open Source", "17 Agents", "Homebrew Install", "Claude Code"],
   },
   {
     title: "cast-observe",
@@ -113,6 +116,20 @@ const projects = [
     github: "https://github.com/ek33450505/cast-dash",
     githubRepo: { owner: "ek33450505", repo: "cast-dash" },
     stats: ["Open Source", "4-Panel TUI", "Live Data", "SQLite", "Homebrew Install"],
+  },
+  {
+    title: "cast-memory",
+    description:
+      "Part of the open-source CAST ecosystem — install just the memory layer. Persistent memory for Claude Code agents via Python, Shell, and MCP integration. Agents retain context across sessions without cloud storage. brew tap ek33450505/cast-memory && brew install cast-memory",
+    tech: ["Python", "Shell", "MCP", "SQLite"],
+    icon: Database,
+    color: "emerald",
+    category: "personal",
+    castEcosystem: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/cast-memory",
+    githubRepo: { owner: "ek33450505", repo: "cast-memory" },
+    stats: ["Open Source", "Agent Memory", "MCP Integration", "Homebrew Install"],
   },
   {
     title: "TARUS",
@@ -265,7 +282,7 @@ const colorMap = {
 const filters = [
   { key: "all", label: "All" },
   { key: "featured", label: "Featured" },
-  { key: "ai-engineering", label: "AI Engineering" },
+  { key: "cast-ecosystem", label: "CAST Ecosystem" },
   { key: "professional", label: "Professional" },
   { key: "personal", label: "Personal" },
 ];
@@ -363,7 +380,7 @@ function ProjectCard({ project }) {
                   )}
                 </div>
                 <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
-                  {project.category}{project.aiEngineering ? " · AI Engineering" : ""}
+                  {project.category}{project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""}
                 </span>
               </div>
             </div>
@@ -439,8 +456,8 @@ function Portfolio() {
       ? projects
       : filter === "featured"
       ? projects.filter((p) => p.featured)
-      : filter === "ai-engineering"
-      ? projects.filter((p) => p.aiEngineering)
+      : filter === "cast-ecosystem"
+      ? projects.filter((p) => p.castEcosystem)
       : projects.filter((p) => p.category === filter);
 
   return (
