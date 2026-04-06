@@ -90,7 +90,7 @@ const experience = [
       "Launched the Customization Web Store (CWS) — an internal React 19 + Vite platform that streamlined PowerSchool customization requests, replacing a manual email-based workflow.",
       "Modernized the E-Rate dashboard into a Docker Compose monorepo architecture — dual React frontends, a Flask REST API with PostgreSQL, Traefik reverse proxy, and Jenkins CI/CD — helping districts track and capture federal telecom discount funding.",
       "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder — a notification system deployed across multiple client school districts.",
-      "Architect of CAST (Claude Agent Specialist Team) v4.2 — a 17-agent specialist framework embedded into Claude Code via hook-driven dispatch. Features model-driven routing, local-first SQLite observability, per-agent persistent memory, and 255 BATS tests. Distributed as 6 modular Homebrew packages (cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory) — install only what you need. Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) — a 10-page observability UI with real-time activity stream, session cost tracking, per-agent scorecards, and Cmd+K global search.",
+      "Architect of CAST (Claude Agent Specialist Team) v4.2 — a 17-agent specialist framework embedded into Claude Code via hook-driven dispatch. Features model-driven routing, local-first SQLite observability, per-agent persistent memory, and 255 BATS tests. Distributed as 7 modular Homebrew packages (cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel) — install only what you need. Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) — a 10-page observability UI with real-time activity stream, session cost tracking, per-agent scorecards, and Cmd+K global search.",
       "Pioneered AI-augmented development workflows — engineered TARUS (dual-LLM assistant) and PromptBot (prompt optimizer), and leverage Claude Code daily as an AI pair programmer to accelerate velocity and code quality.",
     ],
   },
@@ -151,7 +151,7 @@ const Resume = () => {
           Summary
         </h2>
         <p className="text-slate-300 leading-relaxed">
-          Full Stack Developer and AI systems engineer who architects, ships, and maintains five production web applications at META Solutions — serving 4,200+ users across 900+ Ohio school districts. I specialize in modernizing legacy systems (AngularJS, PHP, jQuery → React 19), integrating LLM capabilities into developer workflows, and building AI infrastructure — including CAST v4.2, a 17-agent specialist framework for Claude Code distributed as 6 modular Homebrew packages, plus a 10-page real-time React observability dashboard.
+          Full Stack Developer and AI systems engineer who architects, ships, and maintains five production web applications at META Solutions — serving 4,200+ users across 900+ Ohio school districts. I specialize in modernizing legacy systems (AngularJS, PHP, jQuery → React 19), integrating LLM capabilities into developer workflows, and building AI infrastructure — including CAST v4.2, a 17-agent specialist framework for Claude Code distributed as 7 modular Homebrew packages, plus a 10-page real-time React observability dashboard.
         </p>
       </motion.div>
 

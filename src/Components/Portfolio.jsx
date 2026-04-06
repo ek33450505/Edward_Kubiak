@@ -132,6 +132,20 @@ const projects = [
     stats: ["Open Source", "Agent Memory", "MCP Integration", "Homebrew Install"],
   },
   {
+    title: "cast-parallel",
+    description:
+      "Part of the open-source CAST ecosystem — parallel plan execution. Splits CAST batches across two Claude Code sessions in isolated git worktrees, then merges results automatically when both finish. brew tap ek33450505/cast-parallel && brew install cast-parallel",
+    tech: ["Bash", "Shell", "Git Worktrees", "Python"],
+    icon: Terminal,
+    color: "sky",
+    category: "personal",
+    castEcosystem: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/cast-parallel",
+    githubRepo: { owner: "ek33450505", repo: "cast-parallel" },
+    stats: ["Open Source", "Parallel Execution", "Auto Merge", "Homebrew Install"],
+  },
+  {
     title: "TARUS",
     description:
       "AI assistant I engineered from scratch with dual-LLM architecture — Claude API for cloud intelligence, Ollama for private local inference. Features real-time streaming, SQLite conversation persistence, and a React 19 + Vite frontend.",
