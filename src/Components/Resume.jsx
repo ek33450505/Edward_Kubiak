@@ -122,10 +122,10 @@ const Resume = () => {
           <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
           <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-400">
             <a
-              href="mailto:EK33433450805@mailfence.com"
+              href="mailto:edward.kubiak.dev@gmail.com"
               className="inline-flex items-center gap-1.5 hover:text-amber-400 transition-colors"
             >
-              <Mail size={14} /> EK33433450805@mailfence.com
+              <Mail size={14} /> edward.kubiak.dev@gmail.com
             </a>
             <span className="inline-flex items-center gap-1.5">
               <MapPin size={14} /> Columbus, Ohio
