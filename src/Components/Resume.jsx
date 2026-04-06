@@ -15,6 +15,7 @@ const skills = {
     "React Bootstrap",
     "MUI",
     "TanStack Table",
+    "AG Grid",
     "AngularJS",
     "jQuery",
     "DataTables",
@@ -24,12 +25,15 @@ const skills = {
     "Express 4/5",
     "Python",
     "Flask",
+    "MS SQL Server",
     "PHP",
     "Server-Sent Events (SSE)",
     "better-sqlite3",
     "REST API Design",
     "Docker",
     "Docker Compose",
+    "Traefik",
+    "Jenkins",
   ],
   Data: [
     "SQLite",
@@ -48,6 +52,7 @@ const skills = {
     "Shell Scripting",
     "Textual (Python TUI)",
     "Hook Architecture",
+    "MCP (Model Context Protocol)",
     "BATS (Bash Automated Testing System)",
     "ElevenLabs TTS",
     "Git",
@@ -79,13 +84,13 @@ const experience = [
     location: "Columbus, OH",
     period: "August 2022 — Present",
     highlights: [
-      "Spearheaded the complete migration of CrossCheck from AngularJS to React — a mission-critical EMIS validation platform now serving 4,200+ users across 900+ Ohio school districts.",
+      "Spearheaded the complete migration of CrossCheck from AngularJS to React — a mission-critical EMIS validation platform built with React 18, AG Grid, MUI, JWT auth, and TanStack Query, now serving 4,200+ users across 900+ Ohio school districts.",
       "Architected and maintain five production web applications across React, Flask, Express, PostgreSQL, and jQuery/DataTables — each serving Ohio's K-12 education ecosystem.",
       "Engineered SES-Wiki from the ground up — a React 19 + Express 5 EMIS scenario reference tool, complete with JSON persistence, automated backups, and comprehensive Vitest test coverage.",
       "Launched the Customization Web Store (CWS) — an internal React 19 + Vite platform that streamlined PowerSchool customization requests, replacing a manual email-based workflow.",
-      "Modernized the E-Rate dashboard into a Docker Compose monorepo architecture — dual React frontends and a Flask/PostgreSQL backend — helping districts track and capture federal telecom discount funding.",
+      "Modernized the E-Rate dashboard into a Docker Compose monorepo architecture — dual React frontends, a Flask REST API with PostgreSQL, Traefik reverse proxy, and Jenkins CI/CD — helping districts track and capture federal telecom discount funding.",
       "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder — a notification system deployed across multiple client school districts.",
-      "Architect of CAST (Claude Agent Specialist Team) v4.2 — a shell-native 17-agent specialist framework embedded into Claude Code via four enforcement hooks. Automatic specialist dispatch, post-write code review enforcement, and hard-blocked raw git commits. 255 BATS tests (0 failures), 16 Commands, 7 agent skills, Homebrew distribution (brew install cast). Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) — a 10-page observability UI with real-time SSE activity stream, session cost tracking, per-agent scorecards, and Cmd+K global search.",
+      "Architect of CAST (Claude Agent Specialist Team) v4.2 — a 17-agent specialist framework embedded into Claude Code via hook-driven dispatch. Features model-driven routing, local-first SQLite observability, per-agent persistent memory, and 255 BATS tests. Distributed as 6 modular Homebrew packages (cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory) — install only what you need. Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) — a 10-page observability UI with real-time activity stream, session cost tracking, per-agent scorecards, and Cmd+K global search.",
       "Pioneered AI-augmented development workflows — engineered TARUS (dual-LLM assistant) and PromptBot (prompt optimizer), and leverage Claude Code daily as an AI pair programmer to accelerate velocity and code quality.",
     ],
   },
@@ -146,14 +151,7 @@ const Resume = () => {
           Summary
         </h2>
         <p className="text-slate-300 leading-relaxed">
-          Full Stack Developer and AI systems engineer who architects, ships, and
-          maintains five production web applications at META Solutions — serving
-          4,200+ users across 900+ Ohio school districts. I specialize in
-          modernizing legacy systems (AngularJS, PHP, jQuery → React 19),
-          integrating LLM capabilities into developer workflows, and building
-          AI infrastructure — including CAST v4.2, a shell-native 17-agent
-          specialist framework for Claude Code with Homebrew distribution, and its
-          10-page real-time observability dashboard.
+          Full Stack Developer and AI systems engineer who architects, ships, and maintains five production web applications at META Solutions — serving 4,200+ users across 900+ Ohio school districts. I specialize in modernizing legacy systems (AngularJS, PHP, jQuery → React 19), integrating LLM capabilities into developer workflows, and building AI infrastructure — including CAST v4.2, a 17-agent specialist framework for Claude Code distributed as 6 modular Homebrew packages, plus a 10-page real-time React observability dashboard.
         </p>
       </motion.div>
 
