@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ExternalLink, Github, Star, Bot, Database, Globe, Terminal, BarChart3, ShoppingBag, DollarSign, Network, LayoutDashboard } from "lucide-react";
+import { ExternalLink, Github, Star, Bot, Database, Terminal, BarChart3, ShoppingBag, DollarSign, Network, LayoutDashboard } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 
@@ -19,7 +19,7 @@ const projects = [
   {
     title: "CAST — Claude Agent Team",
     description:
-      "Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 17 specialist agents, 4 enforcement hooks, and model-driven dispatch — no routing tables, no cloud. The full ecosystem is also available as modular Homebrew packages: install only what you need (cast-agents, cast-hooks, cast-observe, cast-security, cast-dash). brew tap ek33450505/cast && brew install cast",
+      "Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 17 specialist agents, 4 enforcement hooks, and model-driven dispatch — no routing tables, no cloud. The full ecosystem ships as 9 modular Homebrew packages: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, Claude's Journal, and JARVIS. Install only what you need. brew tap ek33450505/cast && brew install cast",
     tech: ["Claude Code", "Bash", "Hook Architecture", "Node.js", "SQLite", "BATS"],
     icon: Network,
     color: "violet",
@@ -29,7 +29,7 @@ const projects = [
     github: "https://github.com/ek33450505/claude-agent-team",
     githubRepo: { owner: "ek33450505", repo: "claude-agent-team" },
     castEcosystem: true,
-    stats: ["17 Agents", "4 Hooks", "255 Tests", "16 Commands", "7 Skills", "v4.2"],
+    stats: ["17 Agents", "4 Hooks", "255 Tests", "16 Commands", "9 Packages", "v4.6"],
   },
   {
     title: "Claude Code Dashboard",
@@ -146,6 +146,48 @@ const projects = [
     stats: ["Open Source", "Parallel Execution", "Auto Merge", "Homebrew Install"],
   },
   {
+    title: "Forge",
+    description:
+      "A native macOS terminal emulator built around Claude Code using Tauri v2. Features multi-tab + split pane terminals, Claude session auto-detection, command palette (Cmd+K), ghost-text suggestions, inline error annotations, CAST integration, and 6 built-in themes. Keyboard-first design with 20+ shortcuts.",
+    tech: ["Tauri v2", "React 19", "TypeScript", "Rust", "xterm.js", "Zustand", "Tailwind"],
+    icon: Terminal,
+    color: "amber",
+    category: "personal",
+    featured: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/forge",
+    githubRepo: { owner: "ek33450505", repo: "forge" },
+    stats: ["Open Source", "Native macOS", "Claude Code Native", "6 Themes", "20+ Shortcuts"],
+  },
+  {
+    title: "JARVIS",
+    description:
+      "Part of the open-source CAST ecosystem — a personal assistant framework built on 8 specialized Claude Code agents: morning briefing, email triage, calendar management, meeting prep, EOD summary, weekly report, Jira standup, and nightly backup. Automated via macOS launchd scheduling. brew tap ek33450505/jarvis && brew install jarvis",
+    tech: ["Claude Code", "Bash", "Shell", "launchd"],
+    icon: Bot,
+    color: "sky",
+    category: "personal",
+    castEcosystem: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/JARVIS",
+    githubRepo: { owner: "ek33450505", repo: "JARVIS" },
+    stats: ["Open Source", "8 PA Agents", "launchd Scheduling", "Homebrew Install"],
+  },
+  {
+    title: "Claude's Journal",
+    description:
+      "Part of the open-source CAST ecosystem — session journaling for Claude Code. Gives Claude a persistent journal space for cross-session reflection, idea tracking, and evolving perspectives. brew tap ek33450505/claudes-journal && brew install claudes-journal",
+    tech: ["Bash", "Shell", "Markdown"],
+    icon: Terminal,
+    color: "violet",
+    category: "personal",
+    castEcosystem: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/cast-claudes_journal",
+    githubRepo: { owner: "ek33450505", repo: "cast-claudes_journal" },
+    stats: ["Open Source", "Session Journaling", "Cross-Session Memory", "Homebrew Install"],
+  },
+  {
     title: "TARUS",
     description:
       "AI assistant I engineered from scratch with dual-LLM architecture — Claude API for cloud intelligence, Ollama for private local inference. Features real-time streaming, SQLite conversation persistence, and a React 19 + Vite frontend.",
@@ -220,32 +262,6 @@ const projects = [
     aiEngineering: true,
     stats: ["Python CLI", "Prompt Optimization"],
   },
-  {
-    title: "Run Buddy",
-    description:
-      "A responsive fitness landing page built with semantic HTML and CSS. One of my earliest projects showcasing frontend fundamentals.",
-    tech: ["HTML", "CSS"],
-    icon: Globe,
-    color: "emerald",
-    link: "https://ek33450505.github.io/run-buddy/",
-    github: "https://github.com/ek33450505/run-buddy",
-    githubRepo: { owner: "ek33450505", repo: "run-buddy" },
-    category: "personal",
-    stats: ["HTML", "CSS"],
-  },
-  {
-    title: "Recipe Search",
-    description:
-      "A collaborative recipe search application leveraging third-party APIs for discovering meals and ingredients.",
-    tech: ["JavaScript", "API Integration"],
-    icon: Globe,
-    color: "rose",
-    link: "https://drspookyfox.github.io/RecipeSearch/",
-    github: "https://github.com/drspookyfox/RecipeSearch",
-    githubRepo: { owner: "drspookyfox", repo: "RecipeSearch" },
-    category: "personal",
-    stats: ["Vanilla JS", "Third-party API"],
-  },
 ];
 
 const colorMap = {
@@ -296,6 +312,7 @@ const colorMap = {
 const filters = [
   { key: "all", label: "All" },
   { key: "featured", label: "Featured" },
+  { key: "ai-engineering", label: "AI Engineering" },
   { key: "cast-ecosystem", label: "CAST Ecosystem" },
   { key: "professional", label: "Professional" },
   { key: "personal", label: "Personal" },
@@ -470,6 +487,8 @@ function Portfolio() {
       ? projects
       : filter === "featured"
       ? projects.filter((p) => p.featured)
+      : filter === "ai-engineering"
+      ? projects.filter((p) => p.aiEngineering)
       : filter === "cast-ecosystem"
       ? projects.filter((p) => p.castEcosystem)
       : projects.filter((p) => p.category === filter);

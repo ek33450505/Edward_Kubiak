@@ -29,7 +29,7 @@ const competencies = [
     icon: Brain,
     title: "AI / LLM Integration",
     description:
-      "Architect of the CAST ecosystem — 17 specialist agents, modular Homebrew packages, and a real-time observability dashboard for Claude Code.",
+      "Architect of the CAST ecosystem — 17 specialist agents, 9 modular Homebrew packages, and a real-time observability dashboard for Claude Code. Building Forge, a native macOS terminal designed around Claude Code.",
   },
 ];
 
@@ -294,7 +294,7 @@ const Home = () => {
               </span>
               <br />
               <span className="text-slate-400 text-3xl sm:text-4xl lg:text-5xl">
-                & AI Craftsman
+                & AI Systems Engineer
               </span>
             </motion.h1>
 
@@ -307,7 +307,8 @@ const Home = () => {
               By day, I build production education technology for Ohio school
               districts at META Solutions. By night, I build open-source
               infrastructure for AI-native development — including the CAST
-              ecosystem, a modular agent framework for Claude Code.
+              ecosystem, a modular agent framework for Claude Code, and Forge,
+              a native terminal built around it.
             </motion.p>
 
             <motion.div

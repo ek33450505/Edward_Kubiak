@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
-import { MapPin, Briefcase, Heart, Mountain } from "lucide-react";
+import { MapPin, Briefcase, Heart, Mountain, GitBranch } from "lucide-react";
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -37,15 +37,13 @@ const About = () => {
                   The Developer
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
-                  I&apos;m a full stack developer who architects production
-                  applications and builds AI infrastructure. My daily toolkit
-                  spans React 19, Node.js, Python, and Flask — but what drives
-                  me is pushing AI into real developer workflows at the systems
-                  level. I built CAST, a shell-native 16-agent framework
-                  that embeds an entire specialist team into Claude Code via
-                  hook architecture, and the Claude Code Dashboard — a React 19
-                  + TypeScript observability UI with live SSE agent streams and
-                  token analytics.
+                  I&apos;m a full stack developer and AI systems engineer who
+                  builds developer tooling and production applications. I
+                  created CAST v4.6 — a 17-agent framework that embeds
+                  specialist teams into Claude Code via hook architecture — and
+                  Forge, a native macOS terminal built around Claude Code with
+                  Tauri. The full CAST ecosystem ships as 9 modular Homebrew
+                  packages, plus a React 19 observability dashboard.
                 </p>
                 <p className="mt-4 text-slate-300 leading-relaxed">
                   At{" "}
@@ -87,6 +85,34 @@ const About = () => {
                   ship iteratively, and never stop learning. I believe the best
                   software emerges from understanding the humans who depend on
                   it — not just the stack behind it.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
+            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-2 rounded-lg bg-violet-400/10 text-violet-400 shrink-0 mt-1">
+                <GitBranch size={20} />
+              </div>
+              <div>
+                <h2 className="font-display text-lg font-bold text-slate-100 mb-3">
+                  Open Source Builder
+                </h2>
+                <p className="text-slate-300 leading-relaxed">
+                  I believe developer tools should be transparent, composable,
+                  and owned by the people who use them. The CAST ecosystem is
+                  10+ open-source repositories with 9 standalone Homebrew
+                  packages — from agent definitions to security policy gates to
+                  terminal dashboards. Every component works independently or
+                  together. Zero cloud, zero lock-in.
                 </p>
               </div>
             </div>

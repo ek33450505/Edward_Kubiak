@@ -11,6 +11,9 @@ const skills = {
     "TanStack Query v5",
     "React Router v6/v7",
     "cmdk",
+    "Zustand",
+    "Radix UI",
+    "xterm.js",
     "Bootstrap 5",
     "React Bootstrap",
     "MUI",
@@ -24,6 +27,7 @@ const skills = {
     "Node.js",
     "Express 4/5",
     "Python",
+    "Rust",
     "Flask",
     "MS SQL Server",
     "PHP",
@@ -43,16 +47,19 @@ const skills = {
     "SQL",
     "AES-256 Encryption",
   ],
-  "AI & Tools": [
+  "AI Infrastructure & Developer Tools": [
     "Claude API",
     "Claude Code",
-    "CAST Agent Framework v4.2 (17 agents, Homebrew)",
+    "CAST v4.6 (17 agents, 9 Homebrew packages)",
+    "Agent Architecture",
+    "Tauri v2",
     "Ollama",
     "RAG / Embeddings",
     "Shell Scripting",
     "Textual (Python TUI)",
     "Hook Architecture",
     "MCP (Model Context Protocol)",
+    "launchd Scheduling",
     "BATS (Bash Automated Testing System)",
     "ElevenLabs TTS",
     "Git",
@@ -67,14 +74,14 @@ const skillColors = {
   Frontend: "bg-amber-400/10 text-amber-400",
   Backend: "bg-sky-400/10 text-sky-400",
   Data: "bg-emerald-400/10 text-emerald-400",
-  "AI & Tools": "bg-rose-400/10 text-rose-400",
+  "AI Infrastructure & Developer Tools": "bg-rose-400/10 text-rose-400",
 };
 
 const labelColors = {
   Frontend: "text-amber-400",
   Backend: "text-sky-400",
   Data: "text-emerald-400",
-  "AI & Tools": "text-rose-400",
+  "AI Infrastructure & Developer Tools": "text-rose-400",
 };
 
 const experience = [
@@ -84,13 +91,17 @@ const experience = [
     location: "Columbus, OH",
     period: "August 2022 — Present",
     highlights: [
+      "Creator of CAST (Claude Agent Specialist Team) v4.6 — a local-first, open-source multi-agent framework embedded into Claude Code via hook-driven dispatch. 17 specialist agents with model-driven routing (Sonnet for complex tasks, Haiku for lightweight), local SQLite observability, per-agent persistent memory with FTS5 search, and 255 BATS tests. No cloud dependencies — everything runs on the developer machine.",
+      "Architected the CAST ecosystem as 9 modular Homebrew packages — cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, Claude's Journal, and JARVIS — enabling developers to install only the components they need. Each package has its own Homebrew tap, versioned releases, and standalone functionality.",
+      "Built two complementary observability layers: the Claude Code Dashboard (React 19 + TypeScript + Express 5 + SSE) — a 10-page real-time UI with session cost tracking, per-agent scorecards, Cmd+K search, and privacy auditing — and cast-dash, an htop-style Python TUI for terminal-native monitoring.",
+      "Building Forge — a native macOS terminal emulator designed around Claude Code using Tauri v2, React 19, TypeScript, and xterm.js. Features multi-tab splits, Claude session detection, CAST integration, command palette, ghost-text suggestions, inline error annotations, and 6 built-in themes. Open source.",
+      "Engineered JARVIS — part of the CAST ecosystem — a personal assistant framework built on 8 specialized Claude Code agents (briefing, triage, calendar, meeting prep, EOD summary, weekly report, backup, Jira standup) with macOS launchd scheduling for automated daily workflows.",
       "Spearheaded the complete migration of CrossCheck from AngularJS to React — a mission-critical EMIS validation platform built with React 18, AG Grid, MUI, JWT auth, and TanStack Query, now serving 4,200+ users across 900+ Ohio school districts.",
       "Architected and maintain five production web applications across React, Flask, Express, PostgreSQL, and jQuery/DataTables — each serving Ohio's K-12 education ecosystem.",
       "Engineered SES-Wiki from the ground up — a React 19 + Express 5 EMIS scenario reference tool, complete with JSON persistence, automated backups, and comprehensive Vitest test coverage.",
       "Launched the Customization Web Store (CWS) — an internal React 19 + Vite platform that streamlined PowerSchool customization requests, replacing a manual email-based workflow.",
       "Modernized the E-Rate dashboard into a Docker Compose monorepo architecture — dual React frontends, a Flask REST API with PostgreSQL, Traefik reverse proxy, and Jenkins CI/CD — helping districts track and capture federal telecom discount funding.",
       "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder — a notification system deployed across multiple client school districts.",
-      "Architect of CAST (Claude Agent Specialist Team) v4.2 — a 17-agent specialist framework embedded into Claude Code via hook-driven dispatch. Features model-driven routing, local-first SQLite observability, per-agent persistent memory, and 255 BATS tests. Distributed as 7 modular Homebrew packages (cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel) — install only what you need. Built the companion Claude Code Dashboard (React 19 + TypeScript + Express + SSE) — a 10-page observability UI with real-time activity stream, session cost tracking, per-agent scorecards, and Cmd+K global search.",
       "Pioneered AI-augmented development workflows — engineered TARUS (dual-LLM assistant) and PromptBot (prompt optimizer), and leverage Claude Code daily as an AI pair programmer to accelerate velocity and code quality.",
     ],
   },
@@ -151,7 +162,7 @@ const Resume = () => {
           Summary
         </h2>
         <p className="text-slate-300 leading-relaxed">
-          Full Stack Developer and AI systems engineer who architects, ships, and maintains five production web applications at META Solutions — serving 4,200+ users across 900+ Ohio school districts. I specialize in modernizing legacy systems (AngularJS, PHP, jQuery → React 19), integrating LLM capabilities into developer workflows, and building AI infrastructure — including CAST v4.2, a 17-agent specialist framework for Claude Code distributed as 7 modular Homebrew packages, plus a 10-page real-time React observability dashboard.
+          AI systems engineer and full stack developer who builds developer tooling and multi-agent frameworks. Creator of CAST v4.6 — a local-first, open-source 17-agent framework for Claude Code distributed as 9 modular Homebrew packages — and Forge, a native macOS terminal built around Claude Code with Tauri + React 19. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts.
         </p>
       </motion.div>
 
