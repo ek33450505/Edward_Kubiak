@@ -136,9 +136,9 @@ const About = () => {
                     Family
                   </h2>
                   <p className="text-slate-300 leading-relaxed text-sm">
-                    Proud father of two. When I&apos;m not at a keyboard, I&apos;m
-                    exploring the outdoors with my kids and creating memories that
-                    remind me why I do what I do.
+                    Proud father of two. I met my wife Jayne at Ohio University
+                    in 2006 — twenty years later, we&apos;re still exploring
+                    together.
                   </p>
                 </div>
               </div>
@@ -161,10 +161,11 @@ const About = () => {
                     Trail Runner
                   </h2>
                   <p className="text-slate-300 leading-relaxed text-sm">
-                    Ultramarathon and trail runner. There&apos;s nothing like 30
-                    miles of singletrack to put a stubborn bug in perspective.
-                    The patience and endurance these runs demand translate
-                    directly into how I approach complex problems at work.
+                    I&apos;ve finished five 100-mile ultramarathons along with a
+                    handful of 50K to 100K races over the years. Long days on
+                    singletrack are where I think best. This year I&apos;m looking
+                    forward to Mohican 100 in late May and Rim to River 100 in
+                    October.
                   </p>
                 </div>
               </div>
