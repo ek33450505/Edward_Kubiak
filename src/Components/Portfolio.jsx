@@ -17,6 +17,20 @@ const cardVariants = {
 
 const projects = [
   {
+    title: "Project Engram",
+    description:
+      "Persistent AI identity system. Extracts identity signals from conversations — communication style, behavioral corrections, preferences, relationship arc — compresses them with recency-weighted decay scoring, and injects a token-efficient payload at session start. Works across models, across providers. One identity. Any model. Every session.",
+    tech: ["Python", "SQLite", "Bash", "Claude Code"],
+    icon: Bot,
+    color: "emerald",
+    category: "personal",
+    featured: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/project-engram",
+    githubRepo: { owner: "ek33450505", repo: "project-engram" },
+    stats: ["v0.6.0", "347 Tests", "4 Providers", "Named Personas", "Portable Spec", "Homebrew Install"],
+  },
+  {
     title: "CAST — Claude Agent Team",
     description:
       "Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 17 specialist agents, 4 enforcement hooks, and model-driven dispatch — no routing tables, no cloud. The full ecosystem ships as 9 modular Homebrew packages: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, Claude's Journal, and JARVIS. Install only what you need. brew tap ek33450505/cast && brew install cast",
