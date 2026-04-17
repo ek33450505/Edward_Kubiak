@@ -1,6 +1,24 @@
 import ultras from "../data/ultras";
 
 function UltraMap() {
+  // Group by name|location to dedupe overlapping pins
+  const groups = ultras.reduce((acc, race) => {
+    const key = `${race.name}|${race.location}`;
+    if (!acc[key]) {
+      acc[key] = { ...race, years: [race.year] };
+    } else {
+      acc[key].years.push(race.year);
+      // If any entry is finished, pin is amber
+      if (race.finished) acc[key].finished = true;
+    }
+    return acc;
+  }, {});
+
+  const pins = Object.values(groups).map((g) => ({
+    ...g,
+    label: `${g.name} · ${g.years.sort((a, b) => a - b).join(", ")} · ${g.location}`,
+  }));
+
   return (
     <div className="mt-4">
       <p className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase mb-2">
@@ -20,17 +38,17 @@ function UltraMap() {
           strokeWidth="0.5"
         />
 
-        {/* Race pins */}
-        {ultras.map((race, i) => (
+        {/* Race pins — one per unique race+location */}
+        {pins.map((pin) => (
           <circle
-            key={`${race.name}-${race.year}-${i}`}
-            cx={race.x}
-            cy={race.y}
+            key={`${pin.name}|${pin.location}`}
+            cx={pin.x}
+            cy={pin.y}
             r="1.4"
-            fill={race.finished ? "#fbbf24" : "#64748b"}
-            opacity={race.finished ? 0.9 : 0.6}
+            fill={pin.finished ? "#fbbf24" : "#64748b"}
+            opacity={pin.finished ? 0.9 : 0.6}
           >
-            <title>{race.name} · {race.year} · {race.location}{race.finished ? " · Finished" : " · Planned"}</title>
+            <title>{pin.label}</title>
           </circle>
         ))}
       </svg>
@@ -43,7 +61,7 @@ function UltraMap() {
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 rounded-full bg-slate-500" />
-          <span className="font-display text-[9px] tracking-wider text-slate-500 uppercase">Planned</span>
+          <span className="font-display text-[9px] tracking-wider text-slate-500 uppercase">Planned 2026</span>
         </div>
       </div>
     </div>

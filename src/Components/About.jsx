@@ -163,7 +163,7 @@ const About = () => {
                     Trail Runner
                   </h2>
                   <p className="text-slate-300 leading-relaxed text-sm">
-                    I&apos;ve finished five 100-mile ultramarathons along with a
+                    I&apos;ve finished six 100-mile ultramarathons along with a
                     handful of 50K to 100K races over the years. Long days on
                     singletrack are where I think best. This year I&apos;m looking
                     forward to Mohican 100 in late May and Rim to River 100 in

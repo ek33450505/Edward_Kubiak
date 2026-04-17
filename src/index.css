@@ -44,6 +44,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Global focus-visible ring — applies to all interactive elements */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-slate-950), 0 0 0 4px var(--color-amber-400);
+  border-radius: 4px;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);

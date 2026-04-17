@@ -130,68 +130,65 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Fetch README and VERSION from claude-agent-team
+          curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://raw.githubusercontent.com/ek33450505/claude-agent-team/main/README.md" \
+            -o /tmp/cast-readme.md || true
+          curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://raw.githubusercontent.com/ek33450505/claude-agent-team/main/VERSION" \
+            -o /tmp/cast-version.txt || true
+
           node << 'EOF'
-          const https = require('https');
           const fs = require('fs');
-          const token = process.env.GH_TOKEN;
 
-          function ghGet(path) {
-            return new Promise((resolve) => {
-              const options = {
-                hostname: 'api.github.com',
-                path,
-                headers: {
-                  'User-Agent': 'github-actions',
-                  'Authorization': `Bearer ${token}`,
-                  'Accept': 'application/vnd.github+json',
-                },
-              };
-              https.get(options, (res) => {
-                let data = '';
-                res.on('data', (c) => data += c);
-                res.on('end', () => {
-                  try { resolve(JSON.parse(data)); } catch { resolve(null); }
-                });
-              }).on('error', () => resolve(null));
-            });
-          }
+          // Fallback values (current as of build)
+          const fallback = {
+            version: 'v6.0',
+            agents: 30,
+            tests: 409,
+            packages: 9,
+            commands: 16,
+          };
 
-          (async () => {
-            // Fallback values from the CAST rules file (always accurate)
-            const fallback = {
-              version: 'v4.6',
-              agents: 17,
-              tests: 255,
-              packages: 9,
-              commands: 16,
-            };
+          let version = fallback.version;
+          let agents = fallback.agents;
+          let tests = fallback.tests;
+          const packages = fallback.packages;
+          const commands = fallback.commands;
 
-            let version = fallback.version;
-            let agents = fallback.agents;
-            let tests = fallback.tests;
-            let packages = fallback.packages;
-            let commands = fallback.commands;
+          try {
+            // Parse version: prefer VERSION file, fall back to README
+            const versionFile = fs.readFileSync('/tmp/cast-version.txt', 'utf8').trim();
+            if (versionFile && /^\d+\.\d+/.test(versionFile)) {
+              version = `v${versionFile}`;
+            } else {
+              const readme = fs.readFileSync('/tmp/cast-readme.md', 'utf8');
+              const vMatch = readme.match(/CAST\s+v(\d+\.\d+)/i);
+              if (vMatch) version = `v${vMatch[1]}`;
+            }
+          } catch { /* use fallback */ }
 
-            try {
-              // Try to read agent count from repo contents
-              const agentsDir = await ghGet('/repos/ek33450505/claude-agent-team/contents/agents');
-              if (Array.isArray(agentsDir)) {
-                const mdFiles = agentsDir.filter(f => f.name.endsWith('.md'));
-                if (mdFiles.length > 0) agents = mdFiles.length;
-              }
-            } catch { /* use fallback */ }
+          try {
+            const readme = fs.readFileSync('/tmp/cast-readme.md', 'utf8');
+            // Parse agents from badge URL: badge/agents-30 or similar
+            const agentMatch = readme.match(/badge\/agents-(\d+)/);
+            if (agentMatch) agents = parseInt(agentMatch[1], 10);
 
-            const stats = {
-              version,
-              agents,
-              tests,
-              packages,
-              commands,
-              updated: new Date().toISOString(),
-            };
-            fs.writeFileSync('public/cast-stats.json', JSON.stringify(stats, null, 2));
-            console.log('Wrote cast-stats.json:', stats);
-          })();
+            // Parse tests from badge URL: badge/tests-409 or similar
+            const testMatch = readme.match(/badge\/tests-(\d+)/);
+            if (testMatch) tests = parseInt(testMatch[1], 10);
+          } catch { /* use fallback */ }
+
+          const stats = {
+            version,
+            agents,
+            tests,
+            packages,
+            commands,
+            updated: new Date().toISOString(),
+          };
+          fs.writeFileSync('public/cast-stats.json', JSON.stringify(stats, null, 2));
+          console.log('Wrote cast-stats.json:', stats);
           EOF
 
       - name: Fetch dev.to posts
