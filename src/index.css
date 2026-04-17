@@ -52,15 +52,3 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-@media print {
-  body {
-    background: white;
-    color: black;
-  }
-  nav,
-  footer,
-  [data-scroll-progress] {
-    display: none !important;
-  }
-}

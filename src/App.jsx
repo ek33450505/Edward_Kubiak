@@ -8,22 +8,22 @@ import "./App.css";
 import Home from "./Components/Home";
 import About from "./Components/About";
 import Portfolio from "./Components/Portfolio";
+import ProjectDetail from "./Components/ProjectDetail";
 import Resume from "./Components/Resume";
-import Contact from "./Components/Contact";
 import Now from "./Components/Now";
-import CommandPalette from "./Components/CommandPalette";
+import CommandPalette, { CommandPaletteProvider, useCommandPalette } from "./Components/CommandPalette";
 import BrandingImage from "./Images/Brand.svg";
 
 const navLinks = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
   { to: "/resume", label: "Resume" },
-  { to: "/contact", label: "Contact" },
 ];
 
 function NavBar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { toggle } = useCommandPalette();
 
   // Close menu on route change (back/forward nav)
   useEffect(() => { setOpen(false); }, [location.pathname]);
@@ -73,12 +73,22 @@ function NavBar() {
               )}
             </Link>
           ))}
+          {/* ⌘K affordance */}
+          <button
+            onClick={toggle}
+            aria-label="Open command palette"
+            className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors flex items-center"
+          >
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-700 text-[10px] font-display tracking-wider text-slate-500 hover:border-amber-400/50 hover:text-amber-400 transition-all">
+              ⌘K
+            </span>
+          </button>
           <a
             href="https://github.com/ek33450505"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub profile (opens in new tab)"
-            className="ml-4 p-2 text-slate-400 hover:text-amber-400 transition-colors"
+            className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors"
           >
             <Github size={20} aria-hidden="true" />
           </a>
@@ -132,6 +142,13 @@ function NavBar() {
                   {label}
                 </Link>
               ))}
+              {/* Search / ⌘K row */}
+              <button
+                onClick={() => { setOpen(false); toggle(); }}
+                className="flex items-center gap-2 py-3 text-slate-400 hover:text-amber-400 font-display text-sm tracking-widest uppercase transition-colors border-b border-slate-800/40 text-left"
+              >
+                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-slate-700 text-[10px] text-slate-500">⌘K</span>
+              </button>
               <a
                 href="https://github.com/ek33450505"
                 target="_blank"
@@ -163,12 +180,15 @@ function AnimatedRoutes() {
   const location = useLocation();
 
   useEffect(() => {
+    if (location.pathname.startsWith("/projects/")) {
+      document.title = "Project — Edward Kubiak";
+      return;
+    }
     const titles = {
       "/": "Edward Kubiak — Full Stack Developer & AI Engineer",
       "/about": "About — Edward Kubiak",
       "/projects": "Projects — Edward Kubiak",
       "/resume": "Resume — Edward Kubiak",
-      "/contact": "Contact — Edward Kubiak",
       "/now": "Now — Edward Kubiak",
     };
     document.title = titles[location.pathname] || "Edward Kubiak";
@@ -188,8 +208,8 @@ function AnimatedRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/projects" element={<Portfolio />} />
+          <Route path="/projects/:slug" element={<ProjectDetail />} />
           <Route path="/resume" element={<Resume />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/now" element={<Now />} />
         </Routes>
       </motion.div>
@@ -200,51 +220,53 @@ function AnimatedRoutes() {
 function App() {
   return (
     <Router>
-      <div className="noise-bg gradient-mesh min-h-screen">
-        <ScrollProgress />
-        <NavBar />
-        <CommandPalette />
-        <main className="pt-20">
-          <AnimatedRoutes />
-        </main>
+      <CommandPaletteProvider>
+        <div className="noise-bg gradient-mesh min-h-screen">
+          <ScrollProgress />
+          <NavBar />
+          <CommandPalette />
+          <main className="pt-20">
+            <AnimatedRoutes />
+          </main>
 
-        {/* Footer */}
-        <footer className="border-t border-slate-800/60 py-8 px-6">
-          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-sm">
-            <p className="font-display text-xs tracking-wider">
-              &copy; {new Date().getFullYear()} EDWARD KUBIAK
-            </p>
-            <div className="flex items-center gap-4">
-              <Link
-                to="/contact"
-                className="font-display text-xs tracking-wider uppercase hover:text-amber-400 transition-colors"
-              >
-                Contact
-              </Link>
-              <a
-                href="https://github.com/ek33450505"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub profile (opens in new tab)"
-                className="hover:text-amber-400 transition-colors"
-              >
-                <Github size={16} aria-hidden="true" />
-              </a>
-              <a
-                href="https://dev.to/edwardkubiak"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="DEV.to profile (opens in new tab)"
-                className="hover:text-amber-400 transition-colors"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .67-.08.84-.23.18-.16.27-.45.27-.85v-2.2c0-.4-.09-.69-.27-.85zm13.37-6.41H3.21C1.99 3.64 1 4.63 1 5.85v12.3c0 1.22.99 2.21 2.21 2.21h17.58c1.22 0 2.21-.99 2.21-2.21V5.85c0-1.22-.99-2.21-2.21-2.21zM8.85 14.4c-.37.38-.85.56-1.43.56H5.18V9.04h2.24c.58 0 1.06.19 1.43.56.37.38.56.85.56 1.43v1.94c0 .58-.19 1.06-.56 1.43zm4.75-4.25H11.5v1.64h1.28v1.11H11.5v1.64h2.1v1.11H11c-.65 0-1.11-.47-1.11-1.11v-4.16c0-.65.47-1.11 1.11-1.11h2.6v1.11zm5.04 4.73c-.4.6-.97.85-1.64.54-.52-.23-.82-.73-.97-1.5l-.63-3.12-.63 3.12c-.15.77-.45 1.27-.97 1.5-.67.31-1.24.06-1.64-.54l-1.78-5.73h1.23l1.26 4.57 1.26-4.57h.7l1.26 4.57 1.26-4.57h1.23l-1.78 5.73z"/>
-                </svg>
-              </a>
+          {/* Footer */}
+          <footer className="border-t border-slate-800/60 py-8 px-6">
+            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-sm">
+              <p className="font-display text-xs tracking-wider">
+                &copy; {new Date().getFullYear()} EDWARD KUBIAK
+              </p>
+              <div className="flex items-center gap-4">
+                <a
+                  href="mailto:edward.kubiak.dev@gmail.com"
+                  className="font-display text-xs tracking-wider uppercase hover:text-amber-400 transition-colors"
+                >
+                  edward.kubiak.dev@gmail.com
+                </a>
+                <a
+                  href="https://github.com/ek33450505"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub profile (opens in new tab)"
+                  className="hover:text-amber-400 transition-colors"
+                >
+                  <Github size={16} aria-hidden="true" />
+                </a>
+                <a
+                  href="https://dev.to/edwardkubiak"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="DEV.to profile (opens in new tab)"
+                  className="hover:text-amber-400 transition-colors"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .67-.08.84-.23.18-.16.27-.45.27-.85v-2.2c0-.4-.09-.69-.27-.85zm13.37-6.41H3.21C1.99 3.64 1 4.63 1 5.85v12.3c0 1.22.99 2.21 2.21 2.21h17.58c1.22 0 2.21-.99 2.21-2.21V5.85c0-1.22-.99-2.21-2.21-2.21zM8.85 14.4c-.37.38-.85.56-1.43.56H5.18V9.04h2.24c.58 0 1.06.19 1.43.56.37.38.56.85.56 1.43v1.94c0 .58-.19 1.06-.56 1.43zm4.75-4.25H11.5v1.64h1.28v1.11H11.5v1.64h2.1v1.11H11c-.65 0-1.11-.47-1.11-1.11v-4.16c0-.65.47-1.11 1.11-1.11h2.6v1.11zm5.04 4.73c-.4.6-.97.85-1.64.54-.52-.23-.82-.73-.97-1.5l-.63-3.12-.63 3.12c-.15.77-.45 1.27-.97 1.5-.67.31-1.24.06-1.64-.54l-1.78-5.73h1.23l1.26 4.57 1.26-4.57h.7l1.26 4.57 1.26-4.57h1.23l-1.78 5.73z"/>
+                  </svg>
+                </a>
+              </div>
             </div>
-          </div>
-        </footer>
-      </div>
+          </footer>
+        </div>
+      </CommandPaletteProvider>
     </Router>
   );
 }

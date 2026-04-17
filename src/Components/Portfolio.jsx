@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ExternalLink, Github, Star, Bot, Database, Terminal, BarChart3, ShoppingBag, DollarSign, Network, LayoutDashboard } from "lucide-react";
+import { ExternalLink, Github, Star } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
+import projects from "../data/projects";
 
 const containerVariants = {
   hidden: {},
@@ -16,268 +17,6 @@ const cardVariants = {
   exit: { opacity: 0, y: -10, transition: { duration: 0.2 } },
 };
 
-const projects = [
-  {
-    title: "Project Engram",
-    description:
-      "Persistent AI identity system. Extracts identity signals from conversations — communication style, behavioral corrections, preferences, relationship arc — compresses them with recency-weighted decay scoring, and injects a token-efficient payload at session start. Works across models, across providers. One identity. Any model. Every session.",
-    tech: ["Python", "SQLite", "Bash", "Claude Code"],
-    icon: Bot,
-    color: "emerald",
-    category: "personal",
-    featured: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/project-engram",
-    githubRepo: { owner: "ek33450505", repo: "project-engram" },
-    stats: ["v0.6.0", "347 Tests", "4 Providers", "Named Personas", "Portable Spec", "Homebrew Install"],
-  },
-  {
-    title: "CAST — Claude Agent Team",
-    description:
-      "Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 17 specialist agents, 4 enforcement hooks, and model-driven dispatch — no routing tables, no cloud. The full ecosystem ships as 9 modular Homebrew packages: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, Claude's Journal, and JARVIS. Install only what you need. brew tap ek33450505/cast && brew install cast",
-    tech: ["Claude Code", "Bash", "Hook Architecture", "Node.js", "SQLite", "BATS"],
-    icon: Network,
-    color: "violet",
-    category: "personal",
-    featured: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/claude-agent-team",
-    githubRepo: { owner: "ek33450505", repo: "claude-agent-team" },
-    castEcosystem: true,
-    stats: ["17 Agents", "4 Hooks", "255 Tests", "16 Commands", "9 Packages", "v4.6"],
-  },
-  {
-    title: "Claude Code Dashboard",
-    description:
-      "Observability layer for CAST — a 10-page React 19 + TypeScript UI with real-time SSE activity feed, session cost tracking, per-agent scorecards, Cmd+K global search, and a privacy audit showing your cloud vs. local API ratio. 13+ Express API endpoint categories. Gracefully degrades when CAST is not installed. v1.0.0",
-    tech: ["React 19", "TypeScript", "Vite", "Express", "SSE", "Recharts", "better-sqlite3"],
-    icon: LayoutDashboard,
-    color: "teal",
-    category: "personal",
-    featured: true,
-    aiEngineering: true,
-    castEcosystem: true,
-    github: "https://github.com/ek33450505/claude-code-dashboard",
-    githubRepo: { owner: "ek33450505", repo: "claude-code-dashboard" },
-    link: "https://cast-site-iota.vercel.app/",
-    stats: ["10 Pages", "13+ APIs", "SSE Live Feed", "v1.0.0"],
-  },
-  {
-    title: "cast-agents",
-    description:
-      "Part of the open-source CAST ecosystem — install just the agents, nothing else. All 17 specialist Claude Code agents (commit, debug, review, plan, and more) distributed as a standalone Homebrew package. Mix and match CAST modules to build your own stack. brew tap ek33450505/cast-agents && brew install cast-agents",
-    tech: ["Claude Code", "Bash", "Shell"],
-    icon: Network,
-    color: "violet",
-    category: "personal",
-    castEcosystem: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/cast-agents",
-    githubRepo: { owner: "ek33450505", repo: "cast-agents" },
-    stats: ["Open Source", "17 Agents", "Homebrew Install", "Claude Code"],
-  },
-  {
-    title: "cast-observe",
-    description:
-      "Part of the open-source CAST ecosystem — install just the observability layer. Tracks session cost, agent run history, and token spend in local SQLite. Use standalone or pair with cast-dash for a full terminal monitoring stack. Also serves as the data backend for the Claude Code Dashboard. brew tap ek33450505/cast-observe && brew install cast-observe",
-    tech: ["Bash", "Shell", "SQLite"],
-    icon: BarChart3,
-    color: "teal",
-    category: "personal",
-    castEcosystem: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/cast-observe",
-    githubRepo: { owner: "ek33450505", repo: "cast-observe" },
-    stats: ["Open Source", "Cost Tracking", "SQLite", "Homebrew Install"],
-  },
-  {
-    title: "cast-security",
-    description:
-      "Part of the open-source CAST ecosystem — install just the security layer. Policy gates that hard-block dangerous operations, PII redaction, and a tamper-evident audit log of every agent action. Drop in alongside any other CAST module or use standalone. brew tap ek33450505/cast-security && brew install cast-security",
-    tech: ["Bash", "Shell", "Hook Architecture"],
-    icon: Terminal,
-    color: "rose",
-    category: "personal",
-    castEcosystem: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/cast-security",
-    githubRepo: { owner: "ek33450505", repo: "cast-security" },
-    stats: ["Open Source", "Policy Gates", "Audit Trail", "PII Redaction"],
-  },
-  {
-    title: "cast-hooks",
-    description:
-      "Part of the open-source CAST ecosystem — install just the hooks. 13 production Claude Code hook scripts: observability pipeline, safety policy gates, and agent dispatch directives. Works standalone without the full framework, fully BATS-tested. brew tap ek33450505/cast-hooks && brew install cast-hooks",
-    tech: ["Bash", "Shell", "Hook Architecture", "BATS"],
-    icon: Terminal,
-    color: "rose",
-    category: "personal",
-    castEcosystem: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/cast-hooks",
-    githubRepo: { owner: "ek33450505", repo: "cast-hooks" },
-    stats: ["Open Source", "13 Hooks", "Observability", "Safety Gates", "Homebrew Install"],
-  },
-  {
-    title: "cast-dash",
-    description:
-      "Part of the open-source CAST ecosystem — install just the terminal dashboard. An htop-style 4-panel live display built with Python + Textual showing active sessions, agent history, token spend, and hook health. Pair with cast-observe or use standalone against any cast.db. brew tap ek33450505/cast-dash && brew install cast-dash",
-    tech: ["Python", "Textual", "SQLite", "Shell"],
-    icon: BarChart3,
-    color: "teal",
-    category: "personal",
-    castEcosystem: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/cast-dash",
-    githubRepo: { owner: "ek33450505", repo: "cast-dash" },
-    stats: ["Open Source", "4-Panel TUI", "Live Data", "SQLite", "Homebrew Install"],
-  },
-  {
-    title: "cast-memory",
-    description:
-      "Part of the open-source CAST ecosystem — install just the memory layer. Persistent memory for Claude Code agents via Python, Shell, and MCP integration. Agents retain context across sessions without cloud storage. brew tap ek33450505/cast-memory && brew install cast-memory",
-    tech: ["Python", "Shell", "MCP", "SQLite"],
-    icon: Database,
-    color: "emerald",
-    category: "personal",
-    castEcosystem: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/cast-memory",
-    githubRepo: { owner: "ek33450505", repo: "cast-memory" },
-    stats: ["Open Source", "Agent Memory", "MCP Integration", "Homebrew Install"],
-  },
-  {
-    title: "cast-parallel",
-    description:
-      "Part of the open-source CAST ecosystem — parallel plan execution. Splits CAST batches across two Claude Code sessions in isolated git worktrees, then merges results automatically when both finish. brew tap ek33450505/cast-parallel && brew install cast-parallel",
-    tech: ["Bash", "Shell", "Git Worktrees", "Python"],
-    icon: Terminal,
-    color: "sky",
-    category: "personal",
-    castEcosystem: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/cast-parallel",
-    githubRepo: { owner: "ek33450505", repo: "cast-parallel" },
-    stats: ["Open Source", "Parallel Execution", "Auto Merge", "Homebrew Install"],
-  },
-  {
-    title: "Forge",
-    description:
-      "A native macOS terminal emulator built around Claude Code using Tauri v2. Features multi-tab + split pane terminals, Claude session auto-detection, command palette (Cmd+K), ghost-text suggestions, inline error annotations, CAST integration, and 6 built-in themes. Keyboard-first design with 20+ shortcuts.",
-    tech: ["Tauri v2", "React 19", "TypeScript", "Rust", "xterm.js", "Zustand", "Tailwind"],
-    icon: Terminal,
-    color: "amber",
-    category: "personal",
-    featured: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/forge",
-    githubRepo: { owner: "ek33450505", repo: "forge" },
-    stats: ["Open Source", "Native macOS", "Claude Code Native", "6 Themes", "20+ Shortcuts"],
-  },
-  {
-    title: "JARVIS",
-    description:
-      "Part of the open-source CAST ecosystem — a personal assistant framework built on 8 specialized Claude Code agents: morning briefing, email triage, calendar management, meeting prep, EOD summary, weekly report, Jira standup, and nightly backup. Automated via macOS launchd scheduling. brew tap ek33450505/jarvis && brew install jarvis",
-    tech: ["Claude Code", "Bash", "Shell", "launchd"],
-    icon: Bot,
-    color: "sky",
-    category: "personal",
-    castEcosystem: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/JARVIS",
-    githubRepo: { owner: "ek33450505", repo: "JARVIS" },
-    stats: ["Open Source", "8 PA Agents", "launchd Scheduling", "Homebrew Install"],
-  },
-  {
-    title: "Claude's Journal",
-    description:
-      "Part of the open-source CAST ecosystem — session journaling for Claude Code. Gives Claude a persistent journal space for cross-session reflection, idea tracking, and evolving perspectives. brew tap ek33450505/claudes-journal && brew install claudes-journal",
-    tech: ["Bash", "Shell", "Markdown"],
-    icon: Terminal,
-    color: "violet",
-    category: "personal",
-    castEcosystem: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/cast-claudes_journal",
-    githubRepo: { owner: "ek33450505", repo: "cast-claudes_journal" },
-    stats: ["Open Source", "Session Journaling", "Cross-Session Memory", "Homebrew Install"],
-  },
-  {
-    title: "TARUS",
-    description:
-      "AI assistant I engineered from scratch with dual-LLM architecture — Claude API for cloud intelligence, Ollama for private local inference. Features real-time streaming, SQLite conversation persistence, and a React 19 + Vite frontend.",
-    tech: ["React 19", "Vite", "Express", "SQLite", "Claude API", "Ollama"],
-    icon: Bot,
-    color: "amber",
-    category: "personal",
-    aiEngineering: true,
-    stats: ["Private", "Dual-LLM", "Real-time Streaming", "SQLite Persistence"],
-  },
-  {
-    title: "TARS-Lite",
-    description:
-      "Zero-cloud LLM assistant — every token processed locally via Ollama. Built for developers who need AI assistance without sending proprietary code to external APIs.",
-    tech: ["React", "Vite", "Ollama"],
-    icon: Terminal,
-    color: "sky",
-    category: "personal",
-    aiEngineering: true,
-    stats: ["Private", "100% Local", "Zero Cloud"],
-  },
-  {
-    title: "CrossCheck",
-    description:
-      "Mission-critical EMIS data validation platform serving 4,200+ users across 900+ Ohio school districts. Spearheaded the complete migration from AngularJS to React, modernizing the entire frontend architecture.",
-    tech: ["React", "Node.js", "Python API"],
-    icon: BarChart3,
-    color: "emerald",
-    category: "professional",
-    stats: ["4,200+ Users", "900+ Districts"],
-  },
-  {
-    title: "SES-Wiki",
-    description:
-      "EMIS scenario reference tool I built from the ground up — React 19 + Express 5 with JSON data persistence, automated backups, and full test coverage via Vitest. The go-to resource for Ohio education data teams.",
-    tech: ["React 19", "Vite", "Express 5", "Vitest"],
-    icon: Database,
-    color: "rose",
-    category: "professional",
-    stats: ["React 19", "Express 5", "Full Test Coverage"],
-  },
-  {
-    title: "CWS",
-    description:
-      "Internal catalog platform enabling school districts to browse, request, and manage PowerSchool customizations. Streamlined a process that previously required manual email coordination.",
-    tech: ["React 19", "Vite"],
-    icon: ShoppingBag,
-    color: "amber",
-    category: "professional",
-    stats: ["React 19", "Vite"],
-  },
-  {
-    title: "E-Rate Dashboard",
-    description:
-      "Full-stack platform for managing federal E-Rate telecom discount program data — helping districts capture funding they're entitled to. Architected as a Docker Compose monorepo with dual React frontends, a Flask API layer, and PostgreSQL.",
-    tech: ["React", "Flask", "PostgreSQL", "Docker", "TypeScript", "MUI"],
-    icon: DollarSign,
-    color: "sky",
-    category: "professional",
-    stats: ["Docker Compose", "Dual Frontend", "Flask + PostgreSQL"],
-  },
-  {
-    title: "PromptBot",
-    description:
-      "Python CLI that transforms rough prompts into high-performance LLM instructions using structured optimization techniques. Built to systematize prompt engineering rather than rely on trial and error.",
-    tech: ["Python 3.13", "Click"],
-    icon: Terminal,
-    color: "sky",
-    github: "https://github.com/ek33450505/promptbot",
-    githubRepo: { owner: "ek33450505", repo: "promptbot" },
-    category: "personal",
-    aiEngineering: true,
-    stats: ["Python CLI", "Prompt Optimization"],
-  },
-];
 
 const colorMap = {
   amber: {
@@ -439,9 +178,12 @@ function ProjectCard({ project }) {
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-display text-lg font-bold text-slate-100">
+                  <Link
+                    to={`/projects/${project.slug}`}
+                    className="font-display text-lg font-bold text-slate-100 hover:text-amber-400 transition-colors"
+                  >
                     {project.title}
-                  </h3>
+                  </Link>
                   {project.featured && (
                     <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-amber-400/15 text-amber-400 border border-amber-400/20">
                       Featured

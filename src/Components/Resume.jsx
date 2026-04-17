@@ -1,5 +1,3 @@
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
 import { motion } from "motion/react";
 import { Mail, MapPin, Download } from "lucide-react";
 
@@ -123,15 +121,9 @@ const education = [
 ];
 
 const Resume = () => {
-  const contentRef = useRef(null);
-  const handlePrint = useReactToPrint({
-    contentRef,
-    documentTitle: "Edward_Kubiak_Resume",
-  });
-
   return (
-  <div className="min-h-[calc(100vh-80px)] py-20 print:bg-white print:text-black">
-    <div ref={contentRef} className="max-w-4xl mx-auto px-6">
+  <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="max-w-4xl mx-auto px-6">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -167,13 +159,14 @@ const Resume = () => {
             </a>
           </div>
         </div>
-        <button
-          onClick={handlePrint}
-          className="print:hidden inline-flex items-center gap-2 px-4 py-2 border border-slate-700 text-slate-400 font-display text-xs tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 transition-all duration-300 cursor-pointer shrink-0"
+        <a
+          href="/Edward_Kubiak_Resume.pdf"
+          download="Edward_Kubiak_Resume.pdf"
+          className="inline-flex items-center gap-2 px-4 py-2 border border-slate-700 text-slate-400 font-display text-xs tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 transition-all duration-300 shrink-0"
         >
           <Download size={14} />
           Download PDF
-        </button>
+        </a>
       </motion.div>
 
       {/* Summary */}

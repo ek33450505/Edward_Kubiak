@@ -1,16 +1,35 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, createContext, useContext } from "react";
 import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Home, User, FolderOpen, FileText, Mail, Clock, Github, ExternalLink, Filter } from "lucide-react";
 
+// --- Context ---
+const CommandPaletteContext = createContext(null);
+
+export function CommandPaletteProvider({ children }) {
+  const [open, setOpen] = useState(false);
+  const toggle = useCallback(() => setOpen((prev) => !prev), []);
+  return (
+    <CommandPaletteContext.Provider value={{ open, setOpen, toggle }}>
+      {children}
+    </CommandPaletteContext.Provider>
+  );
+}
+
+export function useCommandPalette() {
+  const ctx = useContext(CommandPaletteContext);
+  if (!ctx) throw new Error("useCommandPalette must be used within CommandPaletteProvider");
+  return ctx;
+}
+
+// --- Commands ---
 const navigateCommands = [
   { id: "home", label: "Home", icon: Home, to: "/" },
   { id: "about", label: "About", icon: User, to: "/about" },
   { id: "projects", label: "Projects", icon: FolderOpen, to: "/projects" },
   { id: "resume", label: "Resume", icon: FileText, to: "/resume" },
-  { id: "contact", label: "Contact", icon: Mail, to: "/contact" },
   { id: "now", label: "Now", icon: Clock, to: "/now" },
 ];
 
@@ -30,10 +49,10 @@ const externalCommands = [
 ];
 
 const CommandPalette = () => {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useCommandPalette();
   const navigate = useNavigate();
 
-  const handleOpen = useCallback((e) => {
+  const handleKeyDown = useCallback((e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
       e.preventDefault();
       setOpen((prev) => !prev);
@@ -41,12 +60,12 @@ const CommandPalette = () => {
     if (e.key === "Escape") {
       setOpen(false);
     }
-  }, []);
+  }, [setOpen]);
 
   useEffect(() => {
-    document.addEventListener("keydown", handleOpen);
-    return () => document.removeEventListener("keydown", handleOpen);
-  }, [handleOpen]);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
 
   const handleNavigate = (to) => {
     navigate(to);

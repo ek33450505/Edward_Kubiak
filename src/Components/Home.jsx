@@ -2,6 +2,7 @@ import { useRef, lazy, Suspense, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Code2, Layers, RefreshCw, Brain, GitCommit, ExternalLink } from "lucide-react";
+import CastStats from "./CastStats";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
 const StarField = lazy(() => import("./Effects/StarField"));
@@ -394,12 +395,12 @@ const Home = () => {
                 See What I&apos;ve Built
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link
-                to="/contact"
+              <a
+                href="mailto:edward.kubiak.dev@gmail.com"
                 className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 font-display text-sm tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 hover:shadow-[0_0_20px_rgba(0,255,194,0.1)] transition-all duration-300"
               >
                 Let&apos;s Build Something
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
 
@@ -490,6 +491,9 @@ const Home = () => {
 
       {/* Recent Writing — dev.to articles */}
       <RecentWriting />
+
+      {/* CAST Ecosystem — live stats strip */}
+      <CastStats />
     </div>
   );
 };

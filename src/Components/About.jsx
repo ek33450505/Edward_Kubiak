@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch } from "lucide-react";
+import UltraMap from "./UltraMap";
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -167,10 +168,47 @@ const About = () => {
                     forward to Mohican 100 in late May and Rim to River 100 in
                     October.
                   </p>
+                  <UltraMap />
+                  <a
+                    href="https://www.strava.com/athletes/76394967"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Follow Edward on Strava (opens in new tab)"
+                    className="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-md border border-slate-700 hover:border-orange-400 bg-slate-900/40 text-xs font-display tracking-wider text-slate-300 hover:text-orange-400 transition-all"
+                  >
+                    <img
+                      src="https://badges.strava.com/echelon-sprite-32.png"
+                      alt=""
+                      width="32"
+                      height="32"
+                      style={{ objectFit: "none", objectPosition: "0 0", width: "32px", height: "32px" }}
+                      aria-hidden="true"
+                    />
+                    Follow on Strava
+                  </a>
                 </div>
               </div>
             </motion.div>
           </div>
+
+          {/* Get in touch */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 text-center"
+          >
+            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+              Get in Touch
+            </h2>
+            <a
+              href="mailto:edward.kubiak.dev@gmail.com"
+              className="font-display text-lg sm:text-xl font-bold text-amber-400 hover:text-amber-300 transition-colors underline underline-offset-4 decoration-amber-400/30 hover:decoration-amber-400"
+            >
+              edward.kubiak.dev@gmail.com
+            </a>
+          </motion.div>
         </div>
       </div>
     </div>
