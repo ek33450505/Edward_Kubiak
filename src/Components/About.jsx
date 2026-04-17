@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch } from "lucide-react";
 import UltraMap from "./UltraMap";
-import StravaStats from "./StravaStats";
+// import StravaStats from "./StravaStats"; // shelved — Strava refresh-token flow too heavy; see plan 2026-04-17-strava-tier-1.md
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -169,7 +169,8 @@ const About = () => {
                     forward to Mohican 100 in late May and Rim to River 100 in
                     October.
                   </p>
-                  <StravaStats />
+                  {/* StravaStats shelved — API flow too heavy; revisit later */}
+                  {/* <StravaStats /> */}
                   <a
                     href="https://www.strava.com/athletes/76394967"
                     target="_blank"
