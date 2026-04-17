@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "motion/react";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
 
@@ -8,8 +8,10 @@ const Contact = () => {
     email: "",
     message: "",
   });
+  const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState({ type: "", message: "" });
   const [sending, setSending] = useState(false);
+  const lastSubmitRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,6 +20,18 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (honeypot) {
+      setStatus({ type: "error", message: "Something went wrong. Please try again." });
+      return;
+    }
+
+    const now = Date.now();
+    if (lastSubmitRef.current && now - lastSubmitRef.current < 30000) {
+      setStatus({ type: "error", message: "Please wait a moment before sending another message." });
+      return;
+    }
+
     setSending(true);
     setStatus({ type: "", message: "" });
 
@@ -39,6 +53,7 @@ const Contact = () => {
       });
       const data = await res.json();
       if (data.success) {
+        lastSubmitRef.current = Date.now();
         setStatus({
           type: "success",
           message: "Message sent! I'll be in touch soon.",
@@ -50,7 +65,7 @@ const Contact = () => {
     } catch {
       setStatus({
         type: "error",
-        message: "Failed to send. Please try again or email EK33433450805@mailfence.com directly.",
+        message: "Failed to send. Please try again or email edward.kubiak.dev@gmail.com directly.",
       });
     } finally {
       setSending(false);
@@ -165,6 +180,16 @@ const Contact = () => {
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-800/60 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/20 transition-all duration-300 resize-none"
             />
           </div>
+
+          <input
+            type="text"
+            name="botcheck_trap"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            className="sr-only"
+          />
 
           <button
             type="submit"

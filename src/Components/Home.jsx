@@ -60,7 +60,7 @@ function CurrentlyBuilding() {
     async function loadActivity() {
       // Try pre-built static file first (generated at deploy time, no rate limit)
       try {
-        const staticRes = await fetch("/Edward_Kubiak/github-activity.json");
+        const staticRes = await fetch("/github-activity.json");
         if (staticRes.ok) {
           const staticData = await staticRes.json();
           if (Array.isArray(staticData) && staticData.length > 0) {
@@ -210,6 +210,76 @@ function CurrentlyBuilding() {
           ))}
         </div>
       )}
+    </motion.section>
+  );
+}
+
+function RecentWriting() {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/devto-feed.json")
+      .then((r) => r.ok ? r.json() : [])
+      .then((data) => {
+        if (!cancelled) {
+          setArticles(Array.isArray(data) ? data : []);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  if (loading || articles.length === 0) return null;
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5 }}
+      className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
+    >
+      <div className="mb-6">
+        <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
+          Recent Writing
+        </h2>
+        <div className="mt-2 w-16 h-0.5 bg-amber-400/60" />
+      </div>
+
+      <div className="space-y-2">
+        {articles.map((article, i) => (
+          <motion.a
+            key={article.url}
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.3, delay: i * 0.06 }}
+            className="group flex items-start gap-3 p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700 hover:bg-slate-800/30 transition-all duration-200 block"
+          >
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-display font-bold text-slate-200 group-hover:text-amber-400 transition-colors leading-snug">
+                {article.title}
+              </p>
+              {article.description && (
+                <p className="text-xs text-slate-500 leading-snug mt-1 truncate">
+                  {article.description}
+                </p>
+              )}
+            </div>
+            <span className="font-display text-[10px] tracking-wider text-slate-600 shrink-0 pt-0.5">
+              {timeAgo(article.published_at)}
+            </span>
+          </motion.a>
+        ))}
+      </div>
     </motion.section>
   );
 }
@@ -417,6 +487,9 @@ const Home = () => {
 
       {/* Currently Building — live GitHub activity feed */}
       <CurrentlyBuilding />
+
+      {/* Recent Writing — dev.to articles */}
+      <RecentWriting />
     </div>
   );
 };

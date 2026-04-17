@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { HashRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Github, Menu, X } from "lucide-react";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
@@ -10,6 +10,8 @@ import About from "./Components/About";
 import Portfolio from "./Components/Portfolio";
 import Resume from "./Components/Resume";
 import Contact from "./Components/Contact";
+import Now from "./Components/Now";
+import CommandPalette from "./Components/CommandPalette";
 import BrandingImage from "./Images/Brand.svg";
 
 const navLinks = [
@@ -167,6 +169,7 @@ function AnimatedRoutes() {
       "/projects": "Projects — Edward Kubiak",
       "/resume": "Resume — Edward Kubiak",
       "/contact": "Contact — Edward Kubiak",
+      "/now": "Now — Edward Kubiak",
     };
     document.title = titles[location.pathname] || "Edward Kubiak";
   }, [location.pathname]);
@@ -187,6 +190,7 @@ function AnimatedRoutes() {
           <Route path="/projects" element={<Portfolio />} />
           <Route path="/resume" element={<Resume />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/now" element={<Now />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -199,6 +203,7 @@ function App() {
       <div className="noise-bg gradient-mesh min-h-screen">
         <ScrollProgress />
         <NavBar />
+        <CommandPalette />
         <main className="pt-20">
           <AnimatedRoutes />
         </main>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ExternalLink, Github, Star, Bot, Database, Terminal, BarChart3, ShoppingBag, DollarSign, Network, LayoutDashboard } from "lucide-react";
 import Tilt from "react-parallax-tilt";
@@ -332,6 +333,28 @@ const filters = [
   { key: "personal", label: "Personal" },
 ];
 
+let starsCache = null;
+let starsCachePromise = null;
+
+function fetchStarsMap() {
+  if (starsCache !== null) return Promise.resolve(starsCache);
+  if (starsCachePromise) return starsCachePromise;
+  starsCachePromise = fetch("/github-stars.json")
+    .then((res) => {
+      if (!res.ok) throw new Error("not found");
+      return res.json();
+    })
+    .then((data) => {
+      starsCache = data;
+      return data;
+    })
+    .catch(() => {
+      starsCache = {};
+      return {};
+    });
+  return starsCachePromise;
+}
+
 function useGitHubStars(owner, repo) {
   const [stars, setStars] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -342,15 +365,24 @@ function useGitHubStars(owner, repo) {
       return;
     }
     let cancelled = false;
-    fetch(`https://api.github.com/repos/${owner}/${repo}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("API error");
-        return res.json();
-      })
-      .then((data) => {
-        if (!cancelled) {
-          setStars(data.stargazers_count ?? null);
+    fetchStarsMap()
+      .then((map) => {
+        if (cancelled) return;
+        if (repo in map) {
+          setStars(map[repo]);
           setLoading(false);
+        } else {
+          return fetch(`https://api.github.com/repos/${owner}/${repo}`)
+            .then((res) => {
+              if (!res.ok) throw new Error("API error");
+              return res.json();
+            })
+            .then((data) => {
+              if (!cancelled) {
+                setStars(data.stargazers_count ?? null);
+                setLoading(false);
+              }
+            });
         }
       })
       .catch(() => {
@@ -493,8 +525,15 @@ function ProjectCard({ project }) {
   );
 }
 
+const VALID_FILTERS = new Set(["all", "featured", "ai-engineering", "cast-ecosystem", "professional", "personal"]);
+
 function Portfolio() {
-  const [filter, setFilter] = useState("all");
+  const [searchParams] = useSearchParams();
+  const initialFilter = (() => {
+    const param = searchParams.get("filter");
+    return param && VALID_FILTERS.has(param) ? param : "all";
+  })();
+  const [filter, setFilter] = useState(initialFilter);
 
   const filtered =
     filter === "all"
@@ -533,9 +572,11 @@ function Portfolio() {
           {filters.map(({ key, label }) => (
             <button
               key={key}
+              id={`tab-${key}`}
               onClick={() => setFilter(key)}
               role="tab"
               aria-selected={filter === key}
+              aria-controls="projects-panel"
               className={`px-4 py-2 font-display text-xs tracking-widest uppercase rounded-lg border transition-all duration-300 cursor-pointer ${
                 filter === key
                   ? "bg-amber-400 text-slate-950 border-amber-400 font-bold"
@@ -551,6 +592,10 @@ function Portfolio() {
         <AnimatePresence mode="wait">
           <motion.div
             key={filter}
+            id="projects-panel"
+            role="tabpanel"
+            aria-labelledby={`tab-${filter}`}
+            tabIndex={0}
             className="mt-10 grid md:grid-cols-2 gap-5"
             variants={containerVariants}
             initial="hidden"

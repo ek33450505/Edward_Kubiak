@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 8 * * *'
 
 permissions:
   contents: write
@@ -62,7 +62,102 @@ jobs:
           console.log('Wrote', pushEvents.length, 'events');
           EOF
 
+      - name: Fetch GitHub repo stars
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node << 'EOF'
+          const https = require('https');
+          const fs = require('fs');
+
+          const repos = [
+            'project-engram',
+            'claude-agent-team',
+            'claude-code-dashboard',
+            'cast-agents',
+            'cast-observe',
+            'cast-security',
+            'cast-hooks',
+            'cast-dash',
+            'cast-memory',
+            'cast-parallel',
+            'forge',
+            'JARVIS',
+            'cast-claudes_journal',
+            'promptbot',
+          ];
+
+          const token = process.env.GH_TOKEN;
+
+          async function fetchStars(repo) {
+            return new Promise((resolve) => {
+              const options = {
+                hostname: 'api.github.com',
+                path: `/repos/ek33450505/${repo}`,
+                headers: {
+                  'User-Agent': 'github-actions',
+                  'Authorization': `Bearer ${token}`,
+                  'Accept': 'application/vnd.github+json',
+                },
+              };
+              https.get(options, (res) => {
+                let data = '';
+                res.on('data', (chunk) => data += chunk);
+                res.on('end', () => {
+                  try {
+                    const json = JSON.parse(data);
+                    resolve({ repo, stars: json.stargazers_count ?? 0 });
+                  } catch {
+                    resolve({ repo, stars: 0 });
+                  }
+                });
+              }).on('error', () => resolve({ repo, stars: 0 }));
+            });
+          }
+
+          (async () => {
+            const results = await Promise.all(repos.map(fetchStars));
+            const map = {};
+            for (const { repo, stars } of results) {
+              map[repo] = stars;
+            }
+            fs.writeFileSync('public/github-stars.json', JSON.stringify(map, null, 2));
+            console.log('Wrote github-stars.json:', map);
+          })();
+          EOF
+
+      - name: Fetch dev.to posts
+        run: |
+          curl -s "https://dev.to/api/articles?username=edwardkubiak&per_page=3" \
+            -o raw_devto.json
+
+          node << 'EOF'
+          const fs = require('fs');
+          let raw;
+          try {
+            raw = JSON.parse(fs.readFileSync('raw_devto.json', 'utf8'));
+          } catch {
+            raw = [];
+          }
+          if (!Array.isArray(raw)) {
+            console.error('dev.to API did not return an array');
+            fs.writeFileSync('public/devto-feed.json', JSON.stringify([]));
+            process.exit(0);
+          }
+          const articles = raw.map(a => ({
+            title: a.title,
+            description: a.description,
+            url: a.url,
+            published_at: a.published_at,
+            tag_list: a.tag_list,
+          }));
+          fs.writeFileSync('public/devto-feed.json', JSON.stringify(articles));
+          console.log('Wrote', articles.length, 'dev.to articles');
+          EOF
+
       - name: Build
+        env:
+          VITE_WEB3FORMS_KEY: ${{ secrets.VITE_WEB3FORMS_KEY }}
         run: npm run build
 
       - name: Deploy to GitHub Pages

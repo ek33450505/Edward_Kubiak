@@ -2,6 +2,7 @@ import { useRef, useMemo, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Stars, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
+import { useReducedMotion } from "motion/react";
 
 /**
  * Nebula cloud — colored particles drifting in space with additive blending.
@@ -148,6 +149,8 @@ function GalaxyCore() {
  * Uses a fixed position behind all page content.
  */
 export default function StarField() {
+  const reducedMotion = useReducedMotion();
+  if (reducedMotion) return null;
   return (
     <div className="fixed inset-0 z-0" aria-hidden="true">
       <Canvas
