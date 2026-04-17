@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch } from "lucide-react";
 import UltraMap from "./UltraMap";
+import StravaStats from "./StravaStats";
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -168,7 +169,7 @@ const About = () => {
                     forward to Mohican 100 in late May and Rim to River 100 in
                     October.
                   </p>
-                  <UltraMap />
+                  <StravaStats />
                   <a
                     href="https://www.strava.com/athletes/76394967"
                     target="_blank"
@@ -186,6 +187,7 @@ const About = () => {
                     />
                     Follow on Strava
                   </a>
+                  <UltraMap />
                 </div>
               </div>
             </motion.div>

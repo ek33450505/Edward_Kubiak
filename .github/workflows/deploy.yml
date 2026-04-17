@@ -223,6 +223,90 @@ jobs:
           console.log('Wrote', articles.length, 'dev.to articles');
           EOF
 
+      - name: Fetch Strava stats
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: |
+          if [ -z "$STRAVA_CLIENT_ID" ] || [ -z "$STRAVA_CLIENT_SECRET" ] || [ -z "$STRAVA_REFRESH_TOKEN" ]; then
+            echo '{"available":false}' > public/strava-stats.json
+            echo "Strava secrets not set — wrote available:false"
+            exit 0
+          fi
+
+          TOKEN_RESPONSE=$(curl -s -S -X POST https://www.strava.com/oauth/token \
+            -d client_id="$STRAVA_CLIENT_ID" \
+            -d client_secret="$STRAVA_CLIENT_SECRET" \
+            -d refresh_token="$STRAVA_REFRESH_TOKEN" \
+            -d grant_type=refresh_token)
+
+          TOKEN_RESPONSE="$TOKEN_RESPONSE" node << 'EOF'
+          const fs = require('fs');
+          const tokenRaw = process.env.TOKEN_RESPONSE;
+
+          async function run() {
+            let accessToken;
+            try {
+              const tokenData = JSON.parse(tokenRaw);
+              if (!tokenData.access_token) throw new Error('no access_token in response');
+              accessToken = tokenData.access_token;
+            } catch (e) {
+              console.error('Token parse error:', e.message);
+              fs.writeFileSync('public/strava-stats.json', JSON.stringify({ available: false, error: 'token exchange failed' }));
+              return;
+            }
+
+            await new Promise((resolve) => {
+              const https = require('https');
+              const options = {
+                hostname: 'www.strava.com',
+                path: '/api/v3/athletes/76394967/stats',
+                headers: { 'Authorization': `Bearer ${accessToken}` },
+              };
+              https.get(options, (res) => {
+                let data = '';
+                res.on('data', (chunk) => data += chunk);
+                res.on('end', () => {
+                  try {
+                    if (res.statusCode < 200 || res.statusCode >= 300) {
+                      throw new Error(`stats API returned ${res.statusCode}`);
+                    }
+                    const s = JSON.parse(data);
+                    const out = {
+                      available: true,
+                      ytdRunDistance: s.ytd_run_totals?.distance ?? 0,
+                      ytdRunElevation: s.ytd_run_totals?.elevation_gain ?? 0,
+                      ytdRunCount: s.ytd_run_totals?.count ?? 0,
+                      allTimeRunDistance: s.all_run_totals?.distance ?? 0,
+                      allTimeRunCount: s.all_run_totals?.count ?? 0,
+                      biggestRunDistance: s.biggest_run_distance ?? 0,
+                      biggestClimbElevation: s.biggest_climb_elevation_gain ?? 0,
+                      recentRunDistance30d: s.recent_run_totals?.distance ?? 0,
+                      updated: new Date().toISOString(),
+                    };
+                    fs.writeFileSync('public/strava-stats.json', JSON.stringify(out));
+                    console.log('Wrote strava-stats.json');
+                  } catch (e) {
+                    console.error('Stats transform error:', e.message);
+                    fs.writeFileSync('public/strava-stats.json', JSON.stringify({ available: false, error: e.message }));
+                  }
+                  resolve();
+                });
+              }).on('error', (e) => {
+                console.error('Stats fetch error:', e.message);
+                fs.writeFileSync('public/strava-stats.json', JSON.stringify({ available: false, error: e.message }));
+                resolve();
+              });
+            });
+          }
+
+          run().catch((e) => {
+            console.error('Unexpected error:', e.message);
+            fs.writeFileSync('public/strava-stats.json', JSON.stringify({ available: false, error: e.message }));
+          });
+          EOF
+
       - name: Build
         env:
           VITE_WEB3FORMS_KEY: ${{ secrets.VITE_WEB3FORMS_KEY }}

@@ -6,3 +6,4 @@ dist
 .env.local
 coverage
 .claude/
+public/strava-stats.json
