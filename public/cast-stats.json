@@ -1,7 +1,7 @@
 {
   "version": "6.0.0",
   "agents": 30,
-  "tests": 1726,
+  "tests": 44,
   "packages": 11,
   "commands": 20,
   "updated": "2026-04-26"

@@ -30,7 +30,7 @@ const projects = [
     github: "https://github.com/ek33450505/claude-agent-team",
     githubRepo: { owner: "ek33450505", repo: "claude-agent-team" },
     castEcosystem: true,
-    stats: ["30 Agents", "81 Hooks", "1726 Tests", "20 Commands", "11 Packages", "v6.0.0"],
+    stats: ["30 Agents", "81 Hooks", "44 Tests", "20 Commands", "11 Packages", "v6.0.0"],
   },
   {
     slug: "claude-code-dashboard",
