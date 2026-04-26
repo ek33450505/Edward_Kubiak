@@ -20,7 +20,7 @@ const projects = [
     slug: "cast-claude-agent-team",
     title: "CAST — Claude Agent Team",
     description:
-      "Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 17 specialist agents, 4 enforcement hooks, and model-driven dispatch — no routing tables, no cloud. The full ecosystem ships as 9 modular Homebrew packages: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, Claude's Journal, and JARVIS. Install only what you need. brew tap ek33450505/cast && brew install cast",
+      "Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 30 specialist agents, 81 enforcement hooks, and model-driven dispatch — no routing tables, no cloud. The full ecosystem ships as 11 modular Homebrew packages: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, Claude's Journal, JARVIS, and more. Install only what you need. brew tap ek33450505/cast && brew install cast",
     tech: ["Claude Code", "Bash", "Hook Architecture", "Node.js", "SQLite", "BATS"],
     icon: Network,
     color: "violet",
@@ -30,13 +30,13 @@ const projects = [
     github: "https://github.com/ek33450505/claude-agent-team",
     githubRepo: { owner: "ek33450505", repo: "claude-agent-team" },
     castEcosystem: true,
-    stats: ["17 Agents", "4 Hooks", "255 Tests", "16 Commands", "9 Packages", "v4.6"],
+    stats: ["30 Agents", "81 Hooks", "1726 Tests", "20 Commands", "11 Packages", "v6.0.0"],
   },
   {
     slug: "claude-code-dashboard",
     title: "Claude Code Dashboard",
     description:
-      "Observability layer for CAST — a 10-page React 19 + TypeScript UI with real-time SSE activity feed, session cost tracking, per-agent scorecards, Cmd+K global search, and a privacy audit showing your cloud vs. local API ratio. 13+ Express API endpoint categories. Gracefully degrades when CAST is not installed. v1.0.0",
+      "Observability layer for CAST — a 10-page React 19 + TypeScript UI with real-time SSE activity feed, session cost tracking, per-agent scorecards, Cmd+K global search, and a privacy audit showing your cloud vs. local API ratio. 15+ Express API endpoint categories. Gracefully degrades when CAST is not installed. v2.1.0",
     tech: ["React 19", "TypeScript", "Vite", "Express", "SSE", "Recharts", "better-sqlite3"],
     icon: LayoutDashboard,
     color: "teal",
@@ -47,13 +47,13 @@ const projects = [
     github: "https://github.com/ek33450505/claude-code-dashboard",
     githubRepo: { owner: "ek33450505", repo: "claude-code-dashboard" },
     link: "https://cast-site-iota.vercel.app/",
-    stats: ["10 Pages", "13+ APIs", "SSE Live Feed", "v1.0.0"],
+    stats: ["10 Pages", "15+ APIs", "SSE Live Feed", "v2.1.0"],
   },
   {
     slug: "cast-agents",
     title: "cast-agents",
     description:
-      "Part of the open-source CAST ecosystem — install just the agents, nothing else. All 17 specialist Claude Code agents (commit, debug, review, plan, and more) distributed as a standalone Homebrew package. Mix and match CAST modules to build your own stack. brew tap ek33450505/cast-agents && brew install cast-agents",
+      "Part of the open-source CAST ecosystem — install just the agents, nothing else. All 30 specialist Claude Code agents (commit, debug, review, plan, and more) distributed as a standalone Homebrew package. Mix and match CAST modules to build your own stack. brew tap ek33450505/cast-agents && brew install cast-agents",
     tech: ["Claude Code", "Bash", "Shell"],
     icon: Network,
     color: "violet",
@@ -62,7 +62,7 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-agents",
     githubRepo: { owner: "ek33450505", repo: "cast-agents" },
-    stats: ["Open Source", "17 Agents", "Homebrew Install", "Claude Code"],
+    stats: ["Open Source", "30 Agents", "Homebrew Install", "Claude Code"],
   },
   {
     slug: "cast-observe",
