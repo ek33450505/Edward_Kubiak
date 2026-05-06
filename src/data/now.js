@@ -1,28 +1,28 @@
 const now = {
-  updated: "April 17, 2025",
+  updated: "May 2026",
   sections: [
     {
       title: "Building",
       items: [
-        "CAST v4.6 — shipping the full 9-package Homebrew ecosystem, per-agent memory with FTS5, and the observability dashboard",
-        "Forge — native macOS terminal emulator for Claude Code (Tauri v2 + React 19 + xterm.js)",
-        "Project Engram — persistent AI identity system across models and providers",
+        "CAST v6.0.1 — 30-agent Claude Code framework, 10 Homebrew packages, 2,000+ cloners in the last 14 days. Public site live at castframework.dev.",
+        "cast-time — just shipped. A single-purpose SessionStart hook that gives Claude a clock. Claude finally knows what time it is.",
+        "Actively networking and exploring new opportunities — the PSUG conference this week has been a great connector.",
       ],
     },
     {
       title: "Learning",
       items: [
-        "Tauri v2 — Rust-backed native app framework; deep-diving window management and IPC",
-        "Rust — systems programming for Forge's core; working through ownership and async patterns",
-        "MCP (Model Context Protocol) — building custom server integrations for the CAST ecosystem",
+        "Managed Agents API (Anthropic beta) — hosted agent execution on Anthropic infrastructure, eliminating local filesystem contention for parallel work",
+        "Hook-driven agent dispatch at scale — 81 Claude Code hooks wired for quality gates, observability, safety policy, and dispatch",
+        "AI systems observability — cast.db, real-time SSE feeds, and per-agent scorecards at the session level",
       ],
     },
     {
       title: "Running",
       items: [
-        "Mohican 100 prep — building mileage and back-to-back long runs through spring",
-        "Rim to River 100 — October 2025 goal race in the New River Gorge",
-        "Current weekly mileage: 50-60 miles, focused on trail-specific vertical gain",
+        "Mohican 100 — late May 2026. Race day is coming up fast. Training is locked in.",
+        "Looking for my next fall 100-miler after Rim to River in October 2025.",
+        "Current focus: back-to-back long runs, trail-specific vertical gain through Ohio singletrack.",
       ],
     },
   ],

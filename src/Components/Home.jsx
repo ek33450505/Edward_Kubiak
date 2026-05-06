@@ -30,7 +30,7 @@ const competencies = [
     icon: Brain,
     title: "AI / LLM Integration",
     description:
-      "Architect of the CAST ecosystem — 17 specialist agents, 9 modular Homebrew packages, and a real-time observability dashboard for Claude Code. Building Forge, a native macOS terminal designed around Claude Code.",
+      "Architect of CAST v6.0.1 — 30 specialist agents, 12 modular Homebrew packages, and a real-time observability dashboard for Claude Code. 2,000+ cloners. castframework.dev",
   },
 ];
 
@@ -377,9 +377,9 @@ const Home = () => {
             >
               By day, I build production education technology for Ohio school
               districts at META Solutions. By night, I build open-source
-              infrastructure for AI-native development — including the CAST
-              ecosystem, a modular agent framework for Claude Code, and Forge,
-              a native terminal built around it.
+              infrastructure for AI-native development — including CAST, a
+              30-agent framework for Claude Code with 2,000+ cloners and a
+              full ecosystem of modular Homebrew packages.
             </motion.p>
 
             <motion.div
@@ -400,6 +400,27 @@ const Home = () => {
                 className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 font-display text-sm tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 hover:shadow-[0_0_20px_rgba(0,255,194,0.1)] transition-all duration-300"
               >
                 Let&apos;s Build Something
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.1 }}
+              className="mt-4 flex items-center gap-2"
+            >
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-display tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+                Open to new opportunities
+              </span>
+              <a
+                href="https://www.linkedin.com/in/edward-kubiak-bbbaa6401/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Connect on LinkedIn (opens in new tab)"
+                className="text-xs text-slate-500 hover:text-sky-400 font-display tracking-wider transition-colors"
+              >
+                LinkedIn →
               </a>
             </motion.div>
           </motion.div>

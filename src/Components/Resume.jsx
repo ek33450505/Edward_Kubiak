@@ -50,7 +50,7 @@ const skills = {
   "AI Infrastructure & Developer Tools": [
     "Claude API",
     "Claude Code",
-    "CAST v4.6 (17 agents, 9 Homebrew packages)",
+    "CAST v6.0.1 (30 agents, 12 Homebrew packages)",
     "Agent Architecture",
     "Tauri v2",
     "Ollama",
@@ -91,10 +91,10 @@ const experience = [
     location: "Columbus, OH",
     period: "August 2022 — Present",
     highlights: [
-      "Creator of CAST (Claude Agent Specialist Team) v4.6 — a local-first, open-source multi-agent framework embedded into Claude Code via hook-driven dispatch. 17 specialist agents with model-driven routing (Sonnet for complex tasks, Haiku for lightweight), local SQLite observability, per-agent persistent memory with FTS5 search, and 255 BATS tests. No cloud dependencies — everything runs on the developer machine.",
-      "Architected the CAST ecosystem as 9 modular Homebrew packages — cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, Claude's Journal, and JARVIS — enabling developers to install only the components they need. Each package has its own Homebrew tap, versioned releases, and standalone functionality.",
-      "Built two complementary observability layers: the Claude Code Dashboard (React 19 + TypeScript + Express 5 + SSE) — a 10-page real-time UI with session cost tracking, per-agent scorecards, Cmd+K search, and privacy auditing — and cast-dash, an htop-style Python TUI for terminal-native monitoring.",
-      "Building Forge — a native macOS terminal emulator designed around Claude Code using Tauri v2, React 19, TypeScript, and xterm.js. Features multi-tab splits, Claude session detection, CAST integration, command palette, ghost-text suggestions, inline error annotations, and 6 built-in themes. Open source.",
+      "Creator of CAST (Claude Agent Specialist Team) v6.0.1 — a local-first, open-source multi-agent framework embedded into Claude Code via hook-driven dispatch. 30 specialist agents with model-driven routing (Sonnet for complex tasks, Haiku for lightweight), local SQLite observability, per-agent persistent memory, and 81 enforcement hooks. 2,000+ cloners. No cloud dependencies — everything runs on the developer machine.",
+      "Architected the CAST ecosystem as 12 modular Homebrew packages — cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, Claude's Journal, cast-time, and more — enabling developers to install only the components they need. Each package has its own Homebrew tap, versioned releases, and standalone functionality.",
+      "Built two complementary observability layers: the Claude Code Dashboard v2.2.0 (React 19 + TypeScript + Express 5 + SSE) — a 10-page real-time UI with session cost tracking, per-agent scorecards, Cmd+K search, and privacy auditing — and cast-dash, an htop-style Python TUI for terminal-native monitoring.",
+      "Built Forge (publicly archived) — a native macOS terminal emulator designed around Claude Code using Tauri v2, React 19, TypeScript, and xterm.js. Features multi-tab splits, Claude session detection, CAST integration, and command palette.",
       "Engineered JARVIS — part of the CAST ecosystem — a personal assistant framework built on 8 specialized Claude Code agents (briefing, triage, calendar, meeting prep, EOD summary, weekly report, backup, Jira standup) with macOS launchd scheduling for automated daily workflows.",
       "Spearheaded the complete migration of CrossCheck from AngularJS to React — a mission-critical EMIS validation platform built with React 18, AG Grid, MUI, JWT auth, and TanStack Query, now serving 4,200+ users across 900+ Ohio school districts.",
       "Architected and maintain five production web applications across React, Flask, Express, PostgreSQL, and jQuery/DataTables — each serving Ohio's K-12 education ecosystem.",
@@ -147,6 +147,18 @@ const Resume = () => {
               <MapPin size={14} /> Columbus, Ohio
             </span>
             <a
+              href="https://www.linkedin.com/in/edward-kubiak-bbbaa6401/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 hover:text-amber-400 transition-colors"
+              aria-label="LinkedIn profile (opens in new tab)"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              linkedin.com/in/edward-kubiak-bbbaa6401
+            </a>
+            <a
               href="https://dev.to/edwardkubiak"
               target="_blank"
               rel="noopener noreferrer"
@@ -181,7 +193,7 @@ const Resume = () => {
           Summary
         </h2>
         <p className="text-slate-300 leading-relaxed">
-          AI systems engineer and full stack developer who builds developer tooling and multi-agent frameworks. Creator of CAST v4.6 — a local-first, open-source 17-agent framework for Claude Code distributed as 9 modular Homebrew packages — and Forge, a native macOS terminal built around Claude Code with Tauri + React 19. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts.
+          AI systems engineer and full stack developer who builds developer tooling and multi-agent frameworks. Creator of CAST v6.0.1 — a local-first, open-source 30-agent framework for Claude Code distributed as 12 modular Homebrew packages, with 2,000+ cloners and a dedicated ecosystem site at castframework.dev. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts.
         </p>
       </motion.div>
 

@@ -41,11 +41,11 @@ const About = () => {
                 <p className="text-slate-300 leading-relaxed">
                   I&apos;m a full stack developer and AI systems engineer who
                   builds developer tooling and production applications. I
-                  created CAST v4.6 — a 17-agent framework that embeds
-                  specialist teams into Claude Code via hook architecture — and
-                  Forge, a native macOS terminal built around Claude Code with
-                  Tauri. The full CAST ecosystem ships as 9 modular Homebrew
-                  packages, plus a React 19 observability dashboard.
+                  created CAST v6.0.1 — a 30-agent framework that embeds
+                  specialist teams into Claude Code via hook architecture. The
+                  full CAST ecosystem ships as 12 modular Homebrew packages,
+                  plus a React 19 observability dashboard. 2,000+ cloners at
+                  castframework.dev.
                 </p>
                 <p className="mt-4 text-slate-300 leading-relaxed">
                   At{" "}
@@ -111,7 +111,7 @@ const About = () => {
                 <p className="text-slate-300 leading-relaxed">
                   I believe developer tools should be transparent, composable,
                   and owned by the people who use them. The CAST ecosystem is
-                  10+ open-source repositories with 9 standalone Homebrew
+                  15+ open-source repositories with 12 standalone Homebrew
                   packages — from agent definitions to security policy gates to
                   terminal dashboards. Every component works independently or
                   together. Zero cloud, zero lock-in.
@@ -165,9 +165,9 @@ const About = () => {
                   <p className="text-slate-300 leading-relaxed text-sm">
                     I&apos;ve finished six 100-mile ultramarathons along with a
                     handful of 50K to 100K races over the years. Long days on
-                    singletrack are where I think best. This year I&apos;m looking
-                    forward to Mohican 100 in late May and Rim to River 100 in
-                    October.
+                    singletrack are where I think best. Mohican 100 is coming
+                    up in late May 2026 — training is locked in. Rim to River
+                    100 in October 2025 is in the books.
                   </p>
                   {/* StravaStats shelved — API flow too heavy; revisit later */}
                   {/* <StravaStats /> */}
@@ -210,6 +210,18 @@ const About = () => {
               className="font-display text-lg sm:text-xl font-bold text-amber-400 hover:text-amber-300 transition-colors underline underline-offset-4 decoration-amber-400/30 hover:decoration-amber-400"
             >
               edward.kubiak.dev@gmail.com
+            </a>
+            <a
+              href="https://www.linkedin.com/in/edward-kubiak-bbbaa6401/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Connect on LinkedIn (opens in new tab)"
+              className="mt-2 inline-flex items-center gap-2 text-sm text-sky-400 hover:text-sky-300 transition-colors"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              Connect on LinkedIn
             </a>
           </motion.div>
         </div>

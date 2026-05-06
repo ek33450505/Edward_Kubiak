@@ -1,0 +1,15 @@
+{
+  "name": "Edward Kubiak — Full Stack Developer",
+  "short_name": "Edward Kubiak",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0a0f1a",
+  "background_color": "#0a0f1a"
+}
