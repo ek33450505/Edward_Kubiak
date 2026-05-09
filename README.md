@@ -29,8 +29,7 @@ This portfolio showcases my work as a full stack developer specializing in React
 ## Connect
 
 - **GitHub**: [ek33450505](https://github.com/ek33450505)
-- **Email**: EK33433450805@mailfence.com
-
+- **Email**: edward.kubiak.dev@gmail.com
 ---
 
 &copy; 2024–2026 Edward Kubiak
