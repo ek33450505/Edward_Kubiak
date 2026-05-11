@@ -41,10 +41,10 @@ const About = () => {
                 <p className="text-slate-300 leading-relaxed">
                   I&apos;m a full stack developer and AI systems engineer who
                   builds developer tooling and production applications. I
-                  created CAST v6.0.1 — a 30-agent framework that embeds
+                  created CAST v7.0 — a 22-agent framework that embeds
                   specialist teams into Claude Code via hook architecture. The
                   full CAST ecosystem ships as 12 modular Homebrew packages,
-                  plus a React 19 observability dashboard. 2,000+ cloners at
+                  plus a React 19 observability dashboard. 2,500+ cloners at
                   castframework.dev.
                 </p>
                 <p className="mt-4 text-slate-300 leading-relaxed">
@@ -111,10 +111,10 @@ const About = () => {
                 <p className="text-slate-300 leading-relaxed">
                   I believe developer tools should be transparent, composable,
                   and owned by the people who use them. The CAST ecosystem is
-                  15+ open-source repositories with 12 standalone Homebrew
+                  13 open-source repositories with 12 standalone Homebrew
                   packages — from agent definitions to security policy gates to
-                  terminal dashboards. Every component works independently or
-                  together. Zero cloud, zero lock-in.
+                  terminal dashboards to autonomous routines. Every component
+                  works independently or together. Zero cloud, zero lock-in.
                 </p>
               </div>
             </div>

@@ -30,7 +30,7 @@ const competencies = [
     icon: Brain,
     title: "AI / LLM Integration",
     description:
-      "Architect of CAST v6.0.1 — 30 specialist agents, 12 modular Homebrew packages, and a real-time observability dashboard for Claude Code. 2,000+ cloners. castframework.dev",
+      "Architect of CAST v7.0 — 22 specialist agents, 12 modular Homebrew packages, and a real-time observability dashboard for Claude Code. 2,500+ cloners. castframework.dev",
   },
 ];
 
