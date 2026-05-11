@@ -4,16 +4,17 @@ const now = {
     {
       title: "Building",
       items: [
-        "CAST v6.0.1 — 30-agent Claude Code framework, 10 Homebrew packages, 2,000+ cloners in the last 14 days. Public site live at castframework.dev.",
-        "cast-time — just shipped. A single-purpose SessionStart hook that gives Claude a clock. Claude finally knows what time it is.",
-        "Actively networking and exploring new opportunities — the PSUG conference this week has been a great connector.",
+        "CAST v7.0 — 22-agent Claude Code framework, 12 Homebrew packages, 2,500+ cloners in the last 14 days. Public site live at castframework.dev.",
+        "cast-routines + cast-doctor — just shipped (2026-05-11). Routines schedule autonomous Claude Code workflows via YAML + cron; doctor is a read-only health check that works against any Claude Code install.",
+        "CAST v8 — bundled desktop app in planning. Bringing Forge (Tauri terminal), the dashboard, and voice into one product. v7 is the daily driver; v8 is the app layer.",
+        "Actively networking and exploring new opportunities.",
       ],
     },
     {
       title: "Learning",
       items: [
         "Managed Agents API (Anthropic beta) — hosted agent execution on Anthropic infrastructure, eliminating local filesystem contention for parallel work",
-        "Hook-driven agent dispatch at scale — 81 Claude Code hooks wired for quality gates, observability, safety policy, and dispatch",
+        "Hook-driven agent dispatch at scale — Claude Code hooks wired for quality gates, observability, safety policy, and dispatch",
         "AI systems observability — cast.db, real-time SSE feeds, and per-agent scorecards at the session level",
       ],
     },
