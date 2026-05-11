@@ -1,0 +1,16 @@
+{
+  "project-engram": 0,
+  "claude-agent-team": 3,
+  "claude-code-dashboard": 4,
+  "cast-agents": 1,
+  "cast-observe": 1,
+  "cast-security": 2,
+  "cast-hooks": 2,
+  "cast-dash": 1,
+  "cast-memory": 1,
+  "cast-parallel": 1,
+  "forge": 1,
+  "JARVIS": 0,
+  "cast-claudes_journal": 1,
+  "promptbot": 0
+}
