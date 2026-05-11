@@ -141,13 +141,16 @@ jobs:
           node << 'EOF'
           const fs = require('fs');
 
-          // Fallback values (current as of build)
+          // Fallback values (current as of 2026-05-11 — CAST v7.0).
+          // version/agents/tests come from claude-agent-team README badges below;
+          // packages/commands have no badge yet, so bump these manually when CAST
+          // ships new packages or slash commands.
           const fallback = {
-            version: 'v6.0',
-            agents: 30,
-            tests: 409,
-            packages: 9,
-            commands: 16,
+            version: 'v7.0',
+            agents: 22,
+            tests: 990,
+            packages: 12,
+            commands: 19,
           };
 
           let version = fallback.version;
