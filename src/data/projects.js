@@ -2,21 +2,6 @@ import { Bot, Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingB
 
 const projects = [
   {
-    slug: "project-engram",
-    title: "Project Engram",
-    description:
-      "Persistent AI identity system — archived publicly in April 2026 after pivoting to a private commercial product. Extracts identity signals from conversations, compresses them with recency-weighted decay scoring, and injects a token-efficient payload at session start. Works across models and providers.",
-    tech: ["Python", "SQLite", "Bash", "Claude Code"],
-    icon: Bot,
-    color: "emerald",
-    category: "personal",
-    archived: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/project-engram",
-    githubRepo: { owner: "ek33450505", repo: "project-engram" },
-    stats: ["Archived 2026-04", "Pivoted Commercial", "v0.6.0", "347 Tests", "4 Providers"],
-  },
-  {
     slug: "cast-claude-agent-team",
     title: "CAST — Claude Agent Team",
     description:
