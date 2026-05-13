@@ -1,5 +1,4 @@
 {
-  "project-engram": 0,
   "claude-agent-team": 4,
   "claude-code-dashboard": 4,
   "cast-agents": 1,
@@ -9,8 +8,10 @@
   "cast-dash": 1,
   "cast-memory": 1,
   "cast-parallel": 1,
-  "forge": 1,
-  "JARVIS": 0,
+  "cast-routines": 0,
+  "cast-doctor": 0,
+  "cast-time": 0,
+  "cast-website": 0,
   "cast-claudes_journal": 1,
   "promptbot": 0
 }
