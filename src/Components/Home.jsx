@@ -165,6 +165,8 @@ function timeAgo(dateString) {
 
 function CurrentlyBuilding() {
   const [events, setEvents] = useState([]);
+  const [lastKnownCommits, setLastKnownCommits] = useState([]);
+  const [lastKnownCachedAt, setLastKnownCachedAt] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -213,6 +215,25 @@ function CurrentlyBuilding() {
           setLoading(false);
         }
       } catch {
+        // Live API failed; try fetching last-known-commits
+        try {
+          const lastKnownRes = await fetch("/last-known-commits.json");
+          if (lastKnownRes.ok) {
+            const lastKnownData = await lastKnownRes.json();
+            if (!cancelled) {
+              if (lastKnownData.commits && lastKnownData.commits.length > 0) {
+                setLastKnownCommits(lastKnownData.commits);
+                setLastKnownCachedAt(lastKnownData.cachedAt || "");
+              }
+              setError(true);
+              setLoading(false);
+            }
+            return;
+          }
+        } catch {
+          // last-known-commits fetch also failed
+        }
+
         if (!cancelled) {
           setError(true);
           setLoading(false);
@@ -226,7 +247,7 @@ function CurrentlyBuilding() {
     };
   }, []);
 
-  const showFallback = !loading && (error || events.length === 0);
+  const showFallback = !loading && (error || (events.length === 0 && lastKnownCommits.length === 0));
 
   return (
     <motion.section
@@ -290,7 +311,7 @@ function CurrentlyBuilding() {
         </div>
       )}
 
-      {/* Activity feed */}
+      {/* Activity feed — live data */}
       {!loading && events.length > 0 && (
         <div className="space-y-2" aria-live="polite">
           {events.map((event, i) => (
@@ -334,6 +355,62 @@ function CurrentlyBuilding() {
               </span>
             </motion.div>
           ))}
+        </div>
+      )}
+
+      {/* Activity feed — from last deploy fallback */}
+      {!loading && events.length === 0 && lastKnownCommits.length > 0 && (
+        <div className="space-y-2" aria-live="polite">
+          {lastKnownCommits.map((event, i) => {
+            const formattedDate = lastKnownCachedAt
+              ? new Date(lastKnownCachedAt).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              : "unknown date";
+            return (
+              <motion.div
+                key={event.id}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: i * 0.06 }}
+                className="group flex items-start gap-3 p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700 hover:bg-slate-800/30 transition-all duration-200"
+              >
+                <GitCommit
+                  size={14}
+                  className="text-amber-400/60 shrink-0 mt-0.5"
+                />
+                <div className="flex-1 min-w-0">
+                  <a
+                    href={
+                      event.sha
+                        ? `https://github.com/ek33450505/${event.repo}/commit/${event.sha}`
+                        : `https://github.com/ek33450505/${event.repo}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-display text-[11px] tracking-wider text-amber-400/80 hover:text-amber-400 transition-colors uppercase inline-flex items-center gap-1"
+                  >
+                    {event.repo}
+                    {event.sha && (
+                      <span className="text-slate-600 normal-case tracking-normal lowercase">
+                        · {event.sha.slice(0, 7)}
+                      </span>
+                    )}
+                    <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                  <p className="text-sm text-slate-400 leading-snug mt-0.5 truncate">
+                    {event.message}
+                  </p>
+                </div>
+                <span className="font-display text-[10px] tracking-wider text-slate-600 shrink-0 pt-0.5">
+                  from last deploy · {formattedDate}
+                </span>
+              </motion.div>
+            );
+          })}
         </div>
       )}
     </motion.section>
@@ -397,6 +474,11 @@ function RecentWriting() {
               {article.description && (
                 <p className="text-xs text-slate-500 leading-snug mt-1 truncate">
                   {article.description}
+                </p>
+              )}
+              {(article.reactions > 0 || article.views > 0) && (
+                <p className="text-xs text-slate-600 leading-snug mt-1">
+                  ★ {article.reactions} reactions · {article.views} views
                 </p>
               )}
             </div>

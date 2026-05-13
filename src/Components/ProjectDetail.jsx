@@ -111,6 +111,17 @@ function ProjectDetail() {
   const { slug } = useParams();
   const project = projects.find((p) => p.slug === slug);
 
+  useEffect(() => {
+    let ogMeta = document.querySelector('meta[property="og:image"]');
+    if (!ogMeta) {
+      ogMeta = document.createElement('meta');
+      ogMeta.setAttribute('property', 'og:image');
+      document.head.appendChild(ogMeta);
+    }
+    ogMeta.setAttribute('content', `/og/${slug}.png`);
+    return () => ogMeta.setAttribute('content', '');
+  }, [slug]);
+
   if (!project) {
     return (
       <div className="min-h-[calc(100vh-80px)] py-20">

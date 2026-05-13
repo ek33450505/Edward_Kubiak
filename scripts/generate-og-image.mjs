@@ -1,15 +1,34 @@
 import sharp from "sharp";
 import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-import { writeFileSync } from "fs";
+import { basename, dirname, join } from "path";
+import { mkdirSync } from "fs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const outPath = join(__dirname, "../public/og-image.png");
 
 const WIDTH = 1200;
 const HEIGHT = 630;
 
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}">
+// Parse CLI arguments
+const args = process.argv.slice(2);
+let slug = null;
+let title = null;
+let outDir = join(__dirname, "../public/og");
+
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === "--slug" && i + 1 < args.length) {
+    slug = args[i + 1];
+    i++;
+  } else if (args[i] === "--title" && i + 1 < args.length) {
+    title = args[i + 1];
+    i++;
+  } else if (args[i] === "--outDir" && i + 1 < args.length) {
+    outDir = args[i + 1];
+    i++;
+  }
+}
+
+function generateOgSvg(mainText, subtitle = "Full Stack Developer & AI Systems Engineer") {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}">
   <!-- Background -->
   <rect width="${WIDTH}" height="${HEIGHT}" fill="#0a0f1a"/>
 
@@ -31,7 +50,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${
     font-weight="700"
     fill="#f8fafc"
     letter-spacing="-2"
-  >EDWARD KUBIAK</text>
+  >${mainText}</text>
 
   <!-- Subtitle -->
   <text
@@ -42,7 +61,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${
     font-weight="400"
     fill="#cbd5e1"
     letter-spacing="1"
-  >Full Stack Developer &amp; AI Systems Engineer</text>
+  >${subtitle}</text>
 
   <!-- Footer domain -->
   <text
@@ -55,11 +74,39 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${
     letter-spacing="2"
   >edwardkubiak.com</text>
 </svg>`;
+}
 
-const svgBuffer = Buffer.from(svg);
+async function generateImage(filename, svgContent) {
+  const svgBuffer = Buffer.from(svgContent);
+  const outPath = join(outDir, filename);
 
-await sharp(svgBuffer)
-  .png()
-  .toFile(outPath);
+  // Ensure output directory exists
+  mkdirSync(outDir, { recursive: true });
 
-console.log(`Wrote og-image.png to ${outPath}`);
+  await sharp(svgBuffer)
+    .png()
+    .toFile(outPath);
+
+  return outPath;
+}
+
+// Sanitize slug to prevent path traversal
+if (slug) {
+  slug = basename(slug).replace(/[^a-zA-Z0-9_-]/g, '');
+  if (!slug) {
+    console.error('Invalid slug');
+    process.exit(1);
+  }
+}
+
+// If specific project requested
+if (slug && title) {
+  const svg = generateOgSvg(title, "Project");
+  const outPath = await generateImage(`${slug}.png`, svg);
+  console.log(`Wrote project OG image to ${outPath}`);
+} else {
+  // Generate main og-image.png
+  const svg = generateOgSvg("EDWARD KUBIAK", "Full Stack Developer & AI Systems Engineer");
+  const outPath = await generateImage("og-image.png", svg);
+  console.log(`Wrote og-image.png to ${outPath}`);
+}

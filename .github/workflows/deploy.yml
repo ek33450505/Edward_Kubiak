@@ -63,6 +63,16 @@ jobs:
             .slice(0, 10);
           fs.writeFileSync('public/github-activity.json', JSON.stringify(pushEvents));
           console.log('Wrote', pushEvents.length, 'commits');
+
+          // Also write last-known-commits.json as fallback for CurrentlyBuilding
+          if (pushEvents.length > 0) {
+            const lastKnownCommits = {
+              commits: pushEvents,
+              cachedAt: new Date().toISOString()
+            };
+            fs.writeFileSync('public/last-known-commits.json', JSON.stringify(lastKnownCommits));
+            console.log('Wrote last-known-commits.json for fallback');
+          }
           EOF
 
       - name: Fetch GitHub repo stars
@@ -199,9 +209,18 @@ jobs:
           EOF
 
       - name: Fetch dev.to posts
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
         run: |
-          curl -s "https://dev.to/api/articles?username=edwardkubiak&per_page=3" \
-            -o raw_devto.json
+          # Use authenticated endpoint if API key is set, otherwise use public endpoint
+          if [ -z "$DEVTO_API_KEY" ]; then
+            curl -s "https://dev.to/api/articles?username=edwardkubiak&per_page=3" \
+              -o raw_devto.json
+          else
+            curl -s "https://api.dev.to/api/articles/me?per_page=3" \
+              -H "api-key: $DEVTO_API_KEY" \
+              -o raw_devto.json
+          fi
 
           node << 'EOF'
           const fs = require('fs');
@@ -222,6 +241,8 @@ jobs:
             url: a.url,
             published_at: a.published_at,
             tag_list: a.tag_list,
+            reactions: a.public_reactions_count ?? 0,
+            views: a.page_views_count ?? 0,
           }));
           fs.writeFileSync('public/devto-feed.json', JSON.stringify(articles));
           console.log('Wrote', articles.length, 'dev.to articles');
@@ -311,6 +332,30 @@ jobs:
       #       fs.writeFileSync('public/strava-stats.json', JSON.stringify({ available: false, error: e.message }));
       #     });
       #     EOF
+
+      - name: Generate RSS feed
+        run: node scripts/generate-rss.mjs
+
+      - name: Generate per-project OG images
+        run: |
+          node --input-type=module << 'EOF'
+          import fs from 'fs';
+          import { spawnSync } from 'child_process';
+          const projectsModule = await import('./src/data/projects.js');
+          const projects = projectsModule.default || [];
+
+          for (const project of projects) {
+            const result = spawnSync('node', [
+              'scripts/generate-og-image.mjs',
+              '--slug', project.slug,
+              '--title', project.title,
+              '--outDir', 'public/og'
+            ], { stdio: 'inherit' });
+            if (result.status !== 0) {
+              console.warn(`Failed to generate OG image for ${project.slug}`);
+            }
+          }
+          EOF
 
       - name: Build
         env:
