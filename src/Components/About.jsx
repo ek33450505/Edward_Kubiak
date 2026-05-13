@@ -1,6 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch, Mail, Github, Linkedin, ArrowUpRight } from "lucide-react";
-import UltraMap from "./UltraMap";
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -168,7 +167,6 @@ const About = () => {
                     up in late May 2026 — training is locked in. Rim to River
                     100 in October 2025 is in the books.
                   </p>
-                  <UltraMap />
                 </div>
               </div>
             </motion.div>
