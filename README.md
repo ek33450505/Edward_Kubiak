@@ -1,6 +1,6 @@
 # Edward Kubiak — Portfolio
 
-**[ek33450505.github.io/Edward_Kubiak](https://ek33450505.github.io/Edward_Kubiak/)**
+**[edwardkubiak.com]([https://edwardkubiak.com/])**
 
 Personal portfolio site for Edward Kubiak — Application Developer based in Columbus, OH.
 
