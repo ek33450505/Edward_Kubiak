@@ -84,14 +84,17 @@ function CurrentlyBuilding() {
         if (cancelled) return;
         const pushEvents = data
           .filter((e) => e.type === "PushEvent" && e.payload?.commits?.length > 0)
-          .slice(0, 5)
-          .map((e) => ({
-            id: e.id,
-            repo: e.repo.name.replace("ek33450505/", ""),
-            repoFull: e.repo.name,
-            message: e.payload.commits[0].message.split("\n")[0],
-            time: e.created_at,
-          }));
+          .flatMap((e) =>
+            e.payload.commits.map((c, idx) => ({
+              id: `${e.id}-${idx}`,
+              repo: e.repo.name.replace("ek33450505/", ""),
+              repoFull: e.repo.name,
+              sha: c.sha,
+              message: c.message.split("\n")[0],
+              time: e.created_at,
+            }))
+          )
+          .slice(0, 10);
         if (!cancelled) {
           setEvents(pushEvents);
           setLoading(false);
@@ -192,12 +195,21 @@ function CurrentlyBuilding() {
               />
               <div className="flex-1 min-w-0">
                 <a
-                  href={`https://github.com/ek33450505/${event.repo}`}
+                  href={
+                    event.sha
+                      ? `https://github.com/ek33450505/${event.repo}/commit/${event.sha}`
+                      : `https://github.com/ek33450505/${event.repo}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-display text-[11px] tracking-wider text-amber-400/80 hover:text-amber-400 transition-colors uppercase inline-flex items-center gap-1"
                 >
                   {event.repo}
+                  {event.sha && (
+                    <span className="text-slate-600 normal-case tracking-normal lowercase">
+                      · {event.sha.slice(0, 7)}
+                    </span>
+                  )}
                   <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                 </a>
                 <p className="text-sm text-slate-400 leading-snug mt-0.5 truncate">
@@ -478,7 +490,7 @@ const Home = () => {
                 Open to new opportunities
               </span>
               <a
-                href="https://www.linkedin.com/in/edward-kubiak-bbbaa6401/"
+                href="https://www.linkedin.com/in/edward-kubiak/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Connect on LinkedIn (opens in new tab)"

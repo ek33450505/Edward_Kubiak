@@ -254,7 +254,7 @@ function App() {
                   <Github size={16} aria-hidden="true" />
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/edward-kubiak-bbbaa6401/"
+                  href="https://www.linkedin.com/in/edward-kubiak/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn profile (opens in new tab)"

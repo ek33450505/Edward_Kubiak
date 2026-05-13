@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
-import { MapPin, Briefcase, Heart, Mountain, GitBranch } from "lucide-react";
+import { MapPin, Briefcase, Heart, Mountain, GitBranch, Mail, Github, Linkedin, ArrowUpRight } from "lucide-react";
 import UltraMap from "./UltraMap";
-// import StravaStats from "./StravaStats"; // shelved — Strava refresh-token flow too heavy; see plan 2026-04-17-strava-tier-1.md
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -169,25 +168,6 @@ const About = () => {
                     up in late May 2026 — training is locked in. Rim to River
                     100 in October 2025 is in the books.
                   </p>
-                  {/* StravaStats shelved — API flow too heavy; revisit later */}
-                  {/* <StravaStats /> */}
-                  <a
-                    href="https://www.strava.com/athletes/76394967"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Follow Edward on Strava (opens in new tab)"
-                    className="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-md border border-slate-700 hover:border-orange-400 bg-slate-900/40 text-xs font-display tracking-wider text-slate-300 hover:text-orange-400 transition-all"
-                  >
-                    <img
-                      src="https://badges.strava.com/echelon-sprite-32.png"
-                      alt=""
-                      width="32"
-                      height="32"
-                      style={{ objectFit: "none", objectPosition: "0 0", width: "32px", height: "32px" }}
-                      aria-hidden="true"
-                    />
-                    Follow on Strava
-                  </a>
                   <UltraMap />
                 </div>
               </div>
@@ -200,29 +180,78 @@ const About = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 text-center"
+            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
-              Get in Touch
-            </h2>
-            <a
-              href="mailto:edward.kubiak.dev@gmail.com"
-              className="font-display text-lg sm:text-xl font-bold text-amber-400 hover:text-amber-300 transition-colors underline underline-offset-4 decoration-amber-400/30 hover:decoration-amber-400"
-            >
-              edward.kubiak.dev@gmail.com
-            </a>
-            <a
-              href="https://www.linkedin.com/in/edward-kubiak-bbbaa6401/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Connect on LinkedIn (opens in new tab)"
-              className="mt-2 inline-flex items-center gap-2 text-sm text-sky-400 hover:text-sky-300 transition-colors"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-              Connect on LinkedIn
-            </a>
+            <div className="text-center">
+              <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-2">
+                Get in Touch
+              </h2>
+              <p className="text-sm text-slate-400 mb-6">
+                Open to new opportunities, collaborations, and conversations about developer tooling.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <a
+                href="mailto:edward.kubiak.dev@gmail.com"
+                aria-label="Email Edward at edward.kubiak.dev@gmail.com"
+                className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-slate-800/60 bg-slate-900/40 hover:border-amber-400/40 hover:bg-slate-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 transition-all"
+              >
+                <Mail size={20} className="text-amber-400 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 group-hover:text-slate-200 uppercase">
+                  Email
+                </span>
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/edward-kubiak/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Connect on LinkedIn (opens in new tab)"
+                className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-slate-800/60 bg-slate-900/40 hover:border-sky-400/40 hover:bg-slate-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 transition-all"
+              >
+                <Linkedin size={20} className="text-sky-400 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 group-hover:text-slate-200 uppercase">
+                  LinkedIn
+                </span>
+              </a>
+
+              <a
+                href="https://github.com/ek33450505"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View Edward's GitHub profile (opens in new tab)"
+                className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-slate-800/60 bg-slate-900/40 hover:border-slate-400/40 hover:bg-slate-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/60 transition-all"
+              >
+                <Github size={20} className="text-slate-200 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 group-hover:text-slate-200 uppercase">
+                  GitHub
+                </span>
+              </a>
+
+              <a
+                href="https://github.com/sponsors/ek33450505"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Sponsor Edward's open source work on GitHub (opens in new tab)"
+                className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-slate-800/60 bg-slate-900/40 hover:border-rose-400/40 hover:bg-slate-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/60 transition-all"
+              >
+                <Heart size={20} className="text-rose-400 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 group-hover:text-slate-200 uppercase">
+                  Sponsor
+                </span>
+              </a>
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-slate-800/60 text-center">
+              <a
+                href="mailto:edward.kubiak.dev@gmail.com"
+                className="inline-flex items-center gap-2 font-display text-sm sm:text-base text-amber-400 hover:text-amber-300 transition-colors group"
+              >
+                edward.kubiak.dev@gmail.com
+                <ArrowUpRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" aria-hidden="true" />
+              </a>
+            </div>
           </motion.div>
         </div>
       </div>

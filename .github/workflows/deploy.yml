@@ -50,16 +50,19 @@ jobs:
           }
           const pushEvents = events
             .filter(e => e.type === 'PushEvent' && e.payload && e.payload.commits && e.payload.commits.length > 0)
-            .slice(0, 5)
-            .map(e => ({
-              id: e.id,
-              repo: e.repo.name.replace('ek33450505/', ''),
-              repoFull: e.repo.name,
-              message: e.payload.commits[0].message.split('\n')[0],
-              time: e.created_at
-            }));
+            .flatMap(e =>
+              e.payload.commits.map((c, idx) => ({
+                id: `${e.id}-${idx}`,
+                repo: e.repo.name.replace('ek33450505/', ''),
+                repoFull: e.repo.name,
+                sha: c.sha,
+                message: c.message.split('\n')[0],
+                time: e.created_at
+              }))
+            )
+            .slice(0, 10);
           fs.writeFileSync('public/github-activity.json', JSON.stringify(pushEvents));
-          console.log('Wrote', pushEvents.length, 'events');
+          console.log('Wrote', pushEvents.length, 'commits');
           EOF
 
       - name: Fetch GitHub repo stars
@@ -71,7 +74,6 @@ jobs:
           const fs = require('fs');
 
           const repos = [
-            'project-engram',
             'claude-agent-team',
             'claude-code-dashboard',
             'cast-agents',
@@ -81,8 +83,10 @@ jobs:
             'cast-dash',
             'cast-memory',
             'cast-parallel',
-            'forge',
-            'JARVIS',
+            'cast-routines',
+            'cast-doctor',
+            'cast-time',
+            'cast-website',
             'cast-claudes_journal',
             'promptbot',
           ];
