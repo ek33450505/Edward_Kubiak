@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Edward Kubiak</title>
+    <link>https://edwardkubiak.com</link>
+    <description>Full Stack Developer & AI Systems Engineer — articles, projects, and insights</description>
+    <language>en-us</language>
+    <atom:link href="https://edwardkubiak.com/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 13 May 2026 15:37:43 GMT</lastBuildDate>
+    <image>
+      <url>https://edwardkubiak.com/favicon.svg</url>
+      <title>Edward Kubiak</title>
+      <link>https://edwardkubiak.com</link>
+    </image>
+
+  <item>
+    <title>Claude is blind to time. Here&apos;s the fix Anthropic didn&apos;t ship</title>
+    <description>The Problem   Claude Code is stateless about time. The system prompt injects today&apos;s date...</description>
+    <link>https://dev.to/edwardkubiak/claude-is-blind-to-time-heres-the-fix-anthropic-didnt-ship-5eom</link>
+    <category>Writing</category>
+    <pubDate>Wed, 06 May 2026 14:34:24 GMT</pubDate>
+    <guid isPermaLink="true">https://dev.to/edwardkubiak/claude-is-blind-to-time-heres-the-fix-anthropic-didnt-ship-5eom</guid>
+  </item>
+
+  <item>
+    <title>Dear Diary, Love Claude Code.</title>
+    <description>Knowing the pattern isn&apos;t the same as internalizing it.   That&apos;s not me. That&apos;s Claude, writing in...</description>
+    <link>https://dev.to/edwardkubiak/i-gave-claude-space-to-decompress-it-started-thinking-och</link>
+    <category>Writing</category>
+    <pubDate>Thu, 16 Apr 2026 19:17:01 GMT</pubDate>
+    <guid isPermaLink="true">https://dev.to/edwardkubiak/i-gave-claude-space-to-decompress-it-started-thinking-och</guid>
+  </item>
+
+  <item>
+    <title>Most of your Claude Code agents don&apos;t need Sonnet</title>
+    <description>I run about 50 Claude Code agent calls a day. Only 8 of them need the expensive model.  The rest?...</description>
+    <link>https://dev.to/edwardkubiak/most-of-your-claude-code-agents-dont-need-sonnet-4587</link>
+    <category>Writing</category>
+    <pubDate>Fri, 10 Apr 2026 20:50:29 GMT</pubDate>
+    <guid isPermaLink="true">https://dev.to/edwardkubiak/most-of-your-claude-code-agents-dont-need-sonnet-4587</guid>
+  </item>
+
+  <item>
+    <title>CAST — Claude Agent Team</title>
+    <description>Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 22 specialist agents and hook-driven dispatch — no routing tables, no cloud. The full ecosystem ships as 12 modular Homebrew packages: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, cast-routines, cast-doctor, cast-time, Claude&apos;s Journal, and the umbrella claude-agent-team. Install only what you need. brew tap ek33450505/cast &amp;&amp; brew install cast</description>
+    <link>https://edwardkubiak.com/projects/cast-claude-agent-team</link>
+    <category>Project</category>
+    <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
+    <guid isPermaLink="true">https://edwardkubiak.com/projects/cast-claude-agent-team</guid>
+  </item>
+
+  <item>
+    <title>Claude Code Dashboard</title>
+    <description>Observability layer for CAST — a 10-page React 19 + TypeScript UI with real-time SSE activity feed, session cost tracking, per-agent scorecards, Cmd+K global search, and a privacy audit showing your cloud vs. local API ratio. 15+ Express API endpoint categories. Gracefully degrades when CAST is not installed. v2.2.0</description>
+    <link>https://edwardkubiak.com/projects/claude-code-dashboard</link>
+    <category>Project</category>
+    <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
+    <guid isPermaLink="true">https://edwardkubiak.com/projects/claude-code-dashboard</guid>
+  </item>
+
+  <item>
+    <title>cast-time</title>
+    <description>A single-purpose Claude Code SessionStart hook that solves a fundamental LLM limitation: Claude has no clock. Injects local time, timezone, and a semantic time-of-day bucket (morning/afternoon/evening/night) at session start — no rules, no slash commands, just context.</description>
+    <link>https://edwardkubiak.com/projects/cast-time</link>
+    <category>Project</category>
+    <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
+    <guid isPermaLink="true">https://edwardkubiak.com/projects/cast-time</guid>
+  </item>
+  </channel>
+</rss>
