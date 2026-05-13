@@ -43,6 +43,7 @@ const projects = [
     icon: Terminal,
     color: "sky",
     category: "personal",
+    featured: true,
     castEcosystem: true,
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-time",

@@ -1,5 +1,8 @@
 import { motion, useReducedMotion } from "motion/react";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch, Mail, Github, Linkedin, ArrowUpRight } from "lucide-react";
+import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
+import testimonials from "../data/testimonials";
+import { aggregateTech } from "../utils/aggregateTech";
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -118,6 +121,45 @@ const About = () => {
             </div>
           </motion.div>
 
+          {/* Tech Radar */}
+          {(() => {
+            const techData = aggregateTech();
+            return techData.length > 0 ? (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+              >
+                <h2 className="font-display text-lg font-bold text-slate-100 mb-6">
+                  Tech Radar
+                </h2>
+                <ResponsiveContainer width="100%" height={280}>
+                  <RadarChart
+                    cx="50%"
+                    cy="50%"
+                    outerRadius="70%"
+                    data={techData}
+                    aria-label="Technology radar showing most-used tech stack across projects"
+                  >
+                    <PolarGrid stroke="#334155" />
+                    <PolarAngleAxis
+                      dataKey="name"
+                      tick={{ fill: "#94a3b8", fontSize: 11 }}
+                    />
+                    <Radar
+                      dataKey="count"
+                      stroke="#f59e0b"
+                      fill="#f59e0b"
+                      fillOpacity={0.25}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </motion.div>
+            ) : null;
+          })()}
+
           <div className="grid sm:grid-cols-2 gap-6">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -171,6 +213,60 @@ const About = () => {
               </div>
             </motion.div>
           </div>
+
+          {/* Testimonials — Kind Words */}
+          {testimonials.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-6">
+                Kind Words
+              </h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {testimonials.map((t) => (
+                  <motion.figure
+                    key={t.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4 }}
+                    className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
+                  >
+                    <blockquote className="relative">
+                      <span
+                        className="absolute -top-2 -left-1 text-5xl leading-none text-amber-400 font-serif select-none"
+                        aria-hidden="true"
+                      >
+                        &ldquo;
+                      </span>
+                      <p className="pt-4 text-sm text-slate-300 leading-relaxed italic">
+                        {t.quote}
+                      </p>
+                    </blockquote>
+                    <figcaption className="mt-4 flex items-center gap-3">
+                      <div
+                        className="w-8 h-8 rounded-full bg-amber-400/20 text-amber-400 flex items-center justify-center font-display text-xs font-bold shrink-0"
+                        aria-hidden="true"
+                      >
+                        {t.avatarInitials}
+                      </div>
+                      <div>
+                        <p className="font-display text-xs font-bold tracking-wide text-slate-200">
+                          {t.name}
+                        </p>
+                        <p className="font-display text-[10px] tracking-wider text-slate-500">
+                          {t.title} @ {t.company}
+                        </p>
+                      </div>
+                    </figcaption>
+                  </motion.figure>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
           {/* Get in touch */}
           <motion.div

@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import { Link } from "react-router-dom";
 import { ArrowRight, Code2, Layers, RefreshCw, Brain, GitCommit, ExternalLink, Heart } from "lucide-react";
 import CastStats from "./CastStats";
+import projects from "../data/projects";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
 const StarField = lazy(() => import("./Effects/StarField"));
@@ -33,6 +34,118 @@ const competencies = [
       "Architect of CAST v7.0 — 22 specialist agents, 12 modular Homebrew packages, and a real-time observability dashboard for Claude Code. 2,500+ cloners. castframework.dev",
   },
 ];
+
+const colorMap = {
+  violet: "text-violet-400 bg-violet-400/10",
+  teal: "text-teal-400 bg-teal-400/10",
+  sky: "text-sky-400 bg-sky-400/10",
+  amber: "text-amber-400 bg-amber-400/10",
+  emerald: "text-emerald-400 bg-emerald-400/10",
+  rose: "text-rose-400 bg-rose-400/10",
+};
+
+function FeaturedWork() {
+  const featuredProjects = projects.filter((p) => p.featured === true).slice(0, 3);
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5 }}
+      className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
+      aria-labelledby="featured-work-heading"
+    >
+      <div className="mb-8">
+        <h2
+          id="featured-work-heading"
+          className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase"
+        >
+          Featured Work
+        </h2>
+        <div className="mt-2 w-16 h-0.5 bg-amber-400/60" />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {featuredProjects.map((project, i) => {
+          const iconColors = colorMap[project.color] || "text-amber-400 bg-amber-400/10";
+          const [iconColor] = iconColors.split(" ");
+          const description =
+            project.description.length > 80
+              ? project.description.slice(0, 80).trimEnd() + "…"
+              : project.description;
+          const techChips = (project.tech || []).slice(0, 3);
+
+          return (
+            <motion.div
+              key={project.slug}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="group flex flex-col p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-amber-400/30 hover:bg-slate-800/40 hover:shadow-[0_0_30px_rgba(0,255,194,0.06)] transition-all duration-300"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className={`p-2 rounded-lg ${iconColors} shrink-0`}>
+                  <project.icon size={20} aria-hidden="true" />
+                </div>
+                <h3 className="font-display text-sm font-bold tracking-wide text-slate-100">
+                  {project.title}
+                </h3>
+              </div>
+
+              <p className="text-sm text-slate-400 leading-relaxed flex-1 mb-4">
+                {description}
+              </p>
+
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {techChips.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2 py-0.5 rounded-full border border-slate-700/60 text-[10px] font-display tracking-wider text-slate-500"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3 mt-auto">
+                <Link
+                  to={`/projects/${project.slug}`}
+                  className={`inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase ${iconColor} hover:opacity-80 transition-opacity`}
+                >
+                  View project →
+                </Link>
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Live demo of ${project.title} (opens in new tab)`}
+                    className="inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase text-slate-500 hover:text-slate-300 transition-colors"
+                  >
+                    Live demo
+                    <ExternalLink size={10} aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <div className="mt-6 text-right">
+        <Link
+          to="/portfolio"
+          className="inline-flex items-center gap-1 font-display text-xs tracking-wider uppercase text-slate-500 hover:text-amber-400 transition-colors"
+        >
+          See all projects →
+        </Link>
+      </div>
+    </motion.section>
+  );
+}
 
 function timeAgo(dateString) {
   const now = new Date();
@@ -172,7 +285,7 @@ function CurrentlyBuilding() {
             className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-amber-400 transition-colors"
           >
             View my latest activity on GitHub
-            <ExternalLink size={13} />
+            <ExternalLink size={13} aria-hidden="true" />
           </a>
         </div>
       )}
@@ -582,6 +695,9 @@ const Home = () => {
           ))}
         </div>
       </section>
+
+      {/* Featured Work — pinned project cards */}
+      <FeaturedWork />
 
       {/* Currently Building — live GitHub activity feed */}
       <CurrentlyBuilding />

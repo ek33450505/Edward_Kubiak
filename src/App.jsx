@@ -11,6 +11,8 @@ import Portfolio from "./Components/Portfolio";
 import ProjectDetail from "./Components/ProjectDetail";
 import Resume from "./Components/Resume";
 import Now from "./Components/Now";
+import Talks from "./Components/Talks";
+import Uses from "./Components/Uses";
 import CommandPalette, { CommandPaletteProvider, useCommandPalette } from "./Components/CommandPalette";
 import BrandingImage from "./Images/Brand.svg";
 
@@ -18,6 +20,9 @@ const navLinks = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
   { to: "/resume", label: "Resume" },
+  { to: "/now", label: "Now" },
+  { to: "/talks", label: "Talks" },
+  { to: "/uses", label: "Uses" },
 ];
 
 function NavBar() {
@@ -192,6 +197,8 @@ function AnimatedRoutes() {
       "/projects": "Projects — Edward Kubiak",
       "/resume": "Resume — Edward Kubiak",
       "/now": "Now — Edward Kubiak",
+      "/talks": "Talks — Edward Kubiak",
+      "/uses": "Uses — Edward Kubiak",
     };
     document.title = titles[location.pathname] || "Edward Kubiak";
   }, [location.pathname]);
@@ -213,6 +220,8 @@ function AnimatedRoutes() {
           <Route path="/projects/:slug" element={<ProjectDetail />} />
           <Route path="/resume" element={<Resume />} />
           <Route path="/now" element={<Now />} />
+          <Route path="/talks" element={<Talks />} />
+          <Route path="/uses" element={<Uses />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
