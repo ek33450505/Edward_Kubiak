@@ -20,9 +20,6 @@ const navLinks = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
   { to: "/resume", label: "Resume" },
-  { to: "/now", label: "Now" },
-  { to: "/talks", label: "Talks" },
-  { to: "/uses", label: "Uses" },
 ];
 
 function NavBar() {
