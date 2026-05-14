@@ -35,6 +35,22 @@ const projects = [
     stats: ["10 Pages", "15+ APIs", "SSE Live Feed", "v2.2.0"],
   },
   {
+    slug: "cast-desktop",
+    title: "Cast Desktop",
+    description:
+      "The desktop app for CAST — every signal your agents emit, all in one place. A Tauri 2 + React 19 native app with embedded Express 5 + SQLite backend. Real PTY-backed terminal (xterm.js + Rust Forge), 11 dashboard views (Activity, Sessions, Agents, Hooks, Memory, Plans, System, Token Spend, DB Explorer, Docs), Cmd+K command palette, search-in-terminal, font-size hotkeys, multi-tab terminal with folder-picker cwd, and 6 themes. Local-first — reads directly from ~/.claude/cast.db.",
+    tech: ["Tauri 2", "React 19", "TypeScript", "Rust", "Express 5", "SQLite", "xterm.js"],
+    icon: Terminal,
+    color: "amber",
+    category: "personal",
+    featured: true,
+    aiEngineering: true,
+    castEcosystem: true,
+    github: "https://github.com/ek33450505/cast-desktop",
+    githubRepo: { owner: "ek33450505", repo: "cast-desktop" },
+    stats: ["11 Dashboard Views", "819 Tests", "Native PTY Terminal", "v0.1.0"],
+  },
+  {
     slug: "cast-time",
     title: "cast-time",
     description:
@@ -43,7 +59,6 @@ const projects = [
     icon: Terminal,
     color: "sky",
     category: "personal",
-    featured: true,
     castEcosystem: true,
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-time",
