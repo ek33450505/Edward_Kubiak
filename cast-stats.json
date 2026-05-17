@@ -1,8 +1,8 @@
 {
-  "version": "v7.0",
+  "version": "v7.2",
   "agents": 22,
-  "tests": 989,
+  "tests": 1011,
   "packages": 12,
   "commands": 19,
-  "updated": "2026-05-16T08:37:59.813Z"
+  "updated": "2026-05-17T08:45:56.159Z"
 }
