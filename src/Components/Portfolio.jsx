@@ -69,7 +69,6 @@ const filters = [
   { key: "ai-engineering", label: "AI Engineering" },
   { key: "cast-ecosystem", label: "CAST Ecosystem" },
   { key: "professional", label: "Professional" },
-  { key: "personal", label: "Personal" },
 ];
 
 let starsCache = null;
@@ -267,7 +266,7 @@ function ProjectCard({ project }) {
   );
 }
 
-const VALID_FILTERS = new Set(["all", "featured", "ai-engineering", "cast-ecosystem", "professional", "personal"]);
+const VALID_FILTERS = new Set(["all", "featured", "ai-engineering", "cast-ecosystem", "professional"]);
 
 function Portfolio() {
   const [searchParams] = useSearchParams();

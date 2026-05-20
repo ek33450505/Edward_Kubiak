@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch, Mail, Github, Linkedin, ArrowUpRight } from "lucide-react";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
-import testimonials from "../data/testimonials";
 import { aggregateTech } from "../utils/aggregateTech";
 
 const About = () => {
@@ -213,60 +212,6 @@ const About = () => {
               </div>
             </motion.div>
           </div>
-
-          {/* Testimonials — Kind Words */}
-          {testimonials.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-6">
-                Kind Words
-              </h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                {testimonials.map((t) => (
-                  <motion.figure
-                    key={t.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4 }}
-                    className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
-                  >
-                    <blockquote className="relative">
-                      <span
-                        className="absolute -top-2 -left-1 text-5xl leading-none text-amber-400 font-serif select-none"
-                        aria-hidden="true"
-                      >
-                        &ldquo;
-                      </span>
-                      <p className="pt-4 text-sm text-slate-300 leading-relaxed italic">
-                        {t.quote}
-                      </p>
-                    </blockquote>
-                    <figcaption className="mt-4 flex items-center gap-3">
-                      <div
-                        className="w-8 h-8 rounded-full bg-amber-400/20 text-amber-400 flex items-center justify-center font-display text-xs font-bold shrink-0"
-                        aria-hidden="true"
-                      >
-                        {t.avatarInitials}
-                      </div>
-                      <div>
-                        <p className="font-display text-xs font-bold tracking-wide text-slate-200">
-                          {t.name}
-                        </p>
-                        <p className="font-display text-[10px] tracking-wider text-slate-500">
-                          {t.title} @ {t.company}
-                        </p>
-                      </div>
-                    </figcaption>
-                  </motion.figure>
-                ))}
-              </div>
-            </motion.div>
-          )}
 
           {/* Get in touch */}
           <motion.div

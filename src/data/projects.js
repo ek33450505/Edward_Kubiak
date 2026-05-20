@@ -1,4 +1,4 @@
-import { Bot, Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign } from "lucide-react";
+import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign } from "lucide-react";
 
 const projects = [
   {
@@ -201,36 +201,6 @@ const projects = [
     stats: ["Open Source", "Parallel Execution", "Auto Merge", "Homebrew Install"],
   },
   {
-    slug: "forge",
-    title: "Forge",
-    description:
-      "A native macOS terminal emulator built around Claude Code using Tauri v2 — publicly archived. Multi-tab + split pane terminals, Claude session auto-detection, command palette (Cmd+K), ghost-text suggestions, CAST integration, and 6 built-in themes.",
-    tech: ["Tauri v2", "React 19", "TypeScript", "Rust", "xterm.js", "Zustand", "Tailwind"],
-    icon: Terminal,
-    color: "amber",
-    category: "personal",
-    archived: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/forge",
-    githubRepo: { owner: "ek33450505", repo: "forge" },
-    stats: ["Open Source", "Native macOS", "Claude Code Native", "6 Themes", "20+ Shortcuts"],
-  },
-  {
-    slug: "jarvis",
-    title: "JARVIS",
-    description:
-      "Personal assistant framework — archived April 2026, superseded by cast-routines for scheduled Claude Code workflows. Built on 8 specialized agents (morning briefing, email triage, calendar management, meeting prep, EOD summary, weekly report, Jira standup, nightly backup) with macOS launchd scheduling.",
-    tech: ["Claude Code", "Bash", "Shell", "launchd"],
-    icon: Bot,
-    color: "sky",
-    category: "personal",
-    archived: true,
-    aiEngineering: true,
-    github: "https://github.com/ek33450505/JARVIS",
-    githubRepo: { owner: "ek33450505", repo: "JARVIS" },
-    stats: ["Archived 2026-04", "Superseded by cast-routines", "8 PA Agents", "launchd Scheduling"],
-  },
-  {
     slug: "claudes-journal",
     title: "Claude's Journal",
     description:
@@ -244,30 +214,6 @@ const projects = [
     github: "https://github.com/ek33450505/cast-claudes_journal",
     githubRepo: { owner: "ek33450505", repo: "cast-claudes_journal" },
     stats: ["Open Source", "Session Journaling", "Cross-Session Memory", "Homebrew Install"],
-  },
-  {
-    slug: "tarus",
-    title: "TARUS",
-    description:
-      "AI assistant I engineered from scratch with dual-LLM architecture — Claude API for cloud intelligence, Ollama for private local inference. Features real-time streaming, SQLite conversation persistence, and a React 19 + Vite frontend.",
-    tech: ["React 19", "Vite", "Express", "SQLite", "Claude API", "Ollama"],
-    icon: Bot,
-    color: "amber",
-    category: "personal",
-    aiEngineering: true,
-    stats: ["Private", "Dual-LLM", "Real-time Streaming", "SQLite Persistence"],
-  },
-  {
-    slug: "tars-lite",
-    title: "TARS-Lite",
-    description:
-      "Zero-cloud LLM assistant — every token processed locally via Ollama. Built for developers who need AI assistance without sending proprietary code to external APIs.",
-    tech: ["React", "Vite", "Ollama"],
-    icon: Terminal,
-    color: "sky",
-    category: "personal",
-    aiEngineering: true,
-    stats: ["Private", "100% Local", "Zero Cloud"],
   },
   {
     slug: "crosscheck",
@@ -312,20 +258,6 @@ const projects = [
     color: "sky",
     category: "professional",
     stats: ["Docker Compose", "Dual Frontend", "Flask + PostgreSQL"],
-  },
-  {
-    slug: "promptbot",
-    title: "PromptBot",
-    description:
-      "Python CLI that transforms rough prompts into high-performance LLM instructions using structured optimization techniques. Built to systematize prompt engineering rather than rely on trial and error.",
-    tech: ["Python 3.13", "Click"],
-    icon: Terminal,
-    color: "sky",
-    github: "https://github.com/ek33450505/promptbot",
-    githubRepo: { owner: "ek33450505", repo: "promptbot" },
-    category: "personal",
-    aiEngineering: true,
-    stats: ["Python CLI", "Prompt Optimization"],
   },
 ];
 
