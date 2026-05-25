@@ -31,7 +31,7 @@ const competencies = [
     icon: Brain,
     title: "AI / LLM Integration",
     description:
-      "Architect of CAST v7.0 — 22 specialist agents, 12 modular Homebrew packages, and a real-time observability dashboard for Claude Code. 2,500+ cloners. castframework.dev",
+      "Architect of CAST v7.0 — 23 specialist agents, 12 modular Homebrew packages, and a real-time observability dashboard for Claude Code. 2,500+ cloners. castframework.dev",
   },
 ];
 
@@ -649,7 +649,7 @@ const Home = () => {
               By day, I build production education technology for Ohio school
               districts at META Solutions. By night, I build open-source
               infrastructure for AI-native development — including CAST, a
-              30-agent framework for Claude Code with 2,000+ cloners and a
+              23-agent framework for Claude Code with 2,500+ cloners and a
               full ecosystem of modular Homebrew packages.
             </motion.p>
 
