@@ -1,5 +1,5 @@
 // TODO: replace placeholder with real talk/podcast/article entries
-import { CAST_STATS, CAST_ECOSYSTEM } from "./castStats";
+import { CAST_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 
 const talks = [
   {

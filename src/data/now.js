@@ -1,4 +1,4 @@
-import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats";
+import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 
 const now = {
   updated: "May 26, 2026",

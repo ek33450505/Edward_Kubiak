@@ -1,5 +1,5 @@
 import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign } from "lucide-react";
-import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats";
+import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 
 const projects = [
   {
