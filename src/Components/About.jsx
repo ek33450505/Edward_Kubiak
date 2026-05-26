@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
-import { MapPin, Briefcase, Heart, Mountain, GitBranch, Mail, Github, Linkedin, ArrowUpRight } from "lucide-react";
+import { MapPin, Briefcase, Heart, Mountain, GitBranch, Mail, ArrowUpRight } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "./BrandIcons";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
 import { aggregateTech } from "../utils/aggregateTech";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
@@ -253,7 +254,7 @@ const About = () => {
                 aria-label="Connect on LinkedIn (opens in new tab)"
                 className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-slate-800/60 bg-slate-900/40 hover:border-sky-400/40 hover:bg-slate-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 transition-all"
               >
-                <Linkedin size={20} className="text-sky-400 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                <LinkedinIcon size={20} className="text-sky-400 group-hover:scale-110 transition-transform" aria-hidden="true" />
                 <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 group-hover:text-slate-200 uppercase">
                   LinkedIn
                 </span>
@@ -266,7 +267,7 @@ const About = () => {
                 aria-label="View Edward's GitHub profile (opens in new tab)"
                 className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-slate-800/60 bg-slate-900/40 hover:border-slate-400/40 hover:bg-slate-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/60 transition-all"
               >
-                <Github size={20} className="text-slate-200 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                <GithubIcon size={20} className="text-slate-200 group-hover:scale-110 transition-transform" aria-hidden="true" />
                 <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 group-hover:text-slate-200 uppercase">
                   GitHub
                 </span>

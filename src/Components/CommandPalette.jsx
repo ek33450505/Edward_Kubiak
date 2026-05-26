@@ -1,9 +1,10 @@
-import { useEffect, useState, useCallback, createContext, useContext } from "react";
+import { useEffect, useState, useCallback, useRef, createContext, useContext } from "react";
 import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { Home, User, FolderOpen, FileText, Mail, Clock, Github, ExternalLink, Filter } from "lucide-react";
+import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Filter } from "lucide-react";
+import { GithubIcon } from "./BrandIcons";
 
 // --- Context ---
 const CommandPaletteContext = createContext(null);
@@ -43,7 +44,7 @@ const filterCommands = [
 ];
 
 const externalCommands = [
-  { id: "github", label: "GitHub", href: "https://github.com/ek33450505", icon: Github },
+  { id: "github", label: "GitHub", href: "https://github.com/ek33450505", icon: GithubIcon },
   { id: "devto", label: "DEV.to", href: "https://dev.to/edwardkubiak", icon: ExternalLink },
   { id: "email", label: "Email", href: "mailto:edward.kubiak.dev@gmail.com", icon: Mail },
 ];
@@ -51,6 +52,16 @@ const externalCommands = [
 const CommandPalette = () => {
   const { open, setOpen } = useCommandPalette();
   const navigate = useNavigate();
+  const inputRef = useRef(null);
+
+  // Autofocus the search input whenever the palette opens
+  useEffect(() => {
+    if (open && inputRef.current) {
+      // Small rAF to let the animation mount before focusing
+      const id = requestAnimationFrame(() => inputRef.current?.focus());
+      return () => cancelAnimationFrame(id);
+    }
+  }, [open]);
 
   const handleKeyDown = useCallback((e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -107,6 +118,7 @@ const CommandPalette = () => {
                 label="Command palette"
               >
                 <Command.Input
+                  ref={inputRef}
                   placeholder="Type a command or search..."
                   className="w-full px-4 py-3.5 bg-transparent border-b border-slate-800 text-slate-100 placeholder-slate-600 text-sm outline-none font-display tracking-wide"
                 />

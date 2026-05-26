@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { Github, Menu, X, Rss } from "lucide-react";
+import { Menu, X, Rss } from "lucide-react";
+import { GithubIcon } from "./Components/BrandIcons";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
 import "./App.css";
 
@@ -20,6 +21,7 @@ const navLinks = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
   { to: "/resume", label: "Resume" },
+  { to: "/now", label: "Now" },
 ];
 
 function NavBar() {
@@ -92,7 +94,7 @@ function NavBar() {
             aria-label="GitHub profile (opens in new tab)"
             className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           >
-            <Github size={20} aria-hidden="true" />
+            <GithubIcon size={20} aria-hidden="true" />
           </a>
           <a
             href="https://dev.to/edwardkubiak"
@@ -158,7 +160,7 @@ function NavBar() {
                 aria-label="GitHub profile (opens in new tab)"
                 className="flex items-center gap-2 py-3 text-slate-400 hover:text-amber-400 font-display text-sm tracking-widest uppercase transition-colors"
               >
-                <Github size={18} aria-hidden="true" /> GITHUB
+                <GithubIcon size={18} aria-hidden="true" /> GITHUB
               </a>
               <a
                 href="https://dev.to/edwardkubiak"
@@ -263,7 +265,7 @@ function App() {
                   aria-label="GitHub profile (opens in new tab)"
                   className="hover:text-amber-400 transition-colors"
                 >
-                  <Github size={16} aria-hidden="true" />
+                  <GithubIcon size={16} aria-hidden="true" />
                 </a>
                 <a
                   href="https://www.linkedin.com/in/edward-kubiak/"

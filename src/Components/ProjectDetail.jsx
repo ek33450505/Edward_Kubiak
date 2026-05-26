@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { Github, ExternalLink, ArrowLeft, Star } from "lucide-react";
+import { ExternalLink, ArrowLeft, Star } from "lucide-react";
+import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 
 const colorMap = {
@@ -205,7 +206,7 @@ function ProjectDetail() {
                     aria-label="View source code on GitHub (opens in new tab)"
                     className="p-2 rounded-lg border border-slate-700 text-slate-400 hover:text-amber-400 hover:border-amber-400/40 transition-all"
                   >
-                    <Github size={18} aria-hidden="true" />
+                    <GithubIcon size={18} aria-hidden="true" />
                   </a>
                 )}
                 {project.link && (
@@ -304,7 +305,7 @@ function ProjectDetail() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-wider uppercase hover:border-amber-400 hover:text-amber-400 transition-all"
                 >
-                  <Github size={14} />
+                  <GithubIcon size={14} />
                   GitHub
                 </a>
               )}

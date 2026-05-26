@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ExternalLink, Github, Star } from "lucide-react";
+import { ExternalLink, Star } from "lucide-react";
+import { GithubIcon } from "./BrandIcons";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
@@ -203,7 +204,7 @@ function ProjectCard({ project }) {
                   className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors"
                   aria-label="View source code on GitHub (opens in new tab)"
                 >
-                  <Github size={16} aria-hidden="true" />
+                  <GithubIcon size={16} aria-hidden="true" />
                 </a>
               )}
               {project.link && (
@@ -265,6 +266,30 @@ function Portfolio() {
     return param && VALID_FILTERS.has(param) ? param : "all";
   })();
   const [filter, setFilter] = useState(initialFilter);
+  const tablistRef = useRef(null);
+
+  const handleTabKeyDown = useCallback((e) => {
+    const tablist = tablistRef.current;
+    if (!tablist) return;
+    const tabs = Array.from(tablist.querySelectorAll("[role='tab']"));
+    const currentIndex = tabs.indexOf(e.currentTarget);
+    let nextIndex = currentIndex;
+
+    if (e.key === "ArrowRight") {
+      nextIndex = (currentIndex + 1) % tabs.length;
+    } else if (e.key === "ArrowLeft") {
+      nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    } else if (e.key === "Home") {
+      nextIndex = 0;
+    } else if (e.key === "End") {
+      nextIndex = tabs.length - 1;
+    } else {
+      return;
+    }
+
+    e.preventDefault();
+    tabs[nextIndex].focus();
+  }, []);
 
   const filtered =
     filter === "all"
@@ -295,6 +320,7 @@ function Portfolio() {
         {/* Filter tabs */}
         <motion.div
           role="tablist"
+          ref={tablistRef}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.15 }}
@@ -305,10 +331,12 @@ function Portfolio() {
               key={key}
               id={`tab-${key}`}
               onClick={() => setFilter(key)}
+              onKeyDown={handleTabKeyDown}
               role="tab"
               aria-selected={filter === key}
               aria-controls="projects-panel"
-              className={`px-4 py-2 font-display text-xs tracking-widest uppercase rounded-lg border transition-all duration-300 cursor-pointer ${
+              tabIndex={filter === key ? 0 : -1}
+              className={`px-4 py-2 font-display text-xs tracking-widest uppercase rounded-lg border transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 ${
                 filter === key
                   ? "bg-amber-400 text-slate-950 border-amber-400 font-bold"
                   : "border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200"
