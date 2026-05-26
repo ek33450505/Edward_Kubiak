@@ -154,12 +154,12 @@ jobs:
             -o /tmp/cast-version.txt || true
 
           node << 'EOF'
+          (async () => {
           const fs = require('fs');
+          const https = require('https');
 
-          // Fallback values (current as of 2026-05-11 — CAST v7.0).
-          // version/agents/tests come from claude-agent-team README badges below;
-          // packages/commands have no badge yet, so bump these manually when CAST
-          // ships new packages or slash commands.
+          // Fallback values — bump these to match castframework.dev whenever the
+          // dynamic fetch is unavailable. Auto-derived values override below.
           const fallback = {
             version: 'v7.3',
             agents: 23,
@@ -206,7 +206,6 @@ jobs:
 
           // Fetch packages: count homebrew-* repos excluding archived ones
           try {
-            const https = require('https');
             const repoData = await new Promise((resolve) => {
               const options = {
                 hostname: 'api.github.com',
@@ -239,7 +238,6 @@ jobs:
 
           // Fetch commands: count .md files in claude-agent-team commands directory
           try {
-            const https = require('https');
             const commandCount = await new Promise((resolve) => {
               const options = {
                 hostname: 'api.github.com',
@@ -282,6 +280,7 @@ jobs:
           console.log('Will write:', JSON.stringify(stats, null, 2));
           fs.writeFileSync('public/cast-stats.json', JSON.stringify(stats, null, 2));
           console.log('Wrote cast-stats.json:', stats);
+          })();
           EOF
 
       - name: Fetch dev.to posts
