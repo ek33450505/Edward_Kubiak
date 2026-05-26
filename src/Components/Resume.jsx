@@ -211,10 +211,10 @@ const Resume = () => {
                 href="mailto:edward.kubiak.dev@gmail.com"
                 className="inline-flex items-center gap-1.5 hover:text-amber-400 transition-colors"
               >
-                <Mail size={14} /> edward.kubiak.dev@gmail.com
+                <Mail size={14} aria-hidden="true" /> edward.kubiak.dev@gmail.com
               </a>
               <span className="inline-flex items-center gap-1.5">
-                <MapPin size={14} /> Columbus, Ohio
+                <MapPin size={14} aria-hidden="true" /> Columbus, Ohio
               </span>
               <a
                 href="https://www.linkedin.com/in/edward-kubiak/"
@@ -247,7 +247,7 @@ const Resume = () => {
             data-print-hide
             className="inline-flex items-center gap-2 px-4 py-2 border border-slate-700 text-slate-400 font-display text-xs tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 transition-all duration-300 shrink-0"
           >
-            <Download size={14} />
+            <Download size={14} aria-hidden="true" />
             Download PDF
           </a>
         </motion.div>
@@ -287,7 +287,7 @@ const Resume = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="p-3.5 rounded-xl border border-slate-800/60 bg-slate-900/30"
+                className="skill-card p-3.5 rounded-xl border border-slate-800/60 bg-slate-900/30"
               >
                 <h3
                   className={`font-display text-[11px] font-bold tracking-wider mb-2 ${labelColors[category]}`}
@@ -298,7 +298,7 @@ const Resume = () => {
                   {items.map((skill) => (
                     <span
                       key={skill}
-                      className={`px-1.5 py-px rounded text-[10px] font-display tracking-wide ${skillColors[category]}`}
+                      className={`skill-chip px-1.5 py-px rounded text-[10px] font-display tracking-wide ${skillColors[category]}`}
                     >
                       {skill}
                     </span>

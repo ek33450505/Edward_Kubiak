@@ -138,7 +138,7 @@ const CommandPalette = () => {
                         onSelect={() => handleNavigate(to)}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 cursor-pointer data-[selected=true]:bg-amber-400/10 data-[selected=true]:text-amber-400 transition-colors"
                       >
-                        <Icon size={14} />
+                        <Icon size={14} aria-hidden="true" />
                         {label}
                       </Command.Item>
                     ))}
@@ -157,7 +157,7 @@ const CommandPalette = () => {
                         onSelect={() => handleFilter(filter)}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 cursor-pointer data-[selected=true]:bg-amber-400/10 data-[selected=true]:text-amber-400 transition-colors"
                       >
-                        <Filter size={14} />
+                        <Filter size={14} aria-hidden="true" />
                         {label}
                       </Command.Item>
                     ))}
@@ -176,9 +176,9 @@ const CommandPalette = () => {
                         onSelect={() => handleExternal(href)}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 cursor-pointer data-[selected=true]:bg-amber-400/10 data-[selected=true]:text-amber-400 transition-colors"
                       >
-                        <Icon size={14} />
+                        <Icon size={14} aria-hidden="true" />
                         {label}
-                        <ExternalLink size={11} className="ml-auto opacity-40" />
+                        <ExternalLink size={11} aria-hidden="true" className="ml-auto opacity-40" />
                       </Command.Item>
                     ))}
                   </Command.Group>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Edward Kubiak</title>
+    <link>https://edwardkubiak.com</link>
+    <description>Full Stack Developer &amp; AI Systems Engineer — articles, projects, and insights</description>
+    <language>en-us</language>
+    <atom:link href="https://edwardkubiak.com/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 26 May 2026 14:07:58 GMT</lastBuildDate>
+    <image>
+      <url>https://edwardkubiak.com/favicon.svg</url>
+      <title>Edward Kubiak</title>
+      <link>https://edwardkubiak.com</link>
+    </image>
+
+  <item>
+    <title>CAST — Claude Agent Team</title>
+    <description>Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 23 specialist agents and hook-driven dispatch — no routing tables, no cloud. The full ecosystem ships as 13 Homebrew taps plus the umbrella `cast` formula: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, cast-routines, cast-doctor, cast-time, cast-desktop, Claude&apos;s Journal, and the umbrella claude-agent-team. Install only what you need. brew tap ek33450505/cast &amp;&amp; brew install cast</description>
+    <link>https://edwardkubiak.com/projects/cast-claude-agent-team</link>
+    <category>Project</category>
+    <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
+    <guid isPermaLink="true">https://edwardkubiak.com/projects/cast-claude-agent-team</guid>
+  </item>
+
+  <item>
+    <title>Claude Code Dashboard</title>
+    <description>Observability layer for CAST — a 10-page React 19 + TypeScript UI with real-time SSE activity feed, session cost tracking, per-agent scorecards, Cmd+K global search, and a privacy audit showing your cloud vs. local API ratio. 15+ Express API endpoint categories. Gracefully degrades when CAST is not installed. v2.2.0</description>
+    <link>https://edwardkubiak.com/projects/claude-code-dashboard</link>
+    <category>Project</category>
+    <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
+    <guid isPermaLink="true">https://edwardkubiak.com/projects/claude-code-dashboard</guid>
+  </item>
+
+  <item>
+    <title>Cast Desktop</title>
+    <description>The desktop app for CAST — every signal your agents emit, all in one place. A Tauri 2 + React 19 native app with embedded Express 5 + SQLite backend. Real PTY-backed terminal (xterm.js + Rust Forge), 11 dashboard views (Activity, Sessions, Agents, Hooks, Memory, Plans, System, Token Spend, DB Explorer, Docs), Cmd+K command palette, search-in-terminal, font-size hotkeys, multi-tab terminal with folder-picker cwd, and 6 themes. Local-first — reads directly from ~/.claude/cast.db.</description>
+    <link>https://edwardkubiak.com/projects/cast-desktop</link>
+    <category>Project</category>
+    <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
+    <guid isPermaLink="true">https://edwardkubiak.com/projects/cast-desktop</guid>
+  </item>
+  </channel>
+</rss>

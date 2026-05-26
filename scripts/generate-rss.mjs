@@ -92,7 +92,7 @@ const rss = `<?xml version="1.0" encoding="UTF-8"?>
   <channel>
     <title>Edward Kubiak</title>
     <link>https://edwardkubiak.com</link>
-    <description>Full Stack Developer & AI Systems Engineer — articles, projects, and insights</description>
+    <description>${escapeXml('Full Stack Developer & AI Systems Engineer — articles, projects, and insights')}</description>
     <language>en-us</language>
     <atom:link href="https://edwardkubiak.com/rss.xml" rel="self" type="application/rss+xml" />
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>

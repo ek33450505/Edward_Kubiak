@@ -102,7 +102,7 @@ function StarBadge({ owner, repo }) {
   if (stars === null) return null;
   return (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">
-      <Star size={10} className="fill-amber-400" />
+      <Star size={10} aria-hidden="true" className="fill-amber-400" />
       {stars}
     </span>
   );
@@ -139,7 +139,7 @@ function ProjectDetail() {
               to="/projects"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-widest uppercase hover:border-amber-400 hover:text-amber-400 transition-all"
             >
-              <ArrowLeft size={14} />
+              <ArrowLeft size={14} aria-hidden="true" />
               Back to Projects
             </Link>
           </motion.div>
@@ -164,7 +164,7 @@ function ProjectDetail() {
             {/* Icon + Title */}
             <div className="flex items-start gap-4 mb-4">
               <div className={`p-3 rounded-xl ${colors.bg} shrink-0`}>
-                <IconComponent size={28} className={colors.text} />
+                <IconComponent size={28} aria-hidden="true" className={colors.text} />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -305,7 +305,7 @@ function ProjectDetail() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-wider uppercase hover:border-amber-400 hover:text-amber-400 transition-all"
                 >
-                  <GithubIcon size={14} />
+                  <GithubIcon size={14} aria-hidden="true" />
                   GitHub
                 </a>
               )}
@@ -316,7 +316,7 @@ function ProjectDetail() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-wider uppercase hover:border-amber-400 hover:text-amber-400 transition-all"
                 >
-                  <ExternalLink size={14} />
+                  <ExternalLink size={14} aria-hidden="true" />
                   Live Site
                 </a>
               )}
@@ -335,7 +335,7 @@ function ProjectDetail() {
             to="/projects"
             className="inline-flex items-center gap-2 text-slate-400 font-display text-xs tracking-widest uppercase hover:text-amber-400 transition-colors"
           >
-            <ArrowLeft size={14} />
+            <ArrowLeft size={14} aria-hidden="true" />
             Back to Projects
           </Link>
         </motion.div>

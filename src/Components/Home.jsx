@@ -362,6 +362,7 @@ function CurrentlyBuilding() {
             >
               <GitCommit
                 size={14}
+                aria-hidden="true"
                 className="text-amber-400/60 shrink-0 mt-0.5"
               />
               <div className="flex-1 min-w-0">
@@ -381,7 +382,7 @@ function CurrentlyBuilding() {
                       · {event.sha.slice(0, 7)}
                     </span>
                   )}
-                  <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ExternalLink size={9} aria-hidden="true" className="opacity-0 group-hover:opacity-100 transition-opacity" />
                 </a>
                 <p className="text-sm text-slate-400 leading-snug mt-0.5 truncate">
                   {event.message}
@@ -417,6 +418,7 @@ function CurrentlyBuilding() {
               >
                 <GitCommit
                   size={14}
+                  aria-hidden="true"
                   className="text-amber-400/60 shrink-0 mt-0.5"
                 />
                 <div className="flex-1 min-w-0">
@@ -436,7 +438,7 @@ function CurrentlyBuilding() {
                         · {event.sha.slice(0, 7)}
                       </span>
                     )}
-                    <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ExternalLink size={9} aria-hidden="true" className="opacity-0 group-hover:opacity-100 transition-opacity" />
                   </a>
                   <p className="text-sm text-slate-400 leading-snug mt-0.5 truncate">
                     {event.message}
@@ -701,7 +703,7 @@ const Home = () => {
                 className="group inline-flex items-center gap-2 px-6 py-3 bg-amber-400 text-slate-950 font-display text-sm tracking-wider uppercase font-bold rounded-lg hover:bg-amber-300 hover:shadow-[0_0_30px_rgba(0,255,194,0.3)] transition-all duration-300"
               >
                 See What I&apos;ve Built
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={16} aria-hidden="true" className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
                 href="mailto:edward.kubiak.dev@gmail.com"
@@ -807,6 +809,7 @@ const Home = () => {
             >
               <item.icon
                 size={24}
+                aria-hidden="true"
                 className="text-amber-400 mb-4 group-hover:scale-110 transition-transform duration-300"
               />
               <h3 className="font-display text-sm font-bold tracking-wide text-slate-100 mb-2">

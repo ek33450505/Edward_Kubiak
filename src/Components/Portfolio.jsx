@@ -130,7 +130,7 @@ function StarBadge({ owner, repo }) {
   if (loading || stars === null) return null;
   return (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">
-      <Star size={10} className="fill-amber-400" />
+      <Star size={10} aria-hidden="true" className="fill-amber-400" />
       {stars}
     </span>
   );
@@ -164,7 +164,7 @@ function ProjectCard({ project }) {
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg ${colors.bg}`}>
-                <project.icon size={20} className={colors.text} />
+                <project.icon size={20} aria-hidden="true" className={colors.text} />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
