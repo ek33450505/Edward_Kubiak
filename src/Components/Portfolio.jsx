@@ -5,17 +5,7 @@ import { ExternalLink, Github, Star } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
-
-const containerVariants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  exit: { opacity: 0, y: -10, transition: { duration: 0.2 } },
-};
+import { staggerContainer, staggerItem } from "../utils/motion";
 
 
 const colorMap = {
@@ -149,7 +139,7 @@ function ProjectCard({ project }) {
   const colors = colorMap[project.color];
   const reducedMotion = useReducedMotion();
   return (
-    <motion.div key={project.title} variants={cardVariants} className="group">
+    <motion.div key={project.title} variants={staggerItem} className="group">
       <Tilt
         tiltMaxAngleX={reducedMotion ? 0 : 6}
         tiltMaxAngleY={reducedMotion ? 0 : 6}
@@ -338,7 +328,7 @@ function Portfolio() {
             aria-labelledby={`tab-${filter}`}
             tabIndex={0}
             className="mt-10 grid md:grid-cols-2 gap-5"
-            variants={containerVariants}
+            variants={staggerContainer}
             initial="hidden"
             animate="show"
           >

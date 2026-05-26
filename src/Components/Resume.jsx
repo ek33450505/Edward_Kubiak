@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { Mail, MapPin, Download } from "lucide-react";
+import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
 
 const skills = {
   Frontend: [
@@ -50,7 +51,7 @@ const skills = {
   "AI Infrastructure & Developer Tools": [
     "Claude API",
     "Claude Code",
-    "CAST v7.0 (23 agents, 12 Homebrew packages)",
+    `CAST ${CAST_STATS.version} (${CAST_STATS.agents} agents, ${CAST_STATS.packages} Homebrew taps)`,
     "Agent Architecture",
     "Tauri v2",
     "Ollama",
@@ -91,8 +92,8 @@ const experience = [
     location: "Columbus, OH",
     period: "August 2022 — Present",
     highlights: [
-      "Creator of CAST (Claude Agent Specialist Team) v7.0 — a local-first, open-source multi-agent framework embedded into Claude Code via hook-driven dispatch. 23 specialist agents with model-driven routing (Sonnet for complex tasks, Haiku for lightweight, Opus for migration review), local SQLite observability, per-agent persistent memory, and a hook-enforced quality gate layer. 2,500+ cloners in the last 14 days. No cloud dependencies — everything runs on the developer machine.",
-      "Architected the CAST ecosystem as 12 modular Homebrew packages — cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, Claude's Journal, cast-time, cast-routines, cast-doctor, and the umbrella claude-agent-team — enabling developers to install only the components they need. Each package has its own Homebrew tap, versioned releases, and standalone functionality. Shipped cast-desktop (Tauri 2 + React 19 + Rust) — a native macOS desktop app with 11 dashboard views, PTY terminal, and Cmd+K palette, distributed via its own Homebrew tap.",
+      `Creator of CAST (Claude Agent Specialist Team) ${CAST_STATS.version} — a local-first, open-source multi-agent framework embedded into Claude Code via hook-driven dispatch. ${CAST_STATS.agents} specialist agents with model-driven routing (Sonnet for complex tasks, Haiku for lightweight, Opus for migration review), local SQLite observability, per-agent persistent memory, and a hook-enforced quality gate layer. No cloud dependencies — everything runs on the developer machine.`,
+      `Architected the CAST ecosystem as ${CAST_STATS.packages} Homebrew taps plus the umbrella \`cast\` formula — cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, cast-routines, cast-doctor, cast-time, cast-desktop, Claude's Journal, and the umbrella claude-agent-team — enabling developers to install only the components they need. Each tap has its own Homebrew formula, versioned releases, and standalone functionality. cast-desktop (${CAST_DESKTOP_STATS.version}) ships as the flagship native Tauri 2 + React 19 + Rust app with ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, PTY terminal, and Cmd+K palette.`,
       "Built two complementary observability layers: the Claude Code Dashboard v2.2.0 (React 19 + TypeScript + Express 5 + SSE) — a 10-page real-time UI with session cost tracking, per-agent scorecards, Cmd+K search, and privacy auditing — and cast-dash, an htop-style Python TUI for terminal-native monitoring.",
       "Shipped cast-routines and cast-doctor (2026-05-11) — routines schedule autonomous Claude Code workflows via YAML + cron; doctor is a read-only health-check CLI that audits any Claude Code install for missing hooks, stale memory, and configuration drift.",
       "Built Forge (publicly archived) — a native macOS terminal emulator designed around Claude Code using Tauri v2, React 19, TypeScript, and xterm.js. Features multi-tab splits, Claude session detection, CAST integration, and command palette.",
@@ -193,7 +194,7 @@ const Resume = () => {
           Summary
         </h2>
         <p className="text-slate-300 leading-relaxed">
-          AI systems engineer and full stack developer who builds developer tooling and multi-agent frameworks. Creator of CAST v7.0 — a local-first, open-source 23-agent framework for Claude Code distributed as 12 modular Homebrew packages, with 2,500+ cloners in the last 14 days and a dedicated ecosystem site at castframework.dev. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts.
+          {`AI systems engineer and full stack developer who builds developer tooling and multi-agent frameworks. Creator of CAST ${CAST_STATS.version} — a local-first, open-source ${CAST_STATS.agents}-agent framework for Claude Code distributed as ${CAST_STATS.packages} Homebrew taps plus the umbrella \`cast\` formula, with a dedicated ecosystem site at castframework.dev. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts.`}
         </p>
       </motion.div>
 

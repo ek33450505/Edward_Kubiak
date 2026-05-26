@@ -59,7 +59,7 @@ function NavBar() {
               key={to}
               to={to}
               aria-current={location.pathname === to ? "page" : undefined}
-              className={`relative px-4 py-2 font-display text-xs tracking-widest uppercase transition-colors duration-300 ${
+              className={`relative px-4 py-2 font-display text-xs tracking-widest uppercase transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 focus-visible:rounded-md ${
                 location.pathname === to
                   ? "text-amber-400"
                   : "text-slate-400 hover:text-slate-100"
@@ -79,7 +79,7 @@ function NavBar() {
           <button
             onClick={toggle}
             aria-label="Open command palette"
-            className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors flex items-center"
+            className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           >
             <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-700 text-[10px] font-display tracking-wider text-slate-500 hover:border-amber-400/50 hover:text-amber-400 transition-all">
               ⌘K
@@ -90,7 +90,7 @@ function NavBar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub profile (opens in new tab)"
-            className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors"
+            className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           >
             <Github size={20} aria-hidden="true" />
           </a>
@@ -99,7 +99,7 @@ function NavBar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="DEV.to profile (opens in new tab)"
-            className="p-2 text-slate-300 hover:text-amber-400 transition-colors"
+            className="p-2 text-slate-300 hover:text-amber-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .67-.08.84-.23.18-.16.27-.45.27-.85v-2.2c0-.4-.09-.69-.27-.85zm13.37-6.41H3.21C1.99 3.64 1 4.63 1 5.85v12.3c0 1.22.99 2.21 2.21 2.21h17.58c1.22 0 2.21-.99 2.21-2.21V5.85c0-1.22-.99-2.21-2.21-2.21zM8.85 14.4c-.37.38-.85.56-1.43.56H5.18V9.04h2.24c.58 0 1.06.19 1.43.56.37.38.56.85.56 1.43v1.94c0 .58-.19 1.06-.56 1.43zm4.75-4.25H11.5v1.64h1.28v1.11H11.5v1.64h2.1v1.11H11c-.65 0-1.11-.47-1.11-1.11v-4.16c0-.65.47-1.11 1.11-1.11h2.6v1.11zm5.04 4.73c-.4.6-.97.85-1.64.54-.52-.23-.82-.73-.97-1.5l-.63-3.12-.63 3.12c-.15.77-.45 1.27-.97 1.5-.67.31-1.24.06-1.64-.54l-1.78-5.73h1.23l1.26 4.57 1.26-4.57h.7l1.26 4.57 1.26-4.57h1.23l-1.78 5.73z"/>
@@ -110,7 +110,7 @@ function NavBar() {
         {/* Mobile toggle */}
         <button
           onClick={() => setOpen(!open)}
-          className="md:hidden p-2 text-slate-400 hover:text-amber-400 transition-colors"
+          className="md:hidden p-2 text-slate-400 hover:text-amber-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           aria-label="Toggle menu"
           aria-expanded={open}
         >
@@ -135,7 +135,7 @@ function NavBar() {
                   to={to}
                   onClick={() => setOpen(false)}
                   aria-current={location.pathname === to ? "page" : undefined}
-                  className={`font-display text-sm tracking-widest uppercase py-3 border-b border-slate-800/40 transition-colors ${
+                  className={`font-display text-sm tracking-widest uppercase py-3 border-b border-slate-800/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 focus-visible:rounded-md ${
                     location.pathname === to
                       ? "text-amber-400"
                       : "text-slate-400 hover:text-slate-100"
@@ -230,10 +230,16 @@ function App() {
     <Router>
       <CommandPaletteProvider>
         <div className="noise-bg gradient-mesh min-h-screen">
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-amber-400 focus:text-slate-950 focus:rounded-md focus:font-display focus:text-sm focus:font-bold focus:tracking-widest focus:uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+          >
+            Skip to main content
+          </a>
           <ScrollProgress />
           <NavBar />
           <CommandPalette />
-          <main className="pt-20">
+          <main id="main-content" className="pt-20">
             <AnimatedRoutes />
           </main>
 

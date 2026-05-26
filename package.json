@@ -25,6 +25,8 @@
   "scripts": {
     "test": "vitest",
     "dev": "vite",
+    "sync-stats": "node scripts/sync-cast-stats.mjs",
+    "prebuild": "node scripts/sync-cast-stats.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",

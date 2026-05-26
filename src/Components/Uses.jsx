@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
-import { Monitor, Terminal, Brain, GitBranch, Cpu, Package } from "lucide-react";
+import { Terminal, Brain, GitBranch, Cpu, Package } from "lucide-react";
+import { CAST_STATS } from "../data/castStats";
 
 const sections = [
   {
@@ -58,7 +59,7 @@ const sections = [
       },
       {
         label: "CAST",
-        description: "My own multi-agent framework — 22 specialist agents embedded into Claude Code via hook architecture. v7.0.",
+        description: `My own multi-agent framework — ${CAST_STATS.agents} specialist agents embedded into Claude Code via hook architecture. ${CAST_STATS.version}.`,
       },
       {
         label: "Key CLI Tools", // TODO: fill in

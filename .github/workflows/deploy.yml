@@ -98,6 +98,7 @@ jobs:
             'cast-time',
             'cast-website',
             'cast-claudes_journal',
+            'cast-desktop',
             'promptbot',
           ];
 
@@ -160,18 +161,21 @@ jobs:
           // packages/commands have no badge yet, so bump these manually when CAST
           // ships new packages or slash commands.
           const fallback = {
-            version: 'v7.0',
-            agents: 22,
-            tests: 990,
-            packages: 12,
-            commands: 19,
+            version: 'v7.3',
+            agents: 23,
+            tests: 1030,
+            packages: 13,
+            commands: 20,
+            skills: 18,
           };
 
           let version = fallback.version;
           let agents = fallback.agents;
           let tests = fallback.tests;
-          const packages = fallback.packages;
-          const commands = fallback.commands;
+          let packages = fallback.packages;
+          let commands = fallback.commands;
+          let skills = fallback.skills;
+          const token = process.env.GH_TOKEN;
 
           try {
             // Parse version: prefer VERSION file, fall back to README
@@ -194,6 +198,75 @@ jobs:
             // Parse tests from badge URL: badge/tests-409 or similar
             const testMatch = readme.match(/badge\/tests-(\d+)/);
             if (testMatch) tests = parseInt(testMatch[1], 10);
+
+            // Parse skills from badge URL: badge/skills-N or similar
+            const skillMatch = readme.match(/badge\/skills-(\d+)/);
+            if (skillMatch) skills = parseInt(skillMatch[1], 10);
+          } catch { /* use fallback */ }
+
+          // Fetch packages: count homebrew-* repos excluding archived ones
+          try {
+            const https = require('https');
+            const repoData = await new Promise((resolve) => {
+              const options = {
+                hostname: 'api.github.com',
+                path: '/users/ek33450505/repos?per_page=100',
+                headers: {
+                  'User-Agent': 'github-actions',
+                  'Authorization': `Bearer ${token}`,
+                  'Accept': 'application/vnd.github+json',
+                },
+              };
+              https.get(options, (res) => {
+                let data = '';
+                res.on('data', (chunk) => data += chunk);
+                res.on('end', () => {
+                  try {
+                    const json = JSON.parse(data);
+                    const archived = ['homebrew-jarvis', 'homebrew-engram', 'homebrew-stratum'];
+                    const homebrewCount = (Array.isArray(json) ? json : [])
+                      .filter(r => r.name.startsWith('homebrew-') && !archived.includes(r.name))
+                      .length;
+                    resolve(homebrewCount);
+                  } catch {
+                    resolve(fallback.packages);
+                  }
+                });
+              }).on('error', () => resolve(fallback.packages));
+            });
+            packages = repoData;
+          } catch { /* use fallback */ }
+
+          // Fetch commands: count .md files in claude-agent-team commands directory
+          try {
+            const https = require('https');
+            const commandCount = await new Promise((resolve) => {
+              const options = {
+                hostname: 'api.github.com',
+                path: '/repos/ek33450505/claude-agent-team/contents/commands',
+                headers: {
+                  'User-Agent': 'github-actions',
+                  'Authorization': `Bearer ${token}`,
+                  'Accept': 'application/vnd.github+json',
+                },
+              };
+              https.get(options, (res) => {
+                let data = '';
+                res.on('data', (chunk) => data += chunk);
+                res.on('end', () => {
+                  try {
+                    const json = JSON.parse(data);
+                    const mdCount = (Array.isArray(json) ? json : [])
+                      .filter(f => f.name && f.name.endsWith('.md'))
+                      .length;
+                    resolve(mdCount > 0 ? mdCount : fallback.commands);
+                  } catch {
+                    resolve(fallback.commands);
+                  }
+                });
+              }).on('error', () => resolve(fallback.commands));
+            });
+            commands = commandCount;
           } catch { /* use fallback */ }
 
           const stats = {
@@ -202,8 +275,11 @@ jobs:
             tests,
             packages,
             commands,
+            skills,
+            verified_at: new Date().toISOString(),
             updated: new Date().toISOString(),
           };
+          console.log('Will write:', JSON.stringify(stats, null, 2));
           fs.writeFileSync('public/cast-stats.json', JSON.stringify(stats, null, 2));
           console.log('Wrote cast-stats.json:', stats);
           EOF

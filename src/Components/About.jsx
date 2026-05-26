@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch, Mail, Github, Linkedin, ArrowUpRight } from "lucide-react";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
 import { aggregateTech } from "../utils/aggregateTech";
+import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -41,11 +42,10 @@ const About = () => {
                 <p className="text-slate-300 leading-relaxed">
                   I&apos;m a full stack developer and AI systems engineer who
                   builds developer tooling and production applications. I
-                  created CAST v7.0 — a 23-agent framework that embeds
+                  created CAST {CAST_STATS.version} — a {CAST_STATS.agents}-agent framework that embeds
                   specialist teams into Claude Code via hook architecture. The
-                  full CAST ecosystem ships as 12 modular Homebrew packages,
-                  plus a React 19 observability dashboard. 2,500+ cloners at
-                  castframework.dev.
+                  full CAST ecosystem ships as {CAST_ECOSYSTEM.tapsPlusUmbrella}, plus cast-desktop (Tauri 2 + React
+                  19) as the flagship app. castframework.dev.
                 </p>
                 <p className="mt-4 text-slate-300 leading-relaxed">
                   At{" "}
@@ -111,12 +111,14 @@ const About = () => {
                 <p className="text-slate-300 leading-relaxed">
                   I believe developer tools should be transparent, composable,
                   and owned by the people who use them. The CAST ecosystem is
-                  14 open-source repositories with 12 standalone Homebrew
-                  packages — from agent definitions to security policy gates to
-                  terminal dashboards to autonomous routines. That includes
-                  cast-desktop: a native Tauri 2 + React 19 app that puts every
-                  CAST signal in one double-click window. Every component works
-                  independently or together. Zero cloud, zero lock-in.
+                  14 open-source repositories distributed as {CAST_STATS.packages} modular
+                  Homebrew taps plus the umbrella `cast` formula — from agent
+                  definitions to security policy gates to terminal dashboards to
+                  autonomous routines. That includes cast-desktop: a native
+                  Tauri 2 + React 19 app ({CAST_DESKTOP_STATS.version}) that puts every CAST signal
+                  in one double-click window with {CAST_DESKTOP_STATS.dashboardViews} dashboard views. Every
+                  component works independently or together. Zero cloud, zero
+                  lock-in.
                 </p>
               </div>
             </div>
@@ -206,9 +208,9 @@ const About = () => {
                   <p className="text-slate-300 leading-relaxed text-sm">
                     I&apos;ve finished six 100-mile ultramarathons along with a
                     handful of 50K to 100K races over the years. Long days on
-                    singletrack are where I think best. Mohican 100 is coming
-                    up in late May 2026 — training is locked in. Rim to River
-                    100 in October 2025 is in the books.
+                    singletrack are where I think best. Mohican 100 just ran
+                    May 23-24 2026 — recap pending. Rim to River 100 in
+                    October 2024 is in the books.
                   </p>
                 </div>
               </div>

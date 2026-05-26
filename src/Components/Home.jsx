@@ -1,9 +1,11 @@
 import { useRef, lazy, Suspense, useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
+import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Code2, Layers, RefreshCw, Brain, GitCommit, ExternalLink, Heart } from "lucide-react";
+import { ArrowRight, Code2, Layers, RefreshCw, Brain, GitCommit, ExternalLink, Heart, ChevronDown } from "lucide-react";
 import CastStats from "./CastStats";
+import HeroStats from "./HeroStats";
 import projects from "../data/projects";
+import { CAST_STATS, CAST_ECOSYSTEM } from "../data/castStats";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
 const StarField = lazy(() => import("./Effects/StarField"));
@@ -31,7 +33,7 @@ const competencies = [
     icon: Brain,
     title: "AI / LLM Integration",
     description:
-      "Architect of CAST v7.0 — 23 specialist agents, 12 modular Homebrew packages, and a real-time observability dashboard for Claude Code. 2,500+ cloners. castframework.dev",
+      `Architect of CAST ${CAST_STATS.version} — ${CAST_STATS.agents} specialist agents, ${CAST_ECOSYSTEM.tapsPlusUmbrella}, and a real-time observability dashboard for Claude Code. castframework.dev`,
   },
 ];
 
@@ -43,6 +45,41 @@ const colorMap = {
   emerald: "text-emerald-400 bg-emerald-400/10",
   rose: "text-rose-400 bg-rose-400/10",
 };
+
+function ScrollCue() {
+  const shouldReduceMotion = useReducedMotion();
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) setHidden(true);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {!hidden && (
+        <motion.a
+          href="#core-competencies"
+          aria-label="Scroll to core competencies"
+          className="mt-12 mx-auto block w-fit text-slate-500 hover:text-amber-400 transition-colors"
+          initial={{ opacity: 1 }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: 1 }
+              : { y: [0, 8, 0], opacity: 1 }
+          }
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDown size={24} aria-hidden="true" />
+        </motion.a>
+      )}
+    </AnimatePresence>
+  );
+}
 
 function FeaturedWork() {
   const featuredProjects = projects.filter((p) => p.featured === true).slice(0, 3);
@@ -526,7 +563,7 @@ function SupportMyWork() {
               Sponsor open-source work on GitHub
             </h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              CAST, cast-dash, Claude's Journal, and the 12-package ecosystem are
+              CAST, cast-dash, Claude's Journal, and the {CAST_STATS.packages}-tap ecosystem are
               built and maintained in the open. If they save you time, a sponsorship
               keeps the next release coming.
             </p>
@@ -648,9 +685,9 @@ const Home = () => {
             >
               By day, I build production education technology for Ohio school
               districts at META Solutions. By night, I build open-source
-              infrastructure for AI-native development — including CAST, a
-              23-agent framework for Claude Code with 2,500+ cloners and a
-              full ecosystem of modular Homebrew packages.
+              infrastructure for AI-native development — including CAST, a{" "}
+              {CAST_STATS.agents}-agent framework for Claude Code distributed as{" "}
+              {CAST_ECOSYSTEM.tapsPlusUmbrella}.
             </motion.p>
 
             <motion.div
@@ -694,6 +731,11 @@ const Home = () => {
                 LinkedIn →
               </a>
             </motion.div>
+
+            <HeroStats />
+
+            {/* Scroll cue */}
+            <ScrollCue />
           </motion.div>
 
           {/* Right column - decorative element with parallax */}
@@ -738,7 +780,7 @@ const Home = () => {
       </section>
 
       {/* Competencies — scroll-triggered */}
-      <section className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]">
+      <section id="core-competencies" className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

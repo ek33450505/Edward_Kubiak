@@ -16,6 +16,10 @@ This portfolio showcases my work as a full stack developer specializing in React
 - **Resume** — Skills, experience, and education
 - **Contact** — Reach out via email form
 
+## CAST Ecosystem
+
+Edward maintains [CAST](https://castframework.dev), a 23-agent multi-agent framework for Claude Code. Try it: `brew tap ek33450505/cast && brew install cast`.
+
 ## Built With
 
 - React 19 + Vite 8
@@ -23,7 +27,7 @@ This portfolio showcases my work as a full stack developer specializing in React
 - Framer Motion (page transitions & scroll animations)
 - Lucide React (icons)
 - React Router v7
-- EmailJS (contact form)
+- Web3Forms (contact form)
 - Deployed via GitHub Pages
 
 ## Connect

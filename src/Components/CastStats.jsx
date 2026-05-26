@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Bot, Package, TestTube2, Terminal, Hash } from "lucide-react";
+import { CAST_STATS } from "../data/castStats";
 
 const PILLS = [
   { key: "version", label: "Version", icon: Hash },
@@ -18,17 +19,22 @@ function CastStats() {
     fetch("/cast-stats.json")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (!cancelled && data && typeof data === "object") {
+        if (cancelled) return;
+        if (data && typeof data === "object") {
           setStats(data);
+        } else {
+          setStats(CAST_STATS);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) setStats(CAST_STATS);
+      });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  if (!stats) return null;
+  const displayStats = stats ?? CAST_STATS;
 
   return (
     <motion.section
@@ -47,7 +53,7 @@ function CastStats() {
 
       <div className="flex flex-wrap gap-3">
         {PILLS.map(({ key, label, icon: Icon }) => {
-          const value = stats[key];
+          const value = displayStats[key];
           if (value === undefined || value === null) return null;
           return (
             <motion.div
@@ -68,10 +74,10 @@ function CastStats() {
             </motion.div>
           );
         })}
-        {stats.updated && (
+        {displayStats.updated && (
           <div className="flex items-center self-center ml-1">
             <span className="font-display text-[10px] tracking-wider text-slate-600">
-              updated {new Date(stats.updated).toLocaleDateString()}
+              updated {new Date(displayStats.updated).toLocaleDateString()}
             </span>
           </div>
         )}

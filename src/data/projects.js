@@ -1,11 +1,12 @@
 import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign } from "lucide-react";
+import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats";
 
 const projects = [
   {
     slug: "cast-claude-agent-team",
     title: "CAST — Claude Agent Team",
     description:
-      "Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. 22 specialist agents and hook-driven dispatch — no routing tables, no cloud. The full ecosystem ships as 12 modular Homebrew packages: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, cast-routines, cast-doctor, cast-time, Claude's Journal, and the umbrella claude-agent-team. Install only what you need. brew tap ek33450505/cast && brew install cast",
+      `Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. ${CAST_STATS.agents} specialist agents and hook-driven dispatch — no routing tables, no cloud. The full ecosystem ships as ${CAST_ECOSYSTEM.tapsPlusUmbrella}: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, cast-routines, cast-doctor, cast-time, cast-desktop, Claude's Journal, and the umbrella claude-agent-team. Install only what you need. brew tap ek33450505/cast && brew install cast`,
     tech: ["Claude Code", "Bash", "Hook Architecture", "Node.js", "SQLite", "BATS"],
     icon: Network,
     color: "violet",
@@ -15,7 +16,7 @@ const projects = [
     github: "https://github.com/ek33450505/claude-agent-team",
     githubRepo: { owner: "ek33450505", repo: "claude-agent-team" },
     castEcosystem: true,
-    stats: ["22 Agents", "990 Tests", "19 Commands", "16 Skills", "12 Packages", "v7.0"],
+    stats: [`${CAST_STATS.agents} Agents`, `${CAST_STATS.tests} Tests`, `${CAST_STATS.commands} Commands`, `${CAST_STATS.skills} Skills`, `${CAST_STATS.packages} Taps`, CAST_STATS.version],
   },
   {
     slug: "claude-code-dashboard",
@@ -31,14 +32,13 @@ const projects = [
     castEcosystem: true,
     github: "https://github.com/ek33450505/claude-code-dashboard",
     githubRepo: { owner: "ek33450505", repo: "claude-code-dashboard" },
-    link: "https://cast-site-iota.vercel.app/",
     stats: ["10 Pages", "15+ APIs", "SSE Live Feed", "v2.2.0"],
   },
   {
     slug: "cast-desktop",
     title: "Cast Desktop",
     description:
-      "The desktop app for CAST — every signal your agents emit, all in one place. A Tauri 2 + React 19 native app with embedded Express 5 + SQLite backend. Real PTY-backed terminal (xterm.js + Rust Forge), 11 dashboard views (Activity, Sessions, Agents, Hooks, Memory, Plans, System, Token Spend, DB Explorer, Docs), Cmd+K command palette, search-in-terminal, font-size hotkeys, multi-tab terminal with folder-picker cwd, and 6 themes. Local-first — reads directly from ~/.claude/cast.db.",
+      `The desktop app for CAST — every signal your agents emit, all in one place. A Tauri 2 + React 19 native app with embedded Express 5 + SQLite backend. Real PTY-backed terminal (xterm.js + Rust Forge), ${CAST_DESKTOP_STATS.dashboardViews} dashboard views (Activity, Sessions, Agents, Hooks, Memory, Plans, System, Token Spend, DB Explorer, Docs), Cmd+K command palette, search-in-terminal, font-size hotkeys, multi-tab terminal with folder-picker cwd, and 6 themes. Local-first — reads directly from ~/.claude/cast.db.`,
     tech: ["Tauri 2", "React 19", "TypeScript", "Rust", "Express 5", "SQLite", "xterm.js"],
     icon: Terminal,
     color: "amber",
@@ -48,7 +48,7 @@ const projects = [
     castEcosystem: true,
     github: "https://github.com/ek33450505/cast-desktop",
     githubRepo: { owner: "ek33450505", repo: "cast-desktop" },
-    stats: ["11 Dashboard Views", "819 Tests", "Native PTY Terminal", "v0.1.0"],
+    stats: [`${CAST_DESKTOP_STATS.dashboardViews} Dashboard Views`, "Native PTY Terminal", CAST_DESKTOP_STATS.version],
   },
   {
     slug: "cast-time",
@@ -99,7 +99,7 @@ const projects = [
     slug: "cast-agents",
     title: "cast-agents",
     description:
-      "Part of the open-source CAST ecosystem — install just the agents, nothing else. All 22 specialist Claude Code agents (commit, debug, review, plan, and more) distributed as a standalone Homebrew package. Mix and match CAST modules to build your own stack. brew tap ek33450505/cast-agents && brew install cast-agents",
+      `Part of the open-source CAST ecosystem — install just the agents, nothing else. All ${CAST_STATS.agents} specialist Claude Code agents (commit, debug, review, plan, and more) distributed as a standalone Homebrew package. Mix and match CAST modules to build your own stack. brew tap ek33450505/cast-agents && brew install cast-agents`,
     tech: ["Claude Code", "Bash", "Shell"],
     icon: Network,
     color: "violet",
@@ -108,7 +108,7 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-agents",
     githubRepo: { owner: "ek33450505", repo: "cast-agents" },
-    stats: ["Open Source", "22 Agents", "Homebrew Install", "Claude Code"],
+    stats: ["Open Source", `${CAST_STATS.agents} Agents`, "Homebrew Install", "Claude Code"],
   },
   {
     slug: "cast-observe",

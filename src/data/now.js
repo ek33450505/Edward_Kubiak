@@ -1,12 +1,14 @@
+import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats";
+
 const now = {
-  updated: "May 2026",
+  updated: "May 26, 2026",
   sections: [
     {
       title: "Building",
       items: [
-        "CAST v7.0 — 22-agent Claude Code framework, 12 Homebrew packages, 2,500+ cloners in the last 14 days. Public site live at castframework.dev.",
+        `CAST ${CAST_STATS.version} — ${CAST_STATS.agents}-agent Claude Code framework, ${CAST_ECOSYSTEM.tapsPlusUmbrella}, ${CAST_STATS.tests} tests. Public site live at castframework.dev.`,
         "cast-routines + cast-doctor — just shipped (2026-05-11). Routines schedule autonomous Claude Code workflows via YAML + cron; doctor is a read-only health check that works against any Claude Code install.",
-        "CAST v8 — bundled desktop app in planning. Bringing Forge (Tauri terminal), the dashboard, and voice into one product. v7 is the daily driver; v8 is the app layer.",
+        `cast-desktop — shipped ${CAST_DESKTOP_STATS.version}. Native Tauri 2 + React 19 app with ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, real PTY terminal, Cmd+K palette, and 6 themes. Available via brew tap ek33450505/cast-desktop.`,
         "Actively networking and exploring new opportunities.",
       ],
     },
@@ -21,8 +23,8 @@ const now = {
     {
       title: "Running",
       items: [
-        "Mohican 100 — late May 2026. Race day is coming up fast. Training is locked in.",
-        "Looking for my next fall 100-miler after Rim to River in October 2025.",
+        "Mohican 100 — May 23-24 2026. Race day just behind me.",
+        "Looking for my next fall 100-miler after Rim to River 2024 (planning a return in October 2026).",
         "Current focus: back-to-back long runs, trail-specific vertical gain through Ohio singletrack.",
       ],
     },
