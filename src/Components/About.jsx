@@ -34,7 +34,7 @@ const About = () => {
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-amber-400/10 text-amber-400 shrink-0 mt-1">
-                <Briefcase size={20} />
+                <Briefcase size={20} aria-hidden="true" />
               </div>
               <div>
                 <h2 className="font-display text-lg font-bold text-slate-100 mb-3">
@@ -77,7 +77,7 @@ const About = () => {
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-sky-400/10 text-sky-400 shrink-0 mt-1">
-                <MapPin size={20} />
+                <MapPin size={20} aria-hidden="true" />
               </div>
               <div>
                 <h2 className="font-display text-lg font-bold text-slate-100 mb-3">
@@ -103,7 +103,7 @@ const About = () => {
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-violet-400/10 text-violet-400 shrink-0 mt-1">
-                <GitBranch size={20} />
+                <GitBranch size={20} aria-hidden="true" />
               </div>
               <div>
                 <h2 className="font-display text-lg font-bold text-slate-100 mb-3">
@@ -175,7 +175,7 @@ const About = () => {
             >
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-rose-400/10 text-rose-400 shrink-0 mt-1">
-                  <Heart size={20} />
+                  <Heart size={20} aria-hidden="true" />
                 </div>
                 <div>
                   <h2 className="font-display text-lg font-bold text-slate-100 mb-3">
@@ -200,7 +200,7 @@ const About = () => {
             >
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-emerald-400/10 text-emerald-400 shrink-0 mt-1">
-                  <Mountain size={20} />
+                  <Mountain size={20} aria-hidden="true" />
                 </div>
                 <div>
                   <h2 className="font-display text-lg font-bold text-slate-100 mb-3">

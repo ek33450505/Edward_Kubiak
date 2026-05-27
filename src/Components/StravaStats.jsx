@@ -97,7 +97,7 @@ const StravaStats = () => {
             key={label}
             className="p-4 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
-            <Icon size={16} className="text-amber-400/60 mb-2" />
+            <Icon size={16} className="text-amber-400/60 mb-2" aria-hidden="true" />
             <div className="text-2xl font-display font-bold text-amber-400">
               {value}
             </div>

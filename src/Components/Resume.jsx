@@ -212,6 +212,7 @@ const Resume = () => {
                 href="https://dev.to/edwardkubiak"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="DEV.to profile (opens in new tab)"
                 className="inline-flex items-center gap-1.5 hover:text-amber-400 transition-colors"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

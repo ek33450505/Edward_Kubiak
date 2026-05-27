@@ -77,6 +77,7 @@ function TalkCard({ talk, index }) {
                 allowFullScreen
                 className="w-full h-full"
                 loading="lazy"
+                sandbox="allow-scripts allow-same-origin allow-presentation"
               />
             </div>
           )}

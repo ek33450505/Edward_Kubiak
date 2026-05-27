@@ -63,6 +63,7 @@ const Now = () => {
             href="https://nownownow.com/about"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="nownownow.com about page (opens in new tab)"
             className="hover:text-slate-400 transition-colors"
           >
             nownownow.com

@@ -293,12 +293,13 @@ function CurrentlyBuilding() {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5 }}
       className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
+      aria-labelledby="currently-building-heading"
     >
       {/* Section heading */}
       <div className="mb-6 flex items-center gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
+            <h2 id="currently-building-heading" className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
               Currently Building
             </h2>
             {!loading && !showFallback && (
@@ -485,9 +486,10 @@ function RecentWriting() {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5 }}
       className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
+      aria-labelledby="recent-writing-heading"
     >
       <div className="mb-6">
-        <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
+        <h2 id="recent-writing-heading" className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
           Recent Writing
         </h2>
         <div className="mt-2 w-16 h-0.5 bg-amber-400/60" />
@@ -782,7 +784,7 @@ const Home = () => {
       </section>
 
       {/* Competencies — scroll-triggered */}
-      <section id="core-competencies" className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]">
+      <section id="core-competencies" aria-labelledby="core-competencies-heading" className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -790,7 +792,7 @@ const Home = () => {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
+          <h2 id="core-competencies-heading" className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
             Core Competencies
           </h2>
           <div className="mt-2 w-16 h-0.5 bg-amber-400/60" />
