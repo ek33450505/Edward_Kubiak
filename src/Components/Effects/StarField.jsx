@@ -152,12 +152,12 @@ export default function StarField() {
   const reducedMotion = useReducedMotion();
   if (reducedMotion) return null;
   return (
-    <div className="fixed inset-0 z-0" aria-hidden="true">
+    <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 60 }}
         dpr={[1, 1.5]}
         gl={{ antialias: false, alpha: true }}
-        style={{ background: "transparent" }}
+        style={{ background: "transparent", pointerEvents: "none" }}
       >
         <Suspense fallback={null}>
           <GalaxyCore />

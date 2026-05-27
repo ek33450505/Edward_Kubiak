@@ -81,6 +81,7 @@ function NavBar() {
           <button
             onClick={toggle}
             aria-label="Open command palette"
+            title="Open command palette"
             className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           >
             <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-700 text-[10px] font-display tracking-wider text-slate-500 hover:border-amber-400/50 hover:text-amber-400 transition-all">
@@ -92,6 +93,7 @@ function NavBar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub profile (opens in new tab)"
+            title="GitHub"
             className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           >
             <GithubIcon size={20} aria-hidden="true" />
@@ -101,6 +103,7 @@ function NavBar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="DEV.to profile (opens in new tab)"
+            title="DEV.to"
             className="p-2 text-slate-300 hover:text-amber-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -263,6 +266,7 @@ function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub profile (opens in new tab)"
+                  title="GitHub"
                   className="hover:text-amber-400 transition-colors"
                 >
                   <GithubIcon size={16} aria-hidden="true" />
@@ -272,6 +276,7 @@ function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn profile (opens in new tab)"
+                  title="LinkedIn"
                   className="hover:text-amber-400 transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -283,6 +288,7 @@ function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="DEV.to profile (opens in new tab)"
+                  title="DEV.to"
                   className="hover:text-amber-400 transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -292,6 +298,7 @@ function App() {
                 <a
                   href="/rss.xml"
                   aria-label="RSS feed"
+                  title="RSS Feed"
                   className="hover:text-amber-400 transition-colors"
                 >
                   <Rss size={16} aria-hidden="true" />
