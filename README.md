@@ -37,10 +37,10 @@ Edward maintains [CAST](https://castframework.dev), a 23-agent multi-agent frame
 | `npm run dev` | Start Vite dev server at `localhost:5173` |
 | `npm run build` | Production build (runs `sync-stats` first via `prebuild`) |
 | `npm run sync-stats` | Pull fresh CAST stats from `~/Projects/personal/claude-agent-team` into `src/data/castStats.js` |
-| `npm run generate-pdf` | Rebuild the site, render `/resume?print=1` via Puppeteer, and write `public/Edward_Kubiak_Resume.pdf` — run this after any content edits to keep the PDF in sync with the UI resume |
+| `npm run build-resume` | Convert `assets/resume/Edward_Kubiak_Resume.docx` → `public/Edward_Kubiak_Resume.pdf` via LibreOffice headless, and copy the CAST one-pager to `public/`. Run after editing the source `.docx`. |
 | `npm run deploy` | Build + deploy to GitHub Pages |
 
-> **Keeping the PDF current:** The UI resume (`src/Components/Resume.jsx`) is the source of truth. After editing experience bullets, skills, or summary text, run `npm run generate-pdf` to regenerate `public/Edward_Kubiak_Resume.pdf`. The script requires `vite preview` access (it spawns one internally) and `puppeteer` (installed as a devDependency — downloads Chromium on first install).
+> **Keeping the PDF current:** The canonical resume source is `assets/resume/Edward_Kubiak_Resume.docx` (authored in Word / Google Docs / Pages). After editing the `.docx`, run `npm run build-resume` to regenerate `public/Edward_Kubiak_Resume.pdf`. Requires LibreOffice installed locally: `brew install --cask libreoffice`. The script is idempotent (skips on unchanged source) and supports `--force` to override. The UI resume (`src/Components/Resume.jsx`) is a browse-only view; the download link serves the real authored PDF.
 
 ## Connect
 

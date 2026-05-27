@@ -1,6 +1,5 @@
-import { useSearchParams } from "react-router-dom";
 import { motion } from "motion/react";
-import { Mail, MapPin, Download } from "lucide-react";
+import { Mail, MapPin, Download, FileText } from "lucide-react";
 import { CAST_STATS, CAST_DESKTOP_STATS } from "../data/castStats";
 
 const skills = {
@@ -171,28 +170,9 @@ const printStyles = `
 `;
 
 const Resume = () => {
-  const [searchParams] = useSearchParams();
-  const isPrintMode = searchParams.get("print") === "1";
-
   return (
-    <div id="resume-print" className={`min-h-[calc(100vh-80px)] py-20${isPrintMode ? " print-mode" : ""}`}>
+    <div id="resume-print" className="min-h-[calc(100vh-80px)] py-20">
       <style>{printStyles}</style>
-      {isPrintMode && (
-        <style>{`
-          nav, footer, [data-print-hide] { display: none !important; }
-          body { background: white !important; color: #0f172a !important; }
-          #resume-print { background: white !important; padding: 1.5rem !important; min-height: unset !important; }
-          #resume-print .rounded-xl { border: 1px solid #e2e8f0 !important; background: white !important; }
-          #resume-print h1, #resume-print h2, #resume-print h3 { color: #0f172a !important; }
-          #resume-print p, #resume-print li, #resume-print span { color: #334155 !important; }
-          #resume-print .text-amber-400 { color: #475569 !important; }
-          #resume-print .text-slate-400, #resume-print .text-slate-500 { color: #64748b !important; }
-          #resume-print .bg-amber-400\\/10, #resume-print .bg-sky-400\\/10,
-          #resume-print .bg-emerald-400\\/10, #resume-print .bg-rose-400\\/10 { background-color: #f1f5f9 !important; }
-          .mt-10 { margin-top: 1.5rem !important; }
-          .mt-8 { margin-top: 1.25rem !important; }
-        `}</style>
-      )}
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <motion.div
@@ -241,15 +221,26 @@ const Resume = () => {
               </a>
             </div>
           </div>
-          <a
-            href="/Edward_Kubiak_Resume.pdf"
-            download="Edward_Kubiak_Resume.pdf"
-            data-print-hide
-            className="inline-flex items-center gap-2 px-4 py-2 border border-slate-700 text-slate-400 font-display text-xs tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 transition-all duration-300 shrink-0"
-          >
-            <Download size={14} aria-hidden="true" />
-            Download PDF
-          </a>
+          <div className="flex flex-col items-start sm:items-end gap-2 shrink-0" data-print-hide>
+            <a
+              href="/Edward_Kubiak_Resume.pdf"
+              download="Edward_Kubiak_Resume.pdf"
+              aria-label="Download resume PDF"
+              className="inline-flex items-center gap-2 px-4 py-2 border border-slate-700 text-slate-400 font-display text-xs tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+            >
+              <Download size={14} aria-hidden="true" />
+              Download PDF
+            </a>
+            <a
+              href="/CAST_Portfolio_OnePager.pdf"
+              download="CAST_Portfolio_OnePager.pdf"
+              aria-label="Download CAST one-pager PDF"
+              className="inline-flex items-center gap-1.5 px-2 py-1.5 text-xs text-slate-400 hover:text-amber-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+            >
+              <FileText size={12} aria-hidden="true" />
+              CAST one-pager
+            </a>
+          </div>
         </motion.div>
 
         {/* Summary */}

@@ -29,13 +29,12 @@
     "prebuild": "node scripts/sync-cast-stats.mjs",
     "build": "vite build",
     "preview": "vite preview",
-    "generate-pdf": "PUPPETEER_CACHE_DIR=./node_modules/.cache/puppeteer node scripts/generate-resume-pdf.mjs",
+    "build-resume": "node scripts/build-resume.mjs",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.1",
-    "puppeteer": "^24.43.1",
     "sharp": "^0.34.5",
     "vite": "^8.0.0"
   }
