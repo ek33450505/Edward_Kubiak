@@ -267,6 +267,31 @@ jobs:
             commands = commandCount;
           } catch { /* use fallback */ }
 
+          // Overlay canonical values from flagship cast-stats.json.
+          // If the fetch succeeds, canonical values take precedence over the
+          // individually-computed values above. Any extra fields this script
+          // computes (e.g. verified_at) are preserved via the spread below.
+          const CANONICAL_URL = 'https://raw.githubusercontent.com/ek33450505/claude-agent-team/main/cast-stats.json';
+          let canonical = {};
+          try {
+            const canonicalRaw = await new Promise((resolve, reject) => {
+              https.get(CANONICAL_URL, (res) => {
+                let data = '';
+                res.on('data', (chunk) => data += chunk);
+                res.on('end', () => resolve(data));
+              }).on('error', reject);
+            });
+            canonical = JSON.parse(canonicalRaw);
+            // Normalise version field: canonical uses bare semver (e.g. "7.4.1"),
+            // but this script expects "v7.4.1" — ensure the v-prefix is present.
+            if (canonical.version && !String(canonical.version).startsWith('v')) {
+              canonical.version = `v${canonical.version}`;
+            }
+            console.log('Fetched canonical stats:', canonical);
+          } catch (e) {
+            console.warn('Canonical fetch failed — using computed values. Error:', e.message);
+          }
+
           const stats = {
             version,
             agents,
@@ -276,6 +301,8 @@ jobs:
             skills,
             verified_at: new Date().toISOString(),
             updated: new Date().toISOString(),
+            // Canonical overlay: trusted values from the flagship repo
+            ...canonical,
           };
           console.log('Will write:', JSON.stringify(stats, null, 2));
           fs.writeFileSync('public/cast-stats.json', JSON.stringify(stats, null, 2));
