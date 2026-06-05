@@ -1,13 +1,13 @@
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 
 const now = {
-  updated: "May 26, 2026",
+  updated: "June 5, 2026",
   sections: [
     {
       title: "Building",
       items: [
         `CAST ${CAST_STATS.version} — ${CAST_STATS.agents}-agent Claude Code framework, ${CAST_ECOSYSTEM.tapsPlusUmbrella}, ${CAST_STATS.tests} tests. Public site live at castframework.dev.`,
-        "cast-routines + cast-doctor — just shipped (2026-05-11). Routines schedule autonomous Claude Code workflows via YAML + cron; doctor is a read-only health check that works against any Claude Code install.",
+        "cast-routines + cast-doctor — schedules autonomous Claude Code workflows via YAML + cron; doctor is a read-only health check that works against any Claude Code install.",
         `cast-desktop — shipped ${CAST_DESKTOP_STATS.version}. Native Tauri 2 + React 19 app with ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, real PTY terminal, Cmd+K palette, and 6 themes. Available via brew tap ek33450505/cast-desktop.`,
         "Actively networking and exploring new opportunities.",
       ],

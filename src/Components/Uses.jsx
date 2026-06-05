@@ -10,16 +10,16 @@ const sections = [
     iconColor: "text-amber-400 bg-amber-400/10",
     items: [
       {
-        label: "Machine", // TODO: fill in
-        description: "{/* TODO: fill in — e.g. MacBook Pro 16\" M3 Pro, 36 GB RAM */}",
+        label: "Machine",
+        description: "",
       },
       {
-        label: "Monitor", // TODO: fill in
-        description: "{/* TODO: fill in — e.g. LG 27UK850-W 4K */}",
+        label: "Monitor",
+        description: "",
       },
       {
-        label: "Keyboard & Mouse", // TODO: fill in
-        description: "{/* TODO: fill in */}",
+        label: "Keyboard & Mouse",
+        description: "",
       },
     ],
   },
@@ -30,20 +30,20 @@ const sections = [
     iconColor: "text-sky-400 bg-sky-400/10",
     items: [
       {
-        label: "Editor", // TODO: fill in
-        description: "{/* TODO: fill in — e.g. VS Code with key extensions */}",
+        label: "Editor",
+        description: "",
       },
       {
-        label: "Terminal", // TODO: fill in
-        description: "{/* TODO: fill in — e.g. Warp / iTerm2 */}",
+        label: "Terminal",
+        description: "",
       },
       {
-        label: "Font", // TODO: fill in
-        description: "{/* TODO: fill in — e.g. JetBrains Mono */}",
+        label: "Font",
+        description: "",
       },
       {
-        label: "Theme", // TODO: fill in
-        description: "{/* TODO: fill in */}",
+        label: "Theme",
+        description: "",
       },
     ],
   },
@@ -62,8 +62,8 @@ const sections = [
         description: `My own multi-agent framework — ${CAST_STATS.agents} specialist agents embedded into Claude Code via hook architecture. ${CAST_STATS.version}.`,
       },
       {
-        label: "Key CLI Tools", // TODO: fill in
-        description: "{/* TODO: fill in — e.g. fzf, ripgrep, bat, jq, gh */}",
+        label: "Key CLI Tools",
+        description: "",
       },
     ],
   },
@@ -74,12 +74,12 @@ const sections = [
     iconColor: "text-emerald-400 bg-emerald-400/10",
     items: [
       {
-        label: "Dotfiles Repo", // TODO: fill in
-        description: "{/* TODO: link dotfiles repo when public */}",
+        label: "Dotfiles Repo",
+        description: "",
       },
       {
-        label: "Package Manager", // TODO: fill in
-        description: "{/* TODO: fill in — e.g. Homebrew with Brewfile */}",
+        label: "Package Manager",
+        description: "",
       },
     ],
   },
