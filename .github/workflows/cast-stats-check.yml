@@ -1,0 +1,24 @@
+name: CAST Stats Drift Check
+
+# Gates public/cast-stats.json against canonical values published by the flagship repo.
+# This workflow goes green once ek33450505/claude-agent-team publishes cast-stats.json to main.
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cast-stats-drift-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ek33450505/claude-agent-team/.github/actions/cast-stats-drift-check@main
+        with:
+          json: public/cast-stats.json
