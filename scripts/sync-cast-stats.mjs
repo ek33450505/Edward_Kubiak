@@ -16,12 +16,13 @@ const outPath = path.join(root, "src", "data", "castStats.js");
 
 // 1. CAST core stats — from public/cast-stats.json (deploy-time refresh)
 let cast = {
-  version: "v7.3",
+  version: "v7.4.0",
   agents: 23,
-  tests: 1030,
+  tests: 1171,
   packages: 13,
-  commands: 20,
-  skills: 18,
+  commands: 19,
+  skills: 16,
+  tables: 38,
   updated: new Date().toISOString().slice(0, 10),
 };
 try {
