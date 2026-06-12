@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Bot, Package, TestTube2, Terminal, Hash } from "lucide-react";
 import { fadeUp } from "../utils/motion";
 import { CAST_STATS } from "../data/castStats";
+import SectionHeader from "./ui/SectionHeader";
 
 const PILLS = [
   { key: "version", label: "Version", icon: Hash },
@@ -46,10 +47,7 @@ function CastStats() {
       className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
     >
       <div className="mb-6">
-        <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase">
-          CAST Ecosystem — Live Stats
-        </h2>
-        <div className="mt-2 w-16 h-0.5 bg-amber-400/60" />
+        <SectionHeader title="CAST Ecosystem — Live Stats" />
       </div>
 
       <div className="flex flex-wrap gap-3">

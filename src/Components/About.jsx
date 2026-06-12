@@ -2,6 +2,8 @@ import { motion, useReducedMotion } from "motion/react";
 import { fadeUp, slideInLeft, staggerItem } from "../utils/motion";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch, Mail, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "./BrandIcons";
+import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
 import { aggregateTech } from "../utils/aggregateTech";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
@@ -10,17 +12,19 @@ const About = () => {
   const reducedMotion = useReducedMotion();
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         {/* Header */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
           animate="show"
         >
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            About <span className="text-amber-400">Me</span>
-          </h1>
-          <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+          <SectionHeader
+            as="h1"
+            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            underlineClassName="mt-3"
+            title={<>About <span className="text-amber-400">Me</span></>}
+          />
         </motion.div>
 
         {/* Bio cards — scroll-triggered */}
@@ -306,7 +310,7 @@ const About = () => {
             </div>
           </motion.div>
         </div>
-      </div>
+      </PageWrapper>
     </div>
   );
 };

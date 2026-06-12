@@ -2,6 +2,8 @@ import { motion } from "motion/react";
 import { ExternalLink, Mic, Headphones, FileText, Play } from "lucide-react";
 import { fadeUp } from "../utils/motion";
 import talks from "../data/talks";
+import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 
 const typeConfig = {
   talk: { icon: Mic, label: "Talk", color: "text-amber-400 bg-amber-400/10" },
@@ -105,17 +107,19 @@ function TalkCard({ talk, index }) {
 const Talks = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         {/* Header */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
           animate="show"
         >
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            Talks & <span className="text-amber-400">Writing</span>
-          </h1>
-          <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+          <SectionHeader
+            as="h1"
+            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            underlineClassName="mt-3"
+            title={<>Talks & <span className="text-amber-400">Writing</span></>}
+          />
           <p className="mt-4 text-slate-400 leading-relaxed max-w-xl">
             Conference talks, podcast appearances, demos, and articles. More
             writing on{" "}
@@ -163,7 +167,7 @@ const Talks = () => {
             .
           </p>
         </motion.div>
-      </div>
+      </PageWrapper>
     </div>
   );
 };

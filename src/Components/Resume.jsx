@@ -2,6 +2,8 @@ import { motion } from "motion/react";
 import { Mail, MapPin, Download, FileText } from "lucide-react";
 import { fadeUp } from "../utils/motion";
 import { CAST_STATS, CAST_DESKTOP_STATS } from "../data/castStats";
+import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 
 const skills = {
   Frontend: [
@@ -174,7 +176,7 @@ const Resume = () => {
   return (
     <div id="resume-print" className="min-h-[calc(100vh-80px)] py-20">
       <style>{printStyles}</style>
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         {/* Header */}
         <motion.div
           variants={fadeUp}
@@ -183,10 +185,12 @@ const Resume = () => {
           className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
         >
           <div>
-            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-              Edward <span className="text-amber-400">Kubiak</span>
-            </h1>
-            <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+            <SectionHeader
+              as="h1"
+              headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+              underlineClassName="mt-3"
+              title={<>Edward <span className="text-amber-400">Kubiak</span></>}
+            />
             <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-400">
               <a
                 href="mailto:edward.kubiak.dev@gmail.com"
@@ -381,7 +385,7 @@ const Resume = () => {
             ))}
           </div>
         </motion.div>
-      </div>
+      </PageWrapper>
     </div>
   );
 };

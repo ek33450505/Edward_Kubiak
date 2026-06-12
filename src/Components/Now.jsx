@@ -1,20 +1,24 @@
 import { motion } from "motion/react";
 import now from "../data/now";
 import { fadeUp, fadeIn } from "../utils/motion";
+import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 
 const Now = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         <motion.div
           variants={fadeUp}
           initial="hidden"
           animate="show"
         >
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            Now
-          </h1>
-          <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+          <SectionHeader
+            as="h1"
+            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            underlineClassName="mt-3"
+            title="Now"
+          />
           <p className="mt-4 text-slate-400 text-sm">
             What I&apos;m focused on right now &middot; Last updated{" "}
             <span className="text-slate-300">{now.updated}</span>
@@ -72,7 +76,7 @@ const Now = () => {
             nownownow.com
           </a>
         </motion.p>
-      </div>
+      </PageWrapper>
     </div>
   );
 };

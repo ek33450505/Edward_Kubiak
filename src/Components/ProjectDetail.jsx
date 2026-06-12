@@ -6,6 +6,7 @@ import { ExternalLink, ArrowLeft, Star } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 import { colorMap } from "../utils/colors";
+import PageWrapper from "./ui/PageWrapper";
 import { useGitHubStars } from "../hooks/useGitHubStars";
 
 function StarBadge({ owner, repo }) {
@@ -37,7 +38,7 @@ function ProjectDetail() {
   if (!project) {
     return (
       <div className="min-h-[calc(100vh-80px)] py-20">
-        <div className="max-w-4xl mx-auto px-6">
+        <PageWrapper>
           <motion.div
             variants={fadeUp}
             initial="hidden"
@@ -55,7 +56,7 @@ function ProjectDetail() {
               Back to Projects
             </Link>
           </motion.div>
-        </div>
+        </PageWrapper>
       </div>
     );
   }
@@ -65,7 +66,7 @@ function ProjectDetail() {
 
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         {/* Hero */}
         <motion.div
           variants={fadeUp}
@@ -256,7 +257,7 @@ function ProjectDetail() {
             Back to Projects
           </Link>
         </motion.div>
-      </div>
+      </PageWrapper>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ExternalLink, Star } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
+import SectionHeader from "./ui/SectionHeader";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
@@ -204,10 +205,12 @@ function Portfolio() {
           initial="hidden"
           animate="show"
         >
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            Projects
-          </h1>
-          <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+          <SectionHeader
+            as="h1"
+            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            underlineClassName="mt-3"
+            title="Projects"
+          />
         </motion.div>
 
         {/* Filter tabs */}
