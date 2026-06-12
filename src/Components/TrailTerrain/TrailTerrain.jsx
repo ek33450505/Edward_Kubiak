@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { useReducedMotion } from "motion/react";
 import { useFrameloopWhenVisible } from "../../hooks/useFrameloopWhenVisible";
-import { CAMERA, SCENE, PALETTE } from "./constants";
+import { CAMERA, SCENE, PALETTE, BLOOM } from "./constants";
 import SkyDome from "./SkyDome";
 import TerrainMesh from "./Terrain";
 import River from "./River";
@@ -76,6 +77,14 @@ function TrailScene() {
 //   - IntersectionObserver on container → frameloop "demand"/"always"
 //   - aria-hidden, pointer-events-none
 //   - Canvas dpr=[1,1.5], antialias:false, alpha:false
+//   - EffectComposer (Unit 10): selective bloom + vignette
+//       · multisampling=0 (antialias already false; skips redundant MSAA buffers;
+//         @react-three/postprocessing defaults to 8 — must be explicit)
+//       · luminanceThreshold=1.0 (selectivity contract — only toneMapped:false HDR
+//         emitters can exceed 1.0 in the composer's HalfFloat buffer; lowering this
+//         would bloom the entire tone-mapped scene)
+//       · frameloop="demand" compatible — composer renders via priority useFrame
+//         (R3F internals); off-screen demand-mode pause still works unchanged
 //
 // alpha:false rationale (changed from alpha:true in Unit 2):
 //   SkyDome makes the canvas fully opaque at runtime — a transparent
@@ -85,6 +94,13 @@ function TrailScene() {
 //   page background. Opaque canvas also skips page compositing overhead.
 //   Container CSS gradient (SCENE.BACKGROUND_GRADIENT) stays as the
 //   Suspense/loading fallback and is hidden by the canvas once it paints.
+//
+// EffectComposer placement (Unit 10):
+//   Placed AFTER <TrailScene /> and OUTSIDE any Suspense. Post-processing has
+//   no async dependencies — it must be active from the first rendered frame so
+//   the bloom and vignette are present the instant scene meshes pop in from
+//   Suspense. If it were inside Suspense, any async child stall would delay FX
+//   activation and produce an unvignetted flash on first paint.
 //
 // Hook ordering: ALL hooks called unconditionally (Rules of Hooks).
 // The reducedMotion bail-out is a render-return, not an early hook skip.
@@ -113,6 +129,21 @@ export default function TrailTerrain() {
         style={{ pointerEvents: "none" }}
       >
         <TrailScene />
+        {/* EffectComposer: outside Suspense — no async deps; must be active
+            from the first rendered frame so bloom/vignette are present the
+            instant TrailScene meshes pop in. See header comment for full
+            rationale and the luminanceThreshold=1.0 selectivity contract. */}
+        <EffectComposer multisampling={BLOOM.MULTISAMPLING}>
+          <Bloom
+            mipmapBlur
+            intensity={BLOOM.INTENSITY}
+            luminanceThreshold={BLOOM.LUMINANCE_THRESHOLD}
+            luminanceSmoothing={BLOOM.LUMINANCE_SMOOTHING}
+            radius={BLOOM.RADIUS}
+            levels={BLOOM.LEVELS}
+          />
+          <Vignette offset={BLOOM.VIGNETTE_OFFSET} darkness={BLOOM.VIGNETTE_DARKNESS} />
+        </EffectComposer>
       </Canvas>
     </div>
   );

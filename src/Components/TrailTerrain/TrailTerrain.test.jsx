@@ -734,6 +734,129 @@ describe("constants.js — HEADLAMP section", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Test suite 13 — BLOOM constants contract (Unit 10)
+//
+// LUMINANCE_THRESHOLD >= 1.0 is the selectivity contract for the entire
+// HDR selective-bloom system. Lowering it below 1.0 would allow tone-mapped
+// scene pixels (terrain, trees, sky, mist — all LDR after ACESFilmic) to
+// enter the bloom pass, blooming the whole scene instead of only the
+// toneMapped:false HDR emitters. This assertion is intentionally strict.
+// ---------------------------------------------------------------------------
+describe("constants.js — BLOOM section", () => {
+  it("exports all 8 required BLOOM keys", async () => {
+    const { BLOOM } = await import("./constants");
+    const requiredKeys = [
+      "MULTISAMPLING",
+      "INTENSITY",
+      "LUMINANCE_THRESHOLD",
+      "LUMINANCE_SMOOTHING",
+      "RADIUS",
+      "LEVELS",
+      "VIGNETTE_OFFSET",
+      "VIGNETTE_DARKNESS",
+    ];
+    for (const key of requiredKeys) {
+      expect(BLOOM).toHaveProperty(key);
+    }
+  });
+
+  it("BLOOM.LUMINANCE_THRESHOLD >= 1.0 (THE selectivity contract — must not be lowered without reconsidering the full material table)", async () => {
+    // This is not a style preference — it is the architectural guarantee that
+    // tone-mapped LDR materials (terrain, trees, sky dome, mist) can never bloom.
+    // Only toneMapped:false HDR emitters (fireflies, river glints, route line,
+    // headlamp) push color channels above 1.0 and pass this gate.
+    const { BLOOM } = await import("./constants");
+    expect(BLOOM.LUMINANCE_THRESHOLD).toBeGreaterThanOrEqual(1.0);
+  });
+
+  it("BLOOM.MULTISAMPLING === 0 (Canvas antialias already false; MSAA buffers inside composer are redundant)", async () => {
+    // @react-three/postprocessing defaults to multisampling=8; must be explicitly
+    // 0 to override. Leaving it at 8 wastes GPU memory for a redundant MSAA pass
+    // when the underlying WebGLRenderer already has antialias:false.
+    const { BLOOM } = await import("./constants");
+    expect(BLOOM.MULTISAMPLING).toBe(0);
+  });
+
+  it("BLOOM.LEVELS is in [3, 8] (mip-chain depth — too low collapses bloom radius, too high wastes GPU)", async () => {
+    const { BLOOM } = await import("./constants");
+    expect(BLOOM.LEVELS).toBeGreaterThanOrEqual(3);
+    expect(BLOOM.LEVELS).toBeLessThanOrEqual(8);
+  });
+
+  it("BLOOM.INTENSITY is in (0, 3) (positive bloom strength; >3 would overbloom the scene)", async () => {
+    const { BLOOM } = await import("./constants");
+    expect(BLOOM.INTENSITY).toBeGreaterThan(0);
+    expect(BLOOM.INTENSITY).toBeLessThan(3);
+  });
+
+  it("BLOOM.VIGNETTE_OFFSET is in (0, 1) (valid inner-edge fraction)", async () => {
+    const { BLOOM } = await import("./constants");
+    expect(BLOOM.VIGNETTE_OFFSET).toBeGreaterThan(0);
+    expect(BLOOM.VIGNETTE_OFFSET).toBeLessThan(1);
+  });
+
+  it("BLOOM.VIGNETTE_DARKNESS is in (0, 1) (partial darkening — never crushes corners to black)", async () => {
+    const { BLOOM } = await import("./constants");
+    expect(BLOOM.VIGNETTE_DARKNESS).toBeGreaterThan(0);
+    expect(BLOOM.VIGNETTE_DARKNESS).toBeLessThan(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite 14 — EffectComposer source-string contract (Unit 10)
+//
+// readFileSync pattern (established in suites 8c, 10, 12): component.toString()
+// may not include child component names after JSX compilation, but reading the
+// raw source file guarantees the identifiers are present in the authored code.
+// ---------------------------------------------------------------------------
+describe("TrailTerrain — EffectComposer wiring (Unit 10)", () => {
+  it("TrailTerrain.jsx source references EffectComposer", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./TrailTerrain.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("EffectComposer");
+  });
+
+  it("TrailTerrain.jsx source references Bloom", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./TrailTerrain.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("Bloom");
+  });
+
+  it("TrailTerrain.jsx source references Vignette", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./TrailTerrain.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("Vignette");
+  });
+
+  it("TrailTerrain.jsx source references multisampling (explicit 0 override is required by contract)", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./TrailTerrain.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("multisampling");
+  });
+
+  it("TrailTerrain.jsx source imports from @react-three/postprocessing", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./TrailTerrain.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("@react-three/postprocessing");
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Test suite 12 — Headlamp export contract (Unit 8)
 // ---------------------------------------------------------------------------
 describe("Headlamp — export contract", () => {

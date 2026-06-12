@@ -370,6 +370,52 @@ export const HEADLAMP = {
 };
 
 // ---------------------------------------------------------------------------
+// BLOOM — EffectComposer selective-bloom + vignette (see TrailTerrain.jsx Unit 10)
+//
+// Selective-bloom recipe (pmndrs standard, documented here for future maintainers):
+//   1. Scene renderer uses default ACESFilmic tone mapping.
+//   2. All standard tone-mapped materials (terrain, trees, mist, sky dome) produce
+//      pixel values < 1.0 after tone mapping — they can NEVER trigger bloom.
+//   3. Every intentional emitter sets `toneMapped={false}` and pushes its color
+//      channel value above 1.0 (HDR emitters: firefly HDR_PEAK ×2.4, river glints
+//      ×2.6, route line ACCENT ×1.35, headlamp sprite ×3.2).
+//   4. LUMINANCE_THRESHOLD=1.0 is THE selectivity gate: only tone-mapped=false HDR
+//      emitters pass it. Lowering this threshold would begin blooming the entire
+//      tone-mapped scene — do NOT lower it without reconsidering the full material
+//      table in the plan.
+//
+// MULTISAMPLING=0 rationale:
+//   antialias is already false on the Canvas WebGLRenderer — adding MSAA buffers
+//   inside the composer would be redundant and waste GPU memory. Default in
+//   @react-three/postprocessing is 8; must be explicit 0 to override.
+//
+// LEVELS=6 rationale:
+//   postprocessing Bloom default is 8 mip levels. Capping at 6 reduces the mip
+//   chain cost while preserving visible bloom radius. Fallback lever: reduce to 5.
+//
+// frameloop="demand" compatibility:
+//   The EffectComposer renders inside a priority useFrame (R3F internals), so it
+//   respects demand-mode frame scheduling and pauses when the canvas is off-screen
+//   — no extra wiring required.
+//
+// No ToneMapping effect added:
+//   Scene materials tone-map in-shader via the renderer's default ACES mapping.
+//   HDR emitters bypass via toneMapped:false. The composer's HalfFloat buffer
+//   (default) preserves the HDR values for the Bloom pass, then outputs LDR to
+//   screen. Adding a ToneMapping effect would double-apply ACESFilmic to LDR pixels.
+// ---------------------------------------------------------------------------
+export const BLOOM = {
+  MULTISAMPLING: 0,            // override default=8; antialias already off on Canvas
+  INTENSITY: 0.85,             // overall bloom strength — fallback: reduce toward 0.5
+  LUMINANCE_THRESHOLD: 1.0,    // THE selectivity contract — only toneMapped=false HDR emitters bloom
+  LUMINANCE_SMOOTHING: 0.15,   // soft knee width around threshold (avoids hard cutoff flicker)
+  RADIUS: 0.75,                // bloom spread radius (0=tight, 1=very wide)
+  LEVELS: 6,                   // mip-chain depth (default=8; 6 caps cost, preserves visual radius)
+  VIGNETTE_OFFSET: 0.28,       // inner edge of vignette darkening (0=center, 1=full frame)
+  VIGNETTE_DARKNESS: 0.55,     // max darkness at corners (0=no vignette, 1=full black)
+};
+
+// ---------------------------------------------------------------------------
 // SKY — SkyDome shader parameters (see SkyDome.jsx)
 //
 // SCENE.BACKGROUND_GRADIENT is the loading-state fallback: the container CSS
