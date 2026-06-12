@@ -28,7 +28,7 @@ function TalkCard({ talk, index }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="font-display text-[10px] tracking-wider uppercase text-slate-500">
+            <span className="font-display text-[10px] tracking-wider uppercase text-slate-400">
               {config.label}
             </span>
             {talk.event && (
@@ -146,7 +146,7 @@ const Talks = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-8 p-6 rounded-xl border border-slate-800/40 bg-slate-900/20 text-center"
         >
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-400">
             More coming soon &mdash;{" "}
             <a
               href="https://dev.to/edwardkubiak"

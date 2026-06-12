@@ -84,7 +84,7 @@ function NavBar() {
             title="Open command palette"
             className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           >
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-700 text-[10px] font-display tracking-wider text-slate-500 hover:border-amber-400/50 hover:text-amber-400 transition-all">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-700 text-[10px] font-display tracking-wider text-slate-400 hover:border-amber-400/50 hover:text-amber-400 transition-all">
               ⌘K
             </span>
           </button>
@@ -154,7 +154,7 @@ function NavBar() {
                 onClick={() => { setOpen(false); toggle(); }}
                 className="flex items-center gap-2 py-3 text-slate-400 hover:text-amber-400 font-display text-sm tracking-widest uppercase transition-colors border-b border-slate-800/40 text-left"
               >
-                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-slate-700 text-[10px] text-slate-500">⌘K</span>
+                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-slate-700 text-[10px] text-slate-400">⌘K</span>
               </button>
               <a
                 href="https://github.com/ek33450505"
@@ -250,7 +250,7 @@ function App() {
 
           {/* Footer */}
           <footer className="border-t border-slate-800/60 py-8 px-6">
-            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-sm">
+            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-sm">
               <p className="font-display text-xs tracking-wider">
                 &copy; {new Date().getFullYear()} EDWARD KUBIAK
               </p>

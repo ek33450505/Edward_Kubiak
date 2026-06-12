@@ -227,7 +227,7 @@ const About = () => {
             className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
             <div className="text-center">
-              <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-2">
+              <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-2">
                 Get in Touch
               </h2>
               <p className="text-sm text-slate-400 mb-6">

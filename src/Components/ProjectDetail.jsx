@@ -190,7 +190,7 @@ function ProjectDetail() {
                     <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />
                   )}
                 </div>
-                <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
+                <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
                   {project.category}
                   {project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""}
                 </span>
@@ -232,7 +232,7 @@ function ProjectDetail() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
             About
           </h2>
           <p className="text-slate-300 leading-relaxed">{project.description}</p>
@@ -246,7 +246,7 @@ function ProjectDetail() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
               Tech Stack
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -270,7 +270,7 @@ function ProjectDetail() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
               Stats
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -294,7 +294,7 @@ function ProjectDetail() {
             transition={{ duration: 0.5, delay: 0.25 }}
             className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
               Links
             </h2>
             <div className="flex flex-wrap gap-3">

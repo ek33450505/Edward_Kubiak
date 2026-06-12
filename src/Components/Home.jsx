@@ -64,7 +64,7 @@ function ScrollCue() {
         <motion.a
           href="#core-competencies"
           aria-label="Scroll to core competencies"
-          className="mt-12 mx-auto block w-fit text-slate-500 hover:text-amber-400 transition-colors"
+          className="mt-12 mx-auto block w-fit text-slate-400 hover:text-amber-400 transition-colors"
           initial={{ opacity: 1 }}
           animate={
             shouldReduceMotion
@@ -96,7 +96,7 @@ function FeaturedWork() {
       <div className="mb-8">
         <h2
           id="featured-work-heading"
-          className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase"
+          className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase"
         >
           Featured Work
         </h2>
@@ -140,7 +140,7 @@ function FeaturedWork() {
                 {techChips.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2 py-0.5 rounded-full border border-slate-700/60 text-[10px] font-display tracking-wider text-slate-500"
+                    className="px-2 py-0.5 rounded-full border border-slate-700/60 text-[10px] font-display tracking-wider text-slate-400"
                   >
                     {tag}
                   </span>
@@ -160,7 +160,7 @@ function FeaturedWork() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Live demo of ${project.title} (opens in new tab)`}
-                    className="inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase text-slate-500 hover:text-slate-300 transition-colors"
+                    className="inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase text-slate-400 hover:text-slate-300 transition-colors"
                   >
                     Live demo
                     <ExternalLink size={10} aria-hidden="true" />
@@ -175,7 +175,7 @@ function FeaturedWork() {
       <div className="mt-6 text-right">
         <Link
           to="/portfolio"
-          className="inline-flex items-center gap-1 font-display text-xs tracking-wider uppercase text-slate-500 hover:text-amber-400 transition-colors"
+          className="inline-flex items-center gap-1 font-display text-xs tracking-wider uppercase text-slate-400 hover:text-amber-400 transition-colors"
         >
           See all projects →
         </Link>
@@ -299,7 +299,7 @@ function CurrentlyBuilding() {
       <div className="mb-6 flex items-center gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h2 id="currently-building-heading" className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
+            <h2 id="currently-building-heading" className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase">
               Currently Building
             </h2>
             {!loading && !showFallback && (
@@ -489,7 +489,7 @@ function RecentWriting() {
       aria-labelledby="recent-writing-heading"
     >
       <div className="mb-6">
-        <h2 id="recent-writing-heading" className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
+        <h2 id="recent-writing-heading" className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase">
           Recent Writing
         </h2>
         <div className="mt-2 w-16 h-0.5 bg-amber-400/60" />
@@ -513,7 +513,7 @@ function RecentWriting() {
                 {article.title}
               </p>
               {article.description && (
-                <p className="text-xs text-slate-500 leading-snug mt-1 truncate">
+                <p className="text-xs text-slate-400 leading-snug mt-1 truncate">
                   {article.description}
                 </p>
               )}
@@ -546,7 +546,7 @@ function SupportMyWork() {
       <div className="mb-6">
         <h2
           id="support-heading"
-          className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase"
+          className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase"
         >
           Support My Work
         </h2>
@@ -584,7 +584,7 @@ function SupportMyWork() {
               href="https://github.com/sponsors/ek33450505"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[11px] font-display tracking-wider uppercase text-slate-500 hover:text-amber-400 transition-colors"
+              className="inline-flex items-center gap-1 text-[11px] font-display tracking-wider uppercase text-slate-400 hover:text-amber-400 transition-colors"
               aria-label="Open GitHub Sponsors page in a new tab"
             >
               View tiers
@@ -730,7 +730,7 @@ const Home = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Connect on LinkedIn (opens in new tab)"
-                className="text-xs text-slate-500 hover:text-sky-400 font-display tracking-wider transition-colors"
+                className="text-xs text-slate-400 hover:text-sky-400 font-display tracking-wider transition-colors"
               >
                 LinkedIn →
               </a>
@@ -772,7 +772,7 @@ const Home = () => {
                       EK
                     </motion.p>
                     <div className="mt-2 w-12 h-0.5 bg-amber-400/40 mx-auto" />
-                    <p className="mt-2 font-display text-[10px] tracking-[0.3em] text-slate-500 uppercase">
+                    <p className="mt-2 font-display text-[10px] tracking-[0.3em] text-slate-400 uppercase">
                       Since 2022
                     </p>
                   </div>
@@ -792,7 +792,7 @@ const Home = () => {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <h2 id="core-competencies-heading" className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
+          <h2 id="core-competencies-heading" className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase">
             Core Competencies
           </h2>
           <div className="mt-2 w-16 h-0.5 bg-amber-400/60" />

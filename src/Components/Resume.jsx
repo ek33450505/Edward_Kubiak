@@ -155,7 +155,7 @@ const printStyles = `
     }
     #resume-print .text-amber-400, #resume-print .text-sky-400,
     #resume-print .text-emerald-400, #resume-print .text-rose-400,
-    #resume-print .text-slate-400, #resume-print .text-slate-500 {
+    #resume-print .text-slate-400 {
       color: #475569 !important;
     }
     #resume-print .bg-amber-400\\/10, #resume-print .bg-sky-400\\/10,
@@ -252,7 +252,7 @@ const Resume = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-10 p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-3">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-3">
             Summary
           </h2>
           <p className="text-slate-300 leading-relaxed">
@@ -268,7 +268,7 @@ const Resume = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-3">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-3">
             Skills
           </h2>
           <div className="grid sm:grid-cols-2 gap-3">
@@ -309,7 +309,7 @@ const Resume = () => {
           transition={{ duration: 0.5 }}
           className="mt-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
             Experience
           </h2>
           {experience.map((job) => (
@@ -326,7 +326,7 @@ const Resume = () => {
                     {job.company} &mdash; {job.location}
                   </p>
                 </div>
-                <span className="font-display text-xs tracking-wider text-slate-500 shrink-0">
+                <span className="font-display text-xs tracking-wider text-slate-400 shrink-0">
                   {job.period}
                 </span>
               </div>
@@ -357,7 +357,7 @@ const Resume = () => {
           transition={{ duration: 0.5 }}
           className="mt-8 mb-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
             Education
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -370,7 +370,7 @@ const Resume = () => {
                   {edu.degree}
                 </h3>
                 <p className="text-slate-400 text-sm mt-1">{edu.institution}</p>
-                <p className="font-display text-xs tracking-wider text-slate-500 mt-2">
+                <p className="font-display text-xs tracking-wider text-slate-400 mt-2">
                   {edu.period}
                 </p>
               </div>

@@ -21,7 +21,7 @@ function UltraMap() {
 
   return (
     <div className="mt-4">
-      <p className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase mb-2">
+      <p className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase mb-2">
         Races
       </p>
       <svg
@@ -57,11 +57,11 @@ function UltraMap() {
       <div className="flex items-center gap-4 mt-2">
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 rounded-full bg-amber-400" />
-          <span className="font-display text-[9px] tracking-wider text-slate-500 uppercase">Finished</span>
+          <span className="font-display text-[9px] tracking-wider text-slate-400 uppercase">Finished</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-slate-500" />
-          <span className="font-display text-[9px] tracking-wider text-slate-500 uppercase">Planned 2026</span>
+          <div className="w-2 h-2 rounded-full bg-slate-400" />
+          <span className="font-display text-[9px] tracking-wider text-slate-400 uppercase">Planned 2026</span>
         </div>
       </div>
     </div>

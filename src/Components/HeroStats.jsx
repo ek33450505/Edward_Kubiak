@@ -80,7 +80,7 @@ function HeroStats() {
             <span className="font-display text-sm font-bold text-amber-400">
               {totalStars.toLocaleString()}
             </span>
-            <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
+            <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
               Stars
             </span>
           </div>
@@ -95,7 +95,7 @@ function HeroStats() {
               <span className="font-display text-sm font-bold text-amber-400">
                 {value}
               </span>
-              <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
+              <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
                 {label}
               </span>
             </div>

@@ -188,7 +188,7 @@ function ProjectCard({ project }) {
                     <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />
                   )}
                 </div>
-                <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
+                <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
                   {project.category}{project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""}
                 </span>
               </div>
@@ -361,7 +361,7 @@ function Portfolio() {
             animate="show"
           >
             {filtered.length === 0 && (
-              <div className="col-span-2 py-20 text-center text-slate-500 font-display text-sm tracking-wider">
+              <div className="col-span-2 py-20 text-center text-slate-400 font-display text-sm tracking-wider">
                 No projects in this category yet.
               </div>
             )}
