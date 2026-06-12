@@ -18,12 +18,12 @@ export default function CTASection() {
         <SectionHeader id="support-heading" title="Support My Work" />
       </div>
 
-      <div className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-amber-400/30 transition-all duration-300">
+      <div className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-accent-400/30 transition-all duration-300">
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           <div className="shrink-0">
             <Heart
               size={28}
-              className="text-amber-400"
+              className="text-accent-400"
               aria-hidden="true"
             />
           </div>
@@ -49,7 +49,7 @@ export default function CTASection() {
               href="https://github.com/sponsors/ek33450505"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[11px] font-display tracking-wider uppercase text-slate-400 hover:text-amber-400 transition-colors"
+              className="inline-flex items-center gap-1 text-[11px] font-display tracking-wider uppercase text-slate-400 hover:text-accent-400 transition-colors"
               aria-label="Open GitHub Sponsors page in a new tab"
             >
               View tiers

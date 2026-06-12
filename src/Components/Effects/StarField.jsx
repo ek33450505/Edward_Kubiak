@@ -88,7 +88,7 @@ function GalaxyCore() {
         speed={0.5}
       />
 
-      {/* Amber nebula — warm glow, positioned off-center left */}
+      {/* Warm nebula glow, positioned off-center left */}
       <group position={[-2, 0.5, -3]}>
         <NebulaCloud
           count={250}

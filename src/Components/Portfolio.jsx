@@ -23,8 +23,8 @@ function StarBadge({ owner, repo }) {
   const { stars, loading } = useGitHubStars(owner, repo);
   if (loading || stars === null) return null;
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">
-      <Star size={10} aria-hidden="true" className="fill-amber-400" />
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-accent-400/10 text-accent-400 border border-accent-400/20">
+      <Star size={10} aria-hidden="true" className="fill-accent-400" />
       {stars}
     </span>
   );
@@ -49,7 +49,7 @@ function ProjectCard({ project }) {
         <CardSpotlight
           className={`p-6 rounded-xl border bg-slate-900/30 transition-all duration-300 ${
             project.featured
-              ? "border-amber-400/25 hover:border-amber-400/50 shadow-[0_0_30px_rgba(251,191,36,0.04)]"
+              ? "border-accent-400/25 hover:border-accent-400/50 shadow-[0_0_30px_rgba(251,191,36,0.04)]"
               : "border-slate-800/60 hover:border-slate-700"
           }`}
           spotlightColor={colors.spotlight}
@@ -64,12 +64,12 @@ function ProjectCard({ project }) {
                 <div className="flex items-center gap-2 flex-wrap">
                   <Link
                     to={`/projects/${project.slug}`}
-                    className="font-display text-lg font-bold text-slate-100 hover:text-amber-400 transition-colors"
+                    className="font-display text-lg font-bold text-slate-100 hover:text-accent-400 transition-colors"
                   >
                     {project.title}
                   </Link>
                   {project.featured && (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-amber-400/15 text-amber-400 border border-amber-400/20">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-accent-400/15 text-accent-400 border border-accent-400/20">
                       Featured
                     </span>
                   )}
@@ -95,7 +95,7 @@ function ProjectCard({ project }) {
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-accent-400 transition-colors"
                   aria-label="View source code on GitHub (opens in new tab)"
                 >
                   <GithubIcon size={16} aria-hidden="true" />
@@ -106,7 +106,7 @@ function ProjectCard({ project }) {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 text-slate-400 hover:text-amber-400 transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-accent-400 transition-colors"
                   aria-label="View live site (opens in new tab)"
                 >
                   <ExternalLink size={16} aria-hidden="true" />
@@ -232,9 +232,9 @@ function Portfolio() {
               aria-selected={filter === key}
               aria-controls="projects-panel"
               tabIndex={filter === key ? 0 : -1}
-              className={`px-4 py-2 font-display text-xs tracking-widest uppercase rounded-lg border transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 ${
+              className={`px-4 py-2 font-display text-xs tracking-widest uppercase rounded-lg border transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60 ${
                 filter === key
-                  ? "bg-amber-400 text-slate-950 border-amber-400 font-bold"
+                  ? "bg-accent-400 text-slate-950 border-accent-400 font-bold"
                   : "border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200"
               }`}
             >

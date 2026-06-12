@@ -41,7 +41,7 @@ export default function FeaturedWork() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className="group flex flex-col p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-amber-400/30 hover:bg-slate-800/40 hover:shadow-[0_0_30px_rgba(0,255,194,0.06)] transition-all duration-300"
+              className="group flex flex-col p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-accent-400/30 hover:bg-slate-800/40 hover:shadow-[0_0_30px_rgba(0,255,194,0.06)] transition-all duration-300"
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className={`p-2 rounded-lg ${iconColors} shrink-0`}>
@@ -95,7 +95,7 @@ export default function FeaturedWork() {
       <div className="mt-6 text-right">
         <Link
           to="/portfolio"
-          className="inline-flex items-center gap-1 font-display text-xs tracking-wider uppercase text-slate-400 hover:text-amber-400 transition-colors"
+          className="inline-flex items-center gap-1 font-display text-xs tracking-wider uppercase text-slate-400 hover:text-accent-400 transition-colors"
         >
           See all projects →
         </Link>

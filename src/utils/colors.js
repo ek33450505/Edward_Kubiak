@@ -11,13 +11,13 @@
  *   border    — border utility class (ProjectDetail detail panels)
  */
 export const colorMap = {
-  amber: {
-    bg: "bg-amber-400/10",
-    text: "text-amber-400",
-    badge: "bg-amber-400/10 text-amber-400",
-    stat: "bg-amber-400/8 text-amber-400/70 border-amber-400/15",
+  accent: {
+    bg: "bg-accent-400/10",
+    text: "text-accent-400",
+    badge: "bg-accent-400/10 text-accent-400",
+    stat: "bg-accent-400/8 text-accent-400/70 border-accent-400/15",
     spotlight: "rgba(0, 255, 194, 0.08)",
-    border: "border-amber-400/30",
+    border: "border-accent-400/30",
   },
   teal: {
     bg: "bg-teal-400/10",
@@ -67,12 +67,12 @@ export const colorMap = {
  * background are applied to the same element and only the text class is also
  * needed independently.
  *
- * Falls back to amber when the color key is unknown.
+ * Falls back to accent when the color key is unknown.
  *
  * @param {string} color - one of the colorMap keys
  * @returns {string} e.g. "text-violet-400 bg-violet-400/10"
  */
 export function getColorClasses(color) {
-  const c = colorMap[color] || colorMap.amber;
+  const c = colorMap[color] || colorMap.accent;
   return `${c.text} ${c.bg}`;
 }

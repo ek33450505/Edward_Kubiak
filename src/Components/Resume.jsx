@@ -83,14 +83,14 @@ const skills = {
 };
 
 const skillColors = {
-  Frontend: "bg-amber-400/10 text-amber-400",
+  Frontend: "bg-accent-400/10 text-accent-400",
   Backend: "bg-sky-400/10 text-sky-400",
   Data: "bg-emerald-400/10 text-emerald-400",
   "AI Infrastructure & Developer Tools": "bg-rose-400/10 text-rose-400",
 };
 
 const labelColors = {
-  Frontend: "text-amber-400",
+  Frontend: "text-accent-400",
   Backend: "text-sky-400",
   Data: "text-emerald-400",
   "AI Infrastructure & Developer Tools": "text-rose-400",
@@ -156,12 +156,12 @@ const printStyles = `
     #resume-print p, #resume-print li, #resume-print span {
       color: #334155 !important;
     }
-    #resume-print .text-amber-400, #resume-print .text-sky-400,
+    #resume-print .text-accent-400, #resume-print .text-sky-400,
     #resume-print .text-emerald-400, #resume-print .text-rose-400,
     #resume-print .text-slate-400 {
       color: #475569 !important;
     }
-    #resume-print .bg-amber-400\\/10, #resume-print .bg-sky-400\\/10,
+    #resume-print .bg-accent-400\\/10, #resume-print .bg-sky-400\\/10,
     #resume-print .bg-emerald-400\\/10, #resume-print .bg-rose-400\\/10 {
       background-color: #f1f5f9 !important;
     }
@@ -189,12 +189,12 @@ const Resume = () => {
               as="h1"
               headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
               underlineClassName="mt-3"
-              title={<>Edward <span className="text-amber-400">Kubiak</span></>}
+              title={<>Edward <span className="text-accent-400">Kubiak</span></>}
             />
             <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-400">
               <a
                 href="mailto:edward.kubiak.dev@gmail.com"
-                className="inline-flex items-center gap-1.5 hover:text-amber-400 transition-colors"
+                className="inline-flex items-center gap-1.5 hover:text-accent-400 transition-colors"
               >
                 <Mail size={14} aria-hidden="true" /> edward.kubiak.dev@gmail.com
               </a>
@@ -205,7 +205,7 @@ const Resume = () => {
                 href="https://www.linkedin.com/in/edward-kubiak/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 hover:text-amber-400 transition-colors"
+                className="inline-flex items-center gap-1.5 hover:text-accent-400 transition-colors"
                 aria-label="LinkedIn profile (opens in new tab)"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -218,7 +218,7 @@ const Resume = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="DEV.to profile (opens in new tab)"
-                className="inline-flex items-center gap-1.5 hover:text-amber-400 transition-colors"
+                className="inline-flex items-center gap-1.5 hover:text-accent-400 transition-colors"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .67-.08.84-.23.18-.16.27-.45.27-.85v-2.2c0-.4-.09-.69-.27-.85zm13.37-6.41H3.21C1.99 3.64 1 4.63 1 5.85v12.3c0 1.22.99 2.21 2.21 2.21h17.58c1.22 0 2.21-.99 2.21-2.21V5.85c0-1.22-.99-2.21-2.21-2.21zM8.85 14.4c-.37.38-.85.56-1.43.56H5.18V9.04h2.24c.58 0 1.06.19 1.43.56.37.38.56.85.56 1.43v1.94c0 .58-.19 1.06-.56 1.43zm4.75-4.25H11.5v1.64h1.28v1.11H11.5v1.64h2.1v1.11H11c-.65 0-1.11-.47-1.11-1.11v-4.16c0-.65.47-1.11 1.11-1.11h2.6v1.11zm5.04 4.73c-.4.6-.97.85-1.64.54-.52-.23-.82-.73-.97-1.5l-.63-3.12-.63 3.12c-.15.77-.45 1.27-.97 1.5-.67.31-1.24.06-1.64-.54l-1.78-5.73h1.23l1.26 4.57 1.26-4.57h.7l1.26 4.57 1.26-4.57h1.23l-1.78 5.73z"/>
@@ -232,7 +232,7 @@ const Resume = () => {
               href="/Edward_Kubiak_Resume.pdf"
               download="Edward_Kubiak_Resume.pdf"
               aria-label="Download resume PDF"
-              className="inline-flex items-center gap-2 px-4 py-2 border border-slate-700 text-slate-400 font-display text-xs tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex items-center gap-2 px-4 py-2 border border-slate-700 text-slate-400 font-display text-xs tracking-wider uppercase rounded-lg hover:border-accent-400 hover:text-accent-400 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             >
               <Download size={14} aria-hidden="true" />
               Download PDF
@@ -241,7 +241,7 @@ const Resume = () => {
               href="/CAST_Portfolio_OnePager.pdf"
               download="CAST_Portfolio_OnePager.pdf"
               aria-label="Download CAST one-pager PDF"
-              className="inline-flex items-center gap-1.5 px-2 py-1.5 text-xs text-slate-400 hover:text-amber-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              className="inline-flex items-center gap-1.5 px-2 py-1.5 text-xs text-slate-400 hover:text-accent-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             >
               <FileText size={12} aria-hidden="true" />
               CAST one-pager
@@ -330,7 +330,7 @@ const Resume = () => {
                   <h3 className="font-display text-lg font-bold text-slate-100">
                     {job.role}
                   </h3>
-                  <p className="text-amber-400 text-sm font-display">
+                  <p className="text-accent-400 text-sm font-display">
                     {job.company} &mdash; {job.location}
                   </p>
                 </div>
@@ -348,7 +348,7 @@ const Resume = () => {
                     transition={{ duration: 0.3, delay: i * 0.05 }}
                     className="text-sm text-slate-300 leading-relaxed pl-4 relative"
                   >
-                    <span aria-hidden="true" className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-amber-400/40" />
+                    <span aria-hidden="true" className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-accent-400/40" />
                     {h}
                   </motion.li>
                 ))}

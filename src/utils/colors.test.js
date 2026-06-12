@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { colorMap, getColorClasses } from "./colors";
 
 describe("colorMap", () => {
-  const knownColors = ["amber", "teal", "violet", "sky", "emerald", "rose"];
+  const knownColors = ["accent", "teal", "violet", "sky", "emerald", "rose"];
 
   it("exports an entry for every expected color key", () => {
     for (const color of knownColors) {
@@ -23,8 +23,8 @@ describe("colorMap", () => {
     }
   );
 
-  it("amber text class is text-amber-400", () => {
-    expect(colorMap.amber.text).toBe("text-amber-400");
+  it("accent text class is text-accent-400", () => {
+    expect(colorMap.accent.text).toBe("text-accent-400");
   });
 
   it("violet bg class is bg-violet-400/10", () => {
@@ -59,12 +59,12 @@ describe("getColorClasses", () => {
     }
   });
 
-  it("falls back to amber classes for an unknown color key", () => {
-    expect(getColorClasses("unknown-color")).toBe("text-amber-400 bg-amber-400/10");
+  it("falls back to accent classes for an unknown color key", () => {
+    expect(getColorClasses("unknown-color")).toBe("text-accent-400 bg-accent-400/10");
   });
 
-  it("falls back to amber classes when called with undefined", () => {
-    expect(getColorClasses(undefined)).toBe("text-amber-400 bg-amber-400/10");
+  it("falls back to accent classes when called with undefined", () => {
+    expect(getColorClasses(undefined)).toBe("text-accent-400 bg-accent-400/10");
   });
 
   it("returns a string with exactly two space-separated Tailwind classes", () => {

@@ -63,8 +63,8 @@ function CastStats() {
               transition={{ duration: 0.3 }}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-800/60 bg-slate-900/30"
             >
-              <Icon size={14} className="text-amber-400 shrink-0" aria-hidden="true" />
-              <span className="font-display text-base font-bold text-amber-400">
+              <Icon size={14} className="text-accent-400 shrink-0" aria-hidden="true" />
+              <span className="font-display text-base font-bold text-accent-400">
                 {value}
               </span>
               <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">

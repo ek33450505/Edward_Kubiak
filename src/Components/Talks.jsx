@@ -6,7 +6,7 @@ import SectionHeader from "./ui/SectionHeader";
 import PageWrapper from "./ui/PageWrapper";
 
 const typeConfig = {
-  talk: { icon: Mic, label: "Talk", color: "text-amber-400 bg-amber-400/10" },
+  talk: { icon: Mic, label: "Talk", color: "text-accent-400 bg-accent-400/10" },
   podcast: { icon: Headphones, label: "Podcast", color: "text-sky-400 bg-sky-400/10" },
   article: { icon: FileText, label: "Article", color: "text-violet-400 bg-violet-400/10" },
   demo: { icon: Play, label: "Demo", color: "text-emerald-400 bg-emerald-400/10" },
@@ -24,7 +24,7 @@ function TalkCard({ talk, index }) {
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
-      className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-amber-400/30 hover:bg-slate-800/40 transition-all duration-300"
+      className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-accent-400/30 hover:bg-slate-800/40 transition-all duration-300"
     >
       <div className="flex items-start gap-4">
         <div className={`p-2 rounded-lg ${config.color} shrink-0 mt-0.5`}>
@@ -92,7 +92,7 @@ function TalkCard({ talk, index }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`View ${talk.title} (opens in new tab)`}
-              className="inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase text-amber-400 hover:text-amber-300 transition-colors"
+              className="inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase text-accent-400 hover:text-accent-300 transition-colors"
             >
               View
               <ExternalLink size={11} aria-hidden="true" />
@@ -118,7 +118,7 @@ const Talks = () => {
             as="h1"
             headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
             underlineClassName="mt-3"
-            title={<>Talks & <span className="text-amber-400">Writing</span></>}
+            title={<>Talks & <span className="text-accent-400">Writing</span></>}
           />
           <p className="mt-4 text-slate-400 leading-relaxed max-w-xl">
             Conference talks, podcast appearances, demos, and articles. More
@@ -127,7 +127,7 @@ const Talks = () => {
               href="https://dev.to/edwardkubiak"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-amber-400 hover:text-amber-300 underline underline-offset-4 decoration-amber-400/30 transition-colors"
+              className="text-accent-400 hover:text-accent-300 underline underline-offset-4 decoration-accent-400/30 transition-colors"
             >
               Dev.to
             </a>
@@ -159,7 +159,7 @@ const Talks = () => {
               href="https://dev.to/edwardkubiak"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-amber-400 hover:text-amber-300 transition-colors"
+              className="text-accent-400 hover:text-accent-300 transition-colors"
               aria-label="Check Dev.to for writing (opens in new tab)"
             >
               check Dev.to for writing

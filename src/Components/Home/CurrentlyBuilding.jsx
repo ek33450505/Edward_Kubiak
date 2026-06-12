@@ -140,7 +140,7 @@ export default function CurrentlyBuilding() {
             href="https://github.com/ek33450505"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-amber-400 transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-accent-400 transition-colors"
           >
             View my latest activity on GitHub
             <ExternalLink size={13} aria-hidden="true" />
@@ -163,7 +163,7 @@ export default function CurrentlyBuilding() {
               <GitCommit
                 size={14}
                 aria-hidden="true"
-                className="text-amber-400/60 shrink-0 mt-0.5"
+                className="text-accent-400/60 shrink-0 mt-0.5"
               />
               <div className="flex-1 min-w-0">
                 <a
@@ -174,7 +174,7 @@ export default function CurrentlyBuilding() {
                   }
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-display text-[11px] tracking-wider text-amber-400/80 hover:text-amber-400 transition-colors uppercase inline-flex items-center gap-1"
+                  className="font-display text-[11px] tracking-wider text-accent-400/80 hover:text-accent-400 transition-colors uppercase inline-flex items-center gap-1"
                 >
                   {event.repo}
                   {event.sha && (
@@ -219,7 +219,7 @@ export default function CurrentlyBuilding() {
                 <GitCommit
                   size={14}
                   aria-hidden="true"
-                  className="text-amber-400/60 shrink-0 mt-0.5"
+                  className="text-accent-400/60 shrink-0 mt-0.5"
                 />
                 <div className="flex-1 min-w-0">
                   <a
@@ -230,7 +230,7 @@ export default function CurrentlyBuilding() {
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-display text-[11px] tracking-wider text-amber-400/80 hover:text-amber-400 transition-colors uppercase inline-flex items-center gap-1"
+                    className="font-display text-[11px] tracking-wider text-accent-400/80 hover:text-accent-400 transition-colors uppercase inline-flex items-center gap-1"
                   >
                     {event.repo}
                     {event.sha && (

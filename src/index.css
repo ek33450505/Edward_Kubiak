@@ -8,9 +8,9 @@
   --color-slate-400: #94a3b8;
   --color-slate-300: #cbd5e1;
   --color-slate-100: #f1f5f9;
-  --color-amber-400: #00FFC2;
-  --color-amber-500: #00D9A3;
-  --color-amber-300: #33FFD1;
+  --color-accent-400: #00FFC2;
+  --color-accent-500: #00D9A3;
+  --color-accent-300: #33FFD1;
   --color-emerald-400: #34d399;
   --color-rose-400: #fb7185;
   --color-sky-400: #38bdf8;
@@ -30,12 +30,12 @@
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-amber-400);
+  background: var(--color-accent-400);
 }
 
 /* Selection color */
 ::selection {
-  background: var(--color-amber-400);
+  background: var(--color-accent-400);
   color: var(--color-slate-950);
 }
 
@@ -47,7 +47,7 @@ html {
 /* Global focus-visible ring — applies to all interactive elements */
 *:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--color-slate-950), 0 0 0 4px var(--color-amber-400);
+  box-shadow: 0 0 0 2px var(--color-slate-950), 0 0 0 4px var(--color-accent-400);
   border-radius: 4px;
 }
 
