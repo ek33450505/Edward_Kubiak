@@ -148,5 +148,43 @@ export const SCENE = {
   SUN_INTENSITY: 0.8,
   FILL_POSITION: [5, 3, 6],
   FILL_INTENSITY: 0.2,
+  // Container CSS gradient — stays as Suspense/loading fallback even when
+  // the SkyDome makes the canvas opaque at runtime (see SKY section below).
   BACKGROUND_GRADIENT: "linear-gradient(to top, #2a1800, #1a1020 50%, #0a0f1a)",
+};
+
+// ---------------------------------------------------------------------------
+// SKY — SkyDome shader parameters (see SkyDome.jsx)
+//
+// SCENE.BACKGROUND_GRADIENT is the loading-state fallback: the container CSS
+// gradient stays visible until the Canvas first paints; once the dome renders,
+// the opaque canvas (alpha:false) covers it completely.
+//
+// STAR_DENSITY kill-switch: set to 0 to produce zero stars at runtime.
+// The GLSL guard `uStarDensity > 0.0` enforces this explicitly even before
+// the threshold math (h > 1.0 is also impossible for fract values in [0,1)).
+// ---------------------------------------------------------------------------
+export const SKY = {
+  RADIUS: 60,            // sphere radius — well inside R3F default far=1000
+
+  // Dusk gradient colors (navy zenith → violet mid → ember horizon)
+  ZENITH: "#0a0f1a",     // deep navy — matches PALETTE.SLATE_950 at zenith
+  VIOLET: "#241433",     // warm violet — twilight mid-sky band
+  HORIZON: "#3b220a",    // dark amber — ember dusk at horizon
+
+  // Gradient transition stops on direction-y axis (world-up)
+  GRAD_Y0: -0.05,        // horizon band: below this → pure HORIZON color
+  GRAD_Y1: 0.18,         // mid-sky: HORIZON blends to VIOLET between Y0→Y1
+  GRAD_Y2: 0.55,         // zenith: VIOLET blends to ZENITH between Y1→Y2
+
+  // Azimuthal sun-glow (warm ember tint toward SCENE.SUN_POSITION direction)
+  SUN_GLOW_EXP: 3.0,     // falloff sharpness (higher = tighter cone)
+  SUN_GLOW_STRENGTH: 0.35, // peak glow intensity (added on top of gradient)
+
+  // Stars — whisper only; site retired astronomy theme.
+  // STAR_DENSITY 0 = kill-switch (set STAR_DENSITY: 0 to disable entirely).
+  STAR_DENSITY: 0.004,   // fraction of cells that show a star (0 disables)
+  STAR_INTENSITY: 0.3,   // max star brightness — never HDR, never blooms
+  STAR_MIN_Y: 0.35,      // only appear above violet band
+  STAR_CELL_SCALE: 90.0, // cell grid density (higher = more, smaller cells)
 };

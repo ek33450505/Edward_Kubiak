@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { useReducedMotion } from "motion/react";
 import { useFrameloopWhenVisible } from "../../hooks/useFrameloopWhenVisible";
 import { CAMERA, SCENE, PALETTE } from "./constants";
+import SkyDome from "./SkyDome";
 import TerrainMesh from "./Terrain";
 import River from "./River";
 import Trees from "./Trees";
@@ -17,6 +18,12 @@ import Fireflies from "./Fireflies";
 function TrailScene() {
   return (
     <>
+      {/* Pre-dome frame clear: slate background so any frame before the dome
+          paints clears to slate rather than black. Overridden by SkyDome at
+          runtime; container CSS gradient (SCENE.BACKGROUND_GRADIENT) handles
+          the Suspense loading fallback outside the canvas. */}
+      <color attach="background" args={[PALETTE.SLATE_950]} />
+
       {/* Exponential fog: thickens in the gorge depth */}
       <fogExp2 attach="fog" args={[PALETTE.FOG, SCENE.FOG_DENSITY]} />
 
@@ -34,6 +41,8 @@ function TrailScene() {
       />
 
       <Suspense fallback={null}>
+        {/* SkyDome first: renders at renderOrder=-1, behind all scene objects */}
+        <SkyDome />
         <TerrainMesh />
         <River />
         <Trees />
@@ -51,7 +60,16 @@ function TrailScene() {
 //   - useReducedMotion() bail → return null before mounting Canvas
 //   - IntersectionObserver on container → frameloop "demand"/"always"
 //   - aria-hidden, pointer-events-none
-//   - Canvas dpr=[1,1.5], antialias:false, alpha:true
+//   - Canvas dpr=[1,1.5], antialias:false, alpha:false
+//
+// alpha:false rationale (changed from alpha:true in Unit 2):
+//   SkyDome makes the canvas fully opaque at runtime — a transparent
+//   framebuffer is unnecessary. More importantly, a transparent FBO +
+//   EffectComposer (added in Unit 10) produces alpha-fringe artifacts on
+//   HDR-bloomed pixels where the compositor pre-multiplies alpha against the
+//   page background. Opaque canvas also skips page compositing overhead.
+//   Container CSS gradient (SCENE.BACKGROUND_GRADIENT) stays as the
+//   Suspense/loading fallback and is hidden by the canvas once it paints.
 //
 // Hook ordering: ALL hooks called unconditionally (Rules of Hooks).
 // The reducedMotion bail-out is a render-return, not an early hook skip.
@@ -75,7 +93,7 @@ export default function TrailTerrain() {
       <Canvas
         camera={{ position: CAMERA.POSITION, fov: CAMERA.FOV }}
         dpr={[1, 1.5]}
-        gl={{ antialias: false, alpha: true }}
+        gl={{ antialias: false, alpha: false }}
         frameloop={frameloop}
         style={{ pointerEvents: "none" }}
       >

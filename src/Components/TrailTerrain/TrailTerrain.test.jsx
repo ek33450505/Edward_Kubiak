@@ -112,11 +112,14 @@ describe("TrailTerrain — export contract", () => {
     expect(src).toContain("pointer-events-none");
   });
 
-  it("component source uses Canvas with dpr and alpha:true", async () => {
+  it("component source uses Canvas with dpr and alpha:false (dome+composer rationale)", async () => {
+    // alpha:false: SkyDome makes canvas opaque; transparent FBO + EffectComposer
+    // (Unit 10) causes alpha-fringe artifacts on bloomed pixels; opaque canvas
+    // skips page compositing. See TrailTerrain.jsx header comment for full rationale.
     const mod = await import("./TrailTerrain");
     const src = mod.default.toString();
     expect(src).toContain("dpr");
-    expect(src).toContain("alpha: true");
+    expect(src).toContain("alpha: false");
   });
 });
 
@@ -198,5 +201,85 @@ describe("useFrameloopWhenVisible hook", () => {
   it("is exported as a function from src/hooks/useFrameloopWhenVisible.js", async () => {
     const mod = await import("../../hooks/useFrameloopWhenVisible");
     expect(typeof mod.useFrameloopWhenVisible).toBe("function");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite 6 — SKY constants contract
+// ---------------------------------------------------------------------------
+describe("constants.js — SKY section", () => {
+  it("exports required SKY keys", async () => {
+    const { SKY } = await import("./constants");
+    const requiredKeys = [
+      "RADIUS", "ZENITH", "VIOLET", "HORIZON",
+      "GRAD_Y0", "GRAD_Y1", "GRAD_Y2",
+      "SUN_GLOW_EXP", "SUN_GLOW_STRENGTH",
+      "STAR_DENSITY", "STAR_INTENSITY", "STAR_MIN_Y", "STAR_CELL_SCALE",
+    ];
+    for (const key of requiredKeys) {
+      expect(SKY).toHaveProperty(key);
+    }
+  });
+
+  it("SKY color values are valid 6-digit hex strings", async () => {
+    const { SKY } = await import("./constants");
+    const hexRe = /^#[0-9a-fA-F]{6}$/;
+    expect(SKY.ZENITH).toMatch(hexRe);
+    expect(SKY.VIOLET).toMatch(hexRe);
+    expect(SKY.HORIZON).toMatch(hexRe);
+  });
+
+  it("SKY.STAR_DENSITY >= 0 (0 is the kill-switch; never negative)", async () => {
+    const { SKY } = await import("./constants");
+    expect(SKY.STAR_DENSITY).toBeGreaterThanOrEqual(0);
+  });
+
+  it("SKY.RADIUS is within 20–500 world units", async () => {
+    const { SKY } = await import("./constants");
+    expect(SKY.RADIUS).toBeGreaterThanOrEqual(20);
+    expect(SKY.RADIUS).toBeLessThanOrEqual(500);
+  });
+
+  it("gradient stops are strictly ascending: GRAD_Y0 < GRAD_Y1 < GRAD_Y2", async () => {
+    const { SKY } = await import("./constants");
+    expect(SKY.GRAD_Y0).toBeLessThan(SKY.GRAD_Y1);
+    expect(SKY.GRAD_Y1).toBeLessThan(SKY.GRAD_Y2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite 7 — SkyDome export contract
+// ---------------------------------------------------------------------------
+describe("SkyDome — export contract", () => {
+  it("default export is a function", async () => {
+    // SkyDome imports only from 'react' and 'three' — both node-importable.
+    // JSX is transpiled by Vitest; no WebGL context required for import.
+    const mod = await import("./SkyDome");
+    expect(typeof mod.default).toBe("function");
+  });
+
+  it("source references BackSide (interior face visible from inside sphere)", async () => {
+    const mod = await import("./SkyDome");
+    const src = mod.default.toString();
+    expect(src).toContain("BackSide");
+  });
+
+  it("source references renderOrder (ensures dome draws before scene objects)", async () => {
+    const mod = await import("./SkyDome");
+    const src = mod.default.toString();
+    expect(src).toContain("renderOrder");
+  });
+
+  it("source references depthWrite and fog: false (dome must not occlude or be fogged)", async () => {
+    const mod = await import("./SkyDome");
+    const src = mod.default.toString();
+    expect(src).toContain("depthWrite");
+    expect(src).toContain("fog: false");
+  });
+
+  it("source references frustumCulled={false} (camera inside sphere — always visible)", async () => {
+    const mod = await import("./SkyDome");
+    const src = mod.default.toString();
+    expect(src).toContain("frustumCulled");
   });
 });
