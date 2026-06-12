@@ -115,9 +115,9 @@ describe("TrailTerrain — export contract", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Test suite 3 — index.js re-export
+// Test suite 3 — direct export contract (index.js removed; barrel was dead)
 // ---------------------------------------------------------------------------
-describe("TrailTerrain — index.js re-export", () => {
+describe("TrailTerrain — direct export contract", () => {
   beforeEach(() => {
     vi.resetModules();
     vi.doMock("motion/react", () => ({ useReducedMotion: () => false }));
@@ -127,8 +127,8 @@ describe("TrailTerrain — index.js re-export", () => {
     vi.restoreAllMocks();
   });
 
-  it("index.js default export is a function named TrailTerrain", async () => {
-    const mod = await import("./index.js");
+  it("TrailTerrain.jsx default export is a function named TrailTerrain", async () => {
+    const mod = await import("./TrailTerrain");
     expect(typeof mod.default).toBe("function");
     expect(mod.default.name).toBe("TrailTerrain");
   });

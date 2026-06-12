@@ -7,7 +7,7 @@ import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
 import { fadeUp, staggerItem, slideInLeft } from "../../utils/motion";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
-const StarField = lazy(() => import("../Effects/StarField"));
+const TrailTerrain = lazy(() => import("../TrailTerrain/TrailTerrain"));
 
 function ScrollCue() {
   const shouldReduceMotion = useReducedMotion();
@@ -61,9 +61,9 @@ export default function HeroSection() {
 
   return (
     <>
-      {/* 3D Galactic starfield background — lazy-loaded */}
+      {/* 3D trail terrain background — lazy-loaded */}
       <Suspense fallback={null}>
-        <StarField />
+        <TrailTerrain />
       </Suspense>
 
       {/* Decorative grid lines */}
