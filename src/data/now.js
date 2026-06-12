@@ -1,7 +1,7 @@
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 
 const now = {
-  updated: "June 5, 2026",
+  updated: "June 12, 2026",
   sections: [
     {
       title: "Building",
@@ -23,8 +23,7 @@ const now = {
     {
       title: "Running",
       items: [
-        "Mohican 100 — May 23-24 2026. Race day just behind me.",
-        "Looking for my next fall 100-miler after Rim to River 2024 (planning a return in October 2026).",
+        "Rim to River 100 — October 24, 2026. Next race on the calendar.",
         "Current focus: back-to-back long runs, trail-specific vertical gain through Ohio singletrack.",
       ],
     },
