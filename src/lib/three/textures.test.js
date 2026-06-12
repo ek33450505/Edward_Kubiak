@@ -15,7 +15,7 @@
 
 import { describe, it, expect } from "vitest";
 import * as THREE from "three";
-import { createRadialGlowTexture, createNoiseTexture } from "./textures.js";
+import { createRadialGlowTexture, createNoiseTexture } from "./textures";
 
 // ---------------------------------------------------------------------------
 // createRadialGlowTexture

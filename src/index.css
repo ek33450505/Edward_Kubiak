@@ -8,6 +8,7 @@
   --color-slate-400: #94a3b8;
   --color-slate-300: #cbd5e1;
   --color-slate-100: #f1f5f9;
+  /* Accent palette — used by CelestialScene (nebula emitters, bloom) and UI components */
   --color-accent-400: #00FFC2;
   --color-accent-500: #00D9A3;
   --color-accent-300: #33FFD1;

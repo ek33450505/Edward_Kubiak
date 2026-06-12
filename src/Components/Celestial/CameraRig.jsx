@@ -1,5 +1,5 @@
 /**
- * CameraRig.jsx — Lissajous camera breath for the TrailTerrain art pass.
+ * CameraRig.jsx — Lissajous camera breath for the Celestial art scene.
  *
  * ENGINEERING NOTES:
  * ─────────────────────────────────────────────────────────────────────────────
@@ -11,7 +11,7 @@
  *    per-frame heap allocation.
  *
  * 2. Reduced-motion coverage:
- *    TrailTerrain returns null before mounting the Canvas when
+ *    CelestialScene returns the CSS fallback before mounting the Canvas when
  *    useReducedMotion() is true — this component never reaches useFrame in
  *    that case. No extra guard is needed here; the Canvas bail is the contract.
  *
@@ -31,7 +31,7 @@ import { CAMERA } from "./constants";
 
 // ---------------------------------------------------------------------------
 // CameraRig — renders null, pure useFrame side-effect component.
-// Placed inside TrailScene outside <Suspense> (no async deps).
+// Placed inside the scene outside <Suspense> (no async deps).
 // ---------------------------------------------------------------------------
 export default function CameraRig() {
   // Pre-allocate lookAt target — avoids per-frame Vector3 construction
@@ -52,7 +52,7 @@ export default function CameraRig() {
     );
 
     // Re-assert lookAt every frame: R3F only calls camera.lookAt once at
-    // creation — re-asserting every frame preserves gorge framing while
+    // creation — re-asserting every frame preserves scene framing while
     // the position drifts through the Lissajous path.
     camera.lookAt(lookAt);
   });

@@ -6,7 +6,7 @@ Personal portfolio and professional site showcasing full-stack development, AI/L
 
 ## Highlights
 
-- **Interactive 3D Hero** — Lazy-loaded Three.js scene (Mohican-gorge terrain, river, instanced trees, race-route visualization, fireflies) with reduced-motion awareness
+- **Interactive 3D Hero** — Lazy-loaded Three.js celestial scene (layered HDR nebula, selective bloom, rare deterministic meteor) with a reduced-motion static fallback
 - **Cmd+K Command Palette** — Fast navigation and search via `cmdk`
 - **Performance** — Lazy-loaded routes; main bundle ~97 kB gzip
 - **Accessibility** — WCAG AA contrast, semantic HTML, comprehensive ARIA labelling, skip links, focus-visible states, reduced-motion support
