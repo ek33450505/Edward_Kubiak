@@ -396,7 +396,52 @@ describe("TREES placement — behavioral contract", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Test suite 7 — SkyDome export contract
+// Test suite 7 — ROUTE constants contract (Unit 4)
+// ---------------------------------------------------------------------------
+describe("constants.js — ROUTE section", () => {
+  it("exports all required ROUTE keys", async () => {
+    const { ROUTE } = await import("./constants");
+    const requiredKeys = [
+      "CURVE_SAMPLES",
+      "LINE_WIDTH",
+      "DASH_SIZE",
+      "GAP_SIZE",
+      "DASH_SPEED",
+      "OPACITY",
+      "HDR_BOOST",
+      "Y_OFFSET",
+    ];
+    for (const key of requiredKeys) {
+      expect(ROUTE).toHaveProperty(key);
+    }
+  });
+
+  it("ROUTE.OPACITY is in (0, 1] (valid opacity range)", async () => {
+    const { ROUTE } = await import("./constants");
+    expect(ROUTE.OPACITY).toBeGreaterThan(0);
+    expect(ROUTE.OPACITY).toBeLessThanOrEqual(1);
+  });
+
+  it("ROUTE.HDR_BOOST > 1.0 (must cross Bloom luminanceThreshold=1.0 gate)", async () => {
+    const { ROUTE } = await import("./constants");
+    expect(ROUTE.HDR_BOOST).toBeGreaterThan(1.0);
+  });
+
+  it("ROUTE.CURVE_SAMPLES is a positive integer (getPoints resolution)", async () => {
+    const { ROUTE } = await import("./constants");
+    expect(ROUTE.CURVE_SAMPLES).toBeGreaterThan(0);
+    expect(Number.isInteger(ROUTE.CURVE_SAMPLES)).toBe(true);
+  });
+
+  it("ROUTE.Y_OFFSET is a positive number (hover clearance above terrain)", async () => {
+    const { ROUTE } = await import("./constants");
+    expect(typeof ROUTE.Y_OFFSET).toBe("number");
+    expect(ROUTE.Y_OFFSET).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite 8 — SkyDome export contract
 // ---------------------------------------------------------------------------
 describe("SkyDome — export contract", () => {
   it("default export is a function", async () => {

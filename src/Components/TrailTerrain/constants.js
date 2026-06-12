@@ -74,18 +74,36 @@ export const TERRAIN = {
 
 // ---------------------------------------------------------------------------
 // River — CatmullRomCurve3 + TubeGeometry along gorge floor
+//
+// SCROLL_SPEED removed in Unit 5: the old useFrame that animated
+// material.map.offset was dead code — meshStandardMaterial with no texture
+// has no map to scroll. Replaced by onBeforeCompile glint shader (see River.jsx).
+//
+// HDR contract: toneMapped={false} on the material; base color×emissive stays
+// <1.0; glint adds ~2.6× to outgoingLight → selectively bloomed (Unit 10).
 // ---------------------------------------------------------------------------
 export const RIVER = {
-  WAYPOINTS: 30,         // control points for the spline (more = smoother meander)
-  TUBE_SEGMENTS: 80,     // radial subdivisions of TubeGeometry
-  TUBE_RADIUS: 0.06,     // world units
+  WAYPOINTS: 30,             // control points for the spline (more = smoother meander)
+  TUBE_SEGMENTS: 80,         // radial subdivisions of TubeGeometry
+  TUBE_RADIUS: 0.06,         // world units
   TUBE_RADIAL_SEGMENTS: 6,
-  MEANDER_AMP: 0.35,     // x-axis sinusoidal offset amplitude (world units)
-  MEANDER_FREQ: 2.5,     // π-multiples of z-range for meander cycles
-  Y_OFFSET: 0.22,        // world Y of river surface (gorge floor ~0.08*2.5=0.2)
-  SCROLL_SPEED: 0.4,     // UV scroll rate (units/sec) — animated in useFrame
+  MEANDER_AMP: 0.35,         // x-axis sinusoidal offset amplitude (world units)
+  MEANDER_FREQ: 2.5,         // π-multiples of z-range for meander cycles
+  Y_OFFSET: 0.22,            // world Y of river surface (gorge floor ~0.08*2.5=0.2)
   EMISSIVE_INTENSITY: 0.35,
   OPACITY: 0.72,
+
+  // Glint shader — traveling "last light" sparkles injected via onBeforeCompile.
+  // Two co-prime sine bands on vUv.x (TubeGeometry UV runs along tube length).
+  // GLINT_INTENSITY (~2.6) is the HDR push: only the sparkle peaks cross the
+  // Bloom luminanceThreshold=1.0 gate; the base river surface never does.
+  GLINT_FREQ_A: 24,          // band A spatial frequency (cycles per UV unit)
+  GLINT_FREQ_B: 41,          // band B frequency — co-prime to A (no harmonic sync)
+  GLINT_SPEED_A: 0.035,      // band A uTime scroll rate (positive = downstream)
+  GLINT_SPEED_B: -0.02,      // band B scroll rate (negative = upstream shimmer)
+  GLINT_SHARPNESS: 24,       // pow() exponent — higher = narrower sparkle peaks
+  GLINT_INTENSITY: 2.6,      // HDR multiplier — crosses luminanceThreshold=1.0 gate
+  GLINT_COLOR: "#bfe9ff",    // cool silver-blue — "caught light" on water surface
 };
 
 // ---------------------------------------------------------------------------
@@ -208,6 +226,28 @@ export const SCENE = {
   // Container CSS gradient — stays as Suspense/loading fallback even when
   // the SkyDome makes the canvas opaque at runtime (see SKY section below).
   BACKGROUND_GRADIENT: "linear-gradient(to top, #2a1800, #1a1020 50%, #0a0f1a)",
+};
+
+// ---------------------------------------------------------------------------
+// Route — race route CatmullRomCurve3 loop (see routeCurve.js, RouteLine.jsx)
+//
+// HDR contract: LINE color = PALETTE.ACCENT × HDR_BOOST.
+// With toneMapped={false} and ACCENT "#00FFC2" (max linear channel ~1.0),
+// the boosted color > 1.0 → crosses Bloom luminanceThreshold=1.0 gate.
+// OPACITY is dimmed (0.55) so the headlamp (Unit 8) reads as brighter/louder.
+//
+// Y_OFFSET: world Y added above sampleHeight surface for all sampleHeight-based
+// waypoints (keeps the route line hovering just above the terrain mesh).
+// ---------------------------------------------------------------------------
+export const ROUTE = {
+  CURVE_SAMPLES: 120,   // getPoints() resolution — higher = smoother rendered line
+  LINE_WIDTH: 1.8,      // LineMaterial lineWidth (world-space–ish units)
+  DASH_SIZE: 0.4,       // world units per dash segment
+  GAP_SIZE: 0.15,       // world units per gap between dashes
+  DASH_SPEED: 0.6,      // dashOffset advance rate (units/sec)
+  OPACITY: 0.55,        // dimmed for protagonist-contrast (headlamp > route)
+  HDR_BOOST: 1.35,      // ACCENT multiplier → >1.0 linear → crosses bloom gate
+  Y_OFFSET: 0.12,       // world Y above sampleHeight surface (hover clearance)
 };
 
 // ---------------------------------------------------------------------------
