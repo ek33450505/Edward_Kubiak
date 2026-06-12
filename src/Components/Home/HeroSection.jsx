@@ -94,22 +94,25 @@ export default function HeroSection() {
               initial="hidden"
               animate="show"
               transition={{ duration: 0.6, delay: 0.1 }}
+              aria-label="Full Stack Developer & AI Systems Engineer"
               className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold leading-tight tracking-tight"
             >
-              {reducedMotion
-                ? "Full Stack"
-                : "Full Stack".split("").map((char, i) => (
-                    <motion.span
-                      key={`fs-${i}`}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.15 + i * 0.03 }}
-                    >
-                      {char}
-                    </motion.span>
-                  ))}
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-sky-400">
+              <span aria-hidden="true">
+                {reducedMotion
+                  ? "Full Stack"
+                  : "Full Stack".split("").map((char, i) => (
+                      <motion.span
+                        key={`fs-${i}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: 0.15 + i * 0.03 }}
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+              </span>
+              <br aria-hidden="true" />
+              <span aria-hidden="true" className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-sky-400">
                 {reducedMotion
                   ? "Developer"
                   : "Developer".split("").map((char, i) => (
@@ -124,8 +127,8 @@ export default function HeroSection() {
                       </motion.span>
                     ))}
               </span>
-              <br />
-              <span className="text-slate-400 text-3xl sm:text-4xl lg:text-5xl">
+              <br aria-hidden="true" />
+              <span aria-hidden="true" className="text-slate-400 text-3xl sm:text-4xl lg:text-5xl">
                 & AI Systems Engineer
               </span>
             </motion.h1>
