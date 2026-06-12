@@ -1,9 +1,10 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { FIREFLIES, TERRAIN, PALETTE } from "./constants";
 import { sampleHeight } from "./Terrain";
 import { mulberry32 } from "./prng";
+import { createRadialGlowTexture } from "./textures";
 
 const { COUNT, GROUP_COUNT, FLASH_IN, FLASH_OUT, IDLE_MIN, IDLE_RANGE } = FIREFLIES;
 
@@ -20,9 +21,32 @@ const { COUNT, GROUP_COUNT, FLASH_IN, FLASH_OUT, IDLE_MIN, IDLE_RANGE } = FIREFL
 //
 // Vector3/Color allocations: all arrays are pre-allocated (Float32Arrays from
 // useMemo). No per-frame heap allocations occur in useFrame.
+//
+// HDR selective-bloom contract (Unit 6):
+//   toneMapped={false} lets the material output values > 1.0 in linear space.
+//   The color scale factor `opacity * (1 + (HDR_PEAK-1)*opacity)` is quadratic:
+//   - opacity=0.0  → scale=0.0  (off)
+//   - opacity=0.5  → scale=0.85 (below Bloom luminanceThreshold=1.0)
+//   - opacity=1.0  → scale=HDR_PEAK=2.4 (crosses bloom gate at J-arc peak)
+//   This ensures only the brief near-peak flash crosses the bloom threshold;
+//   the long idle period never blooms, preserving scene selectivity.
+//   POINT_SIZE increased to 0.14 to compensate for the soft sprite reading
+//   smaller than a hard GL point at the same nominal radius.
 // ---------------------------------------------------------------------------
 export default function Fireflies() {
   const pointsRef = useRef();
+
+  // Glow sprite texture — radial alpha falloff so the particle reads as a soft
+  // halo rather than a hard point. Disposed on unmount to free GPU memory.
+  const glowTexture = useMemo(
+    () => createRadialGlowTexture(FIREFLIES.SPRITE_SIZE, FIREFLIES.SPRITE_FALLOFF),
+    [],
+  );
+  useEffect(() => {
+    return () => {
+      glowTexture.dispose();
+    };
+  }, [glowTexture]);
 
   const { positions, basePositions, colors, phaseOffsets, idleDurations } =
     useMemo(() => {
@@ -111,11 +135,14 @@ export default function Fireflies() {
 
       arr[i * 3 + 1] = basePositions[i * 3 + 1] + yDrift;
 
-      // Encode brightness via color scaling (PointsMaterial has no per-particle opacity)
+      // Encode brightness via color scaling (PointsMaterial has no per-particle opacity).
+      // HDR quadratic: only near-peak flashes cross toneMapped=false Bloom gate.
+      // At opacity=1.0 scale = HDR_PEAK (2.4); at opacity=0.5 scale = 0.85 (below gate).
+      const hdrScale = opacity * (1.0 + (FIREFLIES.HDR_PEAK - 1.0) * opacity);
       const bi = i * 3;
-      colArr[bi] = colors[bi] * opacity;
-      colArr[bi + 1] = colors[bi + 1] * opacity;
-      colArr[bi + 2] = colors[bi + 2] * opacity;
+      colArr[bi] = colors[bi] * hdrScale;
+      colArr[bi + 1] = colors[bi + 1] * hdrScale;
+      colArr[bi + 2] = colors[bi + 2] * hdrScale;
     }
 
     // Single needsUpdate per attribute at end of loop
@@ -137,6 +164,8 @@ export default function Fireflies() {
         />
       </bufferGeometry>
       <pointsMaterial
+        map={glowTexture}
+        toneMapped={false}
         vertexColors
         size={FIREFLIES.POINT_SIZE}
         sizeAttenuation

@@ -9,6 +9,7 @@ import River from "./River";
 import Trees from "./Trees";
 import RaceRoute from "./RouteLine";
 import Fireflies from "./Fireflies";
+import CameraRig from "./CameraRig";
 
 // ---------------------------------------------------------------------------
 // TrailScene — lighting, fog, and all scene objects.
@@ -39,6 +40,9 @@ function TrailScene() {
         intensity={SCENE.FILL_INTENSITY}
         color={PALETTE.FILL_LIGHT}
       />
+
+      {/* CameraRig: outside Suspense — no async deps; pure useFrame side-effect */}
+      <CameraRig />
 
       <Suspense fallback={null}>
         {/* SkyDome first: renders at renderOrder=-1, behind all scene objects */}

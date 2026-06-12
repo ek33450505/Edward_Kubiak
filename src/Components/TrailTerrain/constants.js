@@ -202,15 +202,49 @@ export const FIREFLIES = {
   YELLOW_THRESHOLD: 0.72,
 
   // Geometry
-  POINT_SIZE: 0.08,
+  // POINT_SIZE 0.14 (was 0.08): soft radial sprite reads smaller than a hard GL
+  // point at the same pixel radius — scaling up compensates so on-screen apparent
+  // size is unchanged after adding the glow texture map.
+  POINT_SIZE: 0.14,
+
+  // HDR selective-bloom contract (Unit 6):
+  // HDR_PEAK: color scale factor at flash peak. With toneMapped={false}, a peak
+  // value of 2.4 crosses the Bloom luminanceThreshold=1.0 gate only at the very
+  // top of the J-arc. The quadratic formula `opacity * (1 + (HDR_PEAK-1)*opacity)`
+  // ensures only near-peak flashes are HDR — at opacity=0.5 the multiplier is
+  // 0.85, safely below threshold; at opacity=1.0 it reaches HDR_PEAK=2.4.
+  HDR_PEAK: 2.4,
+
+  // Glow sprite — passed to createRadialGlowTexture(SPRITE_SIZE, SPRITE_FALLOFF).
+  // SPRITE_SIZE must be a power of two (GPU texture requirement).
+  // SPRITE_FALLOFF >1 = soft quadratic centre; 2.2 gives a smooth organic halo.
+  SPRITE_SIZE: 64,
+  SPRITE_FALLOFF: 2.2,
 };
 
 // ---------------------------------------------------------------------------
-// Camera
+// Camera — static position + CameraRig breath (Unit 9)
+//
+// CameraRig applies a Lissajous drift around POSITION every frame.
+// LOOK_AT is re-asserted every frame (R3F only calls lookAt once at creation —
+// see CameraRig.jsx JSDoc for the full rationale).
+//
+// Irrational-ish BREATH_RATIOS ([1.31, 0.73]) and BREATH_PHASES ([1.7, 3.1])
+// ensure the Lissajous path never visibly repeats within a human-length session
+// — the GCD period of these ratios with 1.0 is astronomically large relative
+// to BREATH_PERIOD=64 s.
 // ---------------------------------------------------------------------------
 export const CAMERA = {
   POSITION: [8, 4, 0],   // looking across the gorge from the east ridge
   FOV: 55,
+
+  // CameraRig breath — Lissajous drift parameters
+  LOOK_AT: [0, 0, 0],           // target; re-asserted every frame by CameraRig
+  BREATH_AMP: 0.15,             // world-unit drift amplitude
+  BREATH_PERIOD: 64,            // seconds for one X-axis cycle
+  // Irrational-ish frequency ratios → Lissajous path never visibly repeats
+  BREATH_RATIOS: [1.31, 0.73],  // [Y-axis ratio, Z-axis ratio] relative to X
+  BREATH_PHASES: [1.7, 3.1],    // [Y-axis phase offset, Z-axis phase offset] (radians)
 };
 
 // ---------------------------------------------------------------------------

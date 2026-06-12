@@ -441,6 +441,94 @@ describe("constants.js — ROUTE section", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Test suite 8a — FIREFLIES HDR / glow constants contract (Unit 6)
+// ---------------------------------------------------------------------------
+describe("constants.js — FIREFLIES HDR and glow sprite constants", () => {
+  it("HDR_PEAK > 1 (must be able to push past Bloom luminanceThreshold=1.0)", async () => {
+    const { FIREFLIES } = await import("./constants");
+    expect(FIREFLIES.HDR_PEAK).toBeGreaterThan(1);
+  });
+
+  it("SPRITE_SIZE is a power of two in [16, 256] (GPU texture requirement)", async () => {
+    const { FIREFLIES } = await import("./constants");
+    const s = FIREFLIES.SPRITE_SIZE;
+    expect(s).toBeGreaterThanOrEqual(16);
+    expect(s).toBeLessThanOrEqual(256);
+    // isPowerOfTwo: only one bit set
+    expect((s & (s - 1))).toBe(0);
+  });
+
+  it("SPRITE_FALLOFF > 0 (required for createRadialGlowTexture falloffExp param)", async () => {
+    const { FIREFLIES } = await import("./constants");
+    expect(FIREFLIES.SPRITE_FALLOFF).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite 8b — CAMERA breath constants contract (Unit 9)
+// ---------------------------------------------------------------------------
+describe("constants.js — CAMERA breath constants", () => {
+  it("LOOK_AT is a 3-element array", async () => {
+    const { CAMERA } = await import("./constants");
+    expect(Array.isArray(CAMERA.LOOK_AT)).toBe(true);
+    expect(CAMERA.LOOK_AT).toHaveLength(3);
+  });
+
+  it("BREATH_AMP is in (0, 0.5] (gentle drift — felt not seen)", async () => {
+    const { CAMERA } = await import("./constants");
+    expect(CAMERA.BREATH_AMP).toBeGreaterThan(0);
+    expect(CAMERA.BREATH_AMP).toBeLessThanOrEqual(0.5);
+  });
+
+  it("BREATH_PERIOD >= 30 (slow enough to feel organic over a full session)", async () => {
+    const { CAMERA } = await import("./constants");
+    expect(CAMERA.BREATH_PERIOD).toBeGreaterThanOrEqual(30);
+  });
+
+  it("BREATH_RATIOS is a 2-element array (Y-axis and Z-axis frequency ratios)", async () => {
+    const { CAMERA } = await import("./constants");
+    expect(Array.isArray(CAMERA.BREATH_RATIOS)).toBe(true);
+    expect(CAMERA.BREATH_RATIOS).toHaveLength(2);
+  });
+
+  it("BREATH_PHASES is a 2-element array (Y-axis and Z-axis phase offsets)", async () => {
+    const { CAMERA } = await import("./constants");
+    expect(Array.isArray(CAMERA.BREATH_PHASES)).toBe(true);
+    expect(CAMERA.BREATH_PHASES).toHaveLength(2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite 8c — CameraRig export contract (Unit 9)
+// ---------------------------------------------------------------------------
+describe("CameraRig — export contract", () => {
+  it("default export is a function", async () => {
+    const mod = await import("./CameraRig");
+    expect(typeof mod.default).toBe("function");
+  });
+
+  it("source references lookAt (re-assertion every frame is the critical contract)", async () => {
+    const mod = await import("./CameraRig");
+    const src = mod.default.toString();
+    expect(src).toContain("lookAt");
+  });
+
+  it("source references CAMERA.LOOK_AT (target comes from constants, not a magic literal)", async () => {
+    const mod = await import("./CameraRig");
+    const src = mod.default.toString();
+    // Source string check on the module file (function body may be minified in tests,
+    // but in vitest node env JSX is not minified so identifiers survive).
+    // Cross-check via direct source import to be resilient.
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./CameraRig.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("CAMERA.LOOK_AT");
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Test suite 8 — SkyDome export contract
 // ---------------------------------------------------------------------------
 describe("SkyDome — export contract", () => {
