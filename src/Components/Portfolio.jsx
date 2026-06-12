@@ -6,7 +6,7 @@ import { GithubIcon } from "./BrandIcons";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
-import { staggerContainer, staggerItem } from "../utils/motion";
+import { fadeUp, staggerContainer, staggerItem } from "../utils/motion";
 import { colorMap } from "../utils/colors";
 import { useGitHubStars } from "../hooks/useGitHubStars";
 
@@ -200,9 +200,9 @@ function Portfolio() {
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
             Projects

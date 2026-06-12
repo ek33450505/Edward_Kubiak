@@ -7,6 +7,7 @@ import HeroStats from "./HeroStats";
 import projects from "../data/projects";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../data/castStats";
 import { getColorClasses } from "../utils/colors";
+import { fadeUp, staggerItem, slideInLeft } from "../utils/motion";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
 const StarField = lazy(() => import("./Effects/StarField"));
@@ -79,10 +80,10 @@ function FeaturedWork() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5 }}
       className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
       aria-labelledby="featured-work-heading"
     >
@@ -109,8 +110,9 @@ function FeaturedWork() {
           return (
             <motion.div
               key={project.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={staggerItem}
+              initial="hidden"
+              whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
@@ -281,10 +283,10 @@ function CurrentlyBuilding() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5 }}
       className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
       aria-labelledby="currently-building-heading"
     >
@@ -474,10 +476,10 @@ function RecentWriting() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5 }}
       className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
       aria-labelledby="recent-writing-heading"
     >
@@ -529,10 +531,10 @@ function RecentWriting() {
 function SupportMyWork() {
   return (
     <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5 }}
       className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
       aria-labelledby="support-heading"
     >
@@ -625,8 +627,9 @@ const Home = () => {
           {/* Left column - main headline with parallax */}
           <motion.div className="md:col-span-7" style={{ y: heroTextY, opacity: heroOpacity }}>
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
+              variants={slideInLeft}
+              initial="hidden"
+              animate="show"
               transition={{ duration: 0.6 }}
             >
               <p className="font-display text-xs tracking-[0.3em] text-amber-400 uppercase mb-4">
@@ -635,8 +638,9 @@ const Home = () => {
             </motion.div>
 
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
+              variants={staggerItem}
+              initial="hidden"
+              animate="show"
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold leading-tight tracking-tight"
             >
@@ -675,8 +679,9 @@ const Home = () => {
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              variants={fadeUp}
+              initial="hidden"
+              animate="show"
               transition={{ duration: 0.6, delay: 0.8 }}
               className="mt-6 text-lg text-slate-400 max-w-lg leading-relaxed"
             >
@@ -688,8 +693,9 @@ const Home = () => {
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              variants={fadeUp}
+              initial="hidden"
+              animate="show"
               transition={{ duration: 0.6, delay: 0.95 }}
               className="mt-8 flex flex-wrap gap-4"
             >
@@ -709,8 +715,9 @@ const Home = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              variants={fadeUp}
+              initial="hidden"
+              animate="show"
               transition={{ duration: 0.6, delay: 1.1 }}
               className="mt-4 flex items-center gap-2"
             >
@@ -779,10 +786,10 @@ const Home = () => {
       {/* Competencies — scroll-triggered */}
       <section id="core-competencies" aria-labelledby="core-competencies-heading" className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
           className="mb-8"
         >
           <h2 id="core-competencies-heading" className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase">
@@ -795,8 +802,9 @@ const Home = () => {
           {competencies.map((item, i) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={staggerItem}
+              initial="hidden"
+              whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}

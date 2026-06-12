@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { ExternalLink, Mic, Headphones, FileText, Play } from "lucide-react";
+import { fadeUp } from "../utils/motion";
 import talks from "../data/talks";
 
 const typeConfig = {
@@ -15,8 +16,9 @@ function TalkCard({ talk, index }) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
@@ -106,9 +108,9 @@ const Talks = () => {
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
             Talks & <span className="text-amber-400">Writing</span>
@@ -140,8 +142,9 @@ const Talks = () => {
 
         {/* Empty / coming soon state */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-8 p-6 rounded-xl border border-slate-800/40 bg-slate-900/20 text-center"

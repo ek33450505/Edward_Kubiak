@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Star, Package, Sparkles } from "lucide-react";
+import { fadeUp } from "../utils/motion";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../data/castStats";
 
 const CAST_REPOS = [
@@ -56,8 +57,9 @@ function HeroStats() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: 1.3 }}
       className="mt-6 flex flex-wrap items-center gap-2"

@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { Terminal, Brain, GitBranch, Cpu, Package } from "lucide-react";
+import { fadeUp, staggerItem } from "../utils/motion";
 import { CAST_STATS } from "../data/castStats";
 
 const sections = [
@@ -90,8 +91,9 @@ function SectionCard({ section, index }) {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={staggerItem}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       aria-labelledby={`uses-${section.id}-heading`}
@@ -138,9 +140,9 @@ const Uses = () => {
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
           <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
             What I <span className="text-amber-400">Use</span>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Bot, Package, TestTube2, Terminal, Hash } from "lucide-react";
+import { fadeUp } from "../utils/motion";
 import { CAST_STATS } from "../data/castStats";
 
 const PILLS = [
@@ -38,10 +39,10 @@ function CastStats() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5 }}
       className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
     >
       <div className="mb-6">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { TrendingUp, Mountain, Infinity, Flame } from "lucide-react";
+import { fadeUp } from "../utils/motion";
 
 function timeAgo(dateString) {
   const now = new Date();
@@ -83,8 +84,9 @@ const StravaStats = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4 }}
     >

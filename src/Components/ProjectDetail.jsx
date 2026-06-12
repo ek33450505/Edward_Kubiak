@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
+import { fadeUp, fadeIn } from "../utils/motion";
 import { ExternalLink, ArrowLeft, Star } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
@@ -38,8 +39,9 @@ function ProjectDetail() {
       <div className="min-h-[calc(100vh-80px)] py-20">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
             transition={{ duration: 0.4 }}
             className="text-center py-20"
           >
@@ -66,9 +68,9 @@ function ProjectDetail() {
       <div className="max-w-4xl mx-auto px-6">
         {/* Hero */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
           <div className={`p-8 rounded-xl border ${project.featured ? "border-amber-400/25" : "border-slate-800/60"} bg-slate-900/40`}>
             {/* Icon + Title */}
@@ -137,9 +139,10 @@ function ProjectDetail() {
 
         {/* Description */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          transition={{ delay: 0.1 }}
           className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
         >
           <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
@@ -151,9 +154,10 @@ function ProjectDetail() {
         {/* Tech stack */}
         {project.tech && project.tech.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.15 }}
             className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
             <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
@@ -175,9 +179,10 @@ function ProjectDetail() {
         {/* Stats */}
         {project.stats && project.stats.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.2 }}
             className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
             <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
@@ -199,9 +204,10 @@ function ProjectDetail() {
         {/* Links panel */}
         {(project.github || project.link) && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.25 }}
             className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
             <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
@@ -236,9 +242,10 @@ function ProjectDetail() {
 
         {/* Back link */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          variants={fadeIn}
+          initial="hidden"
+          animate="show"
+          transition={{ delay: 0.3 }}
           className="mt-10"
         >
           <Link

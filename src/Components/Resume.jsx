@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { Mail, MapPin, Download, FileText } from "lucide-react";
+import { fadeUp } from "../utils/motion";
 import { CAST_STATS, CAST_DESKTOP_STATS } from "../data/castStats";
 
 const skills = {
@@ -176,9 +177,9 @@ const Resume = () => {
       <div className="max-w-4xl mx-auto px-6">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
           className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
         >
           <div>
@@ -246,8 +247,9 @@ const Resume = () => {
 
         {/* Summary */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-10 p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
@@ -262,8 +264,9 @@ const Resume = () => {
 
         {/* Skills grid */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-8"
@@ -275,8 +278,9 @@ const Resume = () => {
             {Object.entries(skills).map(([category, items], i) => (
               <motion.div
                 key={category}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 className="skill-card p-3.5 rounded-xl border border-slate-800/60 bg-slate-900/30"
@@ -303,10 +307,10 @@ const Resume = () => {
 
         {/* Experience */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5 }}
           className="mt-8"
         >
           <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
@@ -351,10 +355,10 @@ const Resume = () => {
 
         {/* Education */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5 }}
           className="mt-8 mb-8"
         >
           <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
