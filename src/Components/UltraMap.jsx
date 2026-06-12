@@ -8,7 +8,7 @@ function UltraMap() {
       acc[key] = { ...race, years: [race.year] };
     } else {
       acc[key].years.push(race.year);
-      // If any entry is finished, pin is amber
+      // If any entry is finished, pin is accent green
       if (race.finished) acc[key].finished = true;
     }
     return acc;
@@ -45,7 +45,7 @@ function UltraMap() {
             cx={pin.x}
             cy={pin.y}
             r="1.4"
-            fill={pin.finished ? "#fbbf24" : "#64748b"}
+            fill={pin.finished ? "#00FFC2" : "#64748b"}
             opacity={pin.finished ? 0.9 : 0.6}
           >
             <title>{pin.label}</title>
@@ -56,7 +56,7 @@ function UltraMap() {
       {/* Legend */}
       <div className="flex items-center gap-4 mt-2">
         <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-amber-400" />
+          <div className="w-2 h-2 rounded-full bg-accent-400" />
           <span className="font-display text-[9px] tracking-wider text-slate-400 uppercase">Finished</span>
         </div>
         <div className="flex items-center gap-1.5">

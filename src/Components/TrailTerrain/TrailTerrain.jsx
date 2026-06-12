@@ -1,0 +1,86 @@
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { useReducedMotion } from "motion/react";
+import { useFrameloopWhenVisible } from "../../hooks/useFrameloopWhenVisible";
+import { CAMERA, SCENE, PALETTE } from "./constants";
+import TerrainMesh from "./Terrain";
+import River from "./River";
+import Trees from "./Trees";
+import RaceRoute from "./RouteLine";
+import Fireflies from "./Fireflies";
+
+// ---------------------------------------------------------------------------
+// TrailScene — lighting, fog, and all scene objects.
+// Kept here (not a separate file) as it has no independent reuse and its
+// entire purpose is TrailTerrain composition.
+// ---------------------------------------------------------------------------
+function TrailScene() {
+  return (
+    <>
+      {/* Exponential fog: thickens in the gorge depth */}
+      <fogExp2 attach="fog" args={[PALETTE.FOG, SCENE.FOG_DENSITY]} />
+
+      {/* Scene lighting: warm ambient + directional dusk */}
+      <ambientLight intensity={SCENE.AMBIENT_INTENSITY} color={PALETTE.AMBIENT_LIGHT} />
+      <directionalLight
+        position={SCENE.SUN_POSITION}
+        intensity={SCENE.SUN_INTENSITY}
+        color={PALETTE.SUN_LIGHT}
+      />
+      <directionalLight
+        position={SCENE.FILL_POSITION}
+        intensity={SCENE.FILL_INTENSITY}
+        color={PALETTE.FILL_LIGHT}
+      />
+
+      <Suspense fallback={null}>
+        <TerrainMesh />
+        <River />
+        <Trees />
+        <RaceRoute />
+        <Fireflies />
+      </Suspense>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// TrailTerrain — default export; consumed via React.lazy at import site.
+//
+// Engineering requirements (mirrors StarField):
+//   - useReducedMotion() bail → return null before mounting Canvas
+//   - IntersectionObserver on container → frameloop "demand"/"always"
+//   - aria-hidden, pointer-events-none
+//   - Canvas dpr=[1,1.5], antialias:false, alpha:true
+//
+// Hook ordering: ALL hooks called unconditionally (Rules of Hooks).
+// The reducedMotion bail-out is a render-return, not an early hook skip.
+// useFrameloopWhenVisible receives reducedMotion and skips observer setup
+// when true — see hook JSDoc for the edge-case rationale.
+// ---------------------------------------------------------------------------
+export default function TrailTerrain() {
+  const reducedMotion = useReducedMotion();
+  const [containerRef, frameloop] = useFrameloopWhenVisible(reducedMotion);
+
+  // Pure decoration — render nothing when user prefers no motion
+  if (reducedMotion) return null;
+
+  return (
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-0 pointer-events-none"
+      aria-hidden="true"
+      style={{ background: SCENE.BACKGROUND_GRADIENT }}
+    >
+      <Canvas
+        camera={{ position: CAMERA.POSITION, fov: CAMERA.FOV }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: false, alpha: true }}
+        frameloop={frameloop}
+        style={{ pointerEvents: "none" }}
+      >
+        <TrailScene />
+      </Canvas>
+    </div>
+  );
+}

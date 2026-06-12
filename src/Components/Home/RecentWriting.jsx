@@ -53,7 +53,7 @@ export default function RecentWriting() {
             className="group flex items-start gap-3 p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700 hover:bg-slate-800/30 transition-all duration-200 block"
           >
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-display font-bold text-slate-200 group-hover:text-amber-400 transition-colors leading-snug">
+              <p className="text-sm font-display font-bold text-slate-200 group-hover:text-accent-400 transition-colors leading-snug">
                 {article.title}
               </p>
               {article.description && (

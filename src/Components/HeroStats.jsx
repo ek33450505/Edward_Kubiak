@@ -78,8 +78,8 @@ function HeroStats() {
         <>
           {/* Stars pill — live value */}
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-800/60 bg-slate-900/30">
-            <Star size={13} className="text-amber-400 shrink-0" aria-hidden="true" />
-            <span className="font-display text-sm font-bold text-amber-400">
+            <Star size={13} className="text-accent-400 shrink-0" aria-hidden="true" />
+            <span className="font-display text-sm font-bold text-accent-400">
               {totalStars.toLocaleString()}
             </span>
             <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
@@ -93,8 +93,8 @@ function HeroStats() {
               key={label}
               className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-800/60 bg-slate-900/30"
             >
-              <Icon size={13} className="text-amber-400 shrink-0" aria-hidden="true" />
-              <span className="font-display text-sm font-bold text-amber-400">
+              <Icon size={13} className="text-accent-400 shrink-0" aria-hidden="true" />
+              <span className="font-display text-sm font-bold text-accent-400">
                 {value}
               </span>
               <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">

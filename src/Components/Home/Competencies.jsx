@@ -58,12 +58,12 @@ export default function Competencies() {
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className="group p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-amber-400/30 hover:bg-slate-800/40 hover:shadow-[0_0_30px_rgba(0,255,194,0.06)] transition-all duration-300"
+            className="group p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-accent-400/30 hover:bg-slate-800/40 hover:shadow-[0_0_30px_rgba(0,255,194,0.06)] transition-all duration-300"
           >
             <item.icon
               size={24}
               aria-hidden="true"
-              className="text-amber-400 mb-4 group-hover:scale-110 transition-transform duration-300"
+              className="text-accent-400 mb-4 group-hover:scale-110 transition-transform duration-300"
             />
             <h3 className="font-display text-sm font-bold tracking-wide text-slate-100 mb-2">
               {item.title}

@@ -23,7 +23,7 @@ const About = () => {
             as="h1"
             headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
             underlineClassName="mt-3"
-            title={<>About <span className="text-amber-400">Me</span></>}
+            title={<>About <span className="text-accent-400">Me</span></>}
           />
         </motion.div>
 
@@ -39,7 +39,7 @@ const About = () => {
             className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-amber-400/10 text-amber-400 shrink-0 mt-1">
+              <div className="p-2 rounded-lg bg-accent-400/10 text-accent-400 shrink-0 mt-1">
                 <Briefcase size={20} aria-hidden="true" />
               </div>
               <div>
@@ -60,7 +60,7 @@ const About = () => {
                     href="https://www.metasolutions.net/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-amber-400 hover:text-amber-300 underline underline-offset-4 decoration-amber-400/30 hover:decoration-amber-400 transition-colors"
+                    className="text-accent-400 hover:text-accent-300 underline underline-offset-4 decoration-accent-400/30 hover:decoration-accent-400 transition-colors"
                   >
                     META Solutions
                   </a>
@@ -251,9 +251,9 @@ const About = () => {
               <a
                 href="mailto:edward.kubiak.dev@gmail.com"
                 aria-label="Email Edward at edward.kubiak.dev@gmail.com"
-                className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-slate-800/60 bg-slate-900/40 hover:border-amber-400/40 hover:bg-slate-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 transition-all"
+                className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-slate-800/60 bg-slate-900/40 hover:border-accent-400/40 hover:bg-slate-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60 transition-all"
               >
-                <Mail size={20} className="text-amber-400 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                <Mail size={20} className="text-accent-400 group-hover:scale-110 transition-transform" aria-hidden="true" />
                 <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 group-hover:text-slate-200 uppercase">
                   Email
                 </span>
@@ -302,7 +302,7 @@ const About = () => {
             <div className="mt-6 pt-6 border-t border-slate-800/60 text-center">
               <a
                 href="mailto:edward.kubiak.dev@gmail.com"
-                className="inline-flex items-center gap-2 font-display text-sm sm:text-base text-amber-400 hover:text-amber-300 transition-colors group"
+                className="inline-flex items-center gap-2 font-display text-sm sm:text-base text-accent-400 hover:text-accent-300 transition-colors group"
               >
                 edward.kubiak.dev@gmail.com
                 <ArrowUpRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" aria-hidden="true" />

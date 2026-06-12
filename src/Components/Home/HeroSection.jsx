@@ -7,7 +7,7 @@ import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
 import { fadeUp, staggerItem, slideInLeft } from "../../utils/motion";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
-const StarField = lazy(() => import("../Effects/StarField"));
+const TrailTerrain = lazy(() => import("../TrailTerrain/TrailTerrain"));
 
 function ScrollCue() {
   const shouldReduceMotion = useReducedMotion();
@@ -27,7 +27,7 @@ function ScrollCue() {
         <motion.a
           href="#core-competencies"
           aria-label="Scroll to core competencies"
-          className="mt-12 mx-auto block w-fit text-slate-400 hover:text-amber-400 transition-colors"
+          className="mt-12 mx-auto block w-fit text-slate-400 hover:text-accent-400 transition-colors"
           initial={{ opacity: 1 }}
           animate={
             shouldReduceMotion
@@ -61,9 +61,9 @@ export default function HeroSection() {
 
   return (
     <>
-      {/* 3D Galactic starfield background — lazy-loaded */}
+      {/* 3D trail terrain background — lazy-loaded */}
       <Suspense fallback={null}>
-        <StarField />
+        <TrailTerrain />
       </Suspense>
 
       {/* Decorative grid lines */}
@@ -84,7 +84,7 @@ export default function HeroSection() {
               animate="show"
               transition={{ duration: 0.6 }}
             >
-              <p className="font-display text-xs tracking-[0.3em] text-amber-400 uppercase mb-4">
+              <p className="font-display text-xs tracking-[0.3em] text-accent-400 uppercase mb-4">
                 Full Stack Developer & AI Engineer &mdash; Columbus, OH
               </p>
             </motion.div>
@@ -112,7 +112,7 @@ export default function HeroSection() {
                     ))}
               </span>
               <br aria-hidden="true" />
-              <span aria-hidden="true" className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-sky-400">
+              <span aria-hidden="true" className="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 via-accent-300 to-sky-400">
                 {reducedMotion
                   ? "Developer"
                   : "Developer".split("").map((char, i) => (
@@ -156,14 +156,14 @@ export default function HeroSection() {
             >
               <Link
                 to="/projects"
-                className="group inline-flex items-center gap-2 px-6 py-3 bg-amber-400 text-slate-950 font-display text-sm tracking-wider uppercase font-bold rounded-lg hover:bg-amber-300 hover:shadow-[0_0_30px_rgba(0,255,194,0.3)] transition-all duration-300"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-accent-400 text-slate-950 font-display text-sm tracking-wider uppercase font-bold rounded-lg hover:bg-accent-300 hover:shadow-[0_0_30px_rgba(0,255,194,0.3)] transition-all duration-300"
               >
                 See What I&apos;ve Built
                 <ArrowRight size={16} aria-hidden="true" className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
                 href="mailto:edward.kubiak.dev@gmail.com"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 font-display text-sm tracking-wider uppercase rounded-lg hover:border-amber-400 hover:text-amber-400 hover:shadow-[0_0_20px_rgba(0,255,194,0.1)] transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 font-display text-sm tracking-wider uppercase rounded-lg hover:border-accent-400 hover:text-accent-400 hover:shadow-[0_0_20px_rgba(0,255,194,0.1)] transition-all duration-300"
               >
                 Let&apos;s Build Something
               </a>
@@ -210,11 +210,11 @@ export default function HeroSection() {
               {/* Geometric decoration with glow */}
               <div className="w-64 h-64 lg:w-80 lg:h-80 relative">
                 <div className="absolute inset-0 border border-slate-700/50 rounded-2xl rotate-6" />
-                <div className="absolute inset-4 border border-amber-400/20 rounded-2xl -rotate-3" />
+                <div className="absolute inset-4 border border-accent-400/20 rounded-2xl -rotate-3" />
                 <div className="absolute inset-8 bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl backdrop-blur-sm flex items-center justify-center shadow-[0_0_80px_rgba(0,255,194,0.06)]">
                   <div className="text-center">
                     <motion.p
-                      className="font-display text-6xl lg:text-7xl font-bold text-amber-400"
+                      className="font-display text-6xl lg:text-7xl font-bold text-accent-400"
                       animate={{
                         textShadow: [
                           "0 0 20px rgba(0,255,194,0.3)",
@@ -226,7 +226,7 @@ export default function HeroSection() {
                     >
                       EK
                     </motion.p>
-                    <div className="mt-2 w-12 h-0.5 bg-amber-400/40 mx-auto" />
+                    <div className="mt-2 w-12 h-0.5 bg-accent-400/40 mx-auto" />
                     <p className="mt-2 font-display text-[10px] tracking-[0.3em] text-slate-400 uppercase">
                       Since 2022
                     </p>

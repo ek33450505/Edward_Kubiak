@@ -13,8 +13,8 @@ function StarBadge({ owner, repo }) {
   const { stars } = useGitHubStars(owner, repo);
   if (stars === null) return null;
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">
-      <Star size={10} aria-hidden="true" className="fill-amber-400" />
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-accent-400/10 text-accent-400 border border-accent-400/20">
+      <Star size={10} aria-hidden="true" className="fill-accent-400" />
       {stars}
     </span>
   );
@@ -50,7 +50,7 @@ function ProjectDetail() {
             <h1 className="font-display text-xl font-bold text-slate-200 mb-6">Project not found</h1>
             <Link
               to="/projects"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-widest uppercase hover:border-amber-400 hover:text-amber-400 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-widest uppercase hover:border-accent-400 hover:text-accent-400 transition-all"
             >
               <ArrowLeft size={14} aria-hidden="true" />
               Back to Projects
@@ -61,7 +61,7 @@ function ProjectDetail() {
     );
   }
 
-  const colors = colorMap[project.color] || colorMap.amber;
+  const colors = colorMap[project.color] || colorMap.accent;
   const IconComponent = project.icon;
 
   return (
@@ -73,7 +73,7 @@ function ProjectDetail() {
           initial="hidden"
           animate="show"
         >
-          <div className={`p-8 rounded-xl border ${project.featured ? "border-amber-400/25" : "border-slate-800/60"} bg-slate-900/40`}>
+          <div className={`p-8 rounded-xl border ${project.featured ? "border-accent-400/25" : "border-slate-800/60"} bg-slate-900/40`}>
             {/* Icon + Title */}
             <div className="flex items-start gap-4 mb-4">
               <div className={`p-3 rounded-xl ${colors.bg} shrink-0`}>
@@ -85,7 +85,7 @@ function ProjectDetail() {
                     {project.title}
                   </h1>
                   {project.featured && (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-amber-400/15 text-amber-400 border border-amber-400/20">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-accent-400/15 text-accent-400 border border-accent-400/20">
                       Featured
                     </span>
                   )}
@@ -117,7 +117,7 @@ function ProjectDetail() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="View source code on GitHub (opens in new tab)"
-                    className="p-2 rounded-lg border border-slate-700 text-slate-400 hover:text-amber-400 hover:border-amber-400/40 transition-all"
+                    className="p-2 rounded-lg border border-slate-700 text-slate-400 hover:text-accent-400 hover:border-accent-400/40 transition-all"
                   >
                     <GithubIcon size={18} aria-hidden="true" />
                   </a>
@@ -128,7 +128,7 @@ function ProjectDetail() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="View live site (opens in new tab)"
-                    className="p-2 rounded-lg border border-slate-700 text-slate-400 hover:text-amber-400 hover:border-amber-400/40 transition-all"
+                    className="p-2 rounded-lg border border-slate-700 text-slate-400 hover:text-accent-400 hover:border-accent-400/40 transition-all"
                   >
                     <ExternalLink size={18} aria-hidden="true" />
                   </a>
@@ -220,7 +220,7 @@ function ProjectDetail() {
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-wider uppercase hover:border-amber-400 hover:text-amber-400 transition-all"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-wider uppercase hover:border-accent-400 hover:text-accent-400 transition-all"
                 >
                   <GithubIcon size={14} aria-hidden="true" />
                   GitHub
@@ -231,7 +231,7 @@ function ProjectDetail() {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-wider uppercase hover:border-amber-400 hover:text-amber-400 transition-all"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-wider uppercase hover:border-accent-400 hover:text-accent-400 transition-all"
                 >
                   <ExternalLink size={14} aria-hidden="true" />
                   Live Site
@@ -251,7 +251,7 @@ function ProjectDetail() {
         >
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 text-slate-400 font-display text-xs tracking-widest uppercase hover:text-amber-400 transition-colors"
+            className="inline-flex items-center gap-2 text-slate-400 font-display text-xs tracking-widest uppercase hover:text-accent-400 transition-colors"
           >
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Projects

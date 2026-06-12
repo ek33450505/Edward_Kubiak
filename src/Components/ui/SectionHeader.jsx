@@ -1,5 +1,5 @@
 /**
- * SectionHeader — renders a section/page heading + amber accent underline.
+ * SectionHeader — renders a section/page heading + accent underline.
  *
  * Props:
  *   title           ReactNode   heading text (may contain JSX spans for color)
@@ -38,7 +38,7 @@ export default function SectionHeader({
       ) : (
         heading
       )}
-      <div className={`${underlineClassName} w-16 h-0.5 bg-amber-400/60`} />
+      <div className={`${underlineClassName} w-16 h-0.5 bg-accent-400/60`} />
     </div>
   );
 }

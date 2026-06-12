@@ -36,7 +36,7 @@ const Now = () => {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
             >
-              <h2 className="font-display text-xs tracking-[0.3em] text-amber-400 uppercase mb-4">
+              <h2 className="font-display text-xs tracking-[0.3em] text-accent-400 uppercase mb-4">
                 {section.title}
               </h2>
               <ul className="space-y-3">
@@ -47,7 +47,7 @@ const Now = () => {
                   >
                     <span
                       aria-hidden="true"
-                      className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-amber-400/40"
+                      className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-accent-400/40"
                     />
                     {item}
                   </li>

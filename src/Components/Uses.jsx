@@ -10,7 +10,7 @@ const sections = [
     id: "hardware",
     title: "Hardware",
     icon: Cpu,
-    iconColor: "text-amber-400 bg-amber-400/10",
+    iconColor: "text-accent-400 bg-accent-400/10",
     items: [
       {
         label: "Machine",
@@ -118,7 +118,7 @@ function SectionCard({ section, index }) {
           <li key={item.label} className="flex items-start gap-3">
             <Package
               size={14}
-              className="text-amber-400/50 shrink-0 mt-1"
+              className="text-accent-400/50 shrink-0 mt-1"
               aria-hidden="true"
             />
             <div>
@@ -150,7 +150,7 @@ const Uses = () => {
             as="h1"
             headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
             underlineClassName="mt-3"
-            title={<>What I <span className="text-amber-400">Use</span></>}
+            title={<>What I <span className="text-accent-400">Use</span></>}
           />
           <p className="mt-4 text-slate-400 leading-relaxed max-w-xl">
             The hardware, software, and tools that power my day-to-day
