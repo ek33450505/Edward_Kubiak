@@ -499,7 +499,7 @@ function RecentWriting() {
         {articles.map((article, i) => (
           <motion.a
             key={article.url}
-            href={article.url}
+            href={article.url?.startsWith('https://') ? article.url : undefined}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0, x: -10 }}
