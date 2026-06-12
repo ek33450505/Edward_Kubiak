@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
@@ -6,14 +6,14 @@ import { GithubIcon } from "./Components/BrandIcons";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
 import "./App.css";
 
-import Home from "./Components/Home";
-import About from "./Components/About";
-import Portfolio from "./Components/Portfolio";
-import ProjectDetail from "./Components/ProjectDetail";
-import Resume from "./Components/Resume";
-import Now from "./Components/Now";
-import Talks from "./Components/Talks";
-import Uses from "./Components/Uses";
+const Home = lazy(() => import("./Components/Home"));
+const About = lazy(() => import("./Components/About"));
+const Portfolio = lazy(() => import("./Components/Portfolio"));
+const ProjectDetail = lazy(() => import("./Components/ProjectDetail"));
+const Resume = lazy(() => import("./Components/Resume"));
+const Now = lazy(() => import("./Components/Now"));
+const Talks = lazy(() => import("./Components/Talks"));
+const Uses = lazy(() => import("./Components/Uses"));
 import CommandPalette, { CommandPaletteProvider, useCommandPalette } from "./Components/CommandPalette";
 import BrandingImage from "./Images/Brand.svg";
 
@@ -215,16 +215,18 @@ function AnimatedRoutes() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="page-content"
       >
-        <Routes location={location}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/projects" element={<Portfolio />} />
-          <Route path="/projects/:slug" element={<ProjectDetail />} />
-          <Route path="/resume" element={<Resume />} />
-          <Route path="/now" element={<Now />} />
-          <Route path="/talks" element={<Talks />} />
-          <Route path="/uses" element={<Uses />} />
-        </Routes>
+        <Suspense fallback={<div className="min-h-[60vh]" />}>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Portfolio />} />
+            <Route path="/projects/:slug" element={<ProjectDetail />} />
+            <Route path="/resume" element={<Resume />} />
+            <Route path="/now" element={<Now />} />
+            <Route path="/talks" element={<Talks />} />
+            <Route path="/uses" element={<Uses />} />
+          </Routes>
+        </Suspense>
       </motion.div>
     </AnimatePresence>
   );
