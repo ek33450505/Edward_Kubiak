@@ -669,3 +669,112 @@ describe("Mist — export contract", () => {
     expect(fileSrc).toContain("dispose");
   });
 });
+
+// ---------------------------------------------------------------------------
+// Test suite 11 — HEADLAMP constants contract (Unit 8)
+// ---------------------------------------------------------------------------
+describe("constants.js — HEADLAMP section", () => {
+  it("exports all required HEADLAMP keys", async () => {
+    const { HEADLAMP } = await import("./constants");
+    const requiredKeys = [
+      "LOOP_SECONDS",
+      "COLOR",
+      "HDR_BOOST",
+      "SPRITE_SCALE",
+      "SPRITE_TEX_SIZE",
+      "SPRITE_FALLOFF",
+      "Y_OFFSET",
+      "BOB_AMP",
+      "BOB_HZ",
+      "LIGHT_COLOR",
+      "LIGHT_INTENSITY",
+      "LIGHT_DISTANCE",
+      "LIGHT_DECAY",
+    ];
+    for (const key of requiredKeys) {
+      expect(HEADLAMP).toHaveProperty(key);
+    }
+  });
+
+  it("HEADLAMP.LOOP_SECONDS is in [30, 180] (sane lap duration for a runner)", async () => {
+    const { HEADLAMP } = await import("./constants");
+    expect(HEADLAMP.LOOP_SECONDS).toBeGreaterThanOrEqual(30);
+    expect(HEADLAMP.LOOP_SECONDS).toBeLessThanOrEqual(180);
+  });
+
+  it("HEADLAMP.HDR_BOOST > 1 (must cross Bloom luminanceThreshold=1.0 gate)", async () => {
+    const { HEADLAMP } = await import("./constants");
+    expect(HEADLAMP.HDR_BOOST).toBeGreaterThan(1);
+  });
+
+  it("HEADLAMP.COLOR and LIGHT_COLOR are valid 6-digit hex strings", async () => {
+    const { HEADLAMP } = await import("./constants");
+    const hexRe = /^#[0-9a-fA-F]{6}$/;
+    expect(HEADLAMP.COLOR).toMatch(hexRe);
+    expect(HEADLAMP.LIGHT_COLOR).toMatch(hexRe);
+  });
+
+  it("HEADLAMP.LIGHT_DISTANCE > 0 (must have positive influence radius)", async () => {
+    const { HEADLAMP } = await import("./constants");
+    expect(HEADLAMP.LIGHT_DISTANCE).toBeGreaterThan(0);
+  });
+
+  it("HEADLAMP.SPRITE_TEX_SIZE is a power of two in [16, 256] (GPU texture requirement)", async () => {
+    const { HEADLAMP } = await import("./constants");
+    const s = HEADLAMP.SPRITE_TEX_SIZE;
+    expect(s).toBeGreaterThanOrEqual(16);
+    expect(s).toBeLessThanOrEqual(256);
+    expect(s & (s - 1)).toBe(0);
+  });
+
+  it("HEADLAMP.SPRITE_FALLOFF > 0 (required for createRadialGlowTexture falloffExp param)", async () => {
+    const { HEADLAMP } = await import("./constants");
+    expect(HEADLAMP.SPRITE_FALLOFF).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite 12 — Headlamp export contract (Unit 8)
+// ---------------------------------------------------------------------------
+describe("Headlamp — export contract", () => {
+  it("default export is a function", async () => {
+    const mod = await import("./Headlamp");
+    expect(typeof mod.default).toBe("function");
+  });
+
+  it("source references getRouteCurve (reads the singleton race-route curve)", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./Headlamp.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("getRouteCurve");
+  });
+
+  it("source references getPointAt (advances position along curve with pre-allocated target)", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./Headlamp.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("getPointAt");
+  });
+
+  it("source references dispose (glowTex cleanup on unmount — GPU memory discipline)", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./Headlamp.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("dispose");
+  });
+
+  it("source references AdditiveBlending (sprite adds color — never occludes scene)", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./Headlamp.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("AdditiveBlending");
+  });
+});

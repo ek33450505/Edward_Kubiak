@@ -10,6 +10,7 @@ import Trees from "./Trees";
 import RaceRoute from "./RouteLine";
 import Fireflies from "./Fireflies";
 import Mist from "./Mist";
+import Headlamp from "./Headlamp";
 import CameraRig from "./CameraRig";
 
 // ---------------------------------------------------------------------------
@@ -52,6 +53,11 @@ function TrailScene() {
         <River />
         <Trees />
         <RaceRoute />
+        {/* Headlamp: after RaceRoute — the narrative protagonist. Warm HDR sprite
+            blooms; moving pointLight warms terrain/trees (LDR — never blooms).
+            Adding the pointLight triggers a one-time shader recompile at mount,
+            hidden inside Suspense so no dropped frame is visible. */}
+        <Headlamp />
         <Fireflies />
         {/* Mist: after River — depth-sorted transparents; river draws first
             (further from camera), mist alpha-blends on top. See Mist.jsx

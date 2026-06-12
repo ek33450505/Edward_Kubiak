@@ -329,6 +329,47 @@ export const MIST = {
 };
 
 // ---------------------------------------------------------------------------
+// Headlamp — Runner's headlamp: narrative protagonist tracing the race-route loop.
+//
+// The headlamp is the BRIGHTEST moving element in the scene. Its sprite uses
+// toneMapped:false + HDR_BOOST > 1.0 to cross the Bloom luminanceThreshold=1.0
+// gate — the warm halo blooms while terrain/trees (LDR) stay unaffected.
+//
+// HDR contract:
+//   Sprite SpriteMaterial: warmHDR = Color(COLOR) × HDR_BOOST = 3.2.
+//     → linear channel values ~3.2 → crosses bloom gate; the sprite itself blooms.
+//   PointLight: lights LDR surfaces (terrain, trees). Because those surfaces are
+//     tone-mapped (default ACESFilmic), the POOL of warm light on terrain never
+//     blooms — only the lamp sprite does. Soft radiant halo without overblowing.
+//
+// Protagonist-contrast design:
+//   ROUTE.OPACITY = 0.55 (dimmed in Unit 4 precisely so the headlamp reads louder).
+//   The headlamp always reads as visually dominant over the route line.
+//
+// PointLight shader recompile note:
+//   Adding this pointLight raises NUM_POINT_LIGHTS by 1. Three.js triggers a
+//   one-time recompile of all lit materials (terrain, trees, river) at mount.
+//   Hidden inside Suspense — user never sees a dropped frame.
+//   terrain's onBeforeCompile re-runs cleanly on recompile (plan-verified fact).
+// ---------------------------------------------------------------------------
+export const HEADLAMP = {
+  LOOP_SECONDS: 75,          // one lap duration — Mohican 100 race pace feel
+  COLOR: "#ffc66e",          // warm amber — headlamp source color (sprite tint)
+  HDR_BOOST: 3.2,            // multiplier: Color(COLOR) × HDR_BOOST > 1.0 → blooms
+  SPRITE_SCALE: 0.28,        // world-unit scale of the glow sprite quad
+  SPRITE_TEX_SIZE: 64,       // createRadialGlowTexture size (power of two; GPU req)
+  SPRITE_FALLOFF: 2.2,       // glow falloff exponent (matches firefly sprite)
+  Y_OFFSET: 0.09,            // world Y above route curve point (runner's head height)
+  BOB_AMP: 0.025,            // vertical bob amplitude (world units)
+  BOB_HZ: 1.6,               // bob frequency in Hz (running cadence — ~1.6 steps/sec)
+  LIGHT_COLOR: "#ffb066",    // warm light pool color — slightly richer amber than sprite
+  LIGHT_INTENSITY: 1.6,      // point light intensity (LDR surfaces only — no bloom);
+                             // assumes three's default lighting model — tune at visual QA
+  LIGHT_DISTANCE: 2.5,       // max influence radius (world units); caps terrain spill
+  LIGHT_DECAY: 2,            // physically-based quadratic distance falloff
+};
+
+// ---------------------------------------------------------------------------
 // SKY — SkyDome shader parameters (see SkyDome.jsx)
 //
 // SCENE.BACKGROUND_GRADIENT is the loading-state fallback: the container CSS
