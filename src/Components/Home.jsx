@@ -6,6 +6,7 @@ import CastStats from "./CastStats";
 import HeroStats from "./HeroStats";
 import projects from "../data/projects";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../data/castStats";
+import { getColorClasses } from "../utils/colors";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
 const StarField = lazy(() => import("./Effects/StarField"));
@@ -37,14 +38,6 @@ const competencies = [
   },
 ];
 
-const colorMap = {
-  violet: "text-violet-400 bg-violet-400/10",
-  teal: "text-teal-400 bg-teal-400/10",
-  sky: "text-sky-400 bg-sky-400/10",
-  amber: "text-amber-400 bg-amber-400/10",
-  emerald: "text-emerald-400 bg-emerald-400/10",
-  rose: "text-rose-400 bg-rose-400/10",
-};
 
 function ScrollCue() {
   const shouldReduceMotion = useReducedMotion();
@@ -105,7 +98,7 @@ function FeaturedWork() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {featuredProjects.map((project, i) => {
-          const iconColors = colorMap[project.color] || "text-amber-400 bg-amber-400/10";
+          const iconColors = getColorClasses(project.color);
           const [iconColor] = iconColors.split(" ");
           const description =
             project.description.length > 80
