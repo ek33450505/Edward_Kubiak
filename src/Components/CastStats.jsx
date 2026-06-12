@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Bot, Package, TestTube2, Terminal, Hash } from "lucide-react";
+import { fadeUp } from "../utils/motion";
 import { CAST_STATS } from "../data/castStats";
+import SectionHeader from "./ui/SectionHeader";
 
 const PILLS = [
   { key: "version", label: "Version", icon: Hash },
@@ -38,17 +40,14 @@ function CastStats() {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5 }}
       className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
     >
       <div className="mb-6">
-        <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase">
-          CAST Ecosystem — Live Stats
-        </h2>
-        <div className="mt-2 w-16 h-0.5 bg-amber-400/60" />
+        <SectionHeader title="CAST Ecosystem — Live Stats" />
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -68,7 +67,7 @@ function CastStats() {
               <span className="font-display text-base font-bold text-amber-400">
                 {value}
               </span>
-              <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
+              <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
                 {label}
               </span>
             </motion.div>

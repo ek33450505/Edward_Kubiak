@@ -1,104 +1,16 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
+import { fadeUp, fadeIn } from "../utils/motion";
 import { ExternalLink, ArrowLeft, Star } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
-
-const colorMap = {
-  amber: {
-    bg: "bg-amber-400/10",
-    text: "text-amber-400",
-    badge: "bg-amber-400/10 text-amber-400",
-    stat: "bg-amber-400/8 text-amber-400/70 border-amber-400/15",
-    border: "border-amber-400/30",
-  },
-  teal: {
-    bg: "bg-teal-400/10",
-    text: "text-teal-400",
-    badge: "bg-teal-400/10 text-teal-400",
-    stat: "bg-teal-400/8 text-teal-400/70 border-teal-400/15",
-    border: "border-teal-400/30",
-  },
-  violet: {
-    bg: "bg-violet-400/10",
-    text: "text-violet-400",
-    badge: "bg-violet-400/10 text-violet-400",
-    stat: "bg-violet-400/8 text-violet-400/70 border-violet-400/15",
-    border: "border-violet-400/30",
-  },
-  sky: {
-    bg: "bg-sky-400/10",
-    text: "text-sky-400",
-    badge: "bg-sky-400/10 text-sky-400",
-    stat: "bg-sky-400/8 text-sky-400/70 border-sky-400/15",
-    border: "border-sky-400/30",
-  },
-  emerald: {
-    bg: "bg-emerald-400/10",
-    text: "text-emerald-400",
-    badge: "bg-emerald-400/10 text-emerald-400",
-    stat: "bg-emerald-400/8 text-emerald-400/70 border-emerald-400/15",
-    border: "border-emerald-400/30",
-  },
-  rose: {
-    bg: "bg-rose-400/10",
-    text: "text-rose-400",
-    badge: "bg-rose-400/10 text-rose-400",
-    stat: "bg-rose-400/8 text-rose-400/70 border-rose-400/15",
-    border: "border-rose-400/30",
-  },
-};
-
-let starsCache = null;
-let starsCachePromise = null;
-
-function fetchStarsMap() {
-  if (starsCache !== null) return Promise.resolve(starsCache);
-  if (starsCachePromise) return starsCachePromise;
-  starsCachePromise = fetch("/github-stars.json")
-    .then((res) => {
-      if (!res.ok) throw new Error("not found");
-      return res.json();
-    })
-    .then((data) => {
-      starsCache = data;
-      return data;
-    })
-    .catch(() => {
-      starsCache = {};
-      return {};
-    });
-  return starsCachePromise;
-}
-
-function useGitHubStars(owner, repo) {
-  const [stars, setStars] = useState(null);
-
-  useEffect(() => {
-    if (!owner || !repo) return;
-    let cancelled = false;
-    fetchStarsMap().then((map) => {
-      if (cancelled) return;
-      if (repo in map) {
-        setStars(map[repo]);
-      } else {
-        fetch(`https://api.github.com/repos/${owner}/${repo}`)
-          .then((res) => res.ok ? res.json() : null)
-          .then((data) => {
-            if (!cancelled && data) setStars(data.stargazers_count ?? null);
-          })
-          .catch(() => {});
-      }
-    });
-    return () => { cancelled = true; };
-  }, [owner, repo]);
-
-  return stars;
-}
+import { colorMap } from "../utils/colors";
+import PageWrapper from "./ui/PageWrapper";
+import { useGitHubStars } from "../hooks/useGitHubStars";
 
 function StarBadge({ owner, repo }) {
-  const stars = useGitHubStars(owner, repo);
+  const { stars } = useGitHubStars(owner, repo);
   if (stars === null) return null;
   return (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-amber-400/10 text-amber-400 border border-amber-400/20">
@@ -126,10 +38,11 @@ function ProjectDetail() {
   if (!project) {
     return (
       <div className="min-h-[calc(100vh-80px)] py-20">
-        <div className="max-w-4xl mx-auto px-6">
+        <PageWrapper>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
             transition={{ duration: 0.4 }}
             className="text-center py-20"
           >
@@ -143,7 +56,7 @@ function ProjectDetail() {
               Back to Projects
             </Link>
           </motion.div>
-        </div>
+        </PageWrapper>
       </div>
     );
   }
@@ -153,12 +66,12 @@ function ProjectDetail() {
 
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         {/* Hero */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
           <div className={`p-8 rounded-xl border ${project.featured ? "border-amber-400/25" : "border-slate-800/60"} bg-slate-900/40`}>
             {/* Icon + Title */}
@@ -190,7 +103,7 @@ function ProjectDetail() {
                     <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />
                   )}
                 </div>
-                <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
+                <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
                   {project.category}
                   {project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""}
                 </span>
@@ -227,12 +140,13 @@ function ProjectDetail() {
 
         {/* Description */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          transition={{ delay: 0.1 }}
           className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
             About
           </h2>
           <p className="text-slate-300 leading-relaxed">{project.description}</p>
@@ -241,12 +155,13 @@ function ProjectDetail() {
         {/* Tech stack */}
         {project.tech && project.tech.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.15 }}
             className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
               Tech Stack
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -265,12 +180,13 @@ function ProjectDetail() {
         {/* Stats */}
         {project.stats && project.stats.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.2 }}
             className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
               Stats
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -289,12 +205,13 @@ function ProjectDetail() {
         {/* Links panel */}
         {(project.github || project.link) && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ delay: 0.25 }}
             className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
               Links
             </h2>
             <div className="flex flex-wrap gap-3">
@@ -326,9 +243,10 @@ function ProjectDetail() {
 
         {/* Back link */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          variants={fadeIn}
+          initial="hidden"
+          animate="show"
+          transition={{ delay: 0.3 }}
           className="mt-10"
         >
           <Link
@@ -339,7 +257,7 @@ function ProjectDetail() {
             Back to Projects
           </Link>
         </motion.div>
-      </div>
+      </PageWrapper>
     </div>
   );
 }

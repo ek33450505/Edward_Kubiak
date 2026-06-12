@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { TrendingUp, Mountain, Infinity, Flame } from "lucide-react";
+import { fadeUp } from "../utils/motion";
 
 function timeAgo(dateString) {
   const now = new Date();
@@ -83,12 +84,13 @@ const StravaStats = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4 }}
     >
-      <h4 className="font-display text-[10px] tracking-[0.3em] text-slate-500 uppercase mt-4 mb-3">
+      <h4 className="font-display text-[10px] tracking-[0.3em] text-slate-400 uppercase mt-4 mb-3">
         Trail Stats
       </h4>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -101,13 +103,13 @@ const StravaStats = () => {
             <div className="text-2xl font-display font-bold text-amber-400">
               {value}
             </div>
-            <div className="font-display text-[10px] tracking-widest text-slate-500 mt-1 uppercase">
+            <div className="font-display text-[10px] tracking-widest text-slate-400 mt-1 uppercase">
               {label}
             </div>
           </div>
         ))}
       </div>
-      <p className="mt-3 text-[10px] tracking-wider font-display text-slate-500">
+      <p className="mt-3 text-[10px] tracking-wider font-display text-slate-400">
         Live from{" "}
         <span style={{ color: "#fc4c02" }}>Strava</span>
         {" · updated "}

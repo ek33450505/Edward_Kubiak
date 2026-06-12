@@ -1,6 +1,9 @@
 import { motion, useReducedMotion } from "motion/react";
+import { fadeUp, slideInLeft, staggerItem } from "../utils/motion";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch, Mail, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "./BrandIcons";
+import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
 import { aggregateTech } from "../utils/aggregateTech";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
@@ -9,26 +12,29 @@ const About = () => {
   const reducedMotion = useReducedMotion();
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            About <span className="text-amber-400">Me</span>
-          </h1>
-          <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+          <SectionHeader
+            as="h1"
+            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            underlineClassName="mt-3"
+            title={<>About <span className="text-amber-400">Me</span></>}
+          />
         </motion.div>
 
         {/* Bio cards — scroll-triggered */}
         <div className="mt-12 space-y-6">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            variants={slideInLeft}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ delay: 0.1 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
             className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
           >
@@ -68,10 +74,11 @@ const About = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            variants={slideInLeft}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, delay: 0.15 }}
+            transition={{ delay: 0.15 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
             className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
           >
@@ -94,10 +101,11 @@ const About = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            variants={slideInLeft}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, delay: 0.15 }}
+            transition={{ delay: 0.15 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
             className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
           >
@@ -130,9 +138,10 @@ const About = () => {
             const techData = aggregateTech();
             return techData.length > 0 ? (
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                variants={staggerItem}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5 }}
                 className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
               >
@@ -166,8 +175,9 @@ const About = () => {
 
           <div className="grid sm:grid-cols-2 gap-6">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={staggerItem}
+              initial="hidden"
+              whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5 }}
               whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
@@ -191,8 +201,9 @@ const About = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={staggerItem}
+              initial="hidden"
+              whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: 0.1 }}
               whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
@@ -220,14 +231,15 @@ const About = () => {
 
           {/* Get in touch */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ delay: 0.1 }}
             className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
           >
             <div className="text-center">
-              <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-2">
+              <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-2">
                 Get in Touch
               </h2>
               <p className="text-sm text-slate-400 mb-6">
@@ -298,7 +310,7 @@ const About = () => {
             </div>
           </motion.div>
         </div>
-      </div>
+      </PageWrapper>
     </div>
   );
 };

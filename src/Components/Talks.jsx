@@ -1,6 +1,9 @@
 import { motion } from "motion/react";
 import { ExternalLink, Mic, Headphones, FileText, Play } from "lucide-react";
+import { fadeUp } from "../utils/motion";
 import talks from "../data/talks";
+import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 
 const typeConfig = {
   talk: { icon: Mic, label: "Talk", color: "text-amber-400 bg-amber-400/10" },
@@ -15,8 +18,9 @@ function TalkCard({ talk, index }) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
@@ -28,7 +32,7 @@ function TalkCard({ talk, index }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="font-display text-[10px] tracking-wider uppercase text-slate-500">
+            <span className="font-display text-[10px] tracking-wider uppercase text-slate-400">
               {config.label}
             </span>
             {talk.event && (
@@ -103,17 +107,19 @@ function TalkCard({ talk, index }) {
 const Talks = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            Talks & <span className="text-amber-400">Writing</span>
-          </h1>
-          <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+          <SectionHeader
+            as="h1"
+            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            underlineClassName="mt-3"
+            title={<>Talks & <span className="text-amber-400">Writing</span></>}
+          />
           <p className="mt-4 text-slate-400 leading-relaxed max-w-xl">
             Conference talks, podcast appearances, demos, and articles. More
             writing on{" "}
@@ -140,13 +146,14 @@ const Talks = () => {
 
         {/* Empty / coming soon state */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-8 p-6 rounded-xl border border-slate-800/40 bg-slate-900/20 text-center"
         >
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-400">
             More coming soon &mdash;{" "}
             <a
               href="https://dev.to/edwardkubiak"
@@ -160,7 +167,7 @@ const Talks = () => {
             .
           </p>
         </motion.div>
-      </div>
+      </PageWrapper>
     </div>
   );
 };

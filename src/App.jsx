@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
@@ -6,14 +6,14 @@ import { GithubIcon } from "./Components/BrandIcons";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
 import "./App.css";
 
-import Home from "./Components/Home";
-import About from "./Components/About";
-import Portfolio from "./Components/Portfolio";
-import ProjectDetail from "./Components/ProjectDetail";
-import Resume from "./Components/Resume";
-import Now from "./Components/Now";
-import Talks from "./Components/Talks";
-import Uses from "./Components/Uses";
+const Home = lazy(() => import("./Components/Home"));
+const About = lazy(() => import("./Components/About"));
+const Portfolio = lazy(() => import("./Components/Portfolio"));
+const ProjectDetail = lazy(() => import("./Components/ProjectDetail"));
+const Resume = lazy(() => import("./Components/Resume"));
+const Now = lazy(() => import("./Components/Now"));
+const Talks = lazy(() => import("./Components/Talks"));
+const Uses = lazy(() => import("./Components/Uses"));
 import CommandPalette, { CommandPaletteProvider, useCommandPalette } from "./Components/CommandPalette";
 import BrandingImage from "./Images/Brand.svg";
 
@@ -84,7 +84,7 @@ function NavBar() {
             title="Open command palette"
             className="ml-2 p-2 text-slate-400 hover:text-amber-400 transition-colors flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
           >
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-700 text-[10px] font-display tracking-wider text-slate-500 hover:border-amber-400/50 hover:text-amber-400 transition-all">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-700 text-[10px] font-display tracking-wider text-slate-400 hover:border-amber-400/50 hover:text-amber-400 transition-all">
               ⌘K
             </span>
           </button>
@@ -154,7 +154,7 @@ function NavBar() {
                 onClick={() => { setOpen(false); toggle(); }}
                 className="flex items-center gap-2 py-3 text-slate-400 hover:text-amber-400 font-display text-sm tracking-widest uppercase transition-colors border-b border-slate-800/40 text-left"
               >
-                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-slate-700 text-[10px] text-slate-500">⌘K</span>
+                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-slate-700 text-[10px] text-slate-400">⌘K</span>
               </button>
               <a
                 href="https://github.com/ek33450505"
@@ -215,16 +215,18 @@ function AnimatedRoutes() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="page-content"
       >
-        <Routes location={location}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/projects" element={<Portfolio />} />
-          <Route path="/projects/:slug" element={<ProjectDetail />} />
-          <Route path="/resume" element={<Resume />} />
-          <Route path="/now" element={<Now />} />
-          <Route path="/talks" element={<Talks />} />
-          <Route path="/uses" element={<Uses />} />
-        </Routes>
+        <Suspense fallback={<div className="min-h-[60vh]" />}>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Portfolio />} />
+            <Route path="/projects/:slug" element={<ProjectDetail />} />
+            <Route path="/resume" element={<Resume />} />
+            <Route path="/now" element={<Now />} />
+            <Route path="/talks" element={<Talks />} />
+            <Route path="/uses" element={<Uses />} />
+          </Routes>
+        </Suspense>
       </motion.div>
     </AnimatePresence>
   );
@@ -250,7 +252,7 @@ function App() {
 
           {/* Footer */}
           <footer className="border-t border-slate-800/60 py-8 px-6">
-            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-sm">
+            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-sm">
               <p className="font-display text-xs tracking-wider">
                 &copy; {new Date().getFullYear()} EDWARD KUBIAK
               </p>

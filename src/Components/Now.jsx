@@ -1,19 +1,24 @@
 import { motion } from "motion/react";
 import now from "../data/now";
+import { fadeUp, fadeIn } from "../utils/motion";
+import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 
 const Now = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            Now
-          </h1>
-          <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+          <SectionHeader
+            as="h1"
+            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            underlineClassName="mt-3"
+            title="Now"
+          />
           <p className="mt-4 text-slate-400 text-sm">
             What I&apos;m focused on right now &middot; Last updated{" "}
             <span className="text-slate-300">{now.updated}</span>
@@ -24,8 +29,9 @@ const Now = () => {
           {now.sections.map((section, i) => (
             <motion.div
               key={section.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
@@ -52,8 +58,9 @@ const Now = () => {
         </div>
 
         <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          variants={fadeIn}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-10 text-xs text-slate-600 font-display tracking-wider"
@@ -69,7 +76,7 @@ const Now = () => {
             nownownow.com
           </a>
         </motion.p>
-      </div>
+      </PageWrapper>
     </div>
   );
 };

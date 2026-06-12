@@ -1,6 +1,9 @@
 import { motion } from "motion/react";
 import { Mail, MapPin, Download, FileText } from "lucide-react";
+import { fadeUp } from "../utils/motion";
 import { CAST_STATS, CAST_DESKTOP_STATS } from "../data/castStats";
+import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 
 const skills = {
   Frontend: [
@@ -155,7 +158,7 @@ const printStyles = `
     }
     #resume-print .text-amber-400, #resume-print .text-sky-400,
     #resume-print .text-emerald-400, #resume-print .text-rose-400,
-    #resume-print .text-slate-400, #resume-print .text-slate-500 {
+    #resume-print .text-slate-400 {
       color: #475569 !important;
     }
     #resume-print .bg-amber-400\\/10, #resume-print .bg-sky-400\\/10,
@@ -173,19 +176,21 @@ const Resume = () => {
   return (
     <div id="resume-print" className="min-h-[calc(100vh-80px)] py-20">
       <style>{printStyles}</style>
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
           className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
         >
           <div>
-            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-              Edward <span className="text-amber-400">Kubiak</span>
-            </h1>
-            <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+            <SectionHeader
+              as="h1"
+              headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+              underlineClassName="mt-3"
+              title={<>Edward <span className="text-amber-400">Kubiak</span></>}
+            />
             <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-400">
               <a
                 href="mailto:edward.kubiak.dev@gmail.com"
@@ -246,13 +251,14 @@ const Resume = () => {
 
         {/* Summary */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-10 p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-3">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-3">
             Summary
           </h2>
           <p className="text-slate-300 leading-relaxed">
@@ -262,21 +268,23 @@ const Resume = () => {
 
         {/* Skills grid */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-3">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-3">
             Skills
           </h2>
           <div className="grid sm:grid-cols-2 gap-3">
             {Object.entries(skills).map(([category, items], i) => (
               <motion.div
                 key={category}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 className="skill-card p-3.5 rounded-xl border border-slate-800/60 bg-slate-900/30"
@@ -303,13 +311,13 @@ const Resume = () => {
 
         {/* Experience */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5 }}
           className="mt-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
             Experience
           </h2>
           {experience.map((job) => (
@@ -326,7 +334,7 @@ const Resume = () => {
                     {job.company} &mdash; {job.location}
                   </p>
                 </div>
-                <span className="font-display text-xs tracking-wider text-slate-500 shrink-0">
+                <span className="font-display text-xs tracking-wider text-slate-400 shrink-0">
                   {job.period}
                 </span>
               </div>
@@ -351,13 +359,13 @@ const Resume = () => {
 
         {/* Education */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5 }}
           className="mt-8 mb-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-500 uppercase mb-4">
+          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
             Education
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -370,14 +378,14 @@ const Resume = () => {
                   {edu.degree}
                 </h3>
                 <p className="text-slate-400 text-sm mt-1">{edu.institution}</p>
-                <p className="font-display text-xs tracking-wider text-slate-500 mt-2">
+                <p className="font-display text-xs tracking-wider text-slate-400 mt-2">
                   {edu.period}
                 </p>
               </div>
             ))}
           </div>
         </motion.div>
-      </div>
+      </PageWrapper>
     </div>
   );
 };

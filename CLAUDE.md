@@ -1,6 +1,6 @@
 # Edward_Kubiak
 
-Personal portfolio site — React 19 + Vite 8 + TypeScript, deployed to GitHub Pages.
+Personal portfolio site — React 19 + Vite 8 + JSX, deployed to GitHub Pages.
 
 ## Install
 ```bash

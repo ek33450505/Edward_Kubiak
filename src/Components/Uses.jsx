@@ -1,6 +1,9 @@
 import { motion } from "motion/react";
 import { Terminal, Brain, GitBranch, Cpu, Package } from "lucide-react";
+import { fadeUp, staggerItem } from "../utils/motion";
 import { CAST_STATS } from "../data/castStats";
+import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 
 const sections = [
   {
@@ -90,8 +93,9 @@ function SectionCard({ section, index }) {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={staggerItem}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       aria-labelledby={`uses-${section.id}-heading`}
@@ -135,17 +139,19 @@ function SectionCard({ section, index }) {
 const Uses = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-4xl mx-auto px-6">
+      <PageWrapper>
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            What I <span className="text-amber-400">Use</span>
-          </h1>
-          <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+          <SectionHeader
+            as="h1"
+            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            underlineClassName="mt-3"
+            title={<>What I <span className="text-amber-400">Use</span></>}
+          />
           <p className="mt-4 text-slate-400 leading-relaxed max-w-xl">
             The hardware, software, and tools that power my day-to-day
             development workflow.
@@ -158,7 +164,7 @@ const Uses = () => {
             <SectionCard key={section.id} section={section} index={i} />
           ))}
         </div>
-      </div>
+      </PageWrapper>
     </div>
   );
 };

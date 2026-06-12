@@ -3,56 +3,13 @@ import { useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ExternalLink, Star } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
+import SectionHeader from "./ui/SectionHeader";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
-import { staggerContainer, staggerItem } from "../utils/motion";
-
-
-const colorMap = {
-  amber: {
-    bg: "bg-amber-400/10",
-    text: "text-amber-400",
-    badge: "bg-amber-400/10 text-amber-400",
-    stat: "bg-amber-400/8 text-amber-400/70 border-amber-400/15",
-    spotlight: "rgba(0, 255, 194, 0.08)",
-  },
-  teal: {
-    bg: "bg-teal-400/10",
-    text: "text-teal-400",
-    badge: "bg-teal-400/10 text-teal-400",
-    stat: "bg-teal-400/8 text-teal-400/70 border-teal-400/15",
-    spotlight: "rgba(45, 212, 191, 0.1)",
-  },
-  violet: {
-    bg: "bg-violet-400/10",
-    text: "text-violet-400",
-    badge: "bg-violet-400/10 text-violet-400",
-    stat: "bg-violet-400/8 text-violet-400/70 border-violet-400/15",
-    spotlight: "rgba(167, 139, 250, 0.1)",
-  },
-  sky: {
-    bg: "bg-sky-400/10",
-    text: "text-sky-400",
-    badge: "bg-sky-400/10 text-sky-400",
-    stat: "bg-sky-400/8 text-sky-400/70 border-sky-400/15",
-    spotlight: "rgba(56, 189, 248, 0.08)",
-  },
-  emerald: {
-    bg: "bg-emerald-400/10",
-    text: "text-emerald-400",
-    badge: "bg-emerald-400/10 text-emerald-400",
-    stat: "bg-emerald-400/8 text-emerald-400/70 border-emerald-400/15",
-    spotlight: "rgba(52, 211, 153, 0.08)",
-  },
-  rose: {
-    bg: "bg-rose-400/10",
-    text: "text-rose-400",
-    badge: "bg-rose-400/10 text-rose-400",
-    stat: "bg-rose-400/8 text-rose-400/70 border-rose-400/15",
-    spotlight: "rgba(251, 113, 133, 0.08)",
-  },
-};
+import { fadeUp, staggerContainer, staggerItem } from "../utils/motion";
+import { colorMap } from "../utils/colors";
+import { useGitHubStars } from "../hooks/useGitHubStars";
 
 const filters = [
   { key: "all", label: "All" },
@@ -61,69 +18,6 @@ const filters = [
   { key: "cast-ecosystem", label: "CAST Ecosystem" },
   { key: "professional", label: "Professional" },
 ];
-
-let starsCache = null;
-let starsCachePromise = null;
-
-function fetchStarsMap() {
-  if (starsCache !== null) return Promise.resolve(starsCache);
-  if (starsCachePromise) return starsCachePromise;
-  starsCachePromise = fetch("/github-stars.json")
-    .then((res) => {
-      if (!res.ok) throw new Error("not found");
-      return res.json();
-    })
-    .then((data) => {
-      starsCache = data;
-      return data;
-    })
-    .catch(() => {
-      starsCache = {};
-      return {};
-    });
-  return starsCachePromise;
-}
-
-function useGitHubStars(owner, repo) {
-  const [stars, setStars] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!owner || !repo) {
-      setLoading(false);
-      return;
-    }
-    let cancelled = false;
-    fetchStarsMap()
-      .then((map) => {
-        if (cancelled) return;
-        if (repo in map) {
-          setStars(map[repo]);
-          setLoading(false);
-        } else {
-          return fetch(`https://api.github.com/repos/${owner}/${repo}`)
-            .then((res) => {
-              if (!res.ok) throw new Error("API error");
-              return res.json();
-            })
-            .then((data) => {
-              if (!cancelled) {
-                setStars(data.stargazers_count ?? null);
-                setLoading(false);
-              }
-            });
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [owner, repo]);
-
-  return { stars, loading };
-}
 
 function StarBadge({ owner, repo }) {
   const { stars, loading } = useGitHubStars(owner, repo);
@@ -188,7 +82,7 @@ function ProjectCard({ project }) {
                     <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />
                   )}
                 </div>
-                <span className="font-display text-[10px] tracking-[0.2em] text-slate-500 uppercase">
+                <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
                   {project.category}{project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""}
                 </span>
               </div>
@@ -307,14 +201,16 @@ function Portfolio() {
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
         >
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-            Projects
-          </h1>
-          <div className="mt-3 w-16 h-0.5 bg-amber-400/60" />
+          <SectionHeader
+            as="h1"
+            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            underlineClassName="mt-3"
+            title="Projects"
+          />
         </motion.div>
 
         {/* Filter tabs */}
@@ -361,7 +257,7 @@ function Portfolio() {
             animate="show"
           >
             {filtered.length === 0 && (
-              <div className="col-span-2 py-20 text-center text-slate-500 font-display text-sm tracking-wider">
+              <div className="col-span-2 py-20 text-center text-slate-400 font-display text-sm tracking-wider">
                 No projects in this category yet.
               </div>
             )}
