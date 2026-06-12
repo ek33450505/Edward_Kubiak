@@ -205,7 +205,7 @@ export const FIREFLIES = {
   // POINT_SIZE 0.14 (was 0.08): soft radial sprite reads smaller than a hard GL
   // point at the same pixel radius — scaling up compensates so on-screen apparent
   // size is unchanged after adding the glow texture map.
-  POINT_SIZE: 0.14,
+  POINT_SIZE: 0.22,
 
   // HDR selective-bloom contract (Unit 6):
   // HDR_PEAK: color scale factor at flash peak. With toneMapped={false}, a peak
@@ -235,11 +235,12 @@ export const FIREFLIES = {
 // to BREATH_PERIOD=64 s.
 // ---------------------------------------------------------------------------
 export const CAMERA = {
-  POSITION: [8, 4, 0],   // looking across the gorge from the east ridge
+  POSITION: [0.9, 3.2, 11.2],   // hovering over the gorge mouth, sighting down the river line (tuned at visual QA)
   FOV: 55,
 
   // CameraRig breath — Lissajous drift parameters
-  LOOK_AT: [0, 0, 0],           // target; re-asserted every frame by CameraRig
+  LOOK_AT: [-0.4, 0.35, -2.5],  // down the gorge axis, panned left so the gorge reads center-right,
+                                // clearing the hero text column; re-asserted every frame by CameraRig
   BREATH_AMP: 0.15,             // world-unit drift amplitude
   BREATH_PERIOD: 64,            // seconds for one X-axis cycle
   // Irrational-ish frequency ratios → Lissajous path never visibly repeats
@@ -318,10 +319,11 @@ export const MIST = {
   LENGTH: 18,
   CENTER_X: 1.0,
   LAYER_YS: [0.35, 0.55, 0.78, 1.02],        // strictly ascending (tested)
-  LAYER_OPACITIES: [0.16, 0.12, 0.09, 0.06], // each in (0,1) (tested)
+  LAYER_OPACITIES: [0.32, 0.24, 0.18, 0.12], // each in (0,1) (tested)
   DRIFT_SPEEDS: [0.006, -0.008, 0.010, -0.004], // mixed signs; ~0.004–0.012 range
   REPEATS: [[2, 1], [3, 1.5], [1.5, 2], [2.5, 1]], // per-layer [wrapX, wrapY]
-  COLOR: "#1c2a3a",   // deep gorge-fog tint — cross-ref: PALETTE.SLATE_950 family
+  COLOR: "#56708c",   // skylit haze — must read LIGHTER than the gorge shadow behind it
+                      // (#1c2a3a was darker than the background → invisible; found at visual QA)
   TEX_SIZE: 128,       // power of two (tested)
   NOISE_SEED: 0xb4f3e19a,
   NOISE_LATTICE: 8,
