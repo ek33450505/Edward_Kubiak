@@ -78,10 +78,15 @@ export function sampleHeight(nx, nz) {
       ? floorHeight
       : baseHeight * (1 - wallFactor) + wallFactor * 0.35;
 
-  // Small undulation (stable sine — no random)
+  // Small undulation (stable sine — no random).
+  // Amplitudes sourced from TERRAIN.UNDULATION_AMP_A/B (constants.js) so
+  // they are tunable without touching shader code. Reduced from 0.04/0.03
+  // to 0.025/0.02 to calm ridgelines and let the dense forest read clearly.
+  // All consumers of sampleHeight (Trees, Fireflies, RouteLine) re-sample
+  // automatically — no per-consumer update needed.
   const undulation =
-    Math.sin(nx * 8.0 + 0.5) * 0.04 +
-    Math.sin(nz * 6.3 + 1.2) * 0.03;
+    Math.sin(nx * 8.0 + 0.5) * TERRAIN.UNDULATION_AMP_A +
+    Math.sin(nz * 6.3 + 1.2) * TERRAIN.UNDULATION_AMP_B;
 
   return Math.max(0.05, height + undulation);
 }

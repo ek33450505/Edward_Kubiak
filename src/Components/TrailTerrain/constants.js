@@ -23,6 +23,7 @@ export const PALETTE = {
   // Scene-specific (no site token equivalent)
   GORGE_WALL_MID: "#1a2a1a",   // terrain: gorge wall mid-tone
   GORGE_WALL_DARK: "#1a3a2a",  // hemlock trees (deep gorge shadow)
+  BEECH_MID: "#235c43",        // beech/tulip poplar mid-slope deciduous — between GORGE_WALL_DARK and EMERALD
   FLOOR_DARK: "#0a1218",       // terrain: gorge floor (darkest)
   FIREFLY_YELLOW: "#ffee44",   // firefly warm glow (~72% of fireflies)
   FOG: "#0a0f1a",              // fogExp2 color (same as SLATE_950)
@@ -45,6 +46,12 @@ export const TERRAIN = {
   GORGE_FLOOR_HEIGHT: 0.08, // normalized h at gorge floor (flat valley bottom)
   FLOOR_THRESHOLD: 0.7,  // gorgeShape above this → flat floor kicks in
   WALL_THRESHOLD: 0.6,   // gorgeFactor < this → wall blending factor active
+
+  // Small undulation — stable sine noise layered over the ridge base.
+  // Feeds tree/firefly placement AND the route line heights (sampleHeight is shared).
+  // Reducing these amplitudes calms ridgelines so the forest reads clearly.
+  UNDULATION_AMP_A: 0.025,  // x-axis sine amplitude (was hardcoded 0.04)
+  UNDULATION_AMP_B: 0.02,   // z-axis sine amplitude (was hardcoded 0.03)
 
   // Rim light — amber sun-crest highlight injected via onBeforeCompile.
   // Operates on outgoingLight (pre-opaque_fragment) → tone-mapped output → LDR.
@@ -82,31 +89,63 @@ export const RIVER = {
 };
 
 // ---------------------------------------------------------------------------
-// Trees — instanced hemlock (gorge walls) + oak (ridgelines)
+// Trees — three instanced species to read as forested, not dotted:
+//
+//   Band 1 — Hemlock (gorge walls)     h 0.18–0.55, close to gorge
+//   Band 2 — Beech / tulip poplar      h 0.20–0.55, mid-slope everywhere
+//            (fills the previously-empty open-slope zone)
+//   Band 3 — Oak / canopy ridgeline    h > 0.45, any distance
+//
+// Bands overlap slightly at their edges so species transitions look organic.
+// The gorge floor (h < ~0.15) is excluded from all three by their H_MIN values.
+// MAX_ATTEMPTS give each species a 30–37× attempt budget to ensure >90% fill rate (verified by tests).
 // ---------------------------------------------------------------------------
 export const TREES = {
-  HEMLOCK_TARGET: 150,   // max instances to place (may be fewer if placement fails)
-  OAK_TARGET: 150,
-  HEMLOCK_MAX_ATTEMPTS: 3000,
-  OAK_MAX_ATTEMPTS: 3000,
-  HEMLOCK_SEED: 0xdeadbeef,
+  // ---- Targets & attempt budgets ----
+  HEMLOCK_TARGET: 380,   // was 150; raised to fill gorge-wall bands
+  OAK_TARGET: 340,       // was 150; raised to fill ridgeline canopy
+  BEECH_TARGET: 320,     // new mid-slope species (beech / tulip poplar / yellow birch)
+  HEMLOCK_MAX_ATTEMPTS: 12000,  // was 3000; ~32× target ensures >90% fill
+  OAK_MAX_ATTEMPTS: 12000,
+  BEECH_MAX_ATTEMPTS: 12000,
 
-  // Hemlock placement criteria: gorge wall zone
+  // ---- Seeds (one per species for independent determinism) ----
+  HEMLOCK_SEED: 0xdeadbeef,
+  // Oak reuses the hemlock rand stream (existing behavior — changing would shift placements)
+  BEECH_SEED: 0xb33c4e57,   // independent stream for the new mid-slope species
+
+  // ---- Hemlock: gorge wall — tall narrow dark conifers ----
   HEMLOCK_H_MIN: 0.18,
   HEMLOCK_H_MAX: 0.55,
-  HEMLOCK_DIST_FROM_GORGE_MAX: 0.35,
+  HEMLOCK_DIST_FROM_GORGE_MAX: 0.5,   // was 0.35; wider to close gorge-wall gaps
   HEMLOCK_SCALE_MIN: 0.25,
-  HEMLOCK_SCALE_RANGE: 0.35, // scale = SCALE_MIN + rand() * SCALE_RANGE
+  HEMLOCK_SCALE_RANGE: 0.45,  // was 0.35; wider for understory size variety
   HEMLOCK_CONE_RADIUS: 0.2,
   HEMLOCK_CONE_HEIGHT: 1.0,
   HEMLOCK_CONE_SEGS: 5,
   HEMLOCK_X_SQUASH: 0.35,    // x/z scale relative to y (tall-narrow silhouette)
   HEMLOCK_Y_LIFT: 0.5,       // y offset factor relative to scale
 
-  // Oak placement criteria: ridgeline zone
-  OAK_H_MIN: 0.5,
+  // ---- Beech / tulip poplar / yellow birch: mid-slope deciduous ----
+  // Fills the open slope zone that was previously empty.
+  // Shape between hemlock (narrow/tall) and oak (squat canopy).
+  BEECH_H_MIN: 0.20,
+  BEECH_H_MAX: 0.55,
+  // No distFromGorge constraint — beeches grow across the full slope,
+  // overlapping hemlock and oak zones at their edges for organic transitions.
+  BEECH_SCALE_MIN: 0.25,
+  BEECH_SCALE_RANGE: 0.50,   // wide range — mature beeches alongside understory saplings
+  BEECH_CONE_RADIUS: 0.35,
+  BEECH_CONE_HEIGHT: 0.85,
+  BEECH_CONE_SEGS: 6,
+  BEECH_X_SQUASH: 0.55,      // moderate spread (between hemlock narrow and oak squat)
+  BEECH_Y_SQUASH: 0.85,      // slight y squash for rounded deciduous canopy shape
+  BEECH_Y_LIFT: 0.45,
+
+  // ---- Oak: ridgeline canopy — squat warm-green ----
+  OAK_H_MIN: 0.45,    // was 0.5; lowered slightly to close ridge-to-slope transition gap
   OAK_SCALE_MIN: 0.3,
-  OAK_SCALE_RANGE: 0.4,
+  OAK_SCALE_RANGE: 0.55,  // was 0.4; wider for understory oak variety
   OAK_CONE_RADIUS: 0.5,
   OAK_CONE_HEIGHT: 0.7,
   OAK_CONE_SEGS: 7,

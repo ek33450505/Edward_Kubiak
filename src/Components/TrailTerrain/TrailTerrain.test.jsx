@@ -180,9 +180,43 @@ describe("constants.js — tunable parameter exports", () => {
   it("TREES exports tree counts within sane bounds", async () => {
     const { TREES } = await import("./constants");
     expect(TREES.HEMLOCK_TARGET).toBeGreaterThanOrEqual(10);
-    expect(TREES.HEMLOCK_TARGET).toBeLessThanOrEqual(500);
+    expect(TREES.HEMLOCK_TARGET).toBeLessThanOrEqual(800);
     expect(TREES.OAK_TARGET).toBeGreaterThanOrEqual(10);
-    expect(TREES.OAK_TARGET).toBeLessThanOrEqual(500);
+    expect(TREES.OAK_TARGET).toBeLessThanOrEqual(800);
+    // Beech (mid-slope species added to fill open-slope zone)
+    expect(TREES.BEECH_TARGET).toBeGreaterThanOrEqual(10);
+    expect(TREES.BEECH_TARGET).toBeLessThanOrEqual(800);
+  });
+
+  it("TREES exports BEECH species geometry and placement constants", async () => {
+    const { TREES } = await import("./constants");
+    // Seeds
+    expect(typeof TREES.HEMLOCK_SEED).toBe("number");
+    expect(typeof TREES.BEECH_SEED).toBe("number");
+    // Placement band — above gorge floor, below ridgeline
+    expect(TREES.BEECH_H_MIN).toBeGreaterThanOrEqual(0.15);
+    expect(TREES.BEECH_H_MAX).toBeLessThanOrEqual(0.65);
+    expect(TREES.BEECH_H_MIN).toBeLessThan(TREES.BEECH_H_MAX);
+    // Geometry
+    expect(TREES.BEECH_CONE_RADIUS).toBeGreaterThan(0);
+    expect(TREES.BEECH_CONE_HEIGHT).toBeGreaterThan(0);
+    expect(TREES.BEECH_CONE_SEGS).toBeGreaterThanOrEqual(3);
+    // Scale
+    expect(TREES.BEECH_SCALE_MIN).toBeGreaterThan(0);
+    expect(TREES.BEECH_SCALE_RANGE).toBeGreaterThan(0);
+    // Attempt budget
+    expect(TREES.BEECH_MAX_ATTEMPTS).toBeGreaterThanOrEqual(TREES.BEECH_TARGET * 2);
+  });
+
+  it("TERRAIN exports UNDULATION_AMP_A and UNDULATION_AMP_B", async () => {
+    const { TERRAIN } = await import("./constants");
+    expect(typeof TERRAIN.UNDULATION_AMP_A).toBe("number");
+    expect(typeof TERRAIN.UNDULATION_AMP_B).toBe("number");
+    // Should be small positive fractions (ridge noise amplitude)
+    expect(TERRAIN.UNDULATION_AMP_A).toBeGreaterThan(0);
+    expect(TERRAIN.UNDULATION_AMP_A).toBeLessThan(0.15);
+    expect(TERRAIN.UNDULATION_AMP_B).toBeGreaterThan(0);
+    expect(TERRAIN.UNDULATION_AMP_B).toBeLessThan(0.15);
   });
 
   it("CAMERA exports POSITION as a 3-element array and FOV in sane range", async () => {
@@ -244,6 +278,120 @@ describe("constants.js — SKY section", () => {
     const { SKY } = await import("./constants");
     expect(SKY.GRAD_Y0).toBeLessThan(SKY.GRAD_Y1);
     expect(SKY.GRAD_Y1).toBeLessThan(SKY.GRAD_Y2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite 6b — TREES placement behavioral contract
+//
+// Simulates the placement loop logic using the same predicates as Trees.jsx.
+// Verifies: (1) each species achieves >= 90% of its TARGET within MAX_ATTEMPTS;
+//           (2) no placed tree is below the gorge-floor exclusion height (~0.15).
+//
+// sampleHeight and mulberry32 are node-importable (pure math, no WebGL).
+// ---------------------------------------------------------------------------
+describe("TREES placement — behavioral contract", () => {
+  it("hemlock: achieves >= 90% of HEMLOCK_TARGET within HEMLOCK_MAX_ATTEMPTS", async () => {
+    const { TREES, TERRAIN } = await import("./constants");
+    const { sampleHeight } = await import("./Terrain");
+    const { mulberry32 } = await import("./prng");
+
+    const rand = mulberry32(TREES.HEMLOCK_SEED);
+    let placed = 0;
+    let attempts = 0;
+    while (placed < TREES.HEMLOCK_TARGET && attempts < TREES.HEMLOCK_MAX_ATTEMPTS) {
+      attempts++;
+      const nx = rand() * 2 - 1;
+      const nz = rand() * 2 - 1;
+      const h = sampleHeight(nx, nz);
+      const distFromGorge = Math.abs(nx - TERRAIN.GORGE_CENTER);
+      if (
+        h >= TREES.HEMLOCK_H_MIN &&
+        h <= TREES.HEMLOCK_H_MAX &&
+        distFromGorge < TREES.HEMLOCK_DIST_FROM_GORGE_MAX
+      ) {
+        placed++;
+        // Consume scale rand (mirrors Trees.jsx loop)
+        rand();
+      }
+    }
+    expect(placed).toBeGreaterThanOrEqual(Math.floor(TREES.HEMLOCK_TARGET * 0.9));
+  });
+
+  it("beech: achieves >= 90% of BEECH_TARGET within BEECH_MAX_ATTEMPTS", async () => {
+    const { TREES } = await import("./constants");
+    const { sampleHeight } = await import("./Terrain");
+    const { mulberry32 } = await import("./prng");
+
+    const beechRand = mulberry32(TREES.BEECH_SEED);
+    let placed = 0;
+    let attempts = 0;
+    while (placed < TREES.BEECH_TARGET && attempts < TREES.BEECH_MAX_ATTEMPTS) {
+      attempts++;
+      const nx = beechRand() * 2 - 1;
+      const nz = beechRand() * 2 - 1;
+      const h = sampleHeight(nx, nz);
+      if (h >= TREES.BEECH_H_MIN && h <= TREES.BEECH_H_MAX) {
+        placed++;
+        // Consume scale rand (mirrors Trees.jsx loop)
+        beechRand();
+      }
+    }
+    expect(placed).toBeGreaterThanOrEqual(Math.floor(TREES.BEECH_TARGET * 0.9));
+  });
+
+  it("oak: achieves >= 90% of OAK_TARGET within OAK_MAX_ATTEMPTS (continuing hemlock rand stream)", async () => {
+    const { TREES, TERRAIN } = await import("./constants");
+    const { sampleHeight } = await import("./Terrain");
+    const { mulberry32 } = await import("./prng");
+
+    // Mirror Trees.jsx: oak continues the shared rand stream after hemlock finishes
+    const rand = mulberry32(TREES.HEMLOCK_SEED);
+    // Drain hemlock loop to match Trees.jsx rand stream state
+    let hemlockPlaced = 0;
+    let hemlockAttempts = 0;
+    while (hemlockPlaced < TREES.HEMLOCK_TARGET && hemlockAttempts < TREES.HEMLOCK_MAX_ATTEMPTS) {
+      hemlockAttempts++;
+      const nx = rand() * 2 - 1;
+      const nz = rand() * 2 - 1;
+      const h = sampleHeight(nx, nz);
+      const distFromGorge = Math.abs(nx - TERRAIN.GORGE_CENTER);
+      if (
+        h >= TREES.HEMLOCK_H_MIN &&
+        h <= TREES.HEMLOCK_H_MAX &&
+        distFromGorge < TREES.HEMLOCK_DIST_FROM_GORGE_MAX
+      ) {
+        hemlockPlaced++;
+        rand(); // consume scale rand
+      }
+    }
+
+    // Now drain oak loop
+    let placed = 0;
+    let attempts = 0;
+    while (placed < TREES.OAK_TARGET && attempts < TREES.OAK_MAX_ATTEMPTS) {
+      attempts++;
+      const nx = rand() * 2 - 1;
+      const nz = rand() * 2 - 1;
+      const h = sampleHeight(nx, nz);
+      if (h > TREES.OAK_H_MIN) {
+        placed++;
+        rand(); // consume scale rand
+      }
+    }
+    expect(placed).toBeGreaterThanOrEqual(Math.floor(TREES.OAK_TARGET * 0.9));
+  });
+
+  it("no species H_MIN is below the gorge-floor exclusion threshold (h ~0.15)", async () => {
+    const { TREES, TERRAIN } = await import("./constants");
+    const FLOOR_EXCLUSION = 0.15; // gorge floor / river zone to keep clear
+    expect(TREES.HEMLOCK_H_MIN).toBeGreaterThanOrEqual(FLOOR_EXCLUSION);
+    expect(TREES.BEECH_H_MIN).toBeGreaterThanOrEqual(FLOOR_EXCLUSION);
+    expect(TREES.OAK_H_MIN).toBeGreaterThanOrEqual(FLOOR_EXCLUSION);
+    // Belt-and-suspenders: GORGE_FLOOR_HEIGHT itself is well below all H_MINs
+    expect(TERRAIN.GORGE_FLOOR_HEIGHT).toBeLessThan(TREES.HEMLOCK_H_MIN);
+    expect(TERRAIN.GORGE_FLOOR_HEIGHT).toBeLessThan(TREES.BEECH_H_MIN);
+    expect(TERRAIN.GORGE_FLOOR_HEIGHT).toBeLessThan(TREES.OAK_H_MIN);
   });
 });
 
