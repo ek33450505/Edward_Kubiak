@@ -7,7 +7,7 @@ import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
 import { fadeUp, staggerItem, slideInLeft } from "../../utils/motion";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
-const TrailTerrain = lazy(() => import("../TrailTerrain/TrailTerrain"));
+const CelestialScene = lazy(() => import("../Celestial/CelestialScene"));
 
 function ScrollCue() {
   const shouldReduceMotion = useReducedMotion();
@@ -61,9 +61,22 @@ export default function HeroSection() {
 
   return (
     <>
-      {/* 3D trail terrain background — lazy-loaded */}
-      <Suspense fallback={null}>
-        <TrailTerrain />
+      {/* Celestial art scene background — lazy-loaded; dark fill prevents flash of white */}
+      <Suspense
+        fallback={
+          <div
+            aria-hidden="true"
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 0,
+              pointerEvents: "none",
+              background: "#0a0f1a",
+            }}
+          />
+        }
+      >
+        <CelestialScene />
       </Suspense>
 
       {/* Decorative grid lines */}

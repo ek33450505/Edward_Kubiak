@@ -1,5 +1,5 @@
 /**
- * textures.js — Deterministic DataTexture generators for TrailTerrain art pass.
+ * textures.js — Deterministic DataTexture generators for Three.js scenes.
  *
  * DESIGN DECISION: THREE.DataTexture, not canvas.
  * ─────────────────────────────────────────────────────────────────────────────
@@ -26,7 +26,7 @@ import * as THREE from "three";
 import { mulberry32 } from "./prng.js";
 
 // ---------------------------------------------------------------------------
-// Radial glow sprite — shared by Fireflies and Headlamp
+// Radial glow sprite — shared by particle emitters
 // ---------------------------------------------------------------------------
 
 /**
@@ -74,7 +74,7 @@ export function createRadialGlowTexture(size, falloffExp) {
 }
 
 // ---------------------------------------------------------------------------
-// Tiling value-noise texture — used by Mist for UV-drift animation
+// Tiling value-noise texture — used for UV-drift animation
 // ---------------------------------------------------------------------------
 
 /**
