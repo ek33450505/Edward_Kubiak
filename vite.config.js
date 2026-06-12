@@ -9,7 +9,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('three') || id.includes('@react-three/fiber') || id.includes('@react-three/drei')) {
+          if (id.includes('three') || id.includes('@react-three/fiber') || id.includes('@react-three/drei') || id.includes('/postprocessing/')) {
             return 'three';
           }
           if (id.includes('/motion/') || id.includes('react-parallax-tilt')) {

@@ -36,6 +36,12 @@ vi.mock("@react-three/drei", () => ({
   Line: vi.fn(() => null),
 }));
 
+vi.mock("@react-three/postprocessing", () => ({
+  EffectComposer: vi.fn(() => null),
+  Bloom: vi.fn(() => null),
+  Vignette: vi.fn(() => null),
+}));
+
 // ---------------------------------------------------------------------------
 // Test suite 1 — reduced-motion bail-out logic
 // ---------------------------------------------------------------------------
