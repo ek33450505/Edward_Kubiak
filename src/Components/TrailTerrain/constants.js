@@ -45,6 +45,24 @@ export const TERRAIN = {
   GORGE_FLOOR_HEIGHT: 0.08, // normalized h at gorge floor (flat valley bottom)
   FLOOR_THRESHOLD: 0.7,  // gorgeShape above this → flat floor kicks in
   WALL_THRESHOLD: 0.6,   // gorgeFactor < this → wall blending factor active
+
+  // Rim light — amber sun-crest highlight injected via onBeforeCompile.
+  // Operates on outgoingLight (pre-opaque_fragment) → tone-mapped output → LDR.
+  // Never crosses luminanceThreshold=1.0 bloom gate by design.
+  // Hue cross-reference: RIM_COLOR approximates PALETTE.SUN_LIGHT ("#ff9944").
+  RIM_COLOR: "#ff8844",
+  RIM_STRENGTH: 0.55,
+  RIM_POWER: 2.5,
+
+  // Aerial perspective — replaces #include <fog_fragment> for this mesh only.
+  // Trees, River, and Mist continue to use standard fogExp2 via fog:true.
+  // AERIAL_COLOR_LOW cross-reference: matches PALETTE.FOG = PALETTE.SLATE_950 ("#0a0f1a").
+  AERIAL_DENSITY: 0.07,
+  AERIAL_STRENGTH: 0.85,
+  AERIAL_Y_MIN: 0.4,           // world-Y where aerial blend begins (gorge floor level)
+  AERIAL_Y_MAX: 2.2,           // world-Y where blend reaches full AERIAL_COLOR_HIGH
+  AERIAL_COLOR_LOW: "#0a0f1a", // fog navy — cross-ref: PALETTE.FOG = PALETTE.SLATE_950
+  AERIAL_COLOR_HIGH: "#2c1a28", // ember-violet (far-ridge haze)
 };
 
 // ---------------------------------------------------------------------------
