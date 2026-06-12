@@ -9,6 +9,7 @@ import River from "./River";
 import Trees from "./Trees";
 import RaceRoute from "./RouteLine";
 import Fireflies from "./Fireflies";
+import Mist from "./Mist";
 import CameraRig from "./CameraRig";
 
 // ---------------------------------------------------------------------------
@@ -52,6 +53,10 @@ function TrailScene() {
         <Trees />
         <RaceRoute />
         <Fireflies />
+        {/* Mist: after River — depth-sorted transparents; river draws first
+            (further from camera), mist alpha-blends on top. See Mist.jsx
+            render-order rationale. */}
+        <Mist />
       </Suspense>
     </>
   );

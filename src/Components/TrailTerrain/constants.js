@@ -285,6 +285,50 @@ export const ROUTE = {
 };
 
 // ---------------------------------------------------------------------------
+// Mist — Layered valley mist planes for atmospheric gorge depth (see Mist.jsx)
+//
+// OVERDRAW MITIGATION: Planes are sized to the gorge (WIDTH=7 × LENGTH=18),
+// not the full terrain (SIZE=20). All LAYER_COUNT layers share ONE PlaneGeometry.
+// Fallback levers in order of preference:
+//   1. Reduce LAYER_COUNT to 3 (drop the topmost, least-visible layer)
+//   2. Shrink WIDTH (tightens overdraw footprint while keeping depth coverage)
+//
+// LAYER ORDERING: LAYER_YS must be strictly ascending (tested contract).
+// The lowest plane (y=0.35) sits above the river surface (y≈0.22); river glints
+// read through at low opacities (0.06–0.16). See Mist.jsx render-order rationale
+// for why no explicit renderOrder override is needed.
+//
+// DRIFT: DRIFT_SPEEDS sign controls primary UV drift direction on the x axis
+// (positive = offset advances in +x; negative = advances in -x). The component
+// applies a 0.3× y-component with the same sign, producing a slight diagonal
+// drift per layer that breaks the purely horizontal appearance. Mixed signs
+// ensure adjacent layers move in opposite directions for organic layered depth.
+// All values stay in 0.004–0.012 range — fast enough to read, slow enough not
+// to appear as a slide.
+//
+// REPEATS: per-layer [wrapX, wrapY] UV repeat factors. Slightly different
+// repeats across layers break visible tiling registration between planes.
+//
+// TEX_SIZE must be a power of two (GPU texture requirement — tested contract).
+// NOISE_SEED: 0xb4f3e19a — arbitrary hex constant for deterministic noise.
+// ---------------------------------------------------------------------------
+export const MIST = {
+  LAYER_COUNT: 4,
+  WIDTH: 7,
+  LENGTH: 18,
+  CENTER_X: 1.0,
+  LAYER_YS: [0.35, 0.55, 0.78, 1.02],        // strictly ascending (tested)
+  LAYER_OPACITIES: [0.16, 0.12, 0.09, 0.06], // each in (0,1) (tested)
+  DRIFT_SPEEDS: [0.006, -0.008, 0.010, -0.004], // mixed signs; ~0.004–0.012 range
+  REPEATS: [[2, 1], [3, 1.5], [1.5, 2], [2.5, 1]], // per-layer [wrapX, wrapY]
+  COLOR: "#1c2a3a",   // deep gorge-fog tint — cross-ref: PALETTE.SLATE_950 family
+  TEX_SIZE: 128,       // power of two (tested)
+  NOISE_SEED: 0xb4f3e19a,
+  NOISE_LATTICE: 8,
+  NOISE_OCTAVES: 3,
+};
+
+// ---------------------------------------------------------------------------
 // SKY — SkyDome shader parameters (see SkyDome.jsx)
 //
 // SCENE.BACKGROUND_GRADIENT is the loading-state fallback: the container CSS

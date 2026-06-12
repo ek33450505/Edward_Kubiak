@@ -564,3 +564,108 @@ describe("SkyDome — export contract", () => {
     expect(src).toContain("frustumCulled");
   });
 });
+
+// ---------------------------------------------------------------------------
+// Test suite 9 — MIST constants contract (Unit 7)
+// ---------------------------------------------------------------------------
+describe("constants.js — MIST section", () => {
+  it("exports required MIST keys", async () => {
+    const { MIST } = await import("./constants");
+    const requiredKeys = [
+      "LAYER_COUNT", "WIDTH", "LENGTH", "CENTER_X",
+      "LAYER_YS", "LAYER_OPACITIES", "DRIFT_SPEEDS", "REPEATS",
+      "COLOR", "TEX_SIZE", "NOISE_SEED", "NOISE_LATTICE", "NOISE_OCTAVES",
+    ];
+    for (const key of requiredKeys) {
+      expect(MIST).toHaveProperty(key);
+    }
+  });
+
+  it("all per-layer arrays have length === LAYER_COUNT", async () => {
+    const { MIST } = await import("./constants");
+    expect(MIST.LAYER_YS).toHaveLength(MIST.LAYER_COUNT);
+    expect(MIST.LAYER_OPACITIES).toHaveLength(MIST.LAYER_COUNT);
+    expect(MIST.DRIFT_SPEEDS).toHaveLength(MIST.LAYER_COUNT);
+    expect(MIST.REPEATS).toHaveLength(MIST.LAYER_COUNT);
+  });
+
+  it("LAYER_OPACITIES are all in open interval (0, 1)", async () => {
+    const { MIST } = await import("./constants");
+    for (const op of MIST.LAYER_OPACITIES) {
+      expect(op).toBeGreaterThan(0);
+      expect(op).toBeLessThan(1);
+    }
+  });
+
+  it("LAYER_YS is strictly ascending (lower planes must be first)", async () => {
+    const { MIST } = await import("./constants");
+    for (let i = 1; i < MIST.LAYER_YS.length; i++) {
+      expect(MIST.LAYER_YS[i]).toBeGreaterThan(MIST.LAYER_YS[i - 1]);
+    }
+  });
+
+  it("TEX_SIZE is a power of two in [16, 512] (GPU texture requirement)", async () => {
+    const { MIST } = await import("./constants");
+    const s = MIST.TEX_SIZE;
+    expect(s).toBeGreaterThanOrEqual(16);
+    expect(s).toBeLessThanOrEqual(512);
+    // isPowerOfTwo: only one bit set
+    expect(s & (s - 1)).toBe(0);
+  });
+
+  it("MIST.COLOR is a valid 6-digit hex string", async () => {
+    const { MIST } = await import("./constants");
+    expect(MIST.COLOR).toMatch(/^#[0-9a-fA-F]{6}$/);
+  });
+
+  it("LAYER_YS lowest plane is above river surface y≈0.22 (river glints read through)", async () => {
+    const { MIST, RIVER } = await import("./constants");
+    expect(MIST.LAYER_YS[0]).toBeGreaterThan(RIVER.Y_OFFSET);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite 10 — Mist export contract (Unit 7)
+// ---------------------------------------------------------------------------
+describe("Mist — export contract", () => {
+  it("default export is a function", async () => {
+    const mod = await import("./Mist");
+    expect(typeof mod.default).toBe("function");
+  });
+
+  it("source references depthWrite (transparent planes must not write depth buffer)", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./Mist.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("depthWrite");
+  });
+
+  it("source references clone (per-layer texture cloning required for independent drift)", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./Mist.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("clone");
+  });
+
+  it("source references NormalBlending (mist occludes, does not glow — not additive)", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./Mist.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("NormalBlending");
+  });
+
+  it("source references dispose (cloned textures require manual cleanup)", async () => {
+    const { readFileSync } = await import("fs");
+    const fileSrc = readFileSync(
+      new URL("./Mist.jsx", import.meta.url).pathname,
+      "utf8",
+    );
+    expect(fileSrc).toContain("dispose");
+  });
+});
