@@ -15,8 +15,6 @@ const Now = lazy(() => import("./Components/Now"));
 const Talks = lazy(() => import("./Components/Talks"));
 const Uses = lazy(() => import("./Components/Uses"));
 import CommandPalette, { CommandPaletteProvider, useCommandPalette } from "./Components/CommandPalette";
-import BrandingImage from "./Images/Brand.svg";
-
 const navLinks = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
@@ -42,14 +40,9 @@ function NavBar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/60 backdrop-blur-xl bg-slate-950/80">
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-20">
-        {/* Brand */}
-        <Link to="/" className="flex items-center gap-3 group" onClick={() => setOpen(false)}>
-          <img
-            src={BrandingImage}
-            alt="EK"
-            className="w-11 h-11 rounded-full ring-2 ring-slate-700 group-hover:ring-accent-400 transition-all duration-300"
-          />
-          <span className="font-display text-sm tracking-wider text-slate-300 group-hover:text-accent-400 transition-colors hidden sm:block">
+        {/* Brand — typographic wordmark (Direction A: EK roundel removed) */}
+        <Link to="/" className="flex items-center group" onClick={() => setOpen(false)}>
+          <span className="font-display text-sm font-bold tracking-[0.25em] uppercase text-slate-100 group-hover:text-accent-400 transition-colors">
             EDWARD KUBIAK
           </span>
         </Link>

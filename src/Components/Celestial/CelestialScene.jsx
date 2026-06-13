@@ -87,6 +87,8 @@ export default function CelestialScene() {
           fov: 60,
         }}
       >
+        {/* THREE.Clock: upstream drei internals, not actionable — deprecation warning
+            originates inside @react-three/drei Stars / useFrame internals, not this codebase. */}
         {/* Base star field — drei Stars, no custom geometry needed */}
         <Stars
           radius={STARS.RADIUS}

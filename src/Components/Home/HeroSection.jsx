@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import HeroStats from "../HeroStats";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
-import { fadeUp, staggerItem, slideInLeft } from "../../utils/motion";
+import { fadeUp, slideInLeft } from "../../utils/motion";
 
 // Lazy-load Three.js scene so it code-splits into its own chunk
 const CelestialScene = lazy(() => import("../Celestial/CelestialScene"));
@@ -46,17 +46,14 @@ function ScrollCue() {
 
 export default function HeroSection() {
   const heroRef = useRef(null);
-  const reducedMotion = useReducedMotion();
 
-  // Parallax: hero content scrolls slower, decoration floats differently
+  // Parallax: hero content scrolls slower when user scrolls down
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
 
   const heroTextY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const decorY = useTransform(scrollYProgress, [0, 1], [0, -120]);
-  const decorRotate = useTransform(scrollYProgress, [0, 1], [0, 15]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   return (
@@ -86,169 +83,109 @@ export default function HeroSection() {
         <div className="absolute top-0 left-3/4 w-px h-full bg-slate-100" />
       </div>
 
-      {/* Hero section */}
-      <section ref={heroRef} className="max-w-6xl mx-auto px-6 py-20 md:py-32 w-full relative z-[2]">
-        <div className="grid md:grid-cols-12 gap-8 items-start">
-          {/* Left column - main headline with parallax */}
-          <motion.div className="md:col-span-7" style={{ y: heroTextY, opacity: heroOpacity }}>
-            <motion.div
-              variants={slideInLeft}
-              initial="hidden"
-              animate="show"
-              transition={{ duration: 0.6 }}
-            >
-              <p className="font-display text-xs tracking-[0.3em] text-accent-400 uppercase mb-4">
-                Full Stack Developer & AI Engineer &mdash; Columbus, OH
-              </p>
-            </motion.div>
-
-            <motion.h1
-              variants={staggerItem}
-              initial="hidden"
-              animate="show"
-              transition={{ duration: 0.6, delay: 0.1 }}
-              aria-label="Full Stack Developer & AI Systems Engineer"
-              className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold leading-tight tracking-tight"
-            >
-              <span aria-hidden="true">
-                {reducedMotion
-                  ? "Full Stack"
-                  : "Full Stack".split("").map((char, i) => (
-                      <motion.span
-                        key={`fs-${i}`}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.15 + i * 0.03 }}
-                      >
-                        {char}
-                      </motion.span>
-                    ))}
-              </span>
-              <br aria-hidden="true" />
-              <span aria-hidden="true" className="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 via-accent-300 to-sky-400">
-                {reducedMotion
-                  ? "Developer"
-                  : "Developer".split("").map((char, i) => (
-                      <motion.span
-                        key={`dev-${i}`}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.45 + i * 0.04 }}
-                        className="inline-block"
-                      >
-                        {char}
-                      </motion.span>
-                    ))}
-              </span>
-              <br aria-hidden="true" />
-              <span aria-hidden="true" className="text-slate-400 text-3xl sm:text-4xl lg:text-5xl">
-                & AI Systems Engineer
-              </span>
-            </motion.h1>
-
-            <motion.p
-              variants={fadeUp}
-              initial="hidden"
-              animate="show"
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="mt-6 text-lg text-slate-400 max-w-lg leading-relaxed"
-            >
-              By day, I build production education technology for Ohio school
-              districts at META Solutions. By night, I build open-source
-              infrastructure for AI-native development — including CAST, a{" "}
-              {CAST_STATS.agents}-agent framework for Claude Code distributed as{" "}
-              {CAST_ECOSYSTEM.tapsPlusUmbrella}.
-            </motion.p>
-
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate="show"
-              transition={{ duration: 0.6, delay: 0.95 }}
-              className="mt-8 flex flex-wrap gap-4"
-            >
-              <Link
-                to="/projects"
-                className="group inline-flex items-center gap-2 px-6 py-3 bg-accent-400 text-slate-950 font-display text-sm tracking-wider uppercase font-bold rounded-lg hover:bg-accent-300 hover:shadow-[0_0_30px_rgba(0,255,194,0.3)] transition-all duration-300"
-              >
-                See What I&apos;ve Built
-                <ArrowRight size={16} aria-hidden="true" className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <a
-                href="mailto:edward.kubiak.dev@gmail.com"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 font-display text-sm tracking-wider uppercase rounded-lg hover:border-accent-400 hover:text-accent-400 hover:shadow-[0_0_20px_rgba(0,255,194,0.1)] transition-all duration-300"
-              >
-                Let&apos;s Build Something
-              </a>
-            </motion.div>
-
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate="show"
-              transition={{ duration: 0.6, delay: 1.1 }}
-              className="mt-4 flex items-center gap-2"
-            >
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-display tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
-                Open to new opportunities
-              </span>
-              <a
-                href="https://www.linkedin.com/in/edward-kubiak/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Connect on LinkedIn (opens in new tab)"
-                className="text-xs text-slate-400 hover:text-sky-400 font-display tracking-wider transition-colors"
-              >
-                LinkedIn →
-              </a>
-            </motion.div>
-
-            <HeroStats />
-
-            {/* Scroll cue */}
-            <ScrollCue />
+      {/* Hero section — position: relative explicit for motion useScroll scroll-container contract */}
+      <section
+        ref={heroRef}
+        className="max-w-6xl mx-auto px-6 py-20 md:py-32 w-full relative z-[2]"
+        style={{ position: "relative" }}
+      >
+        {/* Single-column fade-up group — right-column EK box removed (Direction A) */}
+        <motion.div style={{ y: heroTextY, opacity: heroOpacity }}>
+          {/* Kicker — delay 0s */}
+          <motion.div
+            variants={slideInLeft}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6, delay: 0 }}
+          >
+            <p className="font-display text-xs tracking-[0.3em] text-accent-400 uppercase mb-4">
+              Full Stack Developer & AI Engineer &mdash; Columbus, OH
+            </p>
           </motion.div>
 
-          {/* Right column - decorative element with parallax */}
-          <div className="md:col-span-5 hidden md:flex items-center justify-center">
-            <motion.div
-              aria-hidden="true"
-              initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              style={{ y: decorY, rotate: decorRotate }}
-              className="relative"
+          {/* h1 — single fadeUp (letter-by-letter animation removed); delay 0.1s */}
+          <motion.h1
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6, delay: 0.1 }}
+            aria-label="Full Stack Developer & AI Systems Engineer"
+            className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold leading-tight tracking-tight"
+          >
+            <span className="text-slate-100">Full Stack</span>
+            <br />
+            {/* text-accent-400 only — sky gradient removed (Direction A single-accent) */}
+            <span className="text-accent-400">Developer</span>
+            <br />
+            <span className="text-slate-400 text-3xl sm:text-4xl lg:text-5xl">& AI Systems Engineer</span>
+          </motion.h1>
+
+          {/* Paragraph — delay 0.3s */}
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-6 text-lg text-slate-400 max-w-lg leading-relaxed"
+          >
+            By day, I build production education technology for Ohio school
+            districts at META Solutions. By night, I build open-source
+            infrastructure for AI-native development — including CAST, a{" "}
+            {CAST_STATS.agents}-agent framework for Claude Code distributed as{" "}
+            {CAST_ECOSYSTEM.tapsPlusUmbrella}.
+          </motion.p>
+
+          {/* CTAs — delay 0.45s */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6, delay: 0.45 }}
+            className="mt-8 flex flex-wrap gap-4"
+          >
+            <Link
+              to="/projects"
+              className="group inline-flex items-center gap-2 px-6 py-3 bg-accent-400 text-slate-950 font-display text-sm tracking-wider uppercase font-bold rounded-lg hover:bg-accent-300 hover:shadow-[0_0_30px_rgba(0,255,194,0.3)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
             >
-              {/* Geometric decoration with glow */}
-              <div className="w-64 h-64 lg:w-80 lg:h-80 relative">
-                <div className="absolute inset-0 border border-slate-700/50 rounded-2xl rotate-6" />
-                <div className="absolute inset-4 border border-accent-400/20 rounded-2xl -rotate-3" />
-                <div className="absolute inset-8 bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl backdrop-blur-sm flex items-center justify-center shadow-[0_0_80px_rgba(0,255,194,0.06)]">
-                  <div className="text-center">
-                    <motion.p
-                      className="font-display text-6xl lg:text-7xl font-bold text-accent-400"
-                      animate={{
-                        textShadow: [
-                          "0 0 20px rgba(0,255,194,0.3)",
-                          "0 0 40px rgba(0,255,194,0.5)",
-                          "0 0 20px rgba(0,255,194,0.3)",
-                        ],
-                      }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    >
-                      EK
-                    </motion.p>
-                    <div className="mt-2 w-12 h-0.5 bg-accent-400/40 mx-auto" />
-                    <p className="mt-2 font-display text-[10px] tracking-[0.3em] text-slate-400 uppercase">
-                      Since 2022
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
+              See What I&apos;ve Built
+              <ArrowRight size={16} aria-hidden="true" className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <a
+              href="mailto:edward.kubiak.dev@gmail.com"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-slate-700 text-slate-300 font-display text-sm tracking-wider uppercase rounded-lg hover:border-accent-400 hover:text-accent-400 hover:shadow-[0_0_20px_rgba(0,255,194,0.1)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
+            >
+              Let&apos;s Build Something
+            </a>
+          </motion.div>
+
+          {/* Status pill — delay 0.55s */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: 0.6, delay: 0.55 }}
+            className="mt-4 flex items-center gap-2"
+          >
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-display tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+              Open to new opportunities
+            </span>
+            <a
+              href="https://www.linkedin.com/in/edward-kubiak/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Connect on LinkedIn (opens in new tab)"
+              className="text-xs text-slate-400 hover:text-sky-400 font-display tracking-wider transition-colors"
+            >
+              LinkedIn →
+            </a>
+          </motion.div>
+
+          <HeroStats />
+
+          {/* Scroll cue */}
+          <ScrollCue />
+        </motion.div>
       </section>
     </>
   );
