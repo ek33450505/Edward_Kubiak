@@ -27,7 +27,7 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
-function generateOgSvg(mainText, subtitle = "Full Stack Developer & AI Systems Engineer") {
+function generateOgSvg(mainText, subtitle = "Full Stack Developer &amp; AI Systems Engineer · Columbus, OH") {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}">
   <!-- Background -->
   <rect width="${WIDTH}" height="${HEIGHT}" fill="#0a0f1a"/>
@@ -38,8 +38,19 @@ function generateOgSvg(mainText, subtitle = "Full Stack Developer & AI Systems E
   <line x1="400" y1="0" x2="400" y2="${HEIGHT}" stroke="#1e293b" stroke-width="1"/>
   <line x1="800" y1="0" x2="800" y2="${HEIGHT}" stroke="#1e293b" stroke-width="1"/>
 
-  <!-- Amber accent line -->
-  <rect x="100" y="200" width="160" height="6" fill="#fbbf24" rx="3"/>
+  <!-- Mint accent line -->
+  <rect x="100" y="200" width="160" height="6" fill="#00ffc2" rx="3"/>
+
+  <!-- Celestial dot mark — upper-right quadrant (matches favicon design from PR #10) -->
+  <!-- Dark halo -->
+  <circle cx="1100" cy="80" r="40" fill="#0d1424"/>
+  <!-- Mint core -->
+  <circle cx="1100" cy="80" r="8" fill="#00ffc2"/>
+  <!-- 4 satellite dots at r=4 on 24px radius orbit (0/90/180/270 degrees) -->
+  <circle cx="1124" cy="80" r="4" fill="#00ffc2" opacity="0.7"/>
+  <circle cx="1100" cy="104" r="4" fill="#00ffc2" opacity="0.7"/>
+  <circle cx="1076" cy="80" r="4" fill="#00ffc2" opacity="0.7"/>
+  <circle cx="1100" cy="56" r="4" fill="#00ffc2" opacity="0.7"/>
 
   <!-- Headline -->
   <text
@@ -106,7 +117,7 @@ if (slug && title) {
   console.log(`Wrote project OG image to ${outPath}`);
 } else {
   // Generate main og-image.png
-  const svg = generateOgSvg("EDWARD KUBIAK", "Full Stack Developer & AI Systems Engineer");
+  const svg = generateOgSvg("EDWARD KUBIAK", "Full Stack Developer &amp; AI Systems Engineer · Columbus, OH");
   const outPath = await generateImage("og-image.png", svg);
   console.log(`Wrote og-image.png to ${outPath}`);
 }

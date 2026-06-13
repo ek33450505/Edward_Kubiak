@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { ExternalLink, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { fadeUp } from "../../utils/motion";
 import { CAST_STATS } from "../../data/castStats";
 import SectionHeader from "../ui/SectionHeader";
@@ -38,22 +38,16 @@ export default function CTASection() {
             </p>
           </div>
           <div className="shrink-0 flex flex-col gap-2 items-start md:items-end">
-            <iframe
-              src="https://github.com/sponsors/ek33450505/button"
-              title="Sponsor ek33450505 on GitHub"
-              height="32"
-              width="114"
-              style={{ border: 0, borderRadius: 6 }}
-            />
+            {/* GitHub Sponsors iframe replaced with plain anchor — iframe triggers CSP frame-src errors
+                (github.com not in the index.html CSP allowlist; frame-src not declared). */}
             <a
               href="https://github.com/sponsors/ek33450505"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[11px] font-display tracking-wider uppercase text-slate-400 hover:text-accent-400 transition-colors"
-              aria-label="Open GitHub Sponsors page in a new tab"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-md border border-accent-400/30 text-accent-400 text-xs font-bold font-display tracking-wider hover:bg-accent-400/10 transition-colors"
+              aria-label="Sponsor on GitHub (opens in new tab)"
             >
-              View tiers
-              <ExternalLink size={11} aria-hidden="true" />
+              ♥ Sponsor
             </a>
           </div>
         </div>
