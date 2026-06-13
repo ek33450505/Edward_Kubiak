@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
 import { GithubIcon } from "./Components/BrandIcons";
+import ekMark from "./Images/ek-mark.svg";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
 import "./App.css";
 
@@ -40,8 +41,16 @@ function NavBar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/60 backdrop-blur-xl bg-slate-950/80">
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-20">
-        {/* Brand — typographic wordmark (Direction A: EK roundel removed) */}
-        <Link to="/" className="flex items-center group" onClick={() => setOpen(false)}>
+        {/* Brand — EK mark + typographic wordmark */}
+        <Link to="/" className="flex items-center gap-2 group" onClick={() => setOpen(false)}>
+          <img
+            src={ekMark}
+            width="28"
+            height="28"
+            alt=""
+            aria-hidden="true"
+            className="flex-shrink-0"
+          />
           <span className="font-display text-sm font-bold tracking-[0.25em] uppercase text-slate-100 group-hover:text-accent-400 transition-colors">
             EDWARD KUBIAK
           </span>

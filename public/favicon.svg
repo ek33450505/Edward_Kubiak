@@ -1,10 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <circle cx="16" cy="16" r="16" fill="#0a0f1a"/>
-  <!-- Core glow -->
-  <circle cx="16" cy="16" r="3" fill="#00FFC2" opacity="0.95"/>
-  <!-- Satellite dots -->
-  <circle cx="22" cy="11" r="1.5" fill="#38bdf8" opacity="0.7"/>
-  <circle cx="9"  cy="13" r="1"   fill="#a78bfa" opacity="0.6"/>
-  <circle cx="20" cy="22" r="1.2" fill="#00FFC2" opacity="0.45"/>
-  <circle cx="13" cy="23" r="0.8" fill="#fb7185" opacity="0.4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <!-- Mint glow — stronger stdDeviation for small-size legibility -->
+    <filter id="ekGlowFav" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="darkGradFav" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Solid dark background — ensures legibility on any browser chrome -->
+  <rect x="3" y="3" width="94" height="94" rx="13" fill="#0f172a"/>
+
+  <!-- Outer border: slate, thicker for 16px visibility, rotated +6° -->
+  <rect x="5" y="5" width="90" height="90" rx="12"
+        stroke="#334155" stroke-width="3" opacity="0.5"
+        transform="rotate(6, 50, 50)"/>
+
+  <!-- Inner border: mint, thicker for 16px visibility, rotated −3° -->
+  <rect x="10" y="10" width="80" height="80" rx="10"
+        stroke="#00FFC2" stroke-width="2" opacity="0.2"
+        transform="rotate(-3, 50, 50)"/>
+
+  <!-- Innermost filled area -->
+  <rect x="15" y="15" width="70" height="70" rx="8"
+        fill="url(#darkGradFav)"/>
+
+  <!-- EK letterforms — slightly wider vertical strokes (9px vs 7px) for
+       improved legibility at 16–32px favicon sizes -->
+  <g filter="url(#ekGlowFav)" fill="#00FFC2">
+    <!-- E: vertical stroke (widened to 9) -->
+    <rect x="21" y="31" width="9" height="38" rx="1"/>
+    <!-- E: top bar -->
+    <rect x="21" y="31" width="21" height="6" rx="1"/>
+    <!-- E: middle bar -->
+    <rect x="21" y="47" width="18" height="6" rx="1"/>
+    <!-- E: bottom bar -->
+    <rect x="21" y="63" width="21" height="6" rx="1"/>
+    <!-- K: vertical stroke (widened to 9; polygon origin shifts to x=58) -->
+    <rect x="49" y="31" width="9" height="38" rx="1"/>
+    <!-- K: upper diagonal arm -->
+    <polygon points="58,50 58,44 79,31 79,39"/>
+    <!-- K: lower diagonal leg -->
+    <polygon points="58,50 58,56 79,69 79,61"/>
+  </g>
 </svg>
