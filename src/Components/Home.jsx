@@ -3,8 +3,8 @@ import Competencies from "./Home/Competencies";
 import FeaturedWork from "./Home/FeaturedWork";
 import CurrentlyBuilding from "./Home/CurrentlyBuilding";
 import RecentWriting from "./Home/RecentWriting";
-import CTASection from "./Home/CTASection";
 import CastStats from "./CastStats";
+import GetInTouch from "./ui/GetInTouch";
 
 const Home = () => {
   return (
@@ -14,7 +14,9 @@ const Home = () => {
       <FeaturedWork />
       <CurrentlyBuilding />
       <RecentWriting />
-      <CTASection />
+      <div className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]">
+        <GetInTouch />
+      </div>
       <CastStats />
     </div>
   );

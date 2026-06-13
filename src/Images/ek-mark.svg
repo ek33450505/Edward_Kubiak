@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <!-- Mint glow for EK letterforms -->
+    <filter id="ekGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Dark gradient fill for innermost rect -->
+    <linearGradient id="darkGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer border: slate #334155 at ~50% opacity, rotated +6° -->
+  <rect x="5" y="5" width="90" height="90" rx="12"
+        stroke="#334155" stroke-width="1.5" opacity="0.5"
+        transform="rotate(6, 50, 50)"/>
+
+  <!-- Inner border: mint #00FFC2 at ~20% opacity, rotated −3° -->
+  <rect x="10" y="10" width="80" height="80" rx="10"
+        stroke="#00FFC2" stroke-width="1" opacity="0.2"
+        transform="rotate(-3, 50, 50)"/>
+
+  <!-- Innermost filled area: dark gradient -->
+  <rect x="15" y="15" width="70" height="70" rx="8"
+        fill="url(#darkGrad)"/>
+
+  <!-- EK letterforms — geometrically derived from Brand.svg at 0.5× scale,
+       both letters in mint with gaussian-blur glow halo -->
+  <g filter="url(#ekGlow)" fill="#00FFC2">
+    <!-- E: vertical stroke -->
+    <rect x="21" y="31" width="7" height="38" rx="1"/>
+    <!-- E: top bar -->
+    <rect x="21" y="31" width="21" height="6" rx="1"/>
+    <!-- E: middle bar (slightly shorter — classic proportion) -->
+    <rect x="21" y="47" width="18" height="6" rx="1"/>
+    <!-- E: bottom bar -->
+    <rect x="21" y="63" width="21" height="6" rx="1"/>
+    <!-- K: vertical stroke -->
+    <rect x="49" y="31" width="7" height="38" rx="1"/>
+    <!-- K: upper diagonal arm -->
+    <polygon points="56,50 56,44 79,31 79,39"/>
+    <!-- K: lower diagonal leg -->
+    <polygon points="56,50 56,56 79,69 79,61"/>
+  </g>
+</svg>
