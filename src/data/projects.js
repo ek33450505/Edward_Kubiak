@@ -1,4 +1,4 @@
-import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign } from "lucide-react";
+import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck } from "lucide-react";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 
 const projects = [
@@ -49,6 +49,21 @@ const projects = [
     github: "https://github.com/ek33450505/cast-desktop",
     githubRepo: { owner: "ek33450505", repo: "cast-desktop" },
     stats: [`${CAST_DESKTOP_STATS.dashboardViews} Dashboard Views`, "Native PTY Terminal", CAST_DESKTOP_STATS.version],
+  },
+  {
+    slug: "attest",
+    title: "Attest",
+    description:
+      'A local, deterministic, zero-LLM Claude Code hook that verifies a subagent\'s "Status: DONE" / "## Handoff" claim against the real git working-tree delta — and, opt-in, blocks a DONE whose claimed files never actually landed on disk. It adds no tokens, cannot hallucinate its own verdict, and fails open on every doubt. Validated end-to-end against real Claude Code v2.1.170 with committed payload fixtures; 290 tests, CI green. brew tap ek33450505/attest && brew install attest',
+    tech: ["Python", "Claude Code", "Hook Architecture", "Git", "BATS", "GitHub Actions"],
+    icon: ShieldCheck,
+    color: "emerald",
+    category: "personal",
+    featured: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/attest",
+    githubRepo: { owner: "ek33450505", repo: "attest" },
+    stats: ["Zero-LLM", "290 Tests", "Plugin + Homebrew", "v0.1.0"],
   },
   {
     slug: "cast-time",
