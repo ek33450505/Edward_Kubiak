@@ -1,10 +1,10 @@
 {
-  "version": "v7.4.1",
+  "version": "v8.0.0",
   "agents": 23,
-  "tests": 1474,
+  "tests": 1797,
   "packages": 13,
   "commands": 20,
-  "skills": 15,
-  "tables": 35,
-  "updated": "2026-06-12"
+  "skills": 18,
+  "tables": 36,
+  "updated": "2026-06-19"
 }
