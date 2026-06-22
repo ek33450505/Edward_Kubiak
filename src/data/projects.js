@@ -1,4 +1,4 @@
-import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck } from "lucide-react";
+import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat } from "lucide-react";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 
 const projects = [
@@ -64,6 +64,21 @@ const projects = [
     github: "https://github.com/ek33450505/attest",
     githubRepo: { owner: "ek33450505", repo: "attest" },
     stats: ["Zero-LLM", "290 Tests", "Plugin + Homebrew", "v0.1.0"],
+  },
+  {
+    slug: "looptrip",
+    title: "looptrip",
+    description:
+      'A deterministic, framework-agnostic, zero-LLM detector of multi-agent coordination pathologies — duplicate-work loops, ping-pong / livelock, deadlock, and non-termination — that trips at iteration 2, not on the invoice. An observer, never a gate: it reads data you already have (OpenTelemetry GenAI handoff spans or a CAST cast.db), and the same event stream always yields the same verdict. On two real recorded runaway sessions it reproduces $792.96 of prevented duplicate-work spend in one command. 491 tests; live on PyPI. pip install looptrip · brew tap ek33450505/looptrip && brew install looptrip',
+    tech: ["Python", "OpenTelemetry", "Claude Code", "SQLite", "Detection"],
+    icon: Repeat,
+    color: "rose",
+    category: "personal",
+    featured: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/looptrip",
+    githubRepo: { owner: "ek33450505", repo: "looptrip" },
+    stats: ["Zero-LLM", "491 Tests", "$792.96 Proof", "Plugin + Homebrew", "v0.1.0"],
   },
   {
     slug: "cast-time",
