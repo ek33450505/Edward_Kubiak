@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useSearchParams, Link } from "react-router-dom";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
+import { Link } from "react-router-dom";
 import { ExternalLink, Star } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import SectionHeader from "./ui/SectionHeader";
@@ -10,14 +9,6 @@ import projects from "../data/projects";
 import { fadeUp, staggerContainer, staggerItem } from "../utils/motion";
 import { colorMap } from "../utils/colors";
 import { useGitHubStars } from "../hooks/useGitHubStars";
-
-const filters = [
-  { key: "all", label: "All" },
-  { key: "featured", label: "Featured" },
-  { key: "ai-engineering", label: "AI Engineering" },
-  { key: "cast-ecosystem", label: "CAST Ecosystem" },
-  { key: "professional", label: "Professional" },
-];
 
 function StarBadge({ owner, repo }) {
   const { stars, loading } = useGitHubStars(owner, repo);
@@ -151,55 +142,18 @@ function ProjectCard({ project }) {
   );
 }
 
-const VALID_FILTERS = new Set(["all", "featured", "ai-engineering", "cast-ecosystem", "professional"]);
+const SECTIONS = [
+  { key: "flagship",     title: "Flagship" },
+  { key: "tools",        title: "AI & Claude Code Tools" },
+  { key: "ecosystem",    title: "CAST Ecosystem" },
+  { key: "professional", title: "Professional" },
+];
 
 function Portfolio() {
-  const [searchParams] = useSearchParams();
-  const initialFilter = (() => {
-    const param = searchParams.get("filter");
-    return param && VALID_FILTERS.has(param) ? param : "all";
-  })();
-  const [filter, setFilter] = useState(initialFilter);
-  const tablistRef = useRef(null);
-
-  const handleTabKeyDown = useCallback((e) => {
-    const tablist = tablistRef.current;
-    if (!tablist) return;
-    const tabs = Array.from(tablist.querySelectorAll("[role='tab']"));
-    const currentIndex = tabs.indexOf(e.currentTarget);
-    let nextIndex = currentIndex;
-
-    if (e.key === "ArrowRight") {
-      nextIndex = (currentIndex + 1) % tabs.length;
-    } else if (e.key === "ArrowLeft") {
-      nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-    } else if (e.key === "Home") {
-      nextIndex = 0;
-    } else if (e.key === "End") {
-      nextIndex = tabs.length - 1;
-    } else {
-      return;
-    }
-
-    e.preventDefault();
-    tabs[nextIndex].focus();
-  }, []);
-
-  const filtered =
-    filter === "all"
-      ? projects
-      : filter === "featured"
-      ? projects.filter((p) => p.featured)
-      : filter === "ai-engineering"
-      ? projects.filter((p) => p.aiEngineering)
-      : filter === "cast-ecosystem"
-      ? projects.filter((p) => p.castEcosystem)
-      : projects.filter((p) => p.category === filter);
-
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Header */}
+        {/* Page header */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
@@ -213,59 +167,41 @@ function Portfolio() {
           />
         </motion.div>
 
-        {/* Filter tabs */}
-        <motion.div
-          role="tablist"
-          ref={tablistRef}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.15 }}
-          className="mt-8 flex flex-wrap gap-2"
-        >
-          {filters.map(({ key, label }) => (
-            <button
-              key={key}
-              id={`tab-${key}`}
-              onClick={() => setFilter(key)}
-              onKeyDown={handleTabKeyDown}
-              role="tab"
-              aria-selected={filter === key}
-              aria-controls="projects-panel"
-              tabIndex={filter === key ? 0 : -1}
-              className={`px-4 py-2 font-display text-xs tracking-widest uppercase rounded-lg border transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60 ${
-                filter === key
-                  ? "bg-accent-400 text-slate-950 border-accent-400 font-bold"
-                  : "border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </motion.div>
+        {/* Grouped sections */}
+        <div className="mt-10 space-y-16">
+          {SECTIONS.map(({ key, title }) => {
+            const sectionProjects = projects.filter((p) => p.group === key);
+            if (sectionProjects.length === 0) return null;
+            const headingId = `section-${key}`;
+            const isFlagship = key === "flagship";
 
-        {/* Project grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={filter}
-            id="projects-panel"
-            role="tabpanel"
-            aria-labelledby={`tab-${filter}`}
-            tabIndex={0}
-            className="mt-10 grid md:grid-cols-2 gap-5"
-            variants={staggerContainer}
-            initial="hidden"
-            animate="show"
-          >
-            {filtered.length === 0 && (
-              <div className="col-span-2 py-20 text-center text-slate-400 font-display text-sm tracking-wider">
-                No projects in this category yet.
-              </div>
-            )}
-            {filtered.map((project) => (
-              <ProjectCard key={project.title} project={project} />
-            ))}
-          </motion.div>
-        </AnimatePresence>
+            return (
+              <section key={key} aria-labelledby={headingId}>
+                <motion.div
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: "-60px" }}
+                  className="mb-6"
+                >
+                  <SectionHeader id={headingId} as="h2" title={title} />
+                </motion.div>
+
+                <motion.div
+                  className={isFlagship ? "" : "grid md:grid-cols-2 gap-5"}
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: "-60px" }}
+                >
+                  {sectionProjects.map((project) => (
+                    <ProjectCard key={project.title} project={project} />
+                  ))}
+                </motion.div>
+              </section>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
