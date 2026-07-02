@@ -4,6 +4,7 @@ import { ExternalLink, Star } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import SectionHeader from "./ui/SectionHeader";
 import IconButton from "./ui/IconButton";
+import PageWrapper from "./ui/PageWrapper";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
@@ -40,10 +41,10 @@ function ProjectCard({ project }) {
         transitionSpeed={400}
       >
         <CardSpotlight
-          className={`p-6 rounded-xl border bg-slate-900/30 transition-all duration-300 ${
+          className={`p-6 transition-all duration-300 ${
             project.featured
-              ? "border-accent-400/25 hover:border-accent-400/50 shadow-[0_0_30px_rgba(0,255,194,0.06)]"
-              : "border-slate-800/60 hover:border-slate-700"
+              ? "rounded-xl border border-accent-400/25 bg-slate-900/30 hover:border-accent-400/50 shadow-[0_0_30px_rgba(0,255,194,0.06)]"
+              : "card hover:border-slate-700"
           }`}
           spotlightColor={colors.spotlight}
         >
@@ -152,7 +153,7 @@ const SECTIONS = [
 function Portfolio() {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-6xl mx-auto px-6">
+      <PageWrapper width="6xl">
         {/* Page header */}
         <motion.div
           variants={fadeUp}
@@ -202,7 +203,7 @@ function Portfolio() {
             );
           })}
         </div>
-      </div>
+      </PageWrapper>
     </div>
   );
 }

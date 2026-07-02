@@ -8,6 +8,7 @@ import projects from "../data/projects";
 import { colorMap } from "../utils/colors";
 import PageWrapper from "./ui/PageWrapper";
 import NotFound from "./ui/NotFound";
+import Label from "./ui/Label";
 import { useGitHubStars } from "../hooks/useGitHubStars";
 
 function StarBadge({ owner, repo }) {
@@ -130,11 +131,9 @@ function ProjectDetail() {
           initial="hidden"
           animate="show"
           transition={{ delay: 0.1 }}
-          className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+          className="mt-6 p-8 card"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-            About
-          </h2>
+          <Label as="h2" className="mb-4">About</Label>
           <p className="text-slate-300 leading-relaxed">{project.description}</p>
         </motion.div>
 
@@ -145,11 +144,9 @@ function ProjectDetail() {
             initial="hidden"
             animate="show"
             transition={{ delay: 0.15 }}
-            className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+            className="mt-6 p-8 card"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-              Tech Stack
-            </h2>
+            <Label as="h2" className="mb-4">Tech Stack</Label>
             <div className="flex flex-wrap gap-2">
               {project.tech.map((t) => (
                 <span
@@ -170,11 +167,9 @@ function ProjectDetail() {
             initial="hidden"
             animate="show"
             transition={{ delay: 0.2 }}
-            className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+            className="mt-6 p-8 card"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-              Stats
-            </h2>
+            <Label as="h2" className="mb-4">Stats</Label>
             <div className="flex flex-wrap gap-2">
               {project.stats.map((stat) => (
                 <span
@@ -195,11 +190,9 @@ function ProjectDetail() {
             initial="hidden"
             animate="show"
             transition={{ delay: 0.25 }}
-            className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+            className="mt-6 p-8 card"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-              Links
-            </h2>
+            <Label as="h2" className="mb-4">Links</Label>
             <div className="flex flex-wrap gap-3">
               {project.github && (
                 <a

@@ -4,6 +4,7 @@ import { fadeUp } from "../utils/motion";
 import { CAST_STATS, CAST_DESKTOP_STATS } from "../data/castStats";
 import SectionHeader from "./ui/SectionHeader";
 import PageWrapper from "./ui/PageWrapper";
+import Label from "./ui/Label";
 
 const skills = {
   Frontend: [
@@ -256,11 +257,9 @@ const Resume = () => {
           whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-10 p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
+          className="mt-10 p-6 card"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-3">
-            Summary
-          </h2>
+          <Label as="h2" className="mb-3">Summary</Label>
           <p className="text-slate-300 leading-relaxed">
             {`AI systems engineer and full stack developer who builds developer tooling and multi-agent frameworks. Creator of CAST ${CAST_STATS.version} — a local-first, open-source ${CAST_STATS.agents}-agent framework for Claude Code distributed as ${CAST_STATS.packages} Homebrew taps plus the umbrella \`cast\` formula, with a dedicated ecosystem site at castframework.dev. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts.`}
           </p>
@@ -275,9 +274,7 @@ const Resume = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-3">
-            Skills
-          </h2>
+          <Label as="h2" className="mb-3">Skills</Label>
           <div className="grid sm:grid-cols-2 gap-3">
             {Object.entries(skills).map(([category, items], i) => (
               <motion.div
@@ -287,7 +284,7 @@ const Resume = () => {
                 whileInView="show"
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="skill-card p-3.5 rounded-xl border border-slate-800/60 bg-slate-900/30"
+                className="skill-card p-3.5 card"
               >
                 <h3
                   className={`font-display text-[11px] font-bold tracking-wider mb-2 ${labelColors[category]}`}
@@ -317,13 +314,11 @@ const Resume = () => {
           viewport={{ once: true, margin: "-60px" }}
           className="mt-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-            Experience
-          </h2>
+          <Label as="h2" className="mb-4">Experience</Label>
           {experience.map((job) => (
             <div
               key={job.company}
-              className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
+              className="p-6 card"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-4">
                 <div>
@@ -365,14 +360,12 @@ const Resume = () => {
           viewport={{ once: true, margin: "-60px" }}
           className="mt-8 mb-8"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-            Education
-          </h2>
+          <Label as="h2" className="mb-4">Education</Label>
           <div className="grid sm:grid-cols-2 gap-4">
             {education.map((edu) => (
               <div
                 key={edu.institution}
-                className="p-5 rounded-xl border border-slate-800/60 bg-slate-900/30"
+                className="p-5 card"
               >
                 <h3 className="font-display text-sm font-bold text-slate-100">
                   {edu.degree}

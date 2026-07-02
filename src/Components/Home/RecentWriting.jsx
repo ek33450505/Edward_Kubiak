@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { fadeUp } from "../../utils/motion";
 import { timeAgo } from "../../utils/timeAgo";
 import SectionHeader from "../ui/SectionHeader";
+import PageWrapper from "../ui/PageWrapper";
 
 export default function RecentWriting() {
   const [articles, setArticles] = useState([]);
@@ -27,12 +28,12 @@ export default function RecentWriting() {
   if (loading || articles.length === 0) return null;
 
   return (
+    <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
     <motion.section
       variants={fadeUp}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
       aria-labelledby="recent-writing-heading"
     >
       <div className="mb-6">
@@ -50,7 +51,7 @@ export default function RecentWriting() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.3, delay: i * 0.06 }}
-            className="group flex items-start gap-3 p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700 hover:bg-slate-800/30 transition-all duration-200 block"
+            className="group flex items-start gap-3 p-4 card-interactive block"
           >
             <div className="flex-1 min-w-0">
               <p className="text-sm font-display font-bold text-slate-200 group-hover:text-accent-400 transition-colors leading-snug">
@@ -74,5 +75,6 @@ export default function RecentWriting() {
         ))}
       </div>
     </motion.section>
+    </PageWrapper>
   );
 }

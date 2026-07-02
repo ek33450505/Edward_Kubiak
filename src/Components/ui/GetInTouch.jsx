@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { Mail, Heart, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "../BrandIcons";
 import { fadeUp } from "../../utils/motion";
+import Label from "./Label";
 
 export default function GetInTouch() {
   return (
@@ -11,12 +12,10 @@ export default function GetInTouch() {
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
       transition={{ delay: 0.1 }}
-      className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+      className="p-6 sm:p-8 card"
     >
       <div className="text-center">
-        <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-2">
-          Get in Touch
-        </h2>
+        <Label as="h2" className="mb-2">Get in Touch</Label>
         <p className="text-sm text-slate-400 mb-6">
           Open to new opportunities, collaborations, and conversations about developer tooling.
         </p>

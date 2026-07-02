@@ -97,7 +97,7 @@ const StravaStats = () => {
         {pills.map(({ icon: Icon, label, value, unit }) => (
           <div
             key={label}
-            className="p-4 rounded-xl border border-slate-800/60 bg-slate-900/30"
+            className="p-4 card"
           >
             <Icon size={16} className="text-accent-400/60 mb-2" aria-hidden="true" />
             <div className="text-2xl font-display font-bold text-accent-400">

@@ -3,6 +3,7 @@ import now from "../data/now";
 import { fadeUp, fadeIn } from "../utils/motion";
 import SectionHeader from "./ui/SectionHeader";
 import PageWrapper from "./ui/PageWrapper";
+import Label from "./ui/Label";
 
 const Now = () => {
   return (
@@ -34,11 +35,11 @@ const Now = () => {
               whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
+              className="p-6 card"
             >
-              <h2 className="font-display text-xs tracking-[0.3em] text-accent-400 uppercase mb-4">
+              <Label as="h2" className="text-accent-400 mb-4">
                 {section.title}
-              </h2>
+              </Label>
               <ul className="space-y-3">
                 {section.items.map((item, j) => (
                   <li

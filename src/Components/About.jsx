@@ -37,7 +37,7 @@ const About = () => {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ delay: 0.1 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
-            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+            className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-accent-400/10 text-accent-400 shrink-0 mt-1">
@@ -81,7 +81,7 @@ const About = () => {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ delay: 0.15 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
-            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+            className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-sky-400/10 text-sky-400 shrink-0 mt-1">
@@ -108,7 +108,7 @@ const About = () => {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ delay: 0.15 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
-            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+            className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-violet-400/10 text-violet-400 shrink-0 mt-1">
@@ -144,7 +144,7 @@ const About = () => {
                 whileInView="show"
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5 }}
-                className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+                className="p-6 sm:p-8 card"
               >
                 <h2 className="font-display text-lg font-bold text-slate-100 mb-6">
                   Tech Radar
@@ -182,7 +182,7 @@ const About = () => {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5 }}
               whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-              className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+              className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
             >
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-rose-400/10 text-rose-400 shrink-0 mt-1">
@@ -208,7 +208,7 @@ const About = () => {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: 0.1 }}
               whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-              className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+              className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
             >
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-emerald-400/10 text-emerald-400 shrink-0 mt-1">

@@ -77,7 +77,7 @@ function HeroStats() {
       ) : (
         <>
           {/* Stars pill — live value */}
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-800/60 bg-slate-900/30">
+          <div className="flex items-center gap-2 px-4 py-2 card">
             <Star size={13} className="text-accent-400 shrink-0" aria-hidden="true" />
             <span className="font-display text-sm font-bold text-accent-400">
               {totalStars.toLocaleString()}
@@ -91,7 +91,7 @@ function HeroStats() {
           {STATIC_PILLS.map(({ label, value, icon: Icon }) => (
             <div
               key={label}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-800/60 bg-slate-900/30"
+              className="flex items-center gap-2 px-4 py-2 card"
             >
               <Icon size={13} className="text-accent-400 shrink-0" aria-hidden="true" />
               <span className="font-display text-sm font-bold text-accent-400">

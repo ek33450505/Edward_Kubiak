@@ -6,6 +6,7 @@ import { CAST_STATS } from "../../data/castStats";
 import { getColorClasses } from "../../utils/colors";
 import { fadeUp, staggerItem } from "../../utils/motion";
 import SectionHeader from "../ui/SectionHeader";
+import PageWrapper from "../ui/PageWrapper";
 
 const TRIO_SLUGS = ["looptrip", "misfire", "attest"];
 
@@ -18,12 +19,12 @@ export default function FeaturedWork() {
   const flagshipTechChips = flagship ? (flagship.tech || []).slice(0, 3) : [];
 
   return (
+    <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
     <motion.section
       variants={fadeUp}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
       aria-labelledby="featured-work-heading"
     >
       <div className="mb-8">
@@ -164,5 +165,6 @@ export default function FeaturedWork() {
         </Link>
       </div>
     </motion.section>
+    </PageWrapper>
   );
 }

@@ -5,6 +5,7 @@ import CurrentlyBuilding from "./Home/CurrentlyBuilding";
 import RecentWriting from "./Home/RecentWriting";
 import CastStats from "./CastStats";
 import GetInTouch from "./ui/GetInTouch";
+import PageWrapper from "./ui/PageWrapper";
 
 const Home = () => {
   return (
@@ -14,9 +15,9 @@ const Home = () => {
       <FeaturedWork />
       <CurrentlyBuilding />
       <RecentWriting />
-      <div className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]">
+      <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
         <GetInTouch />
-      </div>
+      </PageWrapper>
       <CastStats />
     </div>
   );

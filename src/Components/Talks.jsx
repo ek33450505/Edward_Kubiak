@@ -24,7 +24,7 @@ function TalkCard({ talk, index }) {
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
-      className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur-sm hover:border-accent-400/30 hover:bg-slate-800/40 transition-all duration-300"
+      className="p-6 card backdrop-blur-sm hover:border-accent-400/30 hover:bg-slate-800/40 transition-all duration-300"
     >
       <div className="flex items-start gap-4">
         <div className={`p-2 rounded-lg ${config.color} shrink-0 mt-0.5`}>
@@ -151,7 +151,7 @@ const Talks = () => {
           whileInView="show"
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-8 p-6 rounded-xl border border-slate-800/40 bg-slate-900/20 text-center"
+          className="mt-8 p-6 card text-center"
         >
           <p className="text-sm text-slate-400">
             More coming soon &mdash;{" "}

@@ -4,6 +4,7 @@ import { ExternalLink, GitCommit } from "lucide-react";
 import { fadeUp } from "../../utils/motion";
 import { timeAgo } from "../../utils/timeAgo";
 import SectionHeader from "../ui/SectionHeader";
+import PageWrapper from "../ui/PageWrapper";
 
 export default function CurrentlyBuilding() {
   const [events, setEvents] = useState([]);
@@ -92,12 +93,12 @@ export default function CurrentlyBuilding() {
   const showFallback = !loading && (error || (events.length === 0 && lastKnownCommits.length === 0));
 
   return (
+    <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
     <motion.section
       variants={fadeUp}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
       aria-labelledby="currently-building-heading"
     >
       {/* Section heading */}
@@ -118,7 +119,7 @@ export default function CurrentlyBuilding() {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 animate-pulse"
+              className="p-4 card animate-pulse"
             >
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 rounded bg-slate-700/60 shrink-0" />
@@ -135,7 +136,7 @@ export default function CurrentlyBuilding() {
 
       {/* Fallback card when API fails or no events */}
       {showFallback && (
-        <div className="p-4 rounded-xl border border-slate-800/60 bg-slate-900/30">
+        <div className="p-4 card">
           <a
             href="https://github.com/ek33450505"
             target="_blank"
@@ -158,7 +159,7 @@ export default function CurrentlyBuilding() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: i * 0.06 }}
-              className="group flex items-start gap-3 p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700 hover:bg-slate-800/30 transition-all duration-200"
+              className="group flex items-start gap-3 p-4 card-interactive"
             >
               <GitCommit
                 size={14}
@@ -214,7 +215,7 @@ export default function CurrentlyBuilding() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: i * 0.06 }}
-                className="group flex items-start gap-3 p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700 hover:bg-slate-800/30 transition-all duration-200"
+                className="group flex items-start gap-3 p-4 card-interactive"
               >
                 <GitCommit
                   size={14}
@@ -253,5 +254,6 @@ export default function CurrentlyBuilding() {
         </div>
       )}
     </motion.section>
+    </PageWrapper>
   );
 }

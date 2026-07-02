@@ -4,6 +4,7 @@ import { Bot, Package, TestTube2, Terminal, Hash } from "lucide-react";
 import { fadeUp } from "../utils/motion";
 import { CAST_STATS } from "../data/castStats";
 import SectionHeader from "./ui/SectionHeader";
+import PageWrapper from "./ui/PageWrapper";
 
 const PILLS = [
   { key: "version", label: "Version", icon: Hash },
@@ -44,8 +45,9 @@ function CastStats() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
+      className="w-full relative z-[2]"
     >
+      <PageWrapper width="6xl" className="pb-20">
       <div className="mb-6">
         <SectionHeader title="CAST Ecosystem — Live Stats" />
       </div>
@@ -61,7 +63,7 @@ function CastStats() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3 }}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-800/60 bg-slate-900/30"
+              className="flex items-center gap-2 px-4 py-2.5 card"
             >
               <Icon size={14} className="text-accent-400 shrink-0" aria-hidden="true" />
               <span className="font-display text-base font-bold text-accent-400">
@@ -81,6 +83,7 @@ function CastStats() {
           </div>
         )}
       </div>
+      </PageWrapper>
     </motion.section>
   );
 }

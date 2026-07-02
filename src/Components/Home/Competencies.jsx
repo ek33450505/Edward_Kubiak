@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { fadeUp, staggerItem } from "../../utils/motion";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
 import SectionHeader from "../ui/SectionHeader";
+import PageWrapper from "../ui/PageWrapper";
 
 const competencies = [
   {
@@ -28,10 +29,10 @@ const competencies = [
 
 export default function Competencies() {
   return (
+    <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
     <section
       id="core-competencies"
       aria-labelledby="core-competencies-heading"
-      className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
     >
       <motion.div
         variants={fadeUp}
@@ -64,5 +65,6 @@ export default function Competencies() {
         ))}
       </div>
     </section>
+    </PageWrapper>
   );
 }
