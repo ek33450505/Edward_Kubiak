@@ -1,7 +1,7 @@
 // Resume content data — extracted from Resume.jsx
 // Import into Resume.jsx; do not reference from other components.
 
-import { CAST_STATS, CAST_DESKTOP_STATS } from "./castStats";
+import { CAST_STATS, CAST_DESKTOP_STATS } from "./castStats.js";
 
 export const skills = {
   "AI & Agent Systems": [
@@ -73,7 +73,7 @@ export const labelColors = {
   "Testing & Delivery": "text-rose-400",
 };
 
-export const summary = `Full stack developer and AI systems engineer. Creator of CAST ${CAST_STATS.version} — a local-first, open-source multi-agent control plane for Claude Code whose ${CAST_STATS.tables}-table execution record is searchable, signed, and predictive — shipped as a ${CAST_STATS.packages}-package Homebrew ecosystem backed by ${CAST_STATS.tests} tests. Builds deterministic, zero-LLM agent-reliability tools (misfire, attest, looptrip) shipped on PyPI and Homebrew. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts. Open to full-stack and AI-infrastructure roles.`;
+export const summary = `Full stack developer and AI systems engineer. Creator of CAST ${CAST_STATS.version} — a local-first, open-source multi-agent control plane for Claude Code whose ${CAST_STATS.tables}-table execution record is searchable, signed, and predictive — shipped as a ${CAST_STATS.packages}-package Homebrew ecosystem backed by ${CAST_STATS.tests.toLocaleString("en-US")} tests. Builds deterministic, zero-LLM agent-reliability tools (misfire, attest, looptrip) shipped on PyPI and Homebrew. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts. Open to full-stack and AI-infrastructure roles.`;
 
 export const experience = [
   {
@@ -82,7 +82,7 @@ export const experience = [
     location: "github.com/ek33450505",
     period: "2024 — Present",
     highlights: [
-      `Creator of CAST ${CAST_STATS.version} "The Record That Acts" — a local-first, open-source multi-agent control plane for Claude Code: ${CAST_STATS.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and a ${CAST_STATS.tables}-table SQLite execution record. v9 makes the record act: full-text search over every session (cast ask), signed SHA-256 audit receipts (cast ledger --verify), and telemetry-driven cost prediction (cast predict). ${CAST_STATS.tests} tests, zero cloud dependencies.`,
+      `Creator of CAST ${CAST_STATS.version} "The Record That Acts" — a local-first, open-source multi-agent control plane for Claude Code: ${CAST_STATS.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and a ${CAST_STATS.tables}-table SQLite execution record. v9 makes the record act: full-text search over every session (cast ask), signed SHA-256 audit receipts (cast ledger --verify), and telemetry-driven cost prediction (cast predict). ${CAST_STATS.tests.toLocaleString("en-US")} tests, zero cloud dependencies.`,
       `Shipped the CAST ecosystem as ${CAST_STATS.packages} Homebrew packages plus the umbrella cast formula — the flagship framework, cast-desktop (native Tauri 2 + React 19 + Rust app with an embedded Express 5 + SQLite backend, ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, and a real PTY-backed terminal; 1,222 tests), the Claude Code Dashboard v2.5.0 (React 19 + TypeScript + Express 5 + SSE observability UI), and standalone packages for agent memory, health checks, journaling, MCP access, signed receipts, and dispatch prediction.`,
       "Built a family of deterministic, zero-LLM agent-reliability tools, each shipped to PyPI and Homebrew with CI: misfire v0.2.0, a trace-grounded CLAUDE.md adherence auditor that finds which rules agents actually ignore; attest v0.3.0, a hook that verifies a subagent's DONE claim against the real git delta (325 tests); and looptrip v0.1.2, a coordination-pathology detector that trips duplicate-work loops at iteration 2 and reproduces $792.96 of prevented spend from a committed fixture.",
       "Distribute across 12 public Homebrew taps with versioned releases, and write about agent-infrastructure patterns at dev.to/edwardkubiak.",
@@ -127,6 +127,10 @@ export const printStyles = `
       background: white !important;
       color: #0f172a !important;
     }
+    /* Neutralize app-shell noise texture and gradient mesh (src/App.css + App.jsx).
+       Without these, printBackground captures them as raster, inflating the PDF to ~10MB. */
+    .noise-bg::before { background-image: none !important; }
+    .gradient-mesh { background: white !important; }
     #resume-print {
       background: white !important;
       padding: 0 !important;
@@ -135,6 +139,12 @@ export const printStyles = `
     #resume-print .rounded-xl {
       border: 1px solid #e2e8f0 !important;
       background: white !important;
+    }
+    /* .card is a @utility (bg-slate-900/30) — not matched by the .rounded-xl selector above */
+    #resume-print .card,
+    #resume-print .card-interactive {
+      background: white !important;
+      border: 1px solid #e2e8f0 !important;
     }
     #resume-print h1, #resume-print h2, #resume-print h3 {
       color: #0f172a !important;
