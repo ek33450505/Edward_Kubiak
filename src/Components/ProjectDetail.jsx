@@ -1,63 +1,37 @@
-import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { fadeUp, fadeIn } from "../utils/motion";
-import { ExternalLink, ArrowLeft, Star } from "lucide-react";
+import { ExternalLink, ArrowLeft } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 import { colorMap } from "../utils/colors";
 import PageWrapper from "./ui/PageWrapper";
-import { useGitHubStars } from "../hooks/useGitHubStars";
-
-function StarBadge({ owner, repo }) {
-  const { stars } = useGitHubStars(owner, repo);
-  if (stars === null) return null;
-  return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-accent-400/10 text-accent-400 border border-accent-400/20">
-      <Star size={10} aria-hidden="true" className="fill-accent-400" />
-      {stars}
-    </span>
-  );
-}
+import NotFound from "./ui/NotFound";
+import Label from "./ui/Label";
+import StarBadge from "./ui/StarBadge";
+import { useDocumentMeta } from "../hooks/useDocumentMeta";
 
 function ProjectDetail() {
   const { slug } = useParams();
   const project = projects.find((p) => p.slug === slug);
 
-  useEffect(() => {
-    let ogMeta = document.querySelector('meta[property="og:image"]');
-    if (!ogMeta) {
-      ogMeta = document.createElement('meta');
-      ogMeta.setAttribute('property', 'og:image');
-      document.head.appendChild(ogMeta);
-    }
-    ogMeta.setAttribute('content', `/og/${slug}.png`);
-    return () => ogMeta.setAttribute('content', '');
-  }, [slug]);
+  useDocumentMeta({
+    title: project
+      ? `${project.title} — Edward Kubiak`
+      : "Project Not Found — Edward Kubiak",
+    description: project?.description,
+    canonical: project ? `/projects/${slug}` : undefined,
+    ogImage: project ? `/og/${slug}.png` : undefined,
+  });
 
   if (!project) {
     return (
-      <div className="min-h-[calc(100vh-80px)] py-20">
-        <PageWrapper>
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            transition={{ duration: 0.4 }}
-            className="text-center py-20"
-          >
-            <p className="font-display text-4xl font-bold text-slate-600 mb-4">404</p>
-            <h1 className="font-display text-xl font-bold text-slate-200 mb-6">Project not found</h1>
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-widest uppercase hover:border-accent-400 hover:text-accent-400 transition-all"
-            >
-              <ArrowLeft size={14} aria-hidden="true" />
-              Back to Projects
-            </Link>
-          </motion.div>
-        </PageWrapper>
-      </div>
+      <NotFound
+        heading="404"
+        message="Project not found"
+        linkLabel="Back to Projects"
+        linkHref="/projects"
+      />
     );
   }
 
@@ -67,6 +41,22 @@ function ProjectDetail() {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
       <PageWrapper>
+        {/* Top back link */}
+        <motion.div
+          variants={fadeIn}
+          initial="hidden"
+          animate="show"
+          className="mb-6"
+        >
+          <Link
+            to="/projects"
+            className="inline-flex items-center gap-2 text-slate-400 font-display text-xs tracking-widest uppercase hover:text-accent-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:rounded"
+          >
+            <ArrowLeft size={14} aria-hidden="true" />
+            Back to Projects
+          </Link>
+        </motion.div>
+
         {/* Hero */}
         <motion.div
           variants={fadeUp}
@@ -81,7 +71,7 @@ function ProjectDetail() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-100">
+                  <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-100">
                     {project.title}
                   </h1>
                   {project.featured && (
@@ -144,11 +134,9 @@ function ProjectDetail() {
           initial="hidden"
           animate="show"
           transition={{ delay: 0.1 }}
-          className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+          className="mt-6 p-8 card"
         >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-            About
-          </h2>
+          <Label as="h2" className="mb-4">About</Label>
           <p className="text-slate-300 leading-relaxed">{project.description}</p>
         </motion.div>
 
@@ -159,11 +147,9 @@ function ProjectDetail() {
             initial="hidden"
             animate="show"
             transition={{ delay: 0.15 }}
-            className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+            className="mt-6 p-8 card"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-              Tech Stack
-            </h2>
+            <Label as="h2" className="mb-4">Tech Stack</Label>
             <div className="flex flex-wrap gap-2">
               {project.tech.map((t) => (
                 <span
@@ -184,11 +170,9 @@ function ProjectDetail() {
             initial="hidden"
             animate="show"
             transition={{ delay: 0.2 }}
-            className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+            className="mt-6 p-8 card"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-              Stats
-            </h2>
+            <Label as="h2" className="mb-4">Stats</Label>
             <div className="flex flex-wrap gap-2">
               {project.stats.map((stat) => (
                 <span
@@ -209,11 +193,9 @@ function ProjectDetail() {
             initial="hidden"
             animate="show"
             transition={{ delay: 0.25 }}
-            className="mt-6 p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
+            className="mt-6 p-8 card"
           >
-            <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-              Links
-            </h2>
+            <Label as="h2" className="mb-4">Links</Label>
             <div className="flex flex-wrap gap-3">
               {project.github && (
                 <a
@@ -251,7 +233,7 @@ function ProjectDetail() {
         >
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 text-slate-400 font-display text-xs tracking-widest uppercase hover:text-accent-400 transition-colors"
+            className="inline-flex items-center gap-2 text-slate-400 font-display text-xs tracking-widest uppercase hover:text-accent-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:rounded"
           >
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Projects

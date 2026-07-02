@@ -6,6 +6,12 @@
  *   When true, this component renders CelestialFallback (a CSS-gradient div)
  *   and returns early — no Three.js, no Canvas, no WebGL context.
  *
+ * WEBGL FALLBACK (independent of reduced-motion):
+ *   isWebGLAvailable() probes for a WebGL/WebGL2 context at mount time.
+ *   When false (headless browser, old device, VM with no GPU), this component
+ *   also renders CelestialFallback instead of crashing. Either gate condition
+ *   alone is sufficient to skip the Canvas.
+ *
  * FRAMELOOP CONTROL:
  *   useFrameloopWhenVisible pauses the render loop (frameloop="demand") when
  *   the container is scrolled off-screen. frameloop="always" when visible.
@@ -16,11 +22,14 @@
  *   z-index: 0 — purely decorative, never receives focus or input events.
  */
 
+import { useMemo } from "react";
 import { useReducedMotion } from "motion/react";
+import { ACCENT } from "../../lib/tokens";
 import { Canvas } from "@react-three/fiber";
 import { Stars } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { useFrameloopWhenVisible } from "../../hooks/useFrameloopWhenVisible";
+import { isWebGLAvailable } from "../../lib/three/webgl";
 import { STARS, CAMERA, BLOOM } from "./constants";
 import NebulaLayer from "./NebulaLayer";
 import ShootingStars from "./ShootingStars";
@@ -40,7 +49,7 @@ function CelestialFallback() {
         zIndex: 0,
         pointerEvents: "none",
         background:
-          "radial-gradient(ellipse at 30% 40%, #00FFC215 0%, transparent 55%), " +
+          `radial-gradient(ellipse at 30% 40%, ${ACCENT}15 0%, transparent 55%), ` +
           "radial-gradient(ellipse at 70% 60%, #38bdf810 0%, transparent 50%), " +
           "#0a0f1a",
       }}
@@ -58,12 +67,18 @@ export default function CelestialScene() {
   // all assume motion is permitted (no internal guard needed in those components).
   const prefersReducedMotion = useReducedMotion();
 
+  // WebGL availability check — computed once at mount. A device or browser without
+  // WebGL (headless, old mobile, VM) would crash the Canvas; return the static
+  // gradient fallback instead. This gate is INDEPENDENT of the reduced-motion gate:
+  // either condition alone is sufficient to skip the Canvas.
+  const webglOK = useMemo(() => isWebGLAvailable(), []);
+
   // useFrameloopWhenVisible returns [containerRef, frameloop].
   // When reducedMotion=true, the hook skips IntersectionObserver setup;
   // the returned containerRef and frameloop are unused (we return early below).
   const [containerRef, frameloop] = useFrameloopWhenVisible(prefersReducedMotion ?? false);
 
-  if (prefersReducedMotion) {
+  if (prefersReducedMotion || !webglOK) {
     return <CelestialFallback />;
   }
 

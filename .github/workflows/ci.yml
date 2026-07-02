@@ -1,0 +1,43 @@
+name: CI Verification
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - 'feature/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # HARD RULE: never `npm run build` in automation — its prebuild churns
+      # src/data/castStats.js and trips the stats-drift gate. Verify to a temp dir.
+      - name: Build verification
+        run: npx vite build --outDir /tmp/vite-verify
+
+      # Per team policy, passing tests are NOT a hard merge gate — run advisory.
+      - name: Test (advisory)
+        run: npm test -- --run
+        continue-on-error: true

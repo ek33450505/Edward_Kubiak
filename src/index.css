@@ -5,9 +5,13 @@
   --color-slate-900: #111827;
   --color-slate-800: #1e293b;
   --color-slate-700: #334155;
+  --color-slate-600: #475569;
+  --color-slate-500: #64748b;
   --color-slate-400: #94a3b8;
   --color-slate-300: #cbd5e1;
+  --color-slate-200: #e2e8f0;
   --color-slate-100: #f1f5f9;
+  /* Body copy tiers: slate-100 = headings; slate-300 = primary reading copy; slate-400 = secondary/caption (usually paired with text-sm); slate-500/600 = decorative/disabled only. */
   /* Accent palette — used by CelestialScene (nebula emitters, bloom) and UI components */
   --color-accent-400: #00FFC2;
   --color-accent-500: #00D9A3;
@@ -59,6 +63,21 @@ body {
   color: var(--color-slate-100);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Card surface utilities ─────────────────────────────────────────────────
+   card            — static surface (rounded border + dark fill)
+   card-interactive — same surface + hover color transition
+   Used ~26× across the app; centralised here to stop hand-copying.        */
+@utility card {
+  @apply rounded-xl border border-slate-800/60 bg-slate-900/30;
+}
+
+@utility card-interactive {
+  @apply rounded-xl border border-slate-800/60 bg-slate-900/30 transition-colors;
+  &:hover {
+    @apply border-slate-700 bg-slate-800/30;
+  }
 }
 
 @media print {

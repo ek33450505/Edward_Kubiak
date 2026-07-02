@@ -1,7 +1,8 @@
-import { motion } from "motion/react";
-import { fadeUp, staggerItem } from "../../utils/motion";
+import { staggerItem } from "../../utils/motion";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
 import SectionHeader from "../ui/SectionHeader";
+import PageWrapper from "../ui/PageWrapper";
+import Reveal from "../ui/Reveal";
 
 const competencies = [
   {
@@ -28,29 +29,20 @@ const competencies = [
 
 export default function Competencies() {
   return (
+    <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
     <section
       id="core-competencies"
       aria-labelledby="core-competencies-heading"
-      className="max-w-6xl mx-auto px-6 pb-20 w-full relative z-[2]"
     >
-      <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, margin: "-80px" }}
-        className="mb-8"
-      >
+      <Reveal margin="-60px" className="mb-8">
         <SectionHeader id="core-competencies-heading" title="Core Competencies" />
-      </motion.div>
+      </Reveal>
 
       <div className="flex flex-col sm:flex-row sm:divide-x sm:divide-slate-700/40 gap-6 sm:gap-0">
         {competencies.map((item, i) => (
-          <motion.div
+          <Reveal
             key={item.title}
             variants={staggerItem}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="sm:px-6 first:sm:pl-0 last:sm:pr-0 flex-1"
           >
@@ -60,9 +52,10 @@ export default function Competencies() {
             <p className="text-sm text-slate-400 leading-relaxed">
               {item.description}
             </p>
-          </motion.div>
+          </Reveal>
         ))}
       </div>
     </section>
+    </PageWrapper>
   );
 }

@@ -3,8 +3,17 @@ import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Filter } from "lucide-react";
+import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Mic, Package, Hash } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
+
+const FOCUSABLE_SELECTORS = [
+  'a[href]',
+  'button:not([disabled])',
+  'textarea:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(', ');
 
 // --- Context ---
 const CommandPaletteContext = createContext(null);
@@ -32,15 +41,17 @@ const navigateCommands = [
   { id: "projects", label: "Projects", icon: FolderOpen, to: "/projects" },
   { id: "resume", label: "Resume", icon: FileText, to: "/resume" },
   { id: "now", label: "Now", icon: Clock, to: "/now" },
+  { id: "talks", label: "Talks", icon: Mic, to: "/talks" },
+  { id: "uses", label: "Uses", icon: Package, to: "/uses" },
 ];
 
-const filterCommands = [
-  { id: "filter-all", label: "All Projects", filter: "" },
-  { id: "filter-featured", label: "Featured Projects", filter: "featured" },
-  { id: "filter-ai", label: "AI Engineering", filter: "ai-engineering" },
-  { id: "filter-cast", label: "CAST Ecosystem", filter: "cast-ecosystem" },
-  { id: "filter-professional", label: "Professional", filter: "professional" },
-  { id: "filter-personal", label: "Personal", filter: "personal" },
+// Jump-to-section commands — navigate to /projects with a hash anchor
+// matching each real SECTION group key defined in Portfolio.jsx.
+const jumpCommands = [
+  { id: "jump-flagship",     label: "Jump to Flagship",              hash: "section-flagship" },
+  { id: "jump-tools",        label: "Jump to AI & Claude Code Tools", hash: "section-tools" },
+  { id: "jump-ecosystem",    label: "Jump to CAST Ecosystem",         hash: "section-ecosystem" },
+  { id: "jump-professional", label: "Jump to Professional",           hash: "section-professional" },
 ];
 
 const externalCommands = [
@@ -53,6 +64,17 @@ const CommandPalette = () => {
   const { open, setOpen } = useCommandPalette();
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const dialogRef = useRef(null);
+  const previousActiveElementRef = useRef(null);
+
+  // Capture focus target before opening; restore it on close
+  useEffect(() => {
+    if (open) {
+      previousActiveElementRef.current = document.activeElement;
+    } else {
+      previousActiveElementRef.current?.focus();
+    }
+  }, [open]);
 
   // Autofocus the search input whenever the palette opens
   useEffect(() => {
@@ -61,6 +83,36 @@ const CommandPalette = () => {
       const id = requestAnimationFrame(() => inputRef.current?.focus());
       return () => cancelAnimationFrame(id);
     }
+  }, [open]);
+
+  // Focus trap: cycle Tab/Shift+Tab within the dialog
+  useEffect(() => {
+    if (!open || !dialogRef.current) return;
+
+    const handleTabKey = (e) => {
+      if (e.key !== 'Tab') return;
+      const focusableElements = [
+        ...dialogRef.current.querySelectorAll(FOCUSABLE_SELECTORS),
+      ];
+      if (focusableElements.length === 0) return;
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleTabKey);
+    return () => document.removeEventListener('keydown', handleTabKey);
   }, [open]);
 
   const handleKeyDown = useCallback((e) => {
@@ -83,8 +135,8 @@ const CommandPalette = () => {
     setOpen(false);
   };
 
-  const handleFilter = (filter) => {
-    navigate(filter ? `/projects?filter=${filter}` : "/projects");
+  const handleJump = (hash) => {
+    navigate(`/projects#${hash}`);
     setOpen(false);
   };
 
@@ -112,7 +164,13 @@ const CommandPalette = () => {
             transition={{ duration: 0.15 }}
             className="fixed inset-0 z-[71] flex items-start justify-center pt-[20vh] px-4 pointer-events-none"
           >
-            <div className="w-full max-w-lg pointer-events-auto">
+            <div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Command menu"
+              className="w-full max-w-lg pointer-events-auto"
+            >
               <Command
                 className="rounded-xl border border-slate-800 bg-slate-950 shadow-2xl overflow-hidden"
                 label="Command palette"
@@ -120,16 +178,17 @@ const CommandPalette = () => {
                 <Command.Input
                   ref={inputRef}
                   placeholder="Type a command or search..."
+                  aria-label="Search commands"
                   className="w-full px-4 py-3.5 bg-transparent border-b border-slate-800 text-slate-100 placeholder-slate-600 text-sm outline-none font-display tracking-wide"
                 />
                 <Command.List className="max-h-80 overflow-y-auto p-2">
-                  <Command.Empty className="py-6 text-center text-sm text-slate-600 font-display tracking-wider">
+                  <Command.Empty className="py-6 text-center text-sm text-slate-400 font-display tracking-wider">
                     No results found.
                   </Command.Empty>
 
                   <Command.Group
                     heading="Navigate"
-                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-600 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {navigateCommands.map(({ id, label, icon: Icon, to }) => (
                       <Command.Item
@@ -147,17 +206,17 @@ const CommandPalette = () => {
                   <Command.Separator className="my-1 h-px bg-slate-800/60" />
 
                   <Command.Group
-                    heading="Filter Projects"
-                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-600 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    heading="Jump to Section"
+                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
-                    {filterCommands.map(({ id, label, filter }) => (
+                    {jumpCommands.map(({ id, label, hash }) => (
                       <Command.Item
                         key={id}
                         value={label}
-                        onSelect={() => handleFilter(filter)}
+                        onSelect={() => handleJump(hash)}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 cursor-pointer data-[selected=true]:bg-accent-400/10 data-[selected=true]:text-accent-400 transition-colors"
                       >
-                        <Filter size={14} aria-hidden="true" />
+                        <Hash size={14} aria-hidden="true" />
                         {label}
                       </Command.Item>
                     ))}
@@ -167,7 +226,7 @@ const CommandPalette = () => {
 
                   <Command.Group
                     heading="External"
-                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-600 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {externalCommands.map(({ id, label, href, icon: Icon }) => (
                       <Command.Item

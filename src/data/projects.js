@@ -1,6 +1,33 @@
 import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair } from "lucide-react";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 
+/**
+ * @typedef {Object} GitHubRepo
+ * @property {string} owner - GitHub organization or user login
+ * @property {string} repo  - Repository name
+ */
+
+/**
+ * Represents a single project entry in the portfolio.
+ *
+ * @typedef {Object} Project
+ * @property {string}   slug          - URL-safe unique identifier
+ * @property {string}   title         - Display name
+ * @property {string}   description   - Long-form project description
+ * @property {string[]} tech          - Technology labels shown as badges
+ * @property {React.ComponentType} icon - Lucide icon component for the card
+ * @property {string}   color         - Tailwind color key (e.g. "violet", "teal")
+ * @property {string}   category      - Top-level category ("personal" | "professional")
+ * @property {string}   group         - Display group ("flagship" | "tools" | "ecosystem" | "professional")
+ * @property {boolean}  [featured]        - Whether to surface in the featured section
+ * @property {boolean}  [aiEngineering]   - Tagged as an AI engineering project
+ * @property {boolean}  [castEcosystem]   - Part of the CAST open-source ecosystem
+ * @property {string}   [github]          - URL to the GitHub repository
+ * @property {GitHubRepo} [githubRepo]    - Structured owner/repo for the GitHub Stars API
+ * @property {string[]} [stats]           - Short stat labels shown on the card
+ */
+
+/** @type {Project[]} */
 const projects = [
   // ── Flagship ──────────────────────────────────────────────────────────────
   {

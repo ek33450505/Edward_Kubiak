@@ -4,9 +4,13 @@ import { MapPin, Briefcase, Heart, Mountain, GitBranch } from "lucide-react";
 import SectionHeader from "./ui/SectionHeader";
 import GetInTouch from "./ui/GetInTouch";
 import PageWrapper from "./ui/PageWrapper";
-import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
+import Reveal from "./ui/Reveal";
+import RadarChart from "./ui/RadarChart";
 import { aggregateTech } from "../utils/aggregateTech";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
+
+// Static — computed once at module load, never changes at runtime
+const TECH_DATA = aggregateTech();
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -29,14 +33,13 @@ const About = () => {
 
         {/* Bio cards — scroll-triggered */}
         <div className="mt-12 space-y-6">
-          <motion.div
+          <Reveal
+            as="div"
             variants={slideInLeft}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
+            margin="-60px"
             transition={{ delay: 0.1 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
-            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+            className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-accent-400/10 text-accent-400 shrink-0 mt-1">
@@ -71,16 +74,15 @@ const About = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
 
-          <motion.div
+          <Reveal
+            as="div"
             variants={slideInLeft}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
+            margin="-60px"
             transition={{ delay: 0.15 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
-            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+            className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-sky-400/10 text-sky-400 shrink-0 mt-1">
@@ -98,16 +100,15 @@ const About = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
 
-          <motion.div
+          <Reveal
+            as="div"
             variants={slideInLeft}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
+            margin="-60px"
             transition={{ delay: 0.15 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
-            className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+            className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded-lg bg-violet-400/10 text-violet-400 shrink-0 mt-1">
@@ -131,57 +132,28 @@ const About = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
 
           {/* Tech Radar */}
-          {(() => {
-            const techData = aggregateTech();
-            return techData.length > 0 ? (
-              <motion.div
-                variants={staggerItem}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5 }}
-                className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30"
-              >
-                <h2 className="font-display text-lg font-bold text-slate-100 mb-6">
-                  Tech Radar
-                </h2>
-                <ResponsiveContainer width="100%" height={280}>
-                  <RadarChart
-                    cx="50%"
-                    cy="50%"
-                    outerRadius="70%"
-                    data={techData}
-                    aria-label="Technology radar showing most-used tech stack across projects"
-                  >
-                    <PolarGrid stroke="#334155" />
-                    <PolarAngleAxis
-                      dataKey="name"
-                      tick={{ fill: "#94a3b8", fontSize: 11 }}
-                    />
-                    <Radar
-                      dataKey="count"
-                      stroke="#f59e0b"
-                      fill="#f59e0b"
-                      fillOpacity={0.25}
-                    />
-                  </RadarChart>
-                </ResponsiveContainer>
-              </motion.div>
-            ) : null;
-          })()}
+          {TECH_DATA.length > 0 && (
+            <Reveal
+              variants={staggerItem}
+              transition={{ duration: 0.5 }}
+              className="p-6 sm:p-8 card"
+            >
+              <h2 className="font-display text-lg font-bold text-slate-100 mb-6">
+                Tech Radar
+              </h2>
+              <RadarChart data={TECH_DATA} />
+            </Reveal>
+          )}
 
           <div className="grid sm:grid-cols-2 gap-6">
-            <motion.div
+            <Reveal
               variants={staggerItem}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5 }}
               whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-              className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+              className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
             >
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-rose-400/10 text-rose-400 shrink-0 mt-1">
@@ -198,16 +170,13 @@ const About = () => {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </Reveal>
 
-            <motion.div
+            <Reveal
               variants={staggerItem}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: 0.1 }}
               whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-              className="p-6 sm:p-8 rounded-xl border border-slate-800/60 bg-slate-900/30 hover:border-slate-700/80 transition-colors duration-300"
+              className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
             >
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-emerald-400/10 text-emerald-400 shrink-0 mt-1">
@@ -226,7 +195,7 @@ const About = () => {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </Reveal>
           </div>
 
           {/* Get in touch */}

@@ -1,25 +1,19 @@
+import { useEffect } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { Link } from "react-router-dom";
-import { ExternalLink, Star } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import SectionHeader from "./ui/SectionHeader";
+import IconButton from "./ui/IconButton";
+import PageWrapper from "./ui/PageWrapper";
+import Reveal from "./ui/Reveal";
+import StarBadge from "./ui/StarBadge";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
 import { fadeUp, staggerContainer, staggerItem } from "../utils/motion";
 import { colorMap } from "../utils/colors";
-import { useGitHubStars } from "../hooks/useGitHubStars";
-
-function StarBadge({ owner, repo }) {
-  const { stars, loading } = useGitHubStars(owner, repo);
-  if (loading || stars === null) return null;
-  return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-accent-400/10 text-accent-400 border border-accent-400/20">
-      <Star size={10} aria-hidden="true" className="fill-accent-400" />
-      {stars}
-    </span>
-  );
-}
+import { ACCENT } from "../lib/tokens";
 
 function ProjectCard({ project }) {
   const colors = colorMap[project.color];
@@ -31,17 +25,17 @@ function ProjectCard({ project }) {
         tiltMaxAngleY={reducedMotion ? 0 : 6}
         glareEnable={!reducedMotion}
         glareMaxOpacity={0.08}
-        glareColor="#00FFC2"
+        glareColor={ACCENT}
         glarePosition="all"
         glareBorderRadius="12px"
         scale={reducedMotion ? 1 : 1.02}
         transitionSpeed={400}
       >
         <CardSpotlight
-          className={`p-6 rounded-xl border bg-slate-900/30 transition-all duration-300 ${
+          className={`p-6 transition-all duration-300 ${
             project.featured
-              ? "border-accent-400/25 hover:border-accent-400/50 shadow-[0_0_30px_rgba(251,191,36,0.04)]"
-              : "border-slate-800/60 hover:border-slate-700"
+              ? "rounded-xl border border-accent-400/25 bg-slate-900/30 hover:border-accent-400/50 shadow-[0_0_30px_rgba(0,255,194,0.06)]"
+              : "card hover:border-slate-700"
           }`}
           spotlightColor={colors.spotlight}
         >
@@ -82,26 +76,24 @@ function ProjectCard({ project }) {
             {/* Links */}
             <div className="flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
               {project.github && (
-                <a
+                <IconButton
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 text-slate-400 hover:text-accent-400 transition-colors"
-                  aria-label="View source code on GitHub (opens in new tab)"
+                  label="View source code on GitHub (opens in new tab)"
                 >
                   <GithubIcon size={16} aria-hidden="true" />
-                </a>
+                </IconButton>
               )}
               {project.link && (
-                <a
+                <IconButton
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 text-slate-400 hover:text-accent-400 transition-colors"
-                  aria-label="View live site (opens in new tab)"
+                  label="View live site (opens in new tab)"
                 >
                   <ExternalLink size={16} aria-hidden="true" />
-                </a>
+                </IconButton>
               )}
             </div>
           </div>
@@ -150,9 +142,21 @@ const SECTIONS = [
 ];
 
 function Portfolio() {
+  const location = useLocation();
+
+  // Scroll to hashed section when the hash changes (e.g. /projects#section-flagship)
+  useEffect(() => {
+    if (!location.hash) return;
+    const id = location.hash.slice(1);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [location.hash]);
+
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
-      <div className="max-w-6xl mx-auto px-6">
+      <PageWrapper width="6xl">
         {/* Page header */}
         <motion.div
           variants={fadeUp}
@@ -172,20 +176,15 @@ function Portfolio() {
           {SECTIONS.map(({ key, title }) => {
             const sectionProjects = projects.filter((p) => p.group === key);
             if (sectionProjects.length === 0) return null;
-            const headingId = `section-${key}`;
+            const sectionId = `section-${key}`;
+            const headingId = `heading-${key}`;
             const isFlagship = key === "flagship";
 
             return (
-              <section key={key} aria-labelledby={headingId}>
-                <motion.div
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: "-60px" }}
-                  className="mb-6"
-                >
+              <section id={sectionId} key={key} aria-labelledby={headingId} className="scroll-mt-24">
+                <Reveal className="mb-6">
                   <SectionHeader id={headingId} as="h2" title={title} />
-                </motion.div>
+                </Reveal>
 
                 <motion.div
                   className={isFlagship ? "" : "grid md:grid-cols-2 gap-5"}
@@ -202,7 +201,7 @@ function Portfolio() {
             );
           })}
         </div>
-      </div>
+      </PageWrapper>
     </div>
   );
 }

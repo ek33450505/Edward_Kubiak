@@ -1,176 +1,13 @@
 import { motion } from "motion/react";
 import { Mail, MapPin, Download, FileText } from "lucide-react";
 import { fadeUp } from "../utils/motion";
-import { CAST_STATS, CAST_DESKTOP_STATS } from "../data/castStats";
+import { CAST_STATS } from "../data/castStats";
+import { skills, skillColors, labelColors, experience, education, printStyles } from "../data/resume";
+import { LinkedinIcon, DevToIcon } from "./BrandIcons";
+import Reveal from "./ui/Reveal";
 import SectionHeader from "./ui/SectionHeader";
 import PageWrapper from "./ui/PageWrapper";
-
-const skills = {
-  Frontend: [
-    "React 18/19",
-    "Vite",
-    "TypeScript",
-    "Tailwind CSS",
-    "Framer Motion",
-    "TanStack Query v5",
-    "React Router v6/v7",
-    "react-resizable-panels",
-    "@nivo/charts",
-    "Recharts",
-    "cmdk",
-    "Sonner",
-    "Zustand",
-    "Radix UI",
-    "xterm.js",
-    "Bootstrap 5",
-    "React Bootstrap",
-    "MUI",
-    "TanStack Table",
-    "AG Grid",
-    "AngularJS",
-    "jQuery",
-    "DataTables",
-  ],
-  Backend: [
-    "Node.js",
-    "Express 4/5",
-    "tsx",
-    "concurrently",
-    "Python",
-    "Rust",
-    "Flask",
-    "MS SQL Server",
-    "PHP",
-    "Server-Sent Events (SSE)",
-    "better-sqlite3",
-    "REST API Design",
-    "Docker",
-    "Docker Compose",
-    "Traefik",
-    "Jenkins",
-  ],
-  Data: [
-    "SQLite",
-    "PostgreSQL",
-    "MongoDB",
-    "BigQuery",
-    "SQL",
-    "AES-256 Encryption",
-  ],
-  "AI Infrastructure & Developer Tools": [
-    "Claude API",
-    "Anthropic SDK",
-    "Claude Code",
-    `CAST ${CAST_STATS.version} (${CAST_STATS.agents} agents, ${CAST_STATS.packages} Homebrew taps)`,
-    "Agent Architecture",
-    "Managed Agents (beta)",
-    "Tauri v2",
-    "Ollama",
-    "RAG / Embeddings",
-    "Shell Scripting",
-    "Textual (Python TUI)",
-    "Hook Architecture",
-    "MCP (Model Context Protocol)",
-    "launchd Scheduling",
-    "BATS (Bash Automated Testing System)",
-    "ElevenLabs TTS",
-    "Git",
-    "CI/CD",
-    "Jest",
-    "Vitest",
-    "Playwright",
-  ],
-};
-
-const skillColors = {
-  Frontend: "bg-accent-400/10 text-accent-400",
-  Backend: "bg-sky-400/10 text-sky-400",
-  Data: "bg-emerald-400/10 text-emerald-400",
-  "AI Infrastructure & Developer Tools": "bg-rose-400/10 text-rose-400",
-};
-
-const labelColors = {
-  Frontend: "text-accent-400",
-  Backend: "text-sky-400",
-  Data: "text-emerald-400",
-  "AI Infrastructure & Developer Tools": "text-rose-400",
-};
-
-const experience = [
-  {
-    role: "Application Developer",
-    company: "META Solutions",
-    location: "Columbus, OH",
-    period: "August 2022 — Present",
-    highlights: [
-      `Creator of CAST (Claude Agent Specialist Team) ${CAST_STATS.version} — a local-first, open-source multi-agent framework embedded into Claude Code via hook-driven dispatch. ${CAST_STATS.agents} specialist agents with model-driven routing (Sonnet for complex tasks, Haiku for lightweight, Opus for migration review), local SQLite observability, per-agent persistent memory, and a hook-enforced quality gate layer. No cloud dependencies — everything runs on the developer machine.`,
-      `Shipped cast-desktop ${CAST_DESKTOP_STATS.version} — the flagship native macOS app for CAST. Built with Tauri 2 + React 19 + Rust, embedded Express 5 + SQLite backend, real PTY-backed terminal via xterm.js + Rust Forge, ${CAST_DESKTOP_STATS.dashboardViews} dashboard views (Activity, Sessions, Agents, Hooks, Memory, Plans, System, Token Spend, DB Explorer, Docs), Cmd+K command palette, search-in-terminal, multi-tab terminal with folder-picker cwd, and 6 themes. Distributed via brew tap ek33450505/cast-desktop.`,
-      `Launched castframework.dev and aligned the ${CAST_STATS.packages}-tap Homebrew ecosystem — cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, cast-routines, cast-doctor, cast-time, cast-desktop, Claude's Journal, and the umbrella \`cast\` formula — so developers can install only the components they need. Each tap has its own versioned releases and standalone functionality.`,
-      "Built two complementary observability layers: the Claude Code Dashboard v2.2.0 (React 19 + TypeScript + Express 5 + SSE) — a 10-page real-time UI with session cost tracking, per-agent scorecards, Cmd+K search, and privacy auditing — and cast-dash, an htop-style Python TUI for terminal-native monitoring.",
-      "Shipped cast-routines and cast-doctor — routines schedule autonomous Claude Code workflows via YAML + cron; doctor is a read-only health-check CLI that audits any Claude Code install for missing hooks, stale memory, and configuration drift.",
-      "Spearheaded the complete migration of CrossCheck from AngularJS to React — a mission-critical EMIS validation platform built with React 18, AG Grid, MUI, JWT auth, and TanStack Query, now serving 4,200+ users across 900+ Ohio school districts.",
-      "Architected and maintain five production web applications across React, Flask, Express, PostgreSQL, and jQuery/DataTables — each serving Ohio's K-12 education ecosystem.",
-      "Engineered SES-Wiki from the ground up — a React 19 + Express 5 EMIS scenario reference tool, complete with JSON persistence, automated backups, and comprehensive Vitest test coverage.",
-      "Launched the Customization Web Store (CWS) — an internal React 19 + Vite platform that streamlined PowerSchool customization requests, replacing a manual email-based workflow.",
-      "Modernized the E-Rate dashboard into a Docker Compose monorepo architecture — dual React frontends, a Flask REST API with PostgreSQL, Traefik reverse proxy, and Jenkins CI/CD — helping districts track and capture federal telecom discount funding.",
-      "Maintain and extend PowerSchool plugin customizations (jQuery/DataTables) including the Alert Builder — a notification system deployed across multiple client school districts.",
-      "Pioneer AI-augmented development workflows — engineered TARUS (dual-LLM assistant) and PromptBot (prompt optimizer), and leverage Claude Code daily as an AI pair programmer to accelerate velocity and code quality.",
-    ],
-  },
-];
-
-const education = [
-  {
-    degree: "Full Stack Web Development Certificate",
-    institution: "The Ohio State University",
-    period: "January 2022 — July 2022",
-  },
-  {
-    degree: "Bachelor of Arts and Science in Geological Science",
-    institution: "Ohio University",
-    period: "August 2005 — June 2009",
-  },
-];
-
-const printStyles = `
-  @media print {
-    nav, footer, [data-print-hide] {
-      display: none !important;
-    }
-    body {
-      background: white !important;
-      color: #0f172a !important;
-    }
-    #resume-print {
-      background: white !important;
-      padding: 0 !important;
-      min-height: unset !important;
-    }
-    #resume-print .rounded-xl {
-      border: 1px solid #e2e8f0 !important;
-      background: white !important;
-    }
-    #resume-print h1, #resume-print h2, #resume-print h3 {
-      color: #0f172a !important;
-    }
-    #resume-print p, #resume-print li, #resume-print span {
-      color: #334155 !important;
-    }
-    #resume-print .text-accent-400, #resume-print .text-sky-400,
-    #resume-print .text-emerald-400, #resume-print .text-rose-400,
-    #resume-print .text-slate-400 {
-      color: #475569 !important;
-    }
-    #resume-print .bg-accent-400\\/10, #resume-print .bg-sky-400\\/10,
-    #resume-print .bg-emerald-400\\/10, #resume-print .bg-rose-400\\/10 {
-      background-color: #f1f5f9 !important;
-    }
-    .mt-10 { margin-top: 1.5rem !important; }
-    .mt-8 { margin-top: 1.25rem !important; }
-    ul li { page-break-inside: avoid; }
-    @page { margin: 0.5in; }
-  }
-`;
+import Label from "./ui/Label";
 
 const Resume = () => {
   return (
@@ -208,9 +45,7 @@ const Resume = () => {
                 className="inline-flex items-center gap-1.5 hover:text-accent-400 transition-colors"
                 aria-label="LinkedIn profile (opens in new tab)"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
+                <LinkedinIcon size={14} aria-hidden="true" />
                 linkedin.com/in/edward-kubiak
               </a>
               <a
@@ -220,9 +55,7 @@ const Resume = () => {
                 aria-label="DEV.to profile (opens in new tab)"
                 className="inline-flex items-center gap-1.5 hover:text-accent-400 transition-colors"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .67-.08.84-.23.18-.16.27-.45.27-.85v-2.2c0-.4-.09-.69-.27-.85zm13.37-6.41H3.21C1.99 3.64 1 4.63 1 5.85v12.3c0 1.22.99 2.21 2.21 2.21h17.58c1.22 0 2.21-.99 2.21-2.21V5.85c0-1.22-.99-2.21-2.21-2.21zM8.85 14.4c-.37.38-.85.56-1.43.56H5.18V9.04h2.24c.58 0 1.06.19 1.43.56.37.38.56.85.56 1.43v1.94c0 .58-.19 1.06-.56 1.43zm4.75-4.25H11.5v1.64h1.28v1.11H11.5v1.64h2.1v1.11H11c-.65 0-1.11-.47-1.11-1.11v-4.16c0-.65.47-1.11 1.11-1.11h2.6v1.11zm5.04 4.73c-.4.6-.97.85-1.64.54-.52-.23-.82-.73-.97-1.5l-.63-3.12-.63 3.12c-.15.77-.45 1.27-.97 1.5-.67.31-1.24.06-1.64-.54l-1.78-5.73h1.23l1.26 4.57 1.26-4.57h.7l1.26 4.57 1.26-4.57h1.23l-1.78 5.73z"/>
-                </svg>
+                <DevToIcon size={14} aria-hidden="true" />
                 dev.to/edwardkubiak
               </a>
             </div>
@@ -250,44 +83,22 @@ const Resume = () => {
         </motion.div>
 
         {/* Summary */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-10 p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
-        >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-3">
-            Summary
-          </h2>
+        <Reveal className="mt-10 p-6 card" transition={{ duration: 0.5, delay: 0.1 }}>
+          <Label as="h2" className="mb-3">Summary</Label>
           <p className="text-slate-300 leading-relaxed">
             {`AI systems engineer and full stack developer who builds developer tooling and multi-agent frameworks. Creator of CAST ${CAST_STATS.version} — a local-first, open-source ${CAST_STATS.agents}-agent framework for Claude Code distributed as ${CAST_STATS.packages} Homebrew taps plus the umbrella \`cast\` formula, with a dedicated ecosystem site at castframework.dev. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts.`}
           </p>
-        </motion.div>
+        </Reveal>
 
         {/* Skills grid */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-8"
-        >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-3">
-            Skills
-          </h2>
+        <Reveal className="mt-8" transition={{ duration: 0.5, delay: 0.1 }}>
+          <Label as="h2" className="mb-3">Skills</Label>
           <div className="grid sm:grid-cols-2 gap-3">
             {Object.entries(skills).map(([category, items], i) => (
-              <motion.div
+              <Reveal
                 key={category}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-40px" }}
+                className="skill-card p-3.5 card"
                 transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="skill-card p-3.5 rounded-xl border border-slate-800/60 bg-slate-900/30"
               >
                 <h3
                   className={`font-display text-[11px] font-bold tracking-wider mb-2 ${labelColors[category]}`}
@@ -304,26 +115,18 @@ const Resume = () => {
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </Reveal>
             ))}
           </div>
-        </motion.div>
+        </Reveal>
 
         {/* Experience */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-          className="mt-8"
-        >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-            Experience
-          </h2>
+        <Reveal className="mt-8">
+          <Label as="h2" className="mb-4">Experience</Label>
           {experience.map((job) => (
             <div
               key={job.company}
-              className="p-6 rounded-xl border border-slate-800/60 bg-slate-900/30"
+              className="p-6 card"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-4">
                 <div>
@@ -355,24 +158,16 @@ const Resume = () => {
               </ul>
             </div>
           ))}
-        </motion.div>
+        </Reveal>
 
         {/* Education */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-          className="mt-8 mb-8"
-        >
-          <h2 className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
-            Education
-          </h2>
+        <Reveal className="mt-8 mb-8">
+          <Label as="h2" className="mb-4">Education</Label>
           <div className="grid sm:grid-cols-2 gap-4">
             {education.map((edu) => (
               <div
                 key={edu.institution}
-                className="p-5 rounded-xl border border-slate-800/60 bg-slate-900/30"
+                className="p-5 card"
               >
                 <h3 className="font-display text-sm font-bold text-slate-100">
                   {edu.degree}
@@ -384,7 +179,7 @@ const Resume = () => {
               </div>
             ))}
           </div>
-        </motion.div>
+        </Reveal>
       </PageWrapper>
     </div>
   );

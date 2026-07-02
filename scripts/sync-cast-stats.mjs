@@ -16,12 +16,12 @@ const outPath = path.join(root, "src", "data", "castStats.js");
 
 // 1. CAST core stats — from public/cast-stats.json (deploy-time refresh)
 let cast = {
-  version: "v7.4.0",
+  version: "v9.0.0",
   agents: 23,
-  tests: 1171,
-  packages: 13,
-  commands: 19,
-  skills: 16,
+  tests: 2068,
+  packages: 9,
+  commands: 21,
+  skills: 17,
   tables: 38,
   updated: new Date().toISOString().slice(0, 10),
 };
@@ -34,7 +34,7 @@ try {
 
 // 2. cast-desktop stats — from local clone if available (CI: stays at last-committed defaults)
 let desktop = {
-  version: "v1.2.11",
+  version: "v1.2.12",
   dashboardViews: 12,
 };
 const desktopRepo = path.join(os.homedir(), "Projects", "personal", "cast-desktop");

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "module": "esnext",
+    "target": "esnext",
+    "jsx": "preserve",
+    "moduleResolution": "bundler",
+    "baseUrl": "."
+  },
+  "include": ["src", "scripts"],
+  "exclude": ["node_modules", "dist"]
+}
