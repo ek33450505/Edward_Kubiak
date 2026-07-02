@@ -31,6 +31,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "build-resume": "node scripts/build-resume.mjs",
+    "build-pdfs": "node scripts/build-resume-pdf.mjs",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
@@ -49,6 +50,7 @@
     "globals": "^17.7.0",
     "jsdom": "^29.1.1",
     "prettier": "^3.9.4",
+    "puppeteer": "^25.3.0",
     "sharp": "^0.34.5",
     "vite": "^8.0.0",
     "vitest": "^4.1.6"
