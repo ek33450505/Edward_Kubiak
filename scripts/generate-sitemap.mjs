@@ -16,8 +16,6 @@ const STATIC_ROUTES = [
   { path: '/about',   priority: '0.8', changefreq: 'monthly' },
   { path: '/resume',  priority: '0.7', changefreq: 'monthly' },
   { path: '/now',     priority: '0.5', changefreq: 'weekly'  },
-  { path: '/talks',   priority: '0.5', changefreq: 'monthly' },
-  { path: '/uses',    priority: '0.5', changefreq: 'monthly' },
 ];
 
 // Read and parse projects

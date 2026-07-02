@@ -19,16 +19,12 @@ const Portfolio = lazy(() => import("./Components/Portfolio"));
 const ProjectDetail = lazy(() => import("./Components/ProjectDetail"));
 const Resume = lazy(() => import("./Components/Resume"));
 const Now = lazy(() => import("./Components/Now"));
-const Talks = lazy(() => import("./Components/Talks"));
-const Uses = lazy(() => import("./Components/Uses"));
 import CommandPalette, { CommandPaletteProvider, useCommandPalette } from "./Components/CommandPalette";
 const navLinks = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
   { to: "/resume", label: "Resume" },
   { to: "/now", label: "Now" },
-  { to: "/talks", label: "Talks" },
-  { to: "/uses", label: "Uses" },
 ];
 
 // Static per-route meta. Project detail routes are excluded — ProjectDetail
@@ -39,8 +35,6 @@ const ROUTE_META = {
   "/projects": { title: "Projects — Edward Kubiak", canonical: "/projects" },
   "/resume":   { title: "Resume — Edward Kubiak",   canonical: "/resume" },
   "/now":      { title: "Now — Edward Kubiak",      canonical: "/now" },
-  "/talks":    { title: "Talks — Edward Kubiak",    canonical: "/talks" },
-  "/uses":     { title: "Uses — Edward Kubiak",     canonical: "/uses" },
 };
 
 function NavBar() {
@@ -241,8 +235,6 @@ function AnimatedRoutes() {
             <Route path="/projects/:slug" element={<ProjectDetail />} />
             <Route path="/resume" element={<Resume />} />
             <Route path="/now" element={<Now />} />
-            <Route path="/talks" element={<Talks />} />
-            <Route path="/uses" element={<Uses />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

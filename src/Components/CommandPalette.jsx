@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Mic, Package, Hash } from "lucide-react";
+import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Hash } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 
 const FOCUSABLE_SELECTORS = [
@@ -41,8 +41,6 @@ const navigateCommands = [
   { id: "projects", label: "Projects", icon: FolderOpen, to: "/projects" },
   { id: "resume", label: "Resume", icon: FileText, to: "/resume" },
   { id: "now", label: "Now", icon: Clock, to: "/now" },
-  { id: "talks", label: "Talks", icon: Mic, to: "/talks" },
-  { id: "uses", label: "Uses", icon: Package, to: "/uses" },
 ];
 
 // Jump-to-section commands — navigate to /projects with a hash anchor
