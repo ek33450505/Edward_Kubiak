@@ -7,7 +7,8 @@ import PageWrapper from "./ui/PageWrapper";
 import Reveal from "./ui/Reveal";
 import RadarChart from "./ui/RadarChart";
 import { aggregateTech } from "../utils/aggregateTech";
-import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
+import { Link } from "react-router-dom";
+import { CAST_STATS, CAST_DESKTOP_STATS } from "../data/castStats";
 
 // Static — computed once at module load, never changes at runtime
 const TECH_DATA = aggregateTech();
@@ -51,12 +52,35 @@ const About = () => {
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
                   I&apos;m a full stack developer and AI systems engineer who
-                  builds developer tooling and production applications. I
-                  created CAST {CAST_STATS.version} — a {CAST_STATS.agents}-agent framework that embeds
-                  specialist teams into Claude Code via hook architecture. The
-                  full CAST ecosystem ships as {CAST_ECOSYSTEM.tapsPlusUmbrella}, plus cast-desktop (Tauri 2 + React
-                  19) as the flagship app. castframework.dev.
+                  builds developer tooling and production applications. My
+                  flagship work is CAST {CAST_STATS.version} — a local-first,
+                  open-source multi-agent framework for Claude Code where every
+                  agent run lands in a tamper-evident record the system acts on:
+                  full-text search with{" "}
+                  <code className="text-accent-400/90 font-mono text-[0.92em]">cast ask</code>,
+                  signed SHA-256 audit receipts with{" "}
+                  <code className="text-accent-400/90 font-mono text-[0.92em]">cast ledger --verify</code>,
+                  pre-flight cost prediction with{" "}
+                  <code className="text-accent-400/90 font-mono text-[0.92em]">cast predict</code>.
                 </p>
+                <div className="flex flex-wrap gap-x-4 gap-y-2 mt-4">
+                  <span>
+                    <span className="font-display font-bold text-accent-400">{CAST_STATS.tests.toLocaleString("en-US")}</span>{" "}
+                    <span className="text-slate-400 text-xs uppercase tracking-wider">tests</span>
+                  </span>
+                  <span>
+                    <span className="font-display font-bold text-accent-400">{CAST_STATS.tables}</span>
+                    <span className="text-slate-400 text-xs uppercase tracking-wider">-table record</span>
+                  </span>
+                  <span>
+                    <span className="font-display font-bold text-accent-400">{CAST_STATS.packages}</span>{" "}
+                    <span className="text-slate-400 text-xs uppercase tracking-wider">packages</span>
+                  </span>
+                  <span>
+                    <span className="font-display font-bold text-accent-400">{CAST_STATS.agents}</span>{" "}
+                    <span className="text-slate-400 text-xs uppercase tracking-wider">agents</span>
+                  </span>
+                </div>
                 <p className="mt-4 text-slate-300 leading-relaxed">
                   At{" "}
                   <a
@@ -120,15 +144,38 @@ const About = () => {
                 </h2>
                 <p className="text-slate-300 leading-relaxed">
                   I believe developer tools should be transparent, composable,
-                  and owned by the people who use them. The CAST ecosystem is
-                  14 open-source repositories distributed as {CAST_STATS.packages} modular
-                  Homebrew taps plus the umbrella `cast` formula — from agent
-                  definitions to security policy gates to terminal dashboards to
-                  autonomous routines. That includes cast-desktop: a native
-                  Tauri 2 + React 19 app ({CAST_DESKTOP_STATS.version}) that puts every CAST signal
-                  in one double-click window with {CAST_DESKTOP_STATS.dashboardViews} dashboard views. Every
-                  component works independently or together. Zero cloud, zero
-                  lock-in.
+                  and owned by the people who use them. The CAST ecosystem ships
+                  as {CAST_STATS.packages} Homebrew packages — the flagship
+                  framework, cast-desktop ({CAST_DESKTOP_STATS.version}, a native Tauri 2 +
+                  React 19 app with {CAST_DESKTOP_STATS.dashboardViews} dashboard views), the
+                  Claude Code Dashboard, and standalone packages for agent
+                  memory, health checks, journaling, MCP access, signed
+                  receipts, and cost prediction. Alongside CAST I build
+                  deterministic, zero-LLM reliability tools for agent systems:
+                  misfire asks which of your rules agents actually ignore; attest
+                  checks whether a claimed DONE actually landed on disk; looptrip
+                  trips coordination loops at iteration 2, not on the invoice.
+                  Every component works standalone. Zero cloud, zero lock-in.
+                </p>
+                <p className="mt-4 text-slate-300 leading-relaxed">
+                  I write about these patterns at{" "}
+                  <a
+                    href="https://dev.to/edwardkubiak"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent-400 hover:text-accent-300 underline underline-offset-4 decoration-accent-400/30 hover:decoration-accent-400 transition-colors"
+                    aria-label="DEV.to profile (opens in new tab)"
+                  >
+                    dev.to/edwardkubiak
+                  </a>
+                  , and keep a running log of what I&apos;m building on the{" "}
+                  <Link
+                    to="/now"
+                    className="text-accent-400 hover:text-accent-300 underline underline-offset-4 decoration-accent-400/30 hover:decoration-accent-400 transition-colors"
+                  >
+                    now page
+                  </Link>
+                  .
                 </p>
               </div>
             </div>
