@@ -159,12 +159,13 @@ jobs:
           // Fallback values — bump these to match castframework.dev whenever the
           // dynamic fetch is unavailable. Auto-derived values override below.
           const fallback = {
-            version: 'v7.3',
+            version: 'v9.0.0',
             agents: 23,
-            tests: 1030,
-            packages: 13,
-            commands: 20,
-            skills: 18,
+            tests: 2068,
+            packages: 9,
+            commands: 21,
+            skills: 17,
+            tables: 38,
           };
 
           let version = fallback.version;
@@ -173,6 +174,7 @@ jobs:
           let packages = fallback.packages;
           let commands = fallback.commands;
           let skills = fallback.skills;
+          let tables = fallback.tables;
           const token = process.env.GH_TOKEN;
 
           try {
@@ -222,7 +224,7 @@ jobs:
                     const json = JSON.parse(data);
                     const archived = ['homebrew-jarvis', 'homebrew-engram', 'homebrew-stratum'];
                     const homebrewCount = (Array.isArray(json) ? json : [])
-                      .filter(r => r.name.startsWith('homebrew-') && !archived.includes(r.name))
+                      .filter(r => r.name.startsWith('homebrew-') && !r.archived && !archived.includes(r.name))
                       .length;
                     resolve(homebrewCount);
                   } catch {
@@ -297,6 +299,7 @@ jobs:
             packages,
             commands,
             skills,
+            tables,
             verified_at: new Date().toISOString(),
             updated: new Date().toISOString(),
             // Canonical overlay: trusted values from the flagship repo
