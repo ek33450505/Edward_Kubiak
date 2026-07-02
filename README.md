@@ -51,7 +51,7 @@ npm test                # run Vitest suite
 
 ## Build Notes
 
-- **`sync-stats` prebuild hook** — Runs automatically before every `npm run build`. If `~/Projects/personal/claude-agent-team` is unavailable, build fails. Run `npm run sync-stats` first to debug.
+- **`sync-stats` prebuild hook** — Runs automatically before every `npm run build`. Reads the committed `public/cast-stats.json` for CAST core stats and falls back to built-in constants if unavailable — no local clone required. Only cast-desktop stats optionally read a local `~/Projects/personal/cast-desktop` clone.
 - **Resume PDF generation** — Source is `assets/resume/Edward_Kubiak_Resume.docx`. After editing, run `npm run build-resume` to regenerate the PDF. Requires `brew install --cask libreoffice`. Script is idempotent; supports `--force` flag.
 - **Animation package** — Uses `motion` (npm), not Framer Motion. Import with `import { motion } from "motion/react"`.
 
