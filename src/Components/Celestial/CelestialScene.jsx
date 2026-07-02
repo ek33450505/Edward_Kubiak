@@ -24,6 +24,7 @@
 
 import { useMemo } from "react";
 import { useReducedMotion } from "motion/react";
+import { ACCENT } from "../../lib/tokens";
 import { Canvas } from "@react-three/fiber";
 import { Stars } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
@@ -48,7 +49,7 @@ function CelestialFallback() {
         zIndex: 0,
         pointerEvents: "none",
         background:
-          "radial-gradient(ellipse at 30% 40%, #00FFC215 0%, transparent 55%), " +
+          `radial-gradient(ellipse at 30% 40%, ${ACCENT}15 0%, transparent 55%), ` +
           "radial-gradient(ellipse at 70% 60%, #38bdf810 0%, transparent 50%), " +
           "#0a0f1a",
       }}

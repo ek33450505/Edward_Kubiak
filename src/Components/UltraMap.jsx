@@ -1,4 +1,5 @@
 import ultras from "../data/ultras";
+import { ACCENT } from "../lib/tokens";
 
 function UltraMap() {
   // Group by name|location to dedupe overlapping pins
@@ -45,7 +46,7 @@ function UltraMap() {
             cx={pin.x}
             cy={pin.y}
             r="1.4"
-            fill={pin.finished ? "#00FFC2" : "#64748b"}
+            fill={pin.finished ? ACCENT : "#64748b"}
             opacity={pin.finished ? 0.9 : 0.6}
           >
             <title>{pin.label}</title>

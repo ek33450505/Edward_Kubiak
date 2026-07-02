@@ -67,7 +67,7 @@ function ProjectDetail() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-100">
+                  <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-100">
                     {project.title}
                   </h1>
                   {project.featured && (

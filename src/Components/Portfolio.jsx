@@ -10,6 +10,7 @@ import projects from "../data/projects";
 import { fadeUp, staggerContainer, staggerItem } from "../utils/motion";
 import { colorMap } from "../utils/colors";
 import { useGitHubStars } from "../hooks/useGitHubStars";
+import { ACCENT } from "../lib/tokens";
 
 function StarBadge({ owner, repo }) {
   const { stars, loading } = useGitHubStars(owner, repo);
@@ -32,7 +33,7 @@ function ProjectCard({ project }) {
         tiltMaxAngleY={reducedMotion ? 0 : 6}
         glareEnable={!reducedMotion}
         glareMaxOpacity={0.08}
-        glareColor="#00FFC2"
+        glareColor={ACCENT}
         glarePosition="all"
         glareBorderRadius="12px"
         scale={reducedMotion ? 1 : 1.02}
@@ -41,7 +42,7 @@ function ProjectCard({ project }) {
         <CardSpotlight
           className={`p-6 rounded-xl border bg-slate-900/30 transition-all duration-300 ${
             project.featured
-              ? "border-accent-400/25 hover:border-accent-400/50 shadow-[0_0_30px_rgba(251,191,36,0.04)]"
+              ? "border-accent-400/25 hover:border-accent-400/50 shadow-[0_0_30px_rgba(0,255,194,0.06)]"
               : "border-slate-800/60 hover:border-slate-700"
           }`}
           spotlightColor={colors.spotlight}

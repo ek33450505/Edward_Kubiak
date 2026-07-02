@@ -7,6 +7,7 @@ import PageWrapper from "./ui/PageWrapper";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
 import { aggregateTech } from "../utils/aggregateTech";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
+import { ACCENT, SLATE_700 } from "../lib/tokens";
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -156,15 +157,15 @@ const About = () => {
                     data={techData}
                     aria-label="Technology radar showing most-used tech stack across projects"
                   >
-                    <PolarGrid stroke="#334155" />
+                    <PolarGrid stroke={SLATE_700} />
                     <PolarAngleAxis
                       dataKey="name"
                       tick={{ fill: "#94a3b8", fontSize: 11 }}
                     />
                     <Radar
                       dataKey="count"
-                      stroke="#f59e0b"
-                      fill="#f59e0b"
+                      stroke={ACCENT}
+                      fill={ACCENT}
                       fillOpacity={0.25}
                     />
                   </RadarChart>
