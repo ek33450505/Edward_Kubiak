@@ -7,6 +7,7 @@ import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 import { colorMap } from "../utils/colors";
 import PageWrapper from "./ui/PageWrapper";
+import NotFound from "./ui/NotFound";
 import { useGitHubStars } from "../hooks/useGitHubStars";
 
 function StarBadge({ owner, repo }) {
@@ -37,27 +38,12 @@ function ProjectDetail() {
 
   if (!project) {
     return (
-      <div className="min-h-[calc(100vh-80px)] py-20">
-        <PageWrapper>
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            transition={{ duration: 0.4 }}
-            className="text-center py-20"
-          >
-            <p className="font-display text-4xl font-bold text-slate-600 mb-4">404</p>
-            <h1 className="font-display text-xl font-bold text-slate-200 mb-6">Project not found</h1>
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-widest uppercase hover:border-accent-400 hover:text-accent-400 transition-all"
-            >
-              <ArrowLeft size={14} aria-hidden="true" />
-              Back to Projects
-            </Link>
-          </motion.div>
-        </PageWrapper>
-      </div>
+      <NotFound
+        heading="404"
+        message="Project not found"
+        linkLabel="Back to Projects"
+        linkHref="/projects"
+      />
     );
   }
 

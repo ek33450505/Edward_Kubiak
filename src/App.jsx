@@ -5,6 +5,10 @@ import { Menu, X, Rss } from "lucide-react";
 import { GithubIcon } from "./Components/BrandIcons";
 import ekMark from "./Images/ek-mark.svg";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
+import ErrorBoundary from "./Components/ErrorBoundary";
+import RouteLoader from "./Components/ui/RouteLoader";
+import NotFound from "./Components/ui/NotFound";
+import ScrollToTop from "./Components/ScrollToTop";
 import "./App.css";
 
 const Home = lazy(() => import("./Components/Home"));
@@ -193,18 +197,22 @@ function AnimatedRoutes() {
   useEffect(() => {
     if (location.pathname.startsWith("/projects/")) {
       document.title = "Project — Edward Kubiak";
-      return;
+    } else {
+      const titles = {
+        "/": "Edward Kubiak — Full Stack Developer & AI Engineer",
+        "/about": "About — Edward Kubiak",
+        "/projects": "Projects — Edward Kubiak",
+        "/resume": "Resume — Edward Kubiak",
+        "/now": "Now — Edward Kubiak",
+        "/talks": "Talks — Edward Kubiak",
+        "/uses": "Uses — Edward Kubiak",
+      };
+      document.title = titles[location.pathname] || "Edward Kubiak";
     }
-    const titles = {
-      "/": "Edward Kubiak — Full Stack Developer & AI Engineer",
-      "/about": "About — Edward Kubiak",
-      "/projects": "Projects — Edward Kubiak",
-      "/resume": "Resume — Edward Kubiak",
-      "/now": "Now — Edward Kubiak",
-      "/talks": "Talks — Edward Kubiak",
-      "/uses": "Uses — Edward Kubiak",
-    };
-    document.title = titles[location.pathname] || "Edward Kubiak";
+    // Fire a Plausible SPA pageview on every client-side navigation.
+    // Plausible's default script only tracks hard navigations; this covers
+    // the rest. Guard for undefined to be safe in local dev without the script.
+    window.plausible?.("pageview");
   }, [location.pathname]);
 
   return (
@@ -217,7 +225,7 @@ function AnimatedRoutes() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="page-content"
       >
-        <Suspense fallback={<div className="min-h-[60vh]" />}>
+        <Suspense fallback={<RouteLoader />}>
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -227,6 +235,7 @@ function AnimatedRoutes() {
             <Route path="/now" element={<Now />} />
             <Route path="/talks" element={<Talks />} />
             <Route path="/uses" element={<Uses />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </motion.div>
@@ -245,11 +254,14 @@ function App() {
           >
             Skip to main content
           </a>
+          <ScrollToTop />
           <ScrollProgress />
           <NavBar />
           <CommandPalette />
           <main id="main-content" className="pt-20">
-            <AnimatedRoutes />
+            <ErrorBoundary>
+              <AnimatedRoutes />
+            </ErrorBoundary>
           </main>
 
           {/* Footer */}
