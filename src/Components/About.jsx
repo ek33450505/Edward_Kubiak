@@ -5,10 +5,12 @@ import SectionHeader from "./ui/SectionHeader";
 import GetInTouch from "./ui/GetInTouch";
 import PageWrapper from "./ui/PageWrapper";
 import Reveal from "./ui/Reveal";
-import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
+import RadarChart from "./ui/RadarChart";
 import { aggregateTech } from "../utils/aggregateTech";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
-import { ACCENT, SLATE_700 } from "../lib/tokens";
+
+// Static — computed once at module load, never changes at runtime
+const TECH_DATA = aggregateTech();
 
 const About = () => {
   const reducedMotion = useReducedMotion();
@@ -133,41 +135,18 @@ const About = () => {
           </Reveal>
 
           {/* Tech Radar */}
-          {(() => {
-            const techData = aggregateTech();
-            return techData.length > 0 ? (
-              <Reveal
-                variants={staggerItem}
-                transition={{ duration: 0.5 }}
-                className="p-6 sm:p-8 card"
-              >
-                <h2 className="font-display text-lg font-bold text-slate-100 mb-6">
-                  Tech Radar
-                </h2>
-                <ResponsiveContainer width="100%" height={280}>
-                  <RadarChart
-                    cx="50%"
-                    cy="50%"
-                    outerRadius="70%"
-                    data={techData}
-                    aria-label="Technology radar showing most-used tech stack across projects"
-                  >
-                    <PolarGrid stroke={SLATE_700} />
-                    <PolarAngleAxis
-                      dataKey="name"
-                      tick={{ fill: "#94a3b8", fontSize: 11 }}
-                    />
-                    <Radar
-                      dataKey="count"
-                      stroke={ACCENT}
-                      fill={ACCENT}
-                      fillOpacity={0.25}
-                    />
-                  </RadarChart>
-                </ResponsiveContainer>
-              </Reveal>
-            ) : null;
-          })()}
+          {TECH_DATA.length > 0 && (
+            <Reveal
+              variants={staggerItem}
+              transition={{ duration: 0.5 }}
+              className="p-6 sm:p-8 card"
+            >
+              <h2 className="font-display text-lg font-bold text-slate-100 mb-6">
+                Tech Radar
+              </h2>
+              <RadarChart data={TECH_DATA} />
+            </Reveal>
+          )}
 
           <div className="grid sm:grid-cols-2 gap-6">
             <Reveal

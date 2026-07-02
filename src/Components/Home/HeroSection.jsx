@@ -6,7 +6,9 @@ import HeroStats from "../HeroStats";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
 import { fadeUp, slideInLeft } from "../../utils/motion";
 
-// Lazy-load Three.js scene so it code-splits into its own chunk
+// Lazy-load Three.js scene so it code-splits into its own chunk.
+// The module import is triggered only after an idle callback fires,
+// so LCP text/CTAs get network priority over the heavy three chunk.
 const CelestialScene = lazy(() => import("../Celestial/CelestialScene"));
 
 function ScrollCue() {
@@ -47,6 +49,20 @@ function ScrollCue() {
 export default function HeroSection() {
   const heroRef = useRef(null);
 
+  // Defer the WebGL scene mount until the browser is idle so LCP text/CTAs
+  // get network and parse priority over the heavy `three` chunk.
+  const [showScene, setShowScene] = useState(false);
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.requestIdleCallback) {
+      const id = window.requestIdleCallback(() => setShowScene(true));
+      return () => window.cancelIdleCallback(id);
+    } else {
+      // Safari / older browsers: fall back to a short timeout
+      const id = setTimeout(() => setShowScene(true), 200);
+      return () => clearTimeout(id);
+    }
+  }, []);
+
   // Parallax: hero content scrolls slower when user scrolls down
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -58,23 +74,26 @@ export default function HeroSection() {
 
   return (
     <>
-      {/* Celestial art scene background — lazy-loaded; dark fill prevents flash of white */}
-      <Suspense
-        fallback={
-          <div
-            aria-hidden="true"
-            style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 0,
-              pointerEvents: "none",
-              background: "#0a0f1a",
-            }}
-          />
-        }
-      >
-        <CelestialScene />
-      </Suspense>
+      {/* Celestial art scene background — idle-deferred; dark app background prevents flash
+          until the idle callback fires, then the three chunk begins loading. */}
+      {showScene && (
+        <Suspense
+          fallback={
+            <div
+              aria-hidden="true"
+              style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 0,
+                pointerEvents: "none",
+                background: "#0a0f1a",
+              }}
+            />
+          }
+        >
+          <CelestialScene />
+        </Suspense>
+      )}
 
       {/* Decorative grid lines */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-[1]">
