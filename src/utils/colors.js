@@ -60,19 +60,3 @@ export const colorMap = {
     border: "border-rose-400/30",
   },
 };
-
-/**
- * Returns a combined "text-{color} bg-{color}/10" class string for a given
- * color key.  Used by Home.jsx's FeaturedWork section where both text and
- * background are applied to the same element and only the text class is also
- * needed independently.
- *
- * Falls back to accent when the color key is unknown.
- *
- * @param {string} color - one of the colorMap keys
- * @returns {string} e.g. "text-violet-400 bg-violet-400/10"
- */
-export function getColorClasses(color) {
-  const c = colorMap[color] || colorMap.accent;
-  return `${c.text} ${c.bg}`;
-}

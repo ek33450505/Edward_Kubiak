@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { ExternalLink } from "lucide-react";
 import projects from "../../data/projects";
 import { CAST_STATS } from "../../data/castStats";
-import { getColorClasses } from "../../utils/colors";
-import { fadeUp, staggerItem } from "../../utils/motion";
+import { colorMap } from "../../utils/colors";
+import { staggerItem } from "../../utils/motion";
 import SectionHeader from "../ui/SectionHeader";
 import PageWrapper from "../ui/PageWrapper";
+import Reveal from "../ui/Reveal";
 
 const TRIO_SLUGS = ["looptrip", "misfire", "attest"];
 
@@ -14,19 +15,12 @@ export default function FeaturedWork() {
   const flagship = projects.find((p) => p.slug === "cast-claude-agent-team");
   const trio = TRIO_SLUGS.map((s) => projects.find((p) => p.slug === s)).filter(Boolean);
 
-  const flagshipColors = flagship ? getColorClasses(flagship.color) : "";
-  const [flagshipIconColor] = flagshipColors.split(" ");
+  const flagshipColorEntry = flagship ? (colorMap[flagship.color] || colorMap.accent) : null;
   const flagshipTechChips = flagship ? (flagship.tech || []).slice(0, 3) : [];
 
   return (
     <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
-    <motion.section
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      aria-labelledby="featured-work-heading"
-    >
+    <Reveal as="section" aria-labelledby="featured-work-heading">
       <div className="mb-8">
         <SectionHeader id="featured-work-heading" title="Featured Work" />
       </div>
@@ -43,7 +37,7 @@ export default function FeaturedWork() {
           className="w-full group flex flex-col p-6 rounded-xl border border-slate-700/30 bg-slate-900/20 backdrop-blur-sm hover:border-accent-400/30 hover:bg-slate-800/40 hover:shadow-[0_0_30px_rgba(0,255,194,0.06)] transition-all duration-300 mb-4"
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className={`p-2 rounded-lg ${flagshipColors} shrink-0`}>
+            <div className={`p-2 rounded-lg ${flagshipColorEntry?.text} ${flagshipColorEntry?.bg} shrink-0`}>
               <flagship.icon size={20} aria-hidden="true" />
             </div>
             <h3 className="font-display text-sm font-bold tracking-wide text-slate-100">
@@ -81,7 +75,7 @@ export default function FeaturedWork() {
           <div className="flex items-center gap-3 mt-auto">
             <Link
               to={`/projects/${flagship.slug}`}
-              className={`inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase ${flagshipIconColor} hover:opacity-80 transition-opacity`}
+              className={`inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase ${flagshipColorEntry?.text} hover:opacity-80 transition-opacity`}
             >
               View project →
             </Link>
@@ -92,8 +86,7 @@ export default function FeaturedWork() {
       {/* looptrip / misfire / attest — equal-height responsive trio */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {trio.map((project, i) => {
-          const iconColors = getColorClasses(project.color);
-          const [iconColor] = iconColors.split(" ");
+          const colorEntry = colorMap[project.color] || colorMap.accent;
           const techChips = (project.tech || []).slice(0, 3);
 
           return (
@@ -108,7 +101,7 @@ export default function FeaturedWork() {
               className="group h-full flex flex-col p-6 rounded-xl border border-slate-700/30 bg-slate-900/20 backdrop-blur-sm hover:border-accent-400/30 hover:bg-slate-800/40 hover:shadow-[0_0_30px_rgba(0,255,194,0.06)] transition-all duration-300"
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className={`p-2 rounded-lg ${iconColors} shrink-0`}>
+                <div className={`p-2 rounded-lg ${colorEntry.text} ${colorEntry.bg} shrink-0`}>
                   <project.icon size={20} aria-hidden="true" />
                 </div>
                 <h3 className="font-display text-sm font-bold tracking-wide text-slate-100">
@@ -134,7 +127,7 @@ export default function FeaturedWork() {
               <div className="flex items-center gap-3 mt-auto">
                 <Link
                   to={`/projects/${project.slug}`}
-                  className={`inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase ${iconColor} hover:opacity-80 transition-opacity`}
+                  className={`inline-flex items-center gap-1 font-display text-[11px] tracking-wider uppercase ${colorEntry.text} hover:opacity-80 transition-opacity`}
                 >
                   View project →
                 </Link>
@@ -164,7 +157,7 @@ export default function FeaturedWork() {
           See all projects →
         </Link>
       </div>
-    </motion.section>
+    </Reveal>
     </PageWrapper>
   );
 }

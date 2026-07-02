@@ -4,6 +4,7 @@ import { fadeUp, fadeIn } from "../utils/motion";
 import SectionHeader from "./ui/SectionHeader";
 import PageWrapper from "./ui/PageWrapper";
 import Label from "./ui/Label";
+import Reveal from "./ui/Reveal";
 
 const Now = () => {
   return (
@@ -28,12 +29,8 @@ const Now = () => {
 
         <div className="mt-10 space-y-6">
           {now.sections.map((section, i) => (
-            <motion.div
+            <Reveal
               key={section.title}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="p-6 card"
             >
@@ -54,15 +51,13 @@ const Now = () => {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </Reveal>
           ))}
         </div>
 
-        <motion.p
+        <Reveal
+          as="p"
           variants={fadeIn}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-10 text-xs text-slate-400 font-display tracking-wider"
         >
@@ -76,7 +71,7 @@ const Now = () => {
           >
             nownownow.com
           </a>
-        </motion.p>
+        </Reveal>
       </PageWrapper>
     </div>
   );

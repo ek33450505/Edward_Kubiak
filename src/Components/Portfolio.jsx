@@ -1,28 +1,18 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
-import { ExternalLink, Star } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import SectionHeader from "./ui/SectionHeader";
 import IconButton from "./ui/IconButton";
 import PageWrapper from "./ui/PageWrapper";
+import Reveal from "./ui/Reveal";
+import StarBadge from "./ui/StarBadge";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
 import { fadeUp, staggerContainer, staggerItem } from "../utils/motion";
 import { colorMap } from "../utils/colors";
-import { useGitHubStars } from "../hooks/useGitHubStars";
 import { ACCENT } from "../lib/tokens";
-
-function StarBadge({ owner, repo }) {
-  const { stars, loading } = useGitHubStars(owner, repo);
-  if (loading || stars === null) return null;
-  return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider bg-accent-400/10 text-accent-400 border border-accent-400/20">
-      <Star size={10} aria-hidden="true" className="fill-accent-400" />
-      {stars}
-    </span>
-  );
-}
 
 function ProjectCard({ project }) {
   const colors = colorMap[project.color];
@@ -178,15 +168,9 @@ function Portfolio() {
 
             return (
               <section key={key} aria-labelledby={headingId}>
-                <motion.div
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, margin: "-60px" }}
-                  className="mb-6"
-                >
+                <Reveal className="mb-6">
                   <SectionHeader id={headingId} as="h2" title={title} />
-                </motion.div>
+                </Reveal>
 
                 <motion.div
                   className={isFlagship ? "" : "grid md:grid-cols-2 gap-5"}

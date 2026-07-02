@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { colorMap, getColorClasses } from "./colors";
+import { colorMap } from "./colors";
 
 describe("colorMap", () => {
   const knownColors = ["accent", "teal", "violet", "sky", "emerald", "rose"];
@@ -45,33 +45,5 @@ describe("colorMap", () => {
 
   it("rose border class is border-rose-400/30", () => {
     expect(colorMap.rose.border).toBe("border-rose-400/30");
-  });
-});
-
-describe("getColorClasses", () => {
-  it("returns combined text and bg classes for a known color", () => {
-    expect(getColorClasses("violet")).toBe("text-violet-400 bg-violet-400/10");
-  });
-
-  it("returns combined text and bg for every known color key", () => {
-    for (const [key, entry] of Object.entries(colorMap)) {
-      expect(getColorClasses(key)).toBe(`${entry.text} ${entry.bg}`);
-    }
-  });
-
-  it("falls back to accent classes for an unknown color key", () => {
-    expect(getColorClasses("unknown-color")).toBe("text-accent-400 bg-accent-400/10");
-  });
-
-  it("falls back to accent classes when called with undefined", () => {
-    expect(getColorClasses(undefined)).toBe("text-accent-400 bg-accent-400/10");
-  });
-
-  it("returns a string with exactly two space-separated Tailwind classes", () => {
-    const result = getColorClasses("sky");
-    const parts = result.split(" ");
-    expect(parts).toHaveLength(2);
-    expect(parts[0]).toMatch(/^text-/);
-    expect(parts[1]).toMatch(/^bg-/);
   });
 });

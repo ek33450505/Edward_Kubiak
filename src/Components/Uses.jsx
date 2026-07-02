@@ -4,6 +4,7 @@ import { fadeUp, staggerItem } from "../utils/motion";
 import { CAST_STATS } from "../data/castStats";
 import SectionHeader from "./ui/SectionHeader";
 import PageWrapper from "./ui/PageWrapper";
+import Reveal from "./ui/Reveal";
 
 const sections = [
   {
@@ -92,11 +93,9 @@ function SectionCard({ section, index }) {
   const Icon = section.icon;
 
   return (
-    <motion.section
+    <Reveal
+      as="section"
       variants={staggerItem}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       aria-labelledby={`uses-${section.id}-heading`}
       className="p-6 sm:p-8 card"
@@ -132,7 +131,7 @@ function SectionCard({ section, index }) {
           </li>
         ))}
       </ul>
-    </motion.section>
+    </Reveal>
   );
 }
 

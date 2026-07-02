@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { fadeUp } from "../../utils/motion";
 import { timeAgo } from "../../utils/timeAgo";
 import SectionHeader from "../ui/SectionHeader";
 import PageWrapper from "../ui/PageWrapper";
+import Reveal from "../ui/Reveal";
 
 export default function RecentWriting() {
   const [articles, setArticles] = useState([]);
@@ -29,13 +29,7 @@ export default function RecentWriting() {
 
   return (
     <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
-    <motion.section
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      aria-labelledby="recent-writing-heading"
-    >
+    <Reveal as="section" aria-labelledby="recent-writing-heading">
       <div className="mb-6">
         <SectionHeader id="recent-writing-heading" title="Recent Writing" />
       </div>
@@ -74,7 +68,7 @@ export default function RecentWriting() {
           </motion.a>
         ))}
       </div>
-    </motion.section>
+    </Reveal>
     </PageWrapper>
   );
 }

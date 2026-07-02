@@ -4,6 +4,7 @@ import { fadeUp } from "../utils/motion";
 import talks from "../data/talks";
 import SectionHeader from "./ui/SectionHeader";
 import PageWrapper from "./ui/PageWrapper";
+import Reveal from "./ui/Reveal";
 
 const typeConfig = {
   talk: { icon: Mic, label: "Talk", color: "text-accent-400 bg-accent-400/10" },
@@ -17,11 +18,8 @@ function TalkCard({ talk, index }) {
   const Icon = config.icon;
 
   return (
-    <motion.article
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true }}
+    <Reveal
+      as="article"
       transition={{ duration: 0.4, delay: index * 0.08 }}
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
       className="p-6 card backdrop-blur-sm hover:border-accent-400/30 hover:bg-slate-800/40 transition-all duration-300"
@@ -100,7 +98,7 @@ function TalkCard({ talk, index }) {
           )}
         </div>
       </div>
-    </motion.article>
+    </Reveal>
   );
 }
 
@@ -145,14 +143,7 @@ const Talks = () => {
         </div>
 
         {/* Empty / coming soon state */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-8 p-6 card text-center"
-        >
+        <Reveal transition={{ duration: 0.5, delay: 0.2 }} className="mt-8 p-6 card text-center">
           <p className="text-sm text-slate-400">
             More coming soon &mdash;{" "}
             <a
@@ -166,7 +157,7 @@ const Talks = () => {
             </a>
             .
           </p>
-        </motion.div>
+        </Reveal>
       </PageWrapper>
     </div>
   );

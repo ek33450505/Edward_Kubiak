@@ -4,6 +4,7 @@ import { MapPin, Briefcase, Heart, Mountain, GitBranch } from "lucide-react";
 import SectionHeader from "./ui/SectionHeader";
 import GetInTouch from "./ui/GetInTouch";
 import PageWrapper from "./ui/PageWrapper";
+import Reveal from "./ui/Reveal";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
 import { aggregateTech } from "../utils/aggregateTech";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "../data/castStats";
@@ -30,11 +31,10 @@ const About = () => {
 
         {/* Bio cards — scroll-triggered */}
         <div className="mt-12 space-y-6">
-          <motion.div
+          <Reveal
+            as="div"
             variants={slideInLeft}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
+            margin="-60px"
             transition={{ delay: 0.1 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
             className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
@@ -72,13 +72,12 @@ const About = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
 
-          <motion.div
+          <Reveal
+            as="div"
             variants={slideInLeft}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
+            margin="-60px"
             transition={{ delay: 0.15 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
             className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
@@ -99,13 +98,12 @@ const About = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
 
-          <motion.div
+          <Reveal
+            as="div"
             variants={slideInLeft}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-80px" }}
+            margin="-60px"
             transition={{ delay: 0.15 }}
             whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
             className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
@@ -132,17 +130,14 @@ const About = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
 
           {/* Tech Radar */}
           {(() => {
             const techData = aggregateTech();
             return techData.length > 0 ? (
-              <motion.div
+              <Reveal
                 variants={staggerItem}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.5 }}
                 className="p-6 sm:p-8 card"
               >
@@ -170,16 +165,13 @@ const About = () => {
                     />
                   </RadarChart>
                 </ResponsiveContainer>
-              </motion.div>
+              </Reveal>
             ) : null;
           })()}
 
           <div className="grid sm:grid-cols-2 gap-6">
-            <motion.div
+            <Reveal
               variants={staggerItem}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5 }}
               whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
               className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
@@ -199,13 +191,10 @@ const About = () => {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </Reveal>
 
-            <motion.div
+            <Reveal
               variants={staggerItem}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: 0.1 }}
               whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
               className="p-6 sm:p-8 card hover:border-slate-700/80 transition-colors duration-300"
@@ -227,7 +216,7 @@ const About = () => {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </Reveal>
           </div>
 
           {/* Get in touch */}

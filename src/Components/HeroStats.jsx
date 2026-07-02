@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { motion } from "motion/react";
 import { Star, Package, Sparkles } from "lucide-react";
-import { fadeUp } from "../utils/motion";
-import { CAST_STATS, CAST_ECOSYSTEM } from "../data/castStats";
+import { CAST_STATS } from "../data/castStats";
+import { fetchStarsMap } from "../hooks/useGitHubStars";
+import Reveal from "./ui/Reveal";
 
 const CAST_REPOS = [
   "claude-agent-team",
@@ -33,17 +33,17 @@ function HeroStats() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/github-stars.json")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (cancelled || !data || typeof data !== "object") return;
+    fetchStarsMap()
+      .then((map) => {
+        if (cancelled) return;
+        // fetchStarsMap returns {} on error; skip rendering if no data.
+        if (!map || Object.keys(map).length === 0) return;
         const sum = CAST_REPOS.reduce((acc, repo) => {
-          const count = data[repo];
+          const count = map[repo];
           return acc + (typeof count === "number" ? count : 0);
         }, 0);
         setTotalStars(sum);
       })
-      .catch(() => {})
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
@@ -56,11 +56,7 @@ function HeroStats() {
   if (!loading && totalStars === null) return null;
 
   return (
-    <motion.div
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
+    <Reveal
       transition={{ duration: 0.5, delay: 1.3 }}
       className="mt-6 flex flex-wrap items-center gap-2"
     >
@@ -76,7 +72,7 @@ function HeroStats() {
         </>
       ) : (
         <>
-          {/* Stars pill — live value */}
+          {/* Stars pill — live value from shared module-level cache */}
           <div className="flex items-center gap-2 px-4 py-2 card">
             <Star size={13} className="text-accent-400 shrink-0" aria-hidden="true" />
             <span className="font-display text-sm font-bold text-accent-400">
@@ -104,7 +100,7 @@ function HeroStats() {
           ))}
         </>
       )}
-    </motion.div>
+    </Reveal>
   );
 }
 

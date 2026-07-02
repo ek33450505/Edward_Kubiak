@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Bot, Package, TestTube2, Terminal, Hash } from "lucide-react";
-import { fadeUp } from "../utils/motion";
 import { CAST_STATS } from "../data/castStats";
+import { useStaticJson } from "../hooks/useStaticJson";
 import SectionHeader from "./ui/SectionHeader";
 import PageWrapper from "./ui/PageWrapper";
+import Reveal from "./ui/Reveal";
 
 const PILLS = [
   { key: "version", label: "Version", icon: Hash },
@@ -15,38 +15,14 @@ const PILLS = [
 ];
 
 function CastStats() {
-  const [stats, setStats] = useState(null);
+  const { data } = useStaticJson("/cast-stats.json", { fallback: CAST_STATS });
 
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/cast-stats.json")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (cancelled) return;
-        if (data && typeof data === "object") {
-          setStats(data);
-        } else {
-          setStats(CAST_STATS);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setStats(CAST_STATS);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const displayStats = stats ?? CAST_STATS;
+  // Guard: if JSON parsed to a non-object type, fall back to bundled stats.
+  const displayStats =
+    data && typeof data === "object" ? data : CAST_STATS;
 
   return (
-    <motion.section
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      className="w-full relative z-[2]"
-    >
+    <Reveal as="section" className="w-full relative z-[2]">
       <PageWrapper width="6xl" className="pb-20">
       <div className="mb-6">
         <SectionHeader title="CAST Ecosystem — Live Stats" />
@@ -84,7 +60,7 @@ function CastStats() {
         )}
       </div>
       </PageWrapper>
-    </motion.section>
+    </Reveal>
   );
 }
 

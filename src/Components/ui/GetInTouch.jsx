@@ -1,19 +1,11 @@
-import { motion } from "motion/react";
 import { Mail, Heart, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "../BrandIcons";
-import { fadeUp } from "../../utils/motion";
 import Label from "./Label";
+import Reveal from "./Reveal";
 
 export default function GetInTouch() {
   return (
-    <motion.div
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ delay: 0.1 }}
-      className="p-6 sm:p-8 card"
-    >
+    <Reveal transition={{ delay: 0.1 }} className="p-6 sm:p-8 card">
       <div className="text-center">
         <Label as="h2" className="mb-2">Get in Touch</Label>
         <p className="text-sm text-slate-400 mb-6">
@@ -82,6 +74,6 @@ export default function GetInTouch() {
           <ArrowUpRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" aria-hidden="true" />
         </a>
       </div>
-    </motion.div>
+    </Reveal>
   );
 }
