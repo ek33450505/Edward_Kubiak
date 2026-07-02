@@ -4,22 +4,21 @@ import { CAST_STATS } from "../data/castStats";
 import { fetchStarsMap } from "../hooks/useGitHubStars";
 import Reveal from "./ui/Reveal";
 
-const CAST_REPOS = [
+// Public OSS repos counted in the hero star total
+const STAR_REPOS = [
   "claude-agent-team",
   "cast-desktop",
-  "cast-agents",
-  "cast-hooks",
-  "cast-observe",
-  "cast-security",
-  "cast-dash",
+  "claude-code-dashboard",
+  "cast-mcp",
+  "cast-ledger",
+  "cast-predict",
   "cast-memory",
-  "cast-parallel",
-  "cast-routines",
   "cast-doctor",
   "cast-time",
-  "cast-website",
   "cast-claudes_journal",
-  "claude-code-dashboard",
+  "misfire",
+  "attest",
+  "looptrip",
 ];
 
 const STATIC_PILLS = [
@@ -38,7 +37,7 @@ function HeroStats() {
         if (cancelled) return;
         // fetchStarsMap returns {} on error; skip rendering if no data.
         if (!map || Object.keys(map).length === 0) return;
-        const sum = CAST_REPOS.reduce((acc, repo) => {
+        const sum = STAR_REPOS.reduce((acc, repo) => {
           const count = map[repo];
           return acc + (typeof count === "number" ? count : 0);
         }, 0);
