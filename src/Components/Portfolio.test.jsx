@@ -73,6 +73,22 @@ describe('Portfolio — external link safety', () => {
   });
 });
 
+describe('Portfolio — section id anchors', () => {
+  it('renders section elements with id="section-<key>" for hash deep-links', () => {
+    const { container } = renderPortfolio();
+    // These must match the SECTIONS keys in Portfolio.jsx
+    const expectedIds = ['section-flagship', 'section-tools', 'section-ecosystem', 'section-professional'];
+    // At least one anchored section must be present (empty groups are skipped)
+    const found = expectedIds.filter((id) => container.querySelector(`#${id}`) !== null);
+    expect(found.length).toBeGreaterThanOrEqual(1);
+    // Every anchored section must be a <section> element
+    found.forEach((id) => {
+      const el = container.querySelector(`#${id}`);
+      expect(el.tagName.toLowerCase()).toBe('section');
+    });
+  });
+});
+
 describe('Portfolio — no filter machinery (source guard)', () => {
   /**
    * These are intentional source-level assertions — they guard against

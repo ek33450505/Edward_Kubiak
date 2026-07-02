@@ -26,7 +26,7 @@
     "test": "vitest",
     "dev": "vite",
     "sync-stats": "node scripts/sync-cast-stats.mjs",
-    "prebuild": "node scripts/sync-cast-stats.mjs",
+    "prebuild": "node scripts/sync-cast-stats.mjs && node scripts/generate-sitemap.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",

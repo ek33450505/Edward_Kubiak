@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from "react";
+import { useDocumentMeta } from "./hooks/useDocumentMeta";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
@@ -26,7 +27,21 @@ const navLinks = [
   { to: "/projects", label: "Projects" },
   { to: "/resume", label: "Resume" },
   { to: "/now", label: "Now" },
+  { to: "/talks", label: "Talks" },
+  { to: "/uses", label: "Uses" },
 ];
+
+// Static per-route meta. Project detail routes are excluded — ProjectDetail
+// manages its own meta via useDocumentMeta.
+const ROUTE_META = {
+  "/":         { title: "Edward Kubiak — Full Stack Developer & AI Engineer", canonical: "/" },
+  "/about":    { title: "About — Edward Kubiak",    canonical: "/about" },
+  "/projects": { title: "Projects — Edward Kubiak", canonical: "/projects" },
+  "/resume":   { title: "Resume — Edward Kubiak",   canonical: "/resume" },
+  "/now":      { title: "Now — Edward Kubiak",      canonical: "/now" },
+  "/talks":    { title: "Talks — Edward Kubiak",    canonical: "/talks" },
+  "/uses":     { title: "Uses — Edward Kubiak",     canonical: "/uses" },
+};
 
 function NavBar() {
   const [open, setOpen] = useState(false);
@@ -192,24 +207,19 @@ function NavBar() {
 function AnimatedRoutes() {
   const location = useLocation();
 
+  // Project detail routes manage their own meta via useDocumentMeta —
+  // pass an empty object here so we do not fight them.
+  const isProjectDetail = location.pathname.startsWith("/projects/");
+  const routeMeta = isProjectDetail
+    ? {}
+    : (ROUTE_META[location.pathname] ?? { title: "Edward Kubiak" });
+
+  useDocumentMeta(routeMeta);
+
+  // Fire a Plausible SPA pageview on every client-side navigation.
+  // Plausible's default script only tracks hard navigations; this covers
+  // the rest. Guard for undefined to be safe in local dev without the script.
   useEffect(() => {
-    if (location.pathname.startsWith("/projects/")) {
-      document.title = "Project — Edward Kubiak";
-    } else {
-      const titles = {
-        "/": "Edward Kubiak — Full Stack Developer & AI Engineer",
-        "/about": "About — Edward Kubiak",
-        "/projects": "Projects — Edward Kubiak",
-        "/resume": "Resume — Edward Kubiak",
-        "/now": "Now — Edward Kubiak",
-        "/talks": "Talks — Edward Kubiak",
-        "/uses": "Uses — Edward Kubiak",
-      };
-      document.title = titles[location.pathname] || "Edward Kubiak";
-    }
-    // Fire a Plausible SPA pageview on every client-side navigation.
-    // Plausible's default script only tracks hard navigations; this covers
-    // the rest. Guard for undefined to be safe in local dev without the script.
     window.plausible?.("pageview");
   }, [location.pathname]);
 

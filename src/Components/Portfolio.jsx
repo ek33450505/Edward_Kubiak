@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import SectionHeader from "./ui/SectionHeader";
@@ -141,6 +142,18 @@ const SECTIONS = [
 ];
 
 function Portfolio() {
+  const location = useLocation();
+
+  // Scroll to hashed section when the hash changes (e.g. /projects#section-flagship)
+  useEffect(() => {
+    if (!location.hash) return;
+    const id = location.hash.slice(1);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [location.hash]);
+
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
       <PageWrapper width="6xl">
@@ -163,11 +176,12 @@ function Portfolio() {
           {SECTIONS.map(({ key, title }) => {
             const sectionProjects = projects.filter((p) => p.group === key);
             if (sectionProjects.length === 0) return null;
-            const headingId = `section-${key}`;
+            const sectionId = `section-${key}`;
+            const headingId = `heading-${key}`;
             const isFlagship = key === "flagship";
 
             return (
-              <section key={key} aria-labelledby={headingId}>
+              <section id={sectionId} key={key} aria-labelledby={headingId} className="scroll-mt-24">
                 <Reveal className="mb-6">
                   <SectionHeader id={headingId} as="h2" title={title} />
                 </Reveal>

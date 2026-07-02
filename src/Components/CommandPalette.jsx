@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Filter } from "lucide-react";
+import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Mic, Package, Hash } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 
 const FOCUSABLE_SELECTORS = [
@@ -41,15 +41,17 @@ const navigateCommands = [
   { id: "projects", label: "Projects", icon: FolderOpen, to: "/projects" },
   { id: "resume", label: "Resume", icon: FileText, to: "/resume" },
   { id: "now", label: "Now", icon: Clock, to: "/now" },
+  { id: "talks", label: "Talks", icon: Mic, to: "/talks" },
+  { id: "uses", label: "Uses", icon: Package, to: "/uses" },
 ];
 
-const filterCommands = [
-  { id: "filter-all", label: "All Projects", filter: "" },
-  { id: "filter-featured", label: "Featured Projects", filter: "featured" },
-  { id: "filter-ai", label: "AI Engineering", filter: "ai-engineering" },
-  { id: "filter-cast", label: "CAST Ecosystem", filter: "cast-ecosystem" },
-  { id: "filter-professional", label: "Professional", filter: "professional" },
-  { id: "filter-personal", label: "Personal", filter: "personal" },
+// Jump-to-section commands — navigate to /projects with a hash anchor
+// matching each real SECTION group key defined in Portfolio.jsx.
+const jumpCommands = [
+  { id: "jump-flagship",     label: "Jump to Flagship",              hash: "section-flagship" },
+  { id: "jump-tools",        label: "Jump to AI & Claude Code Tools", hash: "section-tools" },
+  { id: "jump-ecosystem",    label: "Jump to CAST Ecosystem",         hash: "section-ecosystem" },
+  { id: "jump-professional", label: "Jump to Professional",           hash: "section-professional" },
 ];
 
 const externalCommands = [
@@ -133,8 +135,8 @@ const CommandPalette = () => {
     setOpen(false);
   };
 
-  const handleFilter = (filter) => {
-    navigate(filter ? `/projects?filter=${filter}` : "/projects");
+  const handleJump = (hash) => {
+    navigate(`/projects#${hash}`);
     setOpen(false);
   };
 
@@ -204,17 +206,17 @@ const CommandPalette = () => {
                   <Command.Separator className="my-1 h-px bg-slate-800/60" />
 
                   <Command.Group
-                    heading="Filter Projects"
+                    heading="Jump to Section"
                     className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
-                    {filterCommands.map(({ id, label, filter }) => (
+                    {jumpCommands.map(({ id, label, hash }) => (
                       <Command.Item
                         key={id}
                         value={label}
-                        onSelect={() => handleFilter(filter)}
+                        onSelect={() => handleJump(hash)}
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 cursor-pointer data-[selected=true]:bg-accent-400/10 data-[selected=true]:text-accent-400 transition-colors"
                       >
-                        <Filter size={14} aria-hidden="true" />
+                        <Hash size={14} aria-hidden="true" />
                         {label}
                       </Command.Item>
                     ))}

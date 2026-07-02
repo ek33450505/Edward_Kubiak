@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { fadeUp, fadeIn } from "../utils/motion";
@@ -10,21 +9,20 @@ import PageWrapper from "./ui/PageWrapper";
 import NotFound from "./ui/NotFound";
 import Label from "./ui/Label";
 import StarBadge from "./ui/StarBadge";
+import { useDocumentMeta } from "../hooks/useDocumentMeta";
 
 function ProjectDetail() {
   const { slug } = useParams();
   const project = projects.find((p) => p.slug === slug);
 
-  useEffect(() => {
-    let ogMeta = document.querySelector('meta[property="og:image"]');
-    if (!ogMeta) {
-      ogMeta = document.createElement('meta');
-      ogMeta.setAttribute('property', 'og:image');
-      document.head.appendChild(ogMeta);
-    }
-    ogMeta.setAttribute('content', `/og/${slug}.png`);
-    return () => ogMeta.setAttribute('content', '');
-  }, [slug]);
+  useDocumentMeta({
+    title: project
+      ? `${project.title} — Edward Kubiak`
+      : "Project Not Found — Edward Kubiak",
+    description: project?.description,
+    canonical: project ? `/projects/${slug}` : undefined,
+    ogImage: project ? `/og/${slug}.png` : undefined,
+  });
 
   if (!project) {
     return (
@@ -43,6 +41,22 @@ function ProjectDetail() {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
       <PageWrapper>
+        {/* Top back link */}
+        <motion.div
+          variants={fadeIn}
+          initial="hidden"
+          animate="show"
+          className="mb-6"
+        >
+          <Link
+            to="/projects"
+            className="inline-flex items-center gap-2 text-slate-400 font-display text-xs tracking-widest uppercase hover:text-accent-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:rounded"
+          >
+            <ArrowLeft size={14} aria-hidden="true" />
+            Back to Projects
+          </Link>
+        </motion.div>
+
         {/* Hero */}
         <motion.div
           variants={fadeUp}
@@ -219,7 +233,7 @@ function ProjectDetail() {
         >
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 text-slate-400 font-display text-xs tracking-widest uppercase hover:text-accent-400 transition-colors"
+            className="inline-flex items-center gap-2 text-slate-400 font-display text-xs tracking-widest uppercase hover:text-accent-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:rounded"
           >
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Projects

@@ -15,10 +15,10 @@ const Home = () => {
       <FeaturedWork />
       <CurrentlyBuilding />
       <RecentWriting />
+      <CastStats />
       <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
         <GetInTouch />
       </PageWrapper>
-      <CastStats />
     </div>
   );
 };
