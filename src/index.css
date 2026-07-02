@@ -65,6 +65,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Card surface utilities ─────────────────────────────────────────────────
+   card            — static surface (rounded border + dark fill)
+   card-interactive — same surface + hover color transition
+   Used ~26× across the app; centralised here to stop hand-copying.        */
+@utility card {
+  @apply rounded-xl border border-slate-800/60 bg-slate-900/30;
+}
+
+@utility card-interactive {
+  @apply rounded-xl border border-slate-800/60 bg-slate-900/30 transition-colors;
+  &:hover {
+    @apply border-slate-700 bg-slate-800/30;
+  }
+}
+
 @media print {
   .skill-card {
     padding: 1.25rem;
