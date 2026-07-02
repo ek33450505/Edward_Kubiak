@@ -1,8 +1,7 @@
 import { motion } from "motion/react";
 import { Mail, MapPin, Download, FileText } from "lucide-react";
 import { fadeUp } from "../utils/motion";
-import { CAST_STATS } from "../data/castStats";
-import { skills, skillColors, labelColors, experience, education, printStyles } from "../data/resume";
+import { skills, skillColors, labelColors, experience, education, printStyles, summary } from "../data/resume";
 import { LinkedinIcon, DevToIcon } from "./BrandIcons";
 import Reveal from "./ui/Reveal";
 import SectionHeader from "./ui/SectionHeader";
@@ -85,9 +84,7 @@ const Resume = () => {
         {/* Summary */}
         <Reveal className="mt-10 p-6 card" transition={{ duration: 0.5, delay: 0.1 }}>
           <Label as="h2" className="mb-3">Summary</Label>
-          <p className="text-slate-300 leading-relaxed">
-            {`AI systems engineer and full stack developer who builds developer tooling and multi-agent frameworks. Creator of CAST ${CAST_STATS.version} — a local-first, open-source ${CAST_STATS.agents}-agent framework for Claude Code distributed as ${CAST_STATS.packages} Homebrew taps plus the umbrella \`cast\` formula, with a dedicated ecosystem site at castframework.dev. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts.`}
-          </p>
+          <p className="text-slate-300 leading-relaxed">{summary}</p>
         </Reveal>
 
         {/* Skills grid */}
