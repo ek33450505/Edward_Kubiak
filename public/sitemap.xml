@@ -31,18 +31,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://edwardkubiak.com/talks</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://edwardkubiak.com/uses</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://edwardkubiak.com/projects/cast-claude-agent-team</loc>
     <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
@@ -79,13 +67,25 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://edwardkubiak.com/projects/cast-time</loc>
+    <loc>https://edwardkubiak.com/projects/cast-mcp</loc>
     <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://edwardkubiak.com/projects/cast-routines</loc>
+    <loc>https://edwardkubiak.com/projects/cast-ledger</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://edwardkubiak.com/projects/cast-predict</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://edwardkubiak.com/projects/cast-time</loc>
     <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -97,43 +97,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://edwardkubiak.com/projects/cast-agents</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://edwardkubiak.com/projects/cast-observe</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://edwardkubiak.com/projects/cast-security</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://edwardkubiak.com/projects/cast-hooks</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://edwardkubiak.com/projects/cast-dash</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://edwardkubiak.com/projects/cast-memory</loc>
-    <lastmod>2026-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://edwardkubiak.com/projects/cast-parallel</loc>
     <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
