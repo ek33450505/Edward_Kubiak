@@ -34,7 +34,7 @@ const projects = [
     slug: "cast-claude-agent-team",
     title: "CAST — Claude Agent Team",
     description:
-      `Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. ${CAST_STATS.agents} specialist agents and hook-driven dispatch — no routing tables, no cloud. The full ecosystem ships as ${CAST_ECOSYSTEM.tapsPlusUmbrella}: cast-agents, cast-hooks, cast-observe, cast-security, cast-dash, cast-memory, cast-parallel, cast-routines, cast-doctor, cast-time, cast-desktop, Claude's Journal, and the umbrella claude-agent-team. Install only what you need. brew tap ek33450505/cast && brew install cast`,
+      `Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. ${CAST_STATS.agents} specialist agents and hook-driven dispatch — no routing tables, no cloud. The execution record is a local, tamper-evident, queryable substrate that acts: \`cast ask\` runs full-text search over every session; \`cast ledger --verify\` produces signed SHA-256 audit receipts; \`cast predict\` gives pre-flight cost and agent suggestions from telemetry; \`cast mcp\` exposes cast.db as a read-only MCP server. The full ecosystem ships as ${CAST_ECOSYSTEM.tapsPlusUmbrella}. Install only what you need. brew tap ek33450505/cast && brew install cast`,
     tech: ["Claude Code", "Bash", "Hook Architecture", "Node.js", "SQLite", "BATS"],
     icon: Network,
     color: "violet",
@@ -117,7 +117,7 @@ const projects = [
     slug: "cast-desktop",
     title: "Cast Desktop",
     description:
-      `The desktop app for CAST — every signal your agents emit, all in one place. A Tauri 2 + React 19 native app with embedded Express 5 + SQLite backend. Real PTY-backed terminal (xterm.js + Rust Forge), ${CAST_DESKTOP_STATS.dashboardViews} dashboard views (Home, Sessions, Session Detail, Agents, Analytics, Agent Detail, Swarm, Claude, Work Log, System, Docs), Cmd+K command palette, search-in-terminal, font-size hotkeys, multi-tab terminal with folder-picker cwd, and 6 themes. Local-first — reads directly from ~/.claude/cast.db.`,
+      `The desktop app for CAST — every signal your agents emit, all in one place. A Tauri 2 + React 19 native app with embedded Express 5 + SQLite backend. Real PTY-backed terminal (xterm.js + Rust Forge), ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, Cmd+K command palette, search-in-terminal, font-size hotkeys, multi-tab terminal with folder-picker cwd, and 6 themes. Local-first — reads directly from ~/.claude/cast.db.`,
     tech: ["Tauri 2", "React 19", "TypeScript", "Rust", "Express 5", "SQLite", "xterm.js"],
     icon: Terminal,
     color: "accent",

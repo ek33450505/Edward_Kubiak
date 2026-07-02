@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Bot, Package, TestTube2, Terminal, Hash } from "lucide-react";
+import { Bot, Database, Package, TestTube2, Terminal, Hash } from "lucide-react";
 import { CAST_STATS } from "../data/castStats";
 import { useStaticJson } from "../hooks/useStaticJson";
 import SectionHeader from "./ui/SectionHeader";
@@ -11,6 +11,7 @@ const PILLS = [
   { key: "agents", label: "Agents", icon: Bot },
   { key: "tests", label: "Tests", icon: TestTube2 },
   { key: "packages", label: "Packages", icon: Package },
+  { key: "tables", label: "Tables", icon: Database },
   { key: "commands", label: "Commands", icon: Terminal },
 ];
 
