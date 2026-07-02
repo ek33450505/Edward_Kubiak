@@ -6,6 +6,15 @@ import { AnimatePresence, motion } from "motion/react";
 import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Filter } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 
+const FOCUSABLE_SELECTORS = [
+  'a[href]',
+  'button:not([disabled])',
+  'textarea:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(', ');
+
 // --- Context ---
 const CommandPaletteContext = createContext(null);
 
@@ -53,6 +62,17 @@ const CommandPalette = () => {
   const { open, setOpen } = useCommandPalette();
   const navigate = useNavigate();
   const inputRef = useRef(null);
+  const dialogRef = useRef(null);
+  const previousActiveElementRef = useRef(null);
+
+  // Capture focus target before opening; restore it on close
+  useEffect(() => {
+    if (open) {
+      previousActiveElementRef.current = document.activeElement;
+    } else {
+      previousActiveElementRef.current?.focus();
+    }
+  }, [open]);
 
   // Autofocus the search input whenever the palette opens
   useEffect(() => {
@@ -61,6 +81,36 @@ const CommandPalette = () => {
       const id = requestAnimationFrame(() => inputRef.current?.focus());
       return () => cancelAnimationFrame(id);
     }
+  }, [open]);
+
+  // Focus trap: cycle Tab/Shift+Tab within the dialog
+  useEffect(() => {
+    if (!open || !dialogRef.current) return;
+
+    const handleTabKey = (e) => {
+      if (e.key !== 'Tab') return;
+      const focusableElements = [
+        ...dialogRef.current.querySelectorAll(FOCUSABLE_SELECTORS),
+      ];
+      if (focusableElements.length === 0) return;
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleTabKey);
+    return () => document.removeEventListener('keydown', handleTabKey);
   }, [open]);
 
   const handleKeyDown = useCallback((e) => {
@@ -112,7 +162,13 @@ const CommandPalette = () => {
             transition={{ duration: 0.15 }}
             className="fixed inset-0 z-[71] flex items-start justify-center pt-[20vh] px-4 pointer-events-none"
           >
-            <div className="w-full max-w-lg pointer-events-auto">
+            <div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Command menu"
+              className="w-full max-w-lg pointer-events-auto"
+            >
               <Command
                 className="rounded-xl border border-slate-800 bg-slate-950 shadow-2xl overflow-hidden"
                 label="Command palette"
@@ -120,16 +176,17 @@ const CommandPalette = () => {
                 <Command.Input
                   ref={inputRef}
                   placeholder="Type a command or search..."
+                  aria-label="Search commands"
                   className="w-full px-4 py-3.5 bg-transparent border-b border-slate-800 text-slate-100 placeholder-slate-600 text-sm outline-none font-display tracking-wide"
                 />
                 <Command.List className="max-h-80 overflow-y-auto p-2">
-                  <Command.Empty className="py-6 text-center text-sm text-slate-600 font-display tracking-wider">
+                  <Command.Empty className="py-6 text-center text-sm text-slate-400 font-display tracking-wider">
                     No results found.
                   </Command.Empty>
 
                   <Command.Group
                     heading="Navigate"
-                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-600 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {navigateCommands.map(({ id, label, icon: Icon, to }) => (
                       <Command.Item
@@ -148,7 +205,7 @@ const CommandPalette = () => {
 
                   <Command.Group
                     heading="Filter Projects"
-                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-600 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {filterCommands.map(({ id, label, filter }) => (
                       <Command.Item
@@ -167,7 +224,7 @@ const CommandPalette = () => {
 
                   <Command.Group
                     heading="External"
-                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-600 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {externalCommands.map(({ id, label, href, icon: Icon }) => (
                       <Command.Item

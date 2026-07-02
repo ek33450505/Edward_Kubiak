@@ -38,7 +38,7 @@ function TalkCard({ talk, index }) {
             {talk.event && (
               <>
                 <span className="text-slate-700" aria-hidden="true">·</span>
-                <span className="font-display text-[10px] tracking-wider text-slate-600">
+                <span className="font-display text-[11px] tracking-wider text-slate-400">
                   {talk.event}
                 </span>
               </>
@@ -48,7 +48,7 @@ function TalkCard({ talk, index }) {
                 <span className="text-slate-700" aria-hidden="true">·</span>
                 <time
                   dateTime={talk.date}
-                  className="font-display text-[10px] tracking-wider text-slate-600"
+                  className="font-display text-[11px] tracking-wider text-slate-400"
                 >
                   {new Date(talk.date + "T00:00:00").toLocaleDateString("en-US", {
                     year: "numeric",

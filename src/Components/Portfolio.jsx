@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ExternalLink, Star } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import SectionHeader from "./ui/SectionHeader";
+import IconButton from "./ui/IconButton";
 import Tilt from "react-parallax-tilt";
 import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
@@ -82,26 +83,24 @@ function ProjectCard({ project }) {
             {/* Links */}
             <div className="flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
               {project.github && (
-                <a
+                <IconButton
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 text-slate-400 hover:text-accent-400 transition-colors"
-                  aria-label="View source code on GitHub (opens in new tab)"
+                  label="View source code on GitHub (opens in new tab)"
                 >
                   <GithubIcon size={16} aria-hidden="true" />
-                </a>
+                </IconButton>
               )}
               {project.link && (
-                <a
+                <IconButton
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 text-slate-400 hover:text-accent-400 transition-colors"
-                  aria-label="View live site (opens in new tab)"
+                  label="View live site (opens in new tab)"
                 >
                   <ExternalLink size={16} aria-hidden="true" />
-                </a>
+                </IconButton>
               )}
             </div>
           </div>

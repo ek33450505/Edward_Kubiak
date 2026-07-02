@@ -1,8 +1,9 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
 import { GithubIcon } from "./Components/BrandIcons";
+import IconButton from "./Components/ui/IconButton";
 import ekMark from "./Images/ek-mark.svg";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
 import ErrorBoundary from "./Components/ErrorBoundary";
@@ -67,7 +68,7 @@ function NavBar() {
               key={to}
               to={to}
               aria-current={location.pathname === to ? "page" : undefined}
-              className={`relative px-4 py-2 font-display text-xs tracking-widest uppercase transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60 focus-visible:rounded-md ${
+              className={`relative px-4 py-2 font-display text-xs tracking-widest uppercase transition-colors duration-300 rounded-md ${
                 location.pathname === to
                   ? "text-accent-400"
                   : "text-slate-400 hover:text-slate-100"
@@ -84,55 +85,56 @@ function NavBar() {
             </Link>
           ))}
           {/* ⌘K affordance */}
-          <button
-            onClick={toggle}
-            aria-label="Open command palette"
+          <IconButton
+            label="Open command palette"
             title="Open command palette"
-            className="ml-2 p-2 text-slate-400 hover:text-accent-400 transition-colors flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
+            onClick={toggle}
+            className="ml-2"
           >
             <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-700 text-[10px] font-display tracking-wider text-slate-400 hover:border-accent-400/50 hover:text-accent-400 transition-all">
               ⌘K
             </span>
-          </button>
-          <a
+          </IconButton>
+          <IconButton
             href="https://github.com/ek33450505"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="GitHub profile (opens in new tab)"
+            label="GitHub profile (opens in new tab)"
             title="GitHub"
-            className="ml-2 p-2 text-slate-400 hover:text-accent-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
+            className="ml-2"
           >
             <GithubIcon size={20} aria-hidden="true" />
-          </a>
-          <a
+          </IconButton>
+          <IconButton
             href="https://dev.to/edwardkubiak"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="DEV.to profile (opens in new tab)"
+            label="DEV.to profile (opens in new tab)"
             title="DEV.to"
-            className="p-2 text-slate-300 hover:text-accent-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .67-.08.84-.23.18-.16.27-.45.27-.85v-2.2c0-.4-.09-.69-.27-.85zm13.37-6.41H3.21C1.99 3.64 1 4.63 1 5.85v12.3c0 1.22.99 2.21 2.21 2.21h17.58c1.22 0 2.21-.99 2.21-2.21V5.85c0-1.22-.99-2.21-2.21-2.21zM8.85 14.4c-.37.38-.85.56-1.43.56H5.18V9.04h2.24c.58 0 1.06.19 1.43.56.37.38.56.85.56 1.43v1.94c0 .58-.19 1.06-.56 1.43zm4.75-4.25H11.5v1.64h1.28v1.11H11.5v1.64h2.1v1.11H11c-.65 0-1.11-.47-1.11-1.11v-4.16c0-.65.47-1.11 1.11-1.11h2.6v1.11zm5.04 4.73c-.4.6-.97.85-1.64.54-.52-.23-.82-.73-.97-1.5l-.63-3.12-.63 3.12c-.15.77-.45 1.27-.97 1.5-.67.31-1.24.06-1.64-.54l-1.78-5.73h1.23l1.26 4.57 1.26-4.57h.7l1.26 4.57 1.26-4.57h1.23l-1.78 5.73z"/>
             </svg>
-          </a>
+          </IconButton>
         </div>
 
         {/* Mobile toggle */}
-        <button
+        <IconButton
+          label="Toggle menu"
           onClick={() => setOpen(!open)}
-          className="md:hidden p-2 text-slate-400 hover:text-accent-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
-          aria-label="Toggle menu"
           aria-expanded={open}
+          aria-controls="mobile-menu"
+          className="md:hidden"
         >
-          {open ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
+        </IconButton>
       </div>
 
       {/* Mobile menu */}
       <AnimatePresence>
         {open && (
           <motion.div
+            id="mobile-menu"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -146,7 +148,7 @@ function NavBar() {
                   to={to}
                   onClick={() => setOpen(false)}
                   aria-current={location.pathname === to ? "page" : undefined}
-                  className={`font-display text-sm tracking-widest uppercase py-3 border-b border-slate-800/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60 focus-visible:rounded-md ${
+                  className={`font-display text-sm tracking-widest uppercase py-3 border-b border-slate-800/40 transition-colors rounded-md ${
                     location.pathname === to
                       ? "text-accent-400"
                       : "text-slate-400 hover:text-slate-100"
@@ -247,10 +249,11 @@ function App() {
   return (
     <Router>
       <CommandPaletteProvider>
+        <MotionConfig reducedMotion="user">
         <div className="noise-bg gradient-mesh min-h-screen">
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent-400 focus:text-slate-950 focus:rounded-md focus:font-display focus:text-sm focus:font-bold focus:tracking-widest focus:uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent-400 focus:text-slate-950 focus:rounded-md focus:font-display focus:text-sm focus:font-bold focus:tracking-widest focus:uppercase"
           >
             Skip to main content
           </a>
@@ -277,52 +280,49 @@ function App() {
                 >
                   edward.kubiak.dev@gmail.com
                 </a>
-                <a
+                <IconButton
                   href="https://github.com/ek33450505"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="GitHub profile (opens in new tab)"
+                  label="GitHub profile (opens in new tab)"
                   title="GitHub"
-                  className="hover:text-accent-400 transition-colors"
                 >
                   <GithubIcon size={16} aria-hidden="true" />
-                </a>
-                <a
+                </IconButton>
+                <IconButton
                   href="https://www.linkedin.com/in/edward-kubiak/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="LinkedIn profile (opens in new tab)"
+                  label="LinkedIn profile (opens in new tab)"
                   title="LinkedIn"
-                  className="hover:text-accent-400 transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                   </svg>
-                </a>
-                <a
+                </IconButton>
+                <IconButton
                   href="https://dev.to/edwardkubiak"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="DEV.to profile (opens in new tab)"
+                  label="DEV.to profile (opens in new tab)"
                   title="DEV.to"
-                  className="hover:text-accent-400 transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6v4.36h.58c.37 0 .67-.08.84-.23.18-.16.27-.45.27-.85v-2.2c0-.4-.09-.69-.27-.85zm13.37-6.41H3.21C1.99 3.64 1 4.63 1 5.85v12.3c0 1.22.99 2.21 2.21 2.21h17.58c1.22 0 2.21-.99 2.21-2.21V5.85c0-1.22-.99-2.21-2.21-2.21zM8.85 14.4c-.37.38-.85.56-1.43.56H5.18V9.04h2.24c.58 0 1.06.19 1.43.56.37.38.56.85.56 1.43v1.94c0 .58-.19 1.06-.56 1.43zm4.75-4.25H11.5v1.64h1.28v1.11H11.5v1.64h2.1v1.11H11c-.65 0-1.11-.47-1.11-1.11v-4.16c0-.65.47-1.11 1.11-1.11h2.6v1.11zm5.04 4.73c-.4.6-.97.85-1.64.54-.52-.23-.82-.73-.97-1.5l-.63-3.12-.63 3.12c-.15.77-.45 1.27-.97 1.5-.67.31-1.24.06-1.64-.54l-1.78-5.73h1.23l1.26 4.57 1.26-4.57h.7l1.26 4.57 1.26-4.57h1.23l-1.78 5.73z"/>
                   </svg>
-                </a>
-                <a
+                </IconButton>
+                <IconButton
                   href="/rss.xml"
-                  aria-label="RSS feed"
+                  label="RSS feed"
                   title="RSS Feed"
-                  className="hover:text-accent-400 transition-colors"
                 >
                   <Rss size={16} aria-hidden="true" />
-                </a>
+                </IconButton>
               </div>
             </div>
           </footer>
         </div>
+        </MotionConfig>
       </CommandPaletteProvider>
     </Router>
   );

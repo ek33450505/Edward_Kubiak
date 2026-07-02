@@ -104,7 +104,7 @@ export default function CurrentlyBuilding() {
       <div className="mb-6 flex items-center gap-3">
         <SectionHeader id="currently-building-heading" title="Currently Building">
           {!loading && !showFallback && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-emerald-400/15 text-emerald-400 border border-emerald-400/20">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-display tracking-[0.15em] uppercase bg-emerald-400/15 text-emerald-400 border border-emerald-400/20">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Live
             </span>
@@ -178,7 +178,7 @@ export default function CurrentlyBuilding() {
                 >
                   {event.repo}
                   {event.sha && (
-                    <span className="text-slate-600 normal-case tracking-normal lowercase">
+                    <span className="text-slate-400 normal-case tracking-normal lowercase">
                       · {event.sha.slice(0, 7)}
                     </span>
                   )}
@@ -188,7 +188,7 @@ export default function CurrentlyBuilding() {
                   {event.message}
                 </p>
               </div>
-              <span className="font-display text-[10px] tracking-wider text-slate-600 shrink-0 pt-0.5">
+              <span className="font-display text-[11px] tracking-wider text-slate-400 shrink-0 pt-0.5">
                 {timeAgo(event.time)}
               </span>
             </motion.div>
@@ -234,7 +234,7 @@ export default function CurrentlyBuilding() {
                   >
                     {event.repo}
                     {event.sha && (
-                      <span className="text-slate-600 normal-case tracking-normal lowercase">
+                      <span className="text-slate-400 normal-case tracking-normal lowercase">
                         · {event.sha.slice(0, 7)}
                       </span>
                     )}
@@ -244,7 +244,7 @@ export default function CurrentlyBuilding() {
                     {event.message}
                   </p>
                 </div>
-                <span className="font-display text-[10px] tracking-wider text-slate-600 shrink-0 pt-0.5">
+                <span className="font-display text-[11px] tracking-wider text-slate-400 shrink-0 pt-0.5">
                   from last deploy · {formattedDate}
                 </span>
               </motion.div>

@@ -75,7 +75,7 @@ function CastStats() {
         })}
         {displayStats.updated && (
           <div className="flex items-center self-center ml-1">
-            <span className="font-display text-[10px] tracking-wider text-slate-600">
+            <span className="font-display text-[11px] tracking-wider text-slate-400">
               updated {new Date(displayStats.updated).toLocaleDateString()}
             </span>
           </div>

@@ -63,7 +63,7 @@ const Now = () => {
           whileInView="show"
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-10 text-xs text-slate-600 font-display tracking-wider"
+          className="mt-10 text-xs text-slate-400 font-display tracking-wider"
         >
           Inspired by{" "}
           <a

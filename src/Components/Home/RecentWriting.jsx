@@ -62,12 +62,12 @@ export default function RecentWriting() {
                 </p>
               )}
               {(article.reactions > 0 || article.views > 0) && (
-                <p className="text-xs text-slate-600 leading-snug mt-1">
+                <p className="text-xs text-slate-400 leading-snug mt-1">
                   ★ {article.reactions} reactions · {article.views} views
                 </p>
               )}
             </div>
-            <span className="font-display text-[10px] tracking-wider text-slate-600 shrink-0 pt-0.5">
+            <span className="font-display text-[11px] tracking-wider text-slate-400 shrink-0 pt-0.5">
               {timeAgo(article.published_at)}
             </span>
           </motion.a>
