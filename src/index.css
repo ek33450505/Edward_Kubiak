@@ -1,82 +1,129 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   CARTOGRAPHIC SURVEY ATLAS — design foundation
+   Single light "parchment" theme. No dark mode. Character comes from
+   typography (engraved serif + survey mono) and cartographic detail
+   (graticule grid, neatline frames, hairlines), never from decoration.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @theme {
-  --color-slate-950: #0a0f1a;
-  --color-slate-900: #111827;
-  --color-slate-800: #1e293b;
-  --color-slate-700: #334155;
-  --color-slate-600: #475569;
-  --color-slate-500: #64748b;
-  --color-slate-400: #94a3b8;
-  --color-slate-300: #cbd5e1;
-  --color-slate-200: #e2e8f0;
-  --color-slate-100: #f1f5f9;
-  /* Body copy tiers: slate-100 = headings; slate-300 = primary reading copy; slate-400 = secondary/caption (usually paired with text-sm); slate-500/600 = decorative/disabled only. */
-  /* Accent palette — used by CelestialScene (nebula emitters, bloom) and UI components */
-  --color-accent-400: #00FFC2;
-  --color-accent-500: #00D9A3;
-  --color-accent-300: #33FFD1;
-  --color-emerald-400: #34d399;
-  --color-rose-400: #fb7185;
-  --color-sky-400: #38bdf8;
-  --font-display: 'Space Mono', monospace;
-  --font-body: 'DM Sans', sans-serif;
+  /* ── Semantic palette (target API — new/migrated components use these) ──────
+     Contrast verified on --background #F5F1E6:
+       foreground 13:1 · muted-foreground 6.7:1 · primary 6.7:1                */
+  --color-background: #F5F1E6;        /* parchment field                       */
+  --color-foreground: #211E19;        /* engraved ink (darkened)               */
+  --color-card: #FBF8EF;              /* raised leaf (slightly warmer/lighter) */
+  --color-card-foreground: #211E19;
+  --color-muted: #E9E2CF;             /* recessed panel fill                   */
+  --color-muted-foreground: #4B4336;  /* secondary / caption ink (darkened)    */
+  --color-primary: #3A5540;           /* contour green (deepened)              */
+  --color-primary-foreground: #F5F1E6;
+  --color-border: #CDBFA0;            /* sepia hairline / graticule            */
+  --color-ring: #3A5540;
+
+  /* ── Cartographic accents (index marks, categories, status) ────────────────
+     Each verified ≥ 4.5:1 on #F5F1E6 — see scripts note in the PR.            */
+  --color-terra: #9C4A2F;             /* index contour / warm marker  (~7.0:1) */
+  --color-water: #35566E;             /* hydrography blue             (~6.7:1) */
+  --color-sepia: #6E5A2C;             /* secondary annotation         (~5.5:1) */
+
+  /* ── Type ──────────────────────────────────────────────────────────────────
+     display = engraved variable serif (opsz/SOFT/WONK)
+     mono    = survey labels, coordinates, tabular figures
+     body    = clean grotesque reading copy                                    */
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', monospace;
+  --font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --radius: 0.25rem;                  /* crisp corners — no pill shapes        */
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-slate-950);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-slate-700);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-400);
-}
-
-/* Selection color */
-::selection {
-  background: var(--color-accent-400);
-  color: var(--color-slate-950);
-}
-
-/* Smooth scroll */
+/* ── Base ────────────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
-}
-
-/* Global focus-visible ring — applies to all interactive elements */
-*:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--color-slate-950), 0 0 0 4px var(--color-accent-400);
-  border-radius: 4px;
 }
 
 body {
   margin: 0;
   font-family: var(--font-body);
-  background-color: var(--color-slate-950);
-  color: var(--color-slate-100);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Card surface utilities ─────────────────────────────────────────────────
-   card            — static surface (rounded border + dark fill)
-   card-interactive — same surface + hover color transition
-   Used ~26× across the app; centralised here to stop hand-copying.        */
+/* Engraved display serif — optical sizing on, terminals kept sharp & serious
+   (SOFT 0 / WONK 0 — refined reference-atlas, not playful).                   */
+.font-display {
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 0, "WONK" 0;
+  letter-spacing: -0.011em;
+}
+
+/* Tabular figures for every mono surface (coordinates, stats, indices align). */
+.font-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hairline sepia scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-muted);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Selection = contour green */
+::selection {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+/* Global focus-visible ring — a crisp contour-green outline haloed by the
+   parchment field so it reads on any surface. */
+*:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── Cartographic utilities ──────────────────────────────────────────────── */
+
+/* Graticule — the surveyor's reference grid. Faint sepia hairlines at a 44px
+   pitch. Layer behind content and mask at the edges where used. */
+@utility graticule {
+  background-image:
+    repeating-linear-gradient(to right, color-mix(in oklab, var(--color-border) 45%, transparent) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(to bottom, color-mix(in oklab, var(--color-border) 45%, transparent) 0 1px, transparent 1px 44px);
+}
+
+/* Neatline — the engraved double border that frames a plate. */
+@utility neatline {
+  border: 1px solid var(--color-border);
+  box-shadow:
+    inset 0 0 0 3px var(--color-background),
+    inset 0 0 0 4px color-mix(in oklab, var(--color-border) 60%, transparent);
+}
+
+/* ── Card surfaces (migrated to semantic tokens; crisp corners) ───────────────
+   card            — static plate (hairline border + leaf fill)
+   card-interactive — same, border warms to primary on hover                   */
 @utility card {
-  @apply rounded-xl border border-slate-800/60 bg-slate-900/30;
+  @apply rounded border border-border bg-card;
 }
 
 @utility card-interactive {
-  @apply rounded-xl border border-slate-800/60 bg-slate-900/30 transition-colors;
+  @apply rounded border border-border bg-card transition-colors;
   &:hover {
-    @apply border-slate-700 bg-slate-800/30;
+    @apply border-primary/50;
   }
 }
 
