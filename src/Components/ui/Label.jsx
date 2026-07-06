@@ -1,7 +1,7 @@
 /**
  * Label — tiny uppercase eyebrow / caption.
  *
- * Renders the repeated `font-display text-xs tracking-[0.3em] text-slate-400 uppercase`
+ * Renders the repeated `font-mono text-xs tracking-[0.3em] text-muted-foreground uppercase`
  * pattern used for card sub-labels and section eyebrows. Replaces ~9 hand-inlined
  * instances across Resume, ProjectDetail, GetInTouch, etc.
  *
@@ -12,7 +12,7 @@
  *   ...props              forwarded to the rendered element (e.g. id, aria-*)
  */
 export default function Label({ as: Tag = "span", className, children, ...props }) {
-  const base = "font-display text-xs tracking-[0.3em] text-slate-400 uppercase";
+  const base = "font-mono text-xs tracking-[0.3em] text-muted-foreground uppercase";
   const cls = className ? `${base} ${className}` : base;
   return (
     <Tag className={cls} {...props}>

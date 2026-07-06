@@ -27,13 +27,13 @@ export default function RouteLoader() {
         className={`relative w-10 h-10 ${prefersReduced ? "" : "animate-pulse"}`}
       >
         {/* Static ring */}
-        <div className="absolute inset-0 rounded-full border-2 border-accent-400/20" />
+        <div className="absolute inset-0 rounded-full border-2 border-primary/20" />
         {/* Spinning arc (skipped for reduced-motion) */}
         {!prefersReduced && (
-          <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-accent-400 animate-spin" />
+          <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-primary animate-spin" />
         )}
         {/* Centre dot */}
-        <div className="absolute inset-[10px] rounded-full bg-accent-400/40" />
+        <div className="absolute inset-[10px] rounded-full bg-primary/40" />
       </div>
     </div>
   );

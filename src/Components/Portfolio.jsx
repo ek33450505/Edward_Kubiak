@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { Link, useLocation } from "react-router-dom";
 import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
@@ -8,131 +8,8 @@ import IconButton from "./ui/IconButton";
 import PageWrapper from "./ui/PageWrapper";
 import Reveal from "./ui/Reveal";
 import StarBadge from "./ui/StarBadge";
-import Tilt from "react-parallax-tilt";
-import CardSpotlight from "./Effects/CardSpotlight";
 import projects from "../data/projects";
 import { fadeUp, staggerContainer, staggerItem } from "../utils/motion";
-import { colorMap } from "../utils/colors";
-import { ACCENT } from "../lib/tokens";
-
-function ProjectCard({ project }) {
-  const colors = colorMap[project.color];
-  const reducedMotion = useReducedMotion();
-  return (
-    <motion.div key={project.title} variants={staggerItem} className="group">
-      <Tilt
-        tiltMaxAngleX={reducedMotion ? 0 : 6}
-        tiltMaxAngleY={reducedMotion ? 0 : 6}
-        glareEnable={!reducedMotion}
-        glareMaxOpacity={0.08}
-        glareColor={ACCENT}
-        glarePosition="all"
-        glareBorderRadius="12px"
-        scale={reducedMotion ? 1 : 1.02}
-        transitionSpeed={400}
-      >
-        <CardSpotlight
-          className={`p-6 transition-all duration-300 ${
-            project.featured
-              ? "rounded-xl border border-accent-400/25 bg-slate-900/30 hover:border-accent-400/50 shadow-[0_0_30px_rgba(0,255,194,0.06)]"
-              : "card hover:border-slate-700"
-          }`}
-          spotlightColor={colors.spotlight}
-        >
-          {/* Icon + title */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${colors.bg}`}>
-                <project.icon size={20} aria-hidden="true" className={colors.text} />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <Link
-                    to={`/projects/${project.slug}`}
-                    className="font-display text-lg font-bold text-slate-100 hover:text-accent-400 transition-colors"
-                  >
-                    {project.title}
-                  </Link>
-                  {project.featured && (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-accent-400/15 text-accent-400 border border-accent-400/20">
-                      Featured
-                    </span>
-                  )}
-                  {project.castEcosystem && (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-display tracking-[0.15em] uppercase bg-violet-400/15 text-violet-400 border border-violet-400/20">
-                      CAST Ecosystem
-                    </span>
-                  )}
-                  {project.githubRepo && (
-                    <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />
-                  )}
-                </div>
-                <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
-                  {project.category}{project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""}
-                </span>
-              </div>
-            </div>
-
-            {/* Links */}
-            <div className="flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
-              {project.github && (
-                <IconButton
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  label="View source code on GitHub (opens in new tab)"
-                >
-                  <GithubIcon size={16} aria-hidden="true" />
-                </IconButton>
-              )}
-              {project.link && (
-                <IconButton
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  label="View live site (opens in new tab)"
-                >
-                  <ExternalLink size={16} aria-hidden="true" />
-                </IconButton>
-              )}
-            </div>
-          </div>
-
-          {/* Description */}
-          <p className="text-sm text-slate-400 leading-relaxed mb-3">
-            {project.description}
-          </p>
-
-          {/* Metric stat chips */}
-          {project.stats && project.stats.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {project.stats.map((stat) => (
-                <span
-                  key={stat}
-                  className={`px-2 py-0.5 rounded-md text-[10px] font-display tracking-wider border ${colors.stat}`}
-                >
-                  {stat}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Tech badges */}
-          <div className="flex flex-wrap gap-2">
-            {project.tech.map((t) => (
-              <span
-                key={t}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-display tracking-wider ${colors.badge}`}
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-        </CardSpotlight>
-      </Tilt>
-    </motion.div>
-  );
-}
 
 const SECTIONS = [
   { key: "flagship",     title: "Flagship" },
@@ -140,6 +17,92 @@ const SECTIONS = [
   { key: "ecosystem",    title: "CAST Ecosystem" },
   { key: "professional", title: "Professional" },
 ];
+
+// Continuous plate number across all rendered sections.
+const ORDERED = SECTIONS.flatMap(({ key }) => projects.filter((p) => p.group === key));
+const plateOf = (slug) => String(ORDERED.findIndex((p) => p.slug === slug) + 1).padStart(3, "0");
+
+function ProjectCard({ project }) {
+  const categoryLabel = `${project.category}${
+    project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""
+  }`;
+
+  return (
+    <motion.article
+      variants={staggerItem}
+      className="neatline group flex h-full flex-col bg-card p-6 transition-colors duration-300 hover:border-primary/50"
+    >
+      {/* Plate number + status marks + out-links */}
+      <div className="flex items-start justify-between gap-3">
+        <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums">
+          {plateOf(project.slug)}
+        </span>
+        <div className="flex items-center gap-3">
+          {project.featured && (
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary">Featured</span>
+          )}
+          {project.castEcosystem && (
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-sepia">CAST</span>
+          )}
+          <div className="flex gap-1 opacity-60 transition-opacity group-hover:opacity-100">
+            {project.github && (
+              <IconButton
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                label="View source code on GitHub (opens in new tab)"
+              >
+                <GithubIcon size={16} aria-hidden="true" />
+              </IconButton>
+            )}
+            {project.link && (
+              <IconButton
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                label="View live site (opens in new tab)"
+              >
+                <ExternalLink size={16} aria-hidden="true" />
+              </IconButton>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Title + star badge */}
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+        <Link
+          to={`/projects/${project.slug}`}
+          className="font-display text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary"
+        >
+          {project.title}
+        </Link>
+        {project.githubRepo && <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />}
+      </div>
+      <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+        {categoryLabel}
+      </span>
+
+      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+        {project.description}
+      </p>
+
+      {/* Metric stats — mono figures */}
+      {project.stats && project.stats.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">
+          {project.stats.map((stat) => (
+            <span key={stat}>{stat}</span>
+          ))}
+        </div>
+      )}
+
+      {/* Tech — mono legend */}
+      <div className="mt-4 border-t border-border pt-4 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+        {project.tech.join(" · ")}
+      </div>
+    </motion.article>
+  );
+}
 
 function Portfolio() {
   const location = useLocation();
@@ -157,18 +120,15 @@ function Portfolio() {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
       <PageWrapper width="6xl">
-        {/* Page header */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-        >
-          <SectionHeader
-            as="h1"
-            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
-            underlineClassName="mt-3"
-            title="Projects"
-          />
+        {/* Frontispiece header */}
+        <motion.div variants={fadeUp} initial="hidden" animate="show">
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-primary">
+            Project Index · {ORDERED.length} Entries
+          </p>
+          <h1 className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+            Projects
+          </h1>
+          <div className="mt-4 h-px w-full bg-border" />
         </motion.div>
 
         {/* Grouped sections */}
@@ -187,7 +147,7 @@ function Portfolio() {
                 </Reveal>
 
                 <motion.div
-                  className={isFlagship ? "" : "grid md:grid-cols-2 gap-5"}
+                  className={isFlagship ? "" : "grid gap-5 md:grid-cols-2"}
                   variants={staggerContainer}
                   initial="hidden"
                   whileInView="show"

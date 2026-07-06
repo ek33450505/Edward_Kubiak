@@ -48,21 +48,21 @@ export default function RecentWriting() {
             className="group flex items-start gap-3 p-4 card-interactive block"
           >
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-display font-bold text-slate-200 group-hover:text-accent-400 transition-colors leading-snug">
+              <p className="text-sm font-mono font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
                 {article.title}
               </p>
               {article.description && (
-                <p className="text-xs text-slate-400 leading-snug mt-1 truncate">
+                <p className="text-xs text-muted-foreground leading-snug mt-1 truncate">
                   {article.description}
                 </p>
               )}
               {(article.reactions > 0 || article.views > 0) && (
-                <p className="text-xs text-slate-400 leading-snug mt-1">
+                <p className="text-xs text-muted-foreground leading-snug mt-1">
                   ★ {article.reactions} reactions · {article.views} views
                 </p>
               )}
             </div>
-            <span className="font-display text-[11px] tracking-wider text-slate-400 shrink-0 pt-0.5">
+            <span className="font-mono text-[11px] tracking-wider text-muted-foreground shrink-0 pt-0.5">
               {timeAgo(article.published_at)}
             </span>
           </motion.a>

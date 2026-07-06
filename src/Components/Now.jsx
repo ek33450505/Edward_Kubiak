@@ -1,51 +1,77 @@
 import { motion } from "motion/react";
 import now from "../data/now";
 import { fadeUp, fadeIn } from "../utils/motion";
-import SectionHeader from "./ui/SectionHeader";
 import PageWrapper from "./ui/PageWrapper";
-import Label from "./ui/Label";
 import Reveal from "./ui/Reveal";
+
+// Mono plate index — survey card numbering
+const idx = (n) => String(n).padStart(2, "0");
 
 const Now = () => {
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
       <PageWrapper>
+
+        {/* ── Frontispiece header ─────────────────────────────────────────── */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
           animate="show"
         >
-          <SectionHeader
-            as="h1"
-            headingClassName="font-display text-3xl sm:text-4xl font-bold tracking-tight"
-            underlineClassName="mt-3"
-            title="Now"
-          />
-          <p className="mt-4 text-slate-400 text-sm">
-            What I&apos;m focused on right now &middot; Last updated{" "}
-            <span className="text-slate-300">{now.updated}</span>
+          {/* Coordinate overline — survey date stamp */}
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-primary">
+            As of {now.updated} · 39.96°N 82.99°W
           </p>
+
+          {/* Engraved serif H1 */}
+          <h1 className="font-display text-4xl font-semibold leading-[1.06] tracking-tight text-foreground sm:text-5xl">
+            Now
+          </h1>
+
+          {/* Subtitle — retained copy */}
+          <p className="mt-3 text-sm text-muted-foreground">
+            What I&apos;m focused on right now &middot; Last updated{" "}
+            <span className="text-foreground">{now.updated}</span>
+          </p>
+
+          {/* Hairline rule */}
+          <div className="mt-5 h-px w-full bg-border" />
         </motion.div>
 
-        <div className="mt-10 space-y-6">
+        {/* ── Section cards ───────────────────────────────────────────────── */}
+        <div className="mt-10 space-y-4">
           {now.sections.map((section, i) => (
             <Reveal
               key={section.title}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="p-6 card"
+              className="neatline group bg-card p-6 transition-colors duration-300 hover:border-primary/50"
             >
-              <Label as="h2" className="text-accent-400 mb-4">
+              {/* Mono plate index */}
+              <span
+                aria-hidden="true"
+                className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums"
+              >
+                {idx(i + 1)}
+              </span>
+
+              {/* Section title — engraved serif */}
+              <h2 className="font-display mt-2 text-xl font-semibold tracking-tight text-foreground">
                 {section.title}
-              </Label>
+              </h2>
+
+              {/* Hairline between title and items */}
+              <div className="mt-4 mb-4 h-px w-full bg-border" />
+
               <ul className="space-y-3">
                 {section.items.map((item, j) => (
                   <li
                     key={j}
-                    className="text-sm text-slate-300 leading-relaxed pl-4 relative"
+                    className="relative pl-4 text-sm leading-relaxed text-muted-foreground"
                   >
+                    {/* Square survey marker — no rounded-full */}
                     <span
                       aria-hidden="true"
-                      className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-accent-400/40"
+                      className="absolute left-0 top-[0.45em] h-2 w-2 bg-primary"
                     />
                     {item}
                   </li>
@@ -55,11 +81,12 @@ const Now = () => {
           ))}
         </div>
 
+        {/* ── Footer attribution ──────────────────────────────────────────── */}
         <Reveal
           as="p"
           variants={fadeIn}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-10 text-xs text-slate-400 font-display tracking-wider"
+          className="mt-10 font-mono text-xs tracking-wider text-muted-foreground"
         >
           Inspired by{" "}
           <a
@@ -67,11 +94,12 @@ const Now = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="nownownow.com about page (opens in new tab)"
-            className="hover:text-slate-400 transition-colors"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
           >
             nownownow.com
           </a>
         </Reveal>
+
       </PageWrapper>
     </div>
   );

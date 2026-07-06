@@ -5,7 +5,6 @@ import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
 import { GithubIcon, LinkedinIcon, DevToIcon } from "./Components/BrandIcons";
 import IconButton from "./Components/ui/IconButton";
-import ekMark from "./Images/ek-mark.svg";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
 import ErrorBoundary from "./Components/ErrorBoundary";
 import RouteLoader from "./Components/ui/RouteLoader";
@@ -53,20 +52,18 @@ function NavBar() {
   }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/60 backdrop-blur-xl bg-slate-950/80">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/85 backdrop-blur-xl">
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-20">
-        {/* Brand — EK mark + typographic wordmark */}
-        <Link to="/" className="flex items-center gap-2 group" onClick={() => setOpen(false)}>
-          <img
-            src={ekMark}
-            width="28"
-            height="28"
-            alt=""
-            aria-hidden="true"
-            className="flex-shrink-0"
-          />
-          <span className="font-display text-sm font-bold tracking-[0.25em] uppercase text-slate-100 group-hover:text-accent-400 transition-colors">
-            EDWARD KUBIAK
+        {/* Masthead — survey crosshair + engraved wordmark + edition line */}
+        <Link to="/" className="flex items-center gap-3 group" onClick={() => setOpen(false)}>
+          <span aria-hidden="true" className="text-primary text-2xl leading-none select-none">⌖</span>
+          <span className="flex flex-col leading-none">
+            <span className="font-display text-lg sm:text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
+              Edward Kubiak
+            </span>
+            <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.28em] uppercase text-muted-foreground mt-1">
+              Software Engineer · Columbus OH
+            </span>
           </span>
         </Link>
 
@@ -77,17 +74,17 @@ function NavBar() {
               key={to}
               to={to}
               aria-current={location.pathname === to ? "page" : undefined}
-              className={`relative px-4 py-2 font-display text-xs tracking-widest uppercase transition-colors duration-300 rounded-md ${
+              className={`relative px-4 py-2 font-mono text-xs tracking-widest uppercase transition-colors duration-300 ${
                 location.pathname === to
-                  ? "text-accent-400"
-                  : "text-slate-400 hover:text-slate-100"
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {label}
               {location.pathname === to && (
                 <motion.div
                   layoutId="nav-underline"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 bg-accent-400 rounded-full"
+                  className="absolute -bottom-px left-3 right-3 h-px bg-primary"
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
               )}
@@ -100,7 +97,7 @@ function NavBar() {
             onClick={toggle}
             className="ml-2"
           >
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-slate-700 text-[10px] font-display tracking-wider text-slate-400 hover:border-accent-400/50 hover:text-accent-400 transition-all">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-border text-[10px] font-mono tracking-wider text-muted-foreground hover:border-primary/50 hover:text-primary transition-all">
               ⌘K
             </span>
           </IconButton>
@@ -146,7 +143,7 @@ function NavBar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden overflow-hidden border-t border-slate-800/60 bg-slate-950/95 backdrop-blur-xl"
+            className="md:hidden overflow-hidden border-t border-border/60 bg-background/95 backdrop-blur-xl"
           >
             <div className="px-6 py-4 flex flex-col gap-2">
               {navLinks.map(({ to, label }) => (
@@ -155,10 +152,10 @@ function NavBar() {
                   to={to}
                   onClick={() => setOpen(false)}
                   aria-current={location.pathname === to ? "page" : undefined}
-                  className={`font-display text-sm tracking-widest uppercase py-3 border-b border-slate-800/40 transition-colors rounded-md ${
+                  className={`font-mono text-sm tracking-widest uppercase py-3 border-b border-border/40 transition-colors rounded-md ${
                     location.pathname === to
-                      ? "text-accent-400"
-                      : "text-slate-400 hover:text-slate-100"
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {label}
@@ -167,16 +164,16 @@ function NavBar() {
               {/* Search / ⌘K row */}
               <button
                 onClick={() => { setOpen(false); toggle(); }}
-                className="flex items-center gap-2 py-3 text-slate-400 hover:text-accent-400 font-display text-sm tracking-widest uppercase transition-colors border-b border-slate-800/40 text-left"
+                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-sm tracking-widest uppercase transition-colors border-b border-border/40 text-left"
               >
-                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-slate-700 text-[10px] text-slate-400">⌘K</span>
+                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-border text-[10px] text-muted-foreground">⌘K</span>
               </button>
               <a
                 href="https://github.com/ek33450505"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub profile (opens in new tab)"
-                className="flex items-center gap-2 py-3 text-slate-400 hover:text-accent-400 font-display text-sm tracking-widest uppercase transition-colors"
+                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-sm tracking-widest uppercase transition-colors"
               >
                 <GithubIcon size={18} aria-hidden="true" /> GITHUB
               </a>
@@ -185,7 +182,7 @@ function NavBar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="DEV.to profile (opens in new tab)"
-                className="flex items-center gap-2 py-3 text-slate-400 hover:text-accent-400 font-display text-sm tracking-widest uppercase transition-colors"
+                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-sm tracking-widest uppercase transition-colors"
               >
                 <DevToIcon size={18} aria-hidden="true" />
                 DEV.TO
@@ -248,10 +245,10 @@ function App() {
     <Router>
       <CommandPaletteProvider>
         <MotionConfig reducedMotion="user">
-        <div className="noise-bg gradient-mesh min-h-screen">
+        <div className="min-h-screen bg-background">
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent-400 focus:text-slate-950 focus:rounded-md focus:font-display focus:text-sm focus:font-bold focus:tracking-widest focus:uppercase"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-background focus:rounded-md focus:font-mono focus:text-sm focus:font-bold focus:tracking-widest focus:uppercase"
           >
             Skip to main content
           </a>
@@ -265,16 +262,17 @@ function App() {
             </ErrorBoundary>
           </main>
 
-          {/* Footer */}
-          <footer className="border-t border-slate-800/60 py-8 px-6">
-            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-sm">
-              <p className="font-display text-xs tracking-wider">
-                &copy; {new Date().getFullYear()} EDWARD KUBIAK
+          {/* Footer — colophon */}
+          <footer className="border-t border-border py-8 px-6">
+            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-muted-foreground text-sm">
+              <p className="font-mono text-xs tracking-wider uppercase flex items-center gap-2">
+                <span aria-hidden="true" className="text-primary">⌖</span>
+                &copy; {new Date().getFullYear()} Edward Kubiak · 39.96°N 82.99°W
               </p>
               <div className="flex items-center gap-4">
                 <a
                   href="mailto:edward.kubiak.dev@gmail.com"
-                  className="font-display text-xs tracking-wider uppercase hover:text-accent-400 transition-colors"
+                  className="font-mono text-xs tracking-wider uppercase hover:text-primary transition-colors"
                 >
                   edward.kubiak.dev@gmail.com
                 </a>

@@ -31,17 +31,20 @@ export default function NotFound({
           initial="hidden"
           animate="show"
           transition={{ duration: 0.4 }}
-          className="text-center py-20"
+          className="py-20 text-center"
         >
-          <p className="font-display text-4xl font-bold text-slate-600 mb-4">
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-primary">
+            Off the map · No such coordinate
+          </p>
+          <p className="mb-4 font-mono text-6xl font-semibold tabular-nums text-foreground">
             {heading}
           </p>
-          <h1 className="font-display text-xl font-bold text-slate-200 mb-6">
+          <h1 className="mb-8 font-display text-2xl font-semibold tracking-tight text-muted-foreground">
             {message}
           </h1>
           <Link
             to={linkHref}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-widest uppercase hover:border-accent-400 hover:text-accent-400 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
+            className="inline-flex items-center gap-2 rounded border border-primary px-6 py-3 font-mono text-xs uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
           >
             <ArrowLeft size={14} aria-hidden="true" />
             {linkLabel}

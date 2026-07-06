@@ -38,7 +38,7 @@ export default function Competencies() {
         <SectionHeader id="core-competencies-heading" title="Core Competencies" />
       </Reveal>
 
-      <div className="flex flex-col sm:flex-row sm:divide-x sm:divide-slate-700/40 gap-6 sm:gap-0">
+      <div className="flex flex-col sm:flex-row sm:divide-x sm:divide-border/40 gap-6 sm:gap-0">
         {competencies.map((item, i) => (
           <Reveal
             key={item.title}
@@ -46,10 +46,10 @@ export default function Competencies() {
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="sm:px-6 first:sm:pl-0 last:sm:pr-0 flex-1"
           >
-            <h3 className="font-display text-xs tracking-[0.2em] uppercase text-accent-400 mb-1">
+            <h3 className="font-mono text-xs tracking-[0.2em] uppercase text-primary mb-1">
               {item.title}
             </h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               {item.description}
             </p>
           </Reveal>

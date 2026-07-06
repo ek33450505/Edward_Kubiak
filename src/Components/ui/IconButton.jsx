@@ -28,7 +28,7 @@ export default function IconButton({
   ...rest
 }) {
   const base =
-    "inline-flex items-center justify-center min-w-11 min-h-11 text-slate-400 hover:text-accent-400 transition-colors rounded-md";
+    "inline-flex items-center justify-center min-w-11 min-h-11 text-muted-foreground hover:text-primary transition-colors rounded-md";
   const combined = className ? `${base} ${className}` : base;
 
   if (href) {

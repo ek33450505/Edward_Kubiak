@@ -22,8 +22,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const svgPath = join(__dirname, '../public/favicon.svg');
 const outDir  = join(__dirname, '../public');
 
-// Background color matching the SVG and manifest theme
-const BG_COLOR = { r: 15, g: 23, b: 42, alpha: 1 }; // #0f172a
+// Background color matching the SVG and manifest theme (parchment)
+const BG_COLOR = { r: 245, g: 241, b: 230, alpha: 1 }; // #F5F1E6
 
 async function generateIcon(size, outFile) {
   await sharp(svgPath)

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Star, Package, Sparkles } from "lucide-react";
 import { CAST_STATS } from "../data/castStats";
 import { fetchStarsMap } from "../hooks/useGitHubStars";
 import Reveal from "./ui/Reveal";
@@ -22,8 +21,8 @@ const STAR_REPOS = [
 ];
 
 const STATIC_PILLS = [
-  { label: "Taps", value: `${CAST_STATS.packages}`, icon: Package },
-  { label: "CAST", value: CAST_STATS.version, icon: Sparkles },
+  { label: "Taps", value: `${CAST_STATS.packages}` },
+  { label: "CAST", value: CAST_STATS.version },
 ];
 
 function HeroStats() {
@@ -54,50 +53,38 @@ function HeroStats() {
   // Fetch failed and no stars — render nothing
   if (!loading && totalStars === null) return null;
 
+  // Survey-strip cells: a mono tabular figure over a tracked uppercase label,
+  // divided by sepia hairlines.
+  const cells = [
+    { label: "Stars", value: totalStars?.toLocaleString() ?? "—" },
+    ...STATIC_PILLS.map(({ label, value }) => ({ label, value })),
+  ];
+
   return (
     <Reveal
       transition={{ duration: 0.5, delay: 1.3 }}
-      className="mt-6 flex flex-wrap items-center gap-2"
+      className="mt-10 flex w-fit flex-wrap items-stretch divide-x divide-border border-y border-border"
     >
       {loading ? (
         <>
           {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="h-9 w-20 rounded-xl bg-slate-800/50 animate-pulse"
-              aria-hidden="true"
-            />
-          ))}
-        </>
-      ) : (
-        <>
-          {/* Stars pill — live value from shared module-level cache */}
-          <div className="flex items-center gap-2 px-4 py-2 card">
-            <Star size={13} className="text-accent-400 shrink-0" aria-hidden="true" />
-            <span className="font-display text-sm font-bold text-accent-400">
-              {totalStars.toLocaleString()}
-            </span>
-            <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
-              Stars
-            </span>
-          </div>
-
-          {/* Static pills */}
-          {STATIC_PILLS.map(({ label, value, icon: Icon }) => (
-            <div
-              key={label}
-              className="flex items-center gap-2 px-4 py-2 card"
-            >
-              <Icon size={13} className="text-accent-400 shrink-0" aria-hidden="true" />
-              <span className="font-display text-sm font-bold text-accent-400">
-                {value}
-              </span>
-              <span className="font-display text-[10px] tracking-[0.2em] text-slate-400 uppercase">
-                {label}
-              </span>
+            <div key={i} className="px-6 py-3" aria-hidden="true">
+              <div className="h-6 w-16 animate-pulse bg-muted" />
+              <div className="mt-2 h-2 w-10 animate-pulse bg-muted" />
             </div>
           ))}
         </>
+      ) : (
+        cells.map(({ label, value }) => (
+          <div key={label} className="flex flex-col gap-1 px-6 py-3">
+            <span className="font-mono text-xl font-semibold tabular-nums leading-none text-foreground">
+              {value}
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+              {label}
+            </span>
+          </div>
+        ))
       )}
     </Reveal>
   );
