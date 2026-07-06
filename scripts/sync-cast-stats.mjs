@@ -1,38 +1,102 @@
 #!/usr/bin/env node
-// Generates src/data/castStats.js from public/cast-stats.json (written by deploy.yml).
-// Run automatically as `prebuild` so every `npm run build` ships current stats in the
-// JS bundle — eliminating drift between cast-stats.json (CastStats component, runtime
-// fetch) and the marketing prose in Home/About/Resume (build-time bake-in).
+// Generates src/data/castStats.js AND refreshes public/cast-stats.json from the
+// canonical flagship stats, so both the build-time prose bake-in (Home/About/
+// Resume/FeaturedWork) and the runtime-fetched CastStats component stay current.
 //
-// Falls back to existing castStats.js values if public/cast-stats.json is missing.
+// Source priority (highest wins):
+//   1. Canonical fetch — https://raw.githubusercontent.com/ek33450505/claude-agent-team/main/cast-stats.json
+//      (best-effort; what deploy.yml trusts). Makes `npm run sync-stats` self-refresh locally.
+//   2. Existing public/cast-stats.json (deploy.yml writes this pre-build in CI; the
+//      committed snapshot locally). Extra fields here are preserved.
+//   3. Hard-coded fallback constants (offline + first run).
+//
+// Never fails the build on a network error — it degrades to (2) then (3).
 
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import https from "node:https";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const statsPath = path.join(root, "public", "cast-stats.json");
 const outPath = path.join(root, "src", "data", "castStats.js");
 
-// 1. CAST core stats — from public/cast-stats.json (deploy-time refresh)
-let cast = {
-  version: "v9.0.0",
+const CANONICAL_URL =
+  "https://raw.githubusercontent.com/ek33450505/claude-agent-team/main/cast-stats.json";
+
+// Offline/first-run fallback. Bump alongside canonical when convenient.
+const FALLBACK = {
+  version: "v9.2.0",
   agents: 23,
-  tests: 2068,
+  tests: 2275,
   packages: 9,
   commands: 21,
   skills: 17,
-  tables: 38,
-  updated: new Date().toISOString().slice(0, 10),
+  tables: 39,
+  updated: "2026-07-06",
 };
+
+// Fields baked into the JS bundle (curated — keeps castStats.js clean).
+const CORE_FIELDS = ["version", "agents", "tests", "packages", "commands", "skills", "tables", "updated"];
+
+function fetchJson(url, timeoutMs = 4000) {
+  return new Promise((resolve) => {
+    const req = https.get(url, { headers: { "User-Agent": "sync-cast-stats" } }, (res) => {
+      if (res.statusCode !== 200) {
+        res.resume();
+        return resolve(null);
+      }
+      let data = "";
+      res.on("data", (c) => (data += c));
+      res.on("end", () => {
+        try {
+          resolve(JSON.parse(data));
+        } catch {
+          resolve(null);
+        }
+      });
+    });
+    req.on("error", () => resolve(null));
+    req.setTimeout(timeoutMs, () => {
+      req.destroy();
+      resolve(null);
+    });
+  });
+}
+
+// 1. Base — committed / deploy-written public/cast-stats.json (may be missing).
+let base = {};
 try {
-  const parsed = JSON.parse(fs.readFileSync(statsPath, "utf8"));
-  cast = { ...cast, ...parsed };
+  base = JSON.parse(fs.readFileSync(statsPath, "utf8"));
 } catch {
   console.warn("[sync-cast-stats] public/cast-stats.json not found — using fallback constants");
 }
 
-// 2. cast-desktop stats — from local clone if available (CI: stays at last-committed defaults)
+// 2. Canonical — authoritative, best-effort. Normalise the version v-prefix
+//    (canonical publishes bare semver, the app expects "v9.2.0").
+const canonical = await fetchJson(CANONICAL_URL);
+if (canonical) {
+  if (canonical.version && !String(canonical.version).startsWith("v")) {
+    canonical.version = `v${canonical.version}`;
+  }
+  console.log("[sync-cast-stats] pulled canonical:", canonical.version, "· tests", canonical.tests);
+} else {
+  console.warn("[sync-cast-stats] canonical unreachable — using existing public/cast-stats.json");
+}
+
+// 3. Merge (fallback < base < canonical). Preserve any extra base/canonical fields
+//    (test_files, verified_at, _source, …) so the deploy-written runtime file is
+//    never stripped — nothing consumes them, but keeping them is harmless & stable.
+const merged = { ...FALLBACK, ...base, ...(canonical || {}) };
+
+// Refresh the runtime file so dev + the committed snapshot track canonical.
+fs.writeFileSync(statsPath, JSON.stringify(merged, null, 2) + "\n");
+
+// Curated core for the JS bundle.
+const cast = {};
+for (const k of CORE_FIELDS) cast[k] = merged[k];
+
+// cast-desktop stats — from local clone if available (CI: last-committed defaults).
 let desktop = {
   version: "v1.2.12",
   dashboardViews: 12,
@@ -49,17 +113,19 @@ try {
   desktop.dashboardViews = views.length;
 } catch { /* keep default */ }
 
-// 3. Ecosystem-level rollups (derived)
+// Ecosystem-level rollups (derived).
 const ecosystem = {
   taps: cast.packages,
   tapsPlusUmbrella: `${cast.packages} Homebrew taps plus the umbrella \`cast\` formula`,
   marketingDomain: "castframework.dev",
 };
 
+// No volatile timestamp in the banner — keeps the generated file churn-free when
+// the stats themselves are unchanged (see portfolio build notes).
 const banner = `// AUTO-GENERATED by scripts/sync-cast-stats.mjs — do not edit manually.
-// Source: public/cast-stats.json (CAST core) + ~/Projects/personal/cast-desktop (desktop).
+// Source: canonical claude-agent-team/cast-stats.json (best-effort fetch) →
+//         public/cast-stats.json → fallback. Desktop: ~/Projects/personal/cast-desktop.
 // Refresh: run \`npm run sync-stats\` or any \`npm run build\` (prebuild hook).
-// Last sync: ${new Date().toISOString()}
 `;
 
 const body = `
@@ -71,6 +137,6 @@ export const CAST_ECOSYSTEM = ${JSON.stringify(ecosystem, null, 2)};
 `;
 
 fs.writeFileSync(outPath, banner + body);
-console.log("[sync-cast-stats] Wrote", path.relative(root, outPath));
+console.log("[sync-cast-stats] Wrote", path.relative(root, outPath), "+ refreshed public/cast-stats.json");
 console.log("  CAST:", cast);
 console.log("  Desktop:", desktop);
