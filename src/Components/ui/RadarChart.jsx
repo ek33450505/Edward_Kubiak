@@ -100,7 +100,7 @@ export default function RadarChart({ data, maxHeight = 280 }) {
             textAnchor={anchor}
             dominantBaseline="middle"
             fontSize={10}
-            fill="#94a3b8"
+            fill="#4B4336"
           >
             {d.name}
           </text>

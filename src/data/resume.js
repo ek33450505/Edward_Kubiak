@@ -59,20 +59,6 @@ export const skills = {
   ],
 };
 
-export const skillColors = {
-  "AI & Agent Systems": "bg-accent-400/10 text-accent-400",
-  "Languages & Frameworks": "bg-sky-400/10 text-sky-400",
-  Data: "bg-emerald-400/10 text-emerald-400",
-  "Testing & Delivery": "bg-rose-400/10 text-rose-400",
-};
-
-export const labelColors = {
-  "AI & Agent Systems": "text-accent-400",
-  "Languages & Frameworks": "text-sky-400",
-  Data: "text-emerald-400",
-  "Testing & Delivery": "text-rose-400",
-};
-
 export const summary = `Full stack developer and AI systems engineer. Creator of CAST ${CAST_STATS.version} — a local-first, open-source multi-agent control plane for Claude Code whose ${CAST_STATS.tables}-table execution record is searchable, signed, and predictive — shipped as a ${CAST_STATS.packages}-package Homebrew ecosystem backed by ${CAST_STATS.tests.toLocaleString("en-US")} tests. Builds deterministic, zero-LLM agent-reliability tools (misfire, attest, looptrip) shipped on PyPI and Homebrew. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts. Open to full-stack and AI-infrastructure roles.`;
 
 export const experience = [
@@ -118,6 +104,8 @@ export const education = [
   },
 ];
 
+// Classic-paper print output: neutralize the parchment/atlas theme to black-on-white.
+// Applied when printing /resume (Cmd+P) and by the puppeteer PDF generator.
 export const printStyles = `
   @media print {
     nav, footer, [data-print-hide] {
@@ -125,41 +113,37 @@ export const printStyles = `
     }
     body {
       background: white !important;
-      color: #0f172a !important;
+      color: #1a1a1a !important;
     }
-    /* Neutralize app-shell noise texture and gradient mesh (src/App.css + App.jsx).
-       Without these, printBackground captures them as raster, inflating the PDF to ~10MB. */
-    .noise-bg::before { background-image: none !important; }
-    .gradient-mesh { background: white !important; }
     #resume-print {
       background: white !important;
       padding: 0 !important;
       min-height: unset !important;
     }
-    #resume-print .rounded-xl {
-      border: 1px solid #e2e8f0 !important;
-      background: white !important;
-    }
-    /* .card is a @utility (bg-slate-900/30) — not matched by the .rounded-xl selector above */
     #resume-print .card,
-    #resume-print .card-interactive {
+    #resume-print .card-interactive,
+    #resume-print .neatline {
       background: white !important;
-      border: 1px solid #e2e8f0 !important;
+      border: 1px solid #d4d4d4 !important;
+      box-shadow: none !important;
     }
     #resume-print h1, #resume-print h2, #resume-print h3 {
-      color: #0f172a !important;
+      color: #1a1a1a !important;
     }
-    #resume-print p, #resume-print li, #resume-print span {
-      color: #334155 !important;
+    #resume-print p, #resume-print li, #resume-print span, #resume-print a {
+      color: #333333 !important;
     }
-    #resume-print .text-accent-400, #resume-print .text-sky-400,
-    #resume-print .text-emerald-400, #resume-print .text-rose-400,
-    #resume-print .text-slate-400 {
-      color: #475569 !important;
+    /* Flatten the contour-green + sepia accents for paper */
+    #resume-print .text-primary,
+    #resume-print .text-muted-foreground,
+    #resume-print .text-foreground {
+      color: #333333 !important;
     }
-    #resume-print .bg-accent-400\\/10, #resume-print .bg-sky-400\\/10,
-    #resume-print .bg-emerald-400\\/10, #resume-print .bg-rose-400\\/10 {
-      background-color: #f1f5f9 !important;
+    #resume-print .bg-primary {
+      background-color: #444444 !important;
+    }
+    #resume-print .border-border {
+      border-color: #d4d4d4 !important;
     }
     .mt-10 { margin-top: 1.5rem !important; }
     .mt-8 { margin-top: 1.25rem !important; }

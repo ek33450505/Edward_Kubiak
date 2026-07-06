@@ -152,7 +152,7 @@ const CommandPalette = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="fixed inset-0 z-[70] bg-slate-950/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[70] bg-foreground/40 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
           <motion.div
@@ -170,30 +170,30 @@ const CommandPalette = () => {
               className="w-full max-w-lg pointer-events-auto"
             >
               <Command
-                className="rounded-xl border border-slate-800 bg-slate-950 shadow-2xl overflow-hidden"
+                className="rounded border border-border bg-card shadow-xl overflow-hidden"
                 label="Command palette"
               >
                 <Command.Input
                   ref={inputRef}
                   placeholder="Type a command or search..."
                   aria-label="Search commands"
-                  className="w-full px-4 py-3.5 bg-transparent border-b border-slate-800 text-slate-100 placeholder-slate-600 text-sm outline-none font-display tracking-wide"
+                  className="w-full px-4 py-3.5 bg-transparent border-b border-border text-foreground placeholder-muted-foreground text-sm outline-none font-mono tracking-wide"
                 />
                 <Command.List className="max-h-80 overflow-y-auto p-2">
-                  <Command.Empty className="py-6 text-center text-sm text-slate-400 font-display tracking-wider">
+                  <Command.Empty className="py-6 text-center text-sm text-muted-foreground font-mono tracking-wider">
                     No results found.
                   </Command.Empty>
 
                   <Command.Group
                     heading="Navigate"
-                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {navigateCommands.map(({ id, label, icon: Icon, to }) => (
                       <Command.Item
                         key={id}
                         value={label}
                         onSelect={() => handleNavigate(to)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 cursor-pointer data-[selected=true]:bg-accent-400/10 data-[selected=true]:text-accent-400 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-muted-foreground cursor-pointer data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary transition-colors"
                       >
                         <Icon size={14} aria-hidden="true" />
                         {label}
@@ -201,18 +201,18 @@ const CommandPalette = () => {
                     ))}
                   </Command.Group>
 
-                  <Command.Separator className="my-1 h-px bg-slate-800/60" />
+                  <Command.Separator className="my-1 h-px bg-border" />
 
                   <Command.Group
                     heading="Jump to Section"
-                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {jumpCommands.map(({ id, label, hash }) => (
                       <Command.Item
                         key={id}
                         value={label}
                         onSelect={() => handleJump(hash)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 cursor-pointer data-[selected=true]:bg-accent-400/10 data-[selected=true]:text-accent-400 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-muted-foreground cursor-pointer data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary transition-colors"
                       >
                         <Hash size={14} aria-hidden="true" />
                         {label}
@@ -220,18 +220,18 @@ const CommandPalette = () => {
                     ))}
                   </Command.Group>
 
-                  <Command.Separator className="my-1 h-px bg-slate-800/60" />
+                  <Command.Separator className="my-1 h-px bg-border" />
 
                   <Command.Group
                     heading="External"
-                    className="[&_[cmdk-group-heading]]:font-display [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-slate-400 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {externalCommands.map(({ id, label, href, icon: Icon }) => (
                       <Command.Item
                         key={id}
                         value={label}
                         onSelect={() => handleExternal(href)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 cursor-pointer data-[selected=true]:bg-accent-400/10 data-[selected=true]:text-accent-400 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-muted-foreground cursor-pointer data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary transition-colors"
                       >
                         <Icon size={14} aria-hidden="true" />
                         {label}

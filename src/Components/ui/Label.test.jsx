@@ -22,9 +22,9 @@ describe('Label — default rendering', () => {
   it('applies the base uppercase display classes', () => {
     const { container } = render(<Label>Skills</Label>);
     const el = container.querySelector('span');
-    expect(el.className).toContain('font-display');
+    expect(el.className).toContain('font-mono');
     expect(el.className).toContain('uppercase');
-    expect(el.className).toContain('text-slate-400');
+    expect(el.className).toContain('text-muted-foreground');
   });
 });
 
@@ -45,7 +45,7 @@ describe('Label — className merge', () => {
     const { container } = render(<Label className="mt-4">Extra</Label>);
     const el = container.querySelector('span');
     expect(el.className).toContain('mt-4');
-    expect(el.className).toContain('font-display');
+    expect(el.className).toContain('font-mono');
   });
 });
 

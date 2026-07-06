@@ -6,15 +6,15 @@
  *   id               string?            id attribute on the heading element (for aria-labelledby)
  *   as               string?            heading element tag (default "h2")
  *   tone             'muted' | 'accent' heading colour tone when headingClassName is not set
- *                                       (default 'muted' → text-slate-400; 'accent' → text-accent-400)
+ *                                       (default 'muted' → text-muted-foreground; 'accent' → text-primary)
  *   headingClassName string?            fully overrides heading element className (tone ignored when set)
  *   underlineClassName string?          spacing class before the underline div (default "mt-2")
  *   children         ReactNode?         optional badge / inline element rendered after title text
  */
 
 const TONE_COLOR = {
-  muted: "text-slate-400",
-  accent: "text-accent-400",
+  muted: "text-muted-foreground",
+  accent: "text-primary",
 };
 
 export default function SectionHeader({
@@ -27,7 +27,7 @@ export default function SectionHeader({
   children,
 }) {
   const toneColor = TONE_COLOR[tone] ?? TONE_COLOR.muted;
-  const defaultClass = `font-display text-xs tracking-[0.3em] ${toneColor} uppercase`;
+  const defaultClass = `font-mono text-xs tracking-[0.3em] ${toneColor} uppercase`;
   const cls = headingClassName !== undefined ? headingClassName : defaultClass;
 
   const heading = (
@@ -46,7 +46,7 @@ export default function SectionHeader({
       ) : (
         heading
       )}
-      <div className={`${underlineClassName} w-16 h-0.5 bg-accent-400/60`} />
+      <div className={`${underlineClassName} h-px w-full bg-border`} />
     </div>
   );
 }

@@ -82,7 +82,7 @@ const About = () => {
                       {CAST_STATS.tables}
                     </span>
                     <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                      -Table Record
+                      Tables
                     </span>
                   </div>
                   <div className="flex flex-col gap-1 px-4 py-2">

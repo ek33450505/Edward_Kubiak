@@ -50,19 +50,19 @@ class ErrorBoundary extends Component {
         <div className="min-h-[calc(100vh-80px)] flex items-center justify-center py-20">
           <PageWrapper>
             <div className="text-center py-20">
-              <p className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
+              <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground uppercase mb-4">
                 Update available
               </p>
-              <h1 className="font-display text-2xl font-bold text-accent-400 mb-4">
+              <h1 className="font-mono text-2xl font-bold text-primary mb-4">
                 A new version is available
               </h1>
-              <p className="text-slate-400 mb-8 max-w-md mx-auto">
+              <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                 This page couldn&apos;t load because a newer version of the site was
                 deployed. Reload to get the latest version.
               </p>
               <button
                 onClick={() => window.location.reload()}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent-400 text-slate-950 font-display text-xs tracking-widest uppercase hover:bg-accent-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-background font-mono text-xs tracking-widest uppercase hover:bg-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
               >
                 Reload
               </button>
@@ -76,26 +76,26 @@ class ErrorBoundary extends Component {
       <div className="min-h-[calc(100vh-80px)] flex items-center justify-center py-20">
         <PageWrapper>
           <div className="text-center py-20">
-            <p className="font-display text-xs tracking-[0.3em] text-slate-400 uppercase mb-4">
+            <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground uppercase mb-4">
               Something went wrong
             </p>
-            <h1 className="font-display text-2xl font-bold text-accent-400 mb-4">
+            <h1 className="font-mono text-2xl font-bold text-primary mb-4">
               Unexpected error
             </h1>
-            <p className="text-slate-400 mb-8 max-w-md mx-auto">
+            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
               Something went wrong loading this page. Try reloading or return
               home.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => window.location.reload()}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent-400 text-slate-950 font-display text-xs tracking-widest uppercase hover:bg-accent-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-background font-mono text-xs tracking-widest uppercase hover:bg-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
               >
                 Reload
               </button>
               <Link
                 to="/"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-700 text-slate-300 font-display text-xs tracking-widest uppercase hover:border-accent-400 hover:text-accent-400 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400/60"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-foreground font-mono text-xs tracking-widest uppercase hover:border-primary hover:text-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
               >
                 Back to Home
               </Link>

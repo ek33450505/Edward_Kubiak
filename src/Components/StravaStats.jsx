@@ -42,7 +42,7 @@ const StravaStats = () => {
 
   return (
     <Reveal transition={{ duration: 0.4 }}>
-      <h4 className="font-display text-[10px] tracking-[0.3em] text-slate-400 uppercase mt-4 mb-3">
+      <h4 className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase mt-4 mb-3">
         Trail Stats
       </h4>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -51,17 +51,17 @@ const StravaStats = () => {
             key={label}
             className="p-4 card"
           >
-            <Icon size={16} className="text-accent-400/60 mb-2" aria-hidden="true" />
-            <div className="text-2xl font-display font-bold text-accent-400">
+            <Icon size={16} className="text-primary/60 mb-2" aria-hidden="true" />
+            <div className="text-2xl font-mono font-bold text-primary">
               {value}
             </div>
-            <div className="font-display text-[10px] tracking-widest text-slate-400 mt-1 uppercase">
+            <div className="font-mono text-[10px] tracking-widest text-muted-foreground mt-1 uppercase">
               {label}
             </div>
           </div>
         ))}
       </div>
-      <p className="mt-3 text-[10px] tracking-wider font-display text-slate-400">
+      <p className="mt-3 text-[10px] tracking-wider font-mono text-muted-foreground">
         Live from{" "}
         <span style={{ color: "#fc4c02" }}>Strava</span>
         {" · updated "}
