@@ -5,8 +5,8 @@
 
 export const CAST_STATS = {
   "version": "v9.2.0",
-  "agents": 23,
-  "tests": 2275,
+  "agents": 22,
+  "tests": 2281,
   "packages": 9,
   "commands": 21,
   "skills": 17,
