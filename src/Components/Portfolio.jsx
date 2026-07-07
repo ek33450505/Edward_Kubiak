@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Link, useLocation } from "react-router-dom";
 import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
@@ -23,6 +23,7 @@ const ORDERED = SECTIONS.flatMap(({ key }) => projects.filter((p) => p.group ===
 const plateOf = (slug) => String(ORDERED.findIndex((p) => p.slug === slug) + 1).padStart(3, "0");
 
 function ProjectCard({ project }) {
+  const reducedMotion = useReducedMotion();
   const categoryLabel = `${project.category}${
     project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""
   }`;
@@ -30,6 +31,7 @@ function ProjectCard({ project }) {
   return (
     <motion.article
       variants={staggerItem}
+      whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
       className="neatline group flex h-full flex-col bg-card p-6 transition-colors duration-300 hover:border-primary/50"
     >
       {/* Plate number + status marks + out-links */}

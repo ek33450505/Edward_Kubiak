@@ -71,18 +71,27 @@ export default function HeroSection() {
           {COORDINATE}
         </motion.p>
 
-        {/* Frontispiece headline — engraved serif */}
+        {/* Frontispiece headline — the name, engraved serif */}
         <motion.h1
           variants={fadeUp}
           initial="hidden"
           animate="show"
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display max-w-3xl text-4xl font-semibold leading-[1.06] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+          className="font-display max-w-3xl text-5xl font-semibold leading-[1.04] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
         >
-          Production software by day,
-          <br />
-          open-source AI infrastructure by night.
+          Edward Kubiak
         </motion.h1>
+
+        {/* Descriptor — quiet subhead; lets the work carry the weight */}
+        <motion.p
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-5 max-w-2xl font-display text-xl leading-snug text-muted-foreground sm:text-2xl"
+        >
+          Software engineer — developer tooling and production applications.
+        </motion.p>
 
         {/* Body intro */}
         <motion.p
@@ -92,11 +101,10 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground"
         >
-          By day, I build production education technology for Ohio school
-          districts at META Solutions. By night, I build open-source
-          infrastructure for AI-native development — including CAST, a{" "}
-          {CAST_STATS.agents}-agent framework for Claude Code distributed as{" "}
-          {CAST_ECOSYSTEM.tapsPlusUmbrella}.
+          I build production education technology for Ohio school districts at
+          META Solutions, and open-source infrastructure for AI-native
+          development — including CAST, a {CAST_STATS.agents}-agent framework
+          for Claude Code distributed as {CAST_ECOSYSTEM.tapsPlusUmbrella}.
         </motion.p>
 
         {/* CTAs — primary neatline button + underlined secondary */}
