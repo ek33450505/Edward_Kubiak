@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
 import { ExternalLink } from "lucide-react";
 import projects from "../../data/projects";
@@ -14,6 +14,7 @@ const TRIO_SLUGS = ["looptrip", "misfire", "attest"];
 const idx = (n) => String(n).padStart(3, "0");
 
 export default function FeaturedWork() {
+  const reducedMotion = useReducedMotion();
   const flagship = projects.find((p) => p.slug === "cast-claude-agent-team");
   const trio = TRIO_SLUGS.map((s) => projects.find((p) => p.slug === s)).filter(Boolean);
 
@@ -38,6 +39,7 @@ export default function FeaturedWork() {
           whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0 }}
+          whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
           className="neatline group mb-4 flex flex-col bg-card p-6 transition-colors duration-300 hover:border-primary/50 md:p-8"
         >
           <div className="flex items-baseline justify-between">
@@ -94,6 +96,7 @@ export default function FeaturedWork() {
               whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: (i + 1) * 0.1 }}
+              whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
               className="neatline group flex h-full flex-col bg-card p-6 transition-colors duration-300 hover:border-primary/50"
             >
               <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums">
