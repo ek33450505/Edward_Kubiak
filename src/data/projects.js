@@ -1,4 +1,4 @@
-import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair } from "lucide-react";
+import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair, Map } from "lucide-react";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 
 /**
@@ -46,6 +46,23 @@ const projects = [
     githubRepo: { owner: "ek33450505", repo: "claude-agent-team" },
     castEcosystem: true,
     stats: [`${CAST_STATS.agents} Agents`, `${CAST_STATS.tests} Tests`, `${CAST_STATS.commands} Commands`, `${CAST_STATS.skills} Skills`, `${CAST_STATS.packages} Taps`, CAST_STATS.version],
+  },
+
+  {
+    slug: "compute-atlas",
+    title: "Compute Atlas",
+    description:
+      "An open, mapped census of the AI datacenter buildout across North America — 232 facilities in 48 states, each scored across power draw, water use, and community impact from primary sources. Ships as an interactive MapLibre map, a sortable data table, and per-facility dossiers, with the entire dataset published as open data anyone can download and cite. Built with Next.js 16 + React 19 + TypeScript; dual-licensed MIT (code) and CC BY 4.0 (data). Live at compute-atlas.com.",
+    tech: ["Next.js 16", "React 19", "TypeScript", "MapLibre GL", "Tailwind", "Open Data"],
+    icon: Map,
+    color: "amber",
+    category: "personal",
+    group: "flagship",
+    featured: true,
+    github: "https://github.com/ek33450505/compute-atlas",
+    githubRepo: { owner: "ek33450505", repo: "compute-atlas" },
+    link: "https://www.compute-atlas.com",
+    stats: ["232 Facilities", "48 States", "120 Operators", "Open Dataset", "MIT + CC BY 4.0"],
   },
 
   // ── AI & Claude Code Tools ────────────────────────────────────────────────

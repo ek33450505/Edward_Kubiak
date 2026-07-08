@@ -20,6 +20,10 @@ export default function FeaturedWork() {
 
   const flagshipTech = flagship ? (flagship.tech || []).slice(0, 4) : [];
 
+  const atlas = projects.find((p) => p.slug === "compute-atlas");
+  const atlasStats = atlas ? (atlas.stats || []).slice(0, 3) : [];
+  const atlasTech = atlas ? (atlas.tech || []).slice(0, 2) : [];
+
   return (
     <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
     <Reveal as="section" aria-labelledby="featured-work-heading">
@@ -83,6 +87,74 @@ export default function FeaturedWork() {
         </motion.article>
       )}
 
+      {/* Compute Atlas — second full-width plate */}
+      {atlas && (
+        <motion.article
+          variants={staggerItem}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
+          className="neatline group mb-4 flex flex-col bg-card p-6 transition-colors duration-300 hover:border-primary/50 md:p-8"
+        >
+          <div className="flex items-baseline justify-between">
+            <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums">
+              {idx(2)}
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+              Live Atlas
+            </span>
+          </div>
+
+          <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
+            {atlas.title}
+          </h3>
+
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            {atlas.description}
+          </p>
+
+          <div
+            className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground"
+            aria-label="Compute Atlas stats"
+          >
+            {atlasStats.map((stat, i) => (
+              <span key={stat} className={i === 0 ? "text-primary tabular-nums" : "tabular-nums"}>
+                {stat}
+              </span>
+            ))}
+            {atlasTech.length > 0 && (
+              <span aria-hidden="true" className="text-border">·</span>
+            )}
+            {atlasTech.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
+          </div>
+
+          <div className="mt-5 flex items-center justify-between gap-3 border-t border-border pt-4">
+            <Link
+              to={`/projects/${atlas.slug}`}
+              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-primary transition-colors hover:text-foreground"
+            >
+              View plate →
+            </Link>
+            {atlas.link && (
+              <a
+                href={atlas.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Live site for ${atlas.title} (opens in new tab)`}
+                className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Live
+                <ExternalLink size={10} aria-hidden="true" />
+              </a>
+            )}
+          </div>
+        </motion.article>
+      )}
+
       {/* looptrip / misfire / attest — equal-height index cards */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {trio.map((project, i) => {
@@ -95,12 +167,12 @@ export default function FeaturedWork() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: (i + 1) * 0.1 }}
+              transition={{ duration: 0.5, delay: (i + 2) * 0.1 }}
               whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
               className="neatline group flex h-full flex-col bg-card p-6 transition-colors duration-300 hover:border-primary/50"
             >
               <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums">
-                {idx(i + 2)}
+                {idx(i + 3)}
               </span>
 
               <h3 className="font-display mt-3 text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
