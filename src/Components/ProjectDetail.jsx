@@ -108,15 +108,46 @@ function ProjectDetail() {
           </div>
         </motion.div>
 
+        {/* Highlights — hairline survey readout (showcase-only) */}
+        {project.highlights && project.highlights.length > 0 && (
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.1 }} className="mt-6 neatline bg-card p-8">
+            <Label as="h2" className="mb-4">Survey Readout</Label>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3">
+              {project.highlights.map((h, i) => (
+                <div key={h.label} className="border-t border-border pt-3">
+                  <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <span className="mr-2 text-primary">{String(i + 1).padStart(2, "0")}</span>{h.label}
+                  </dt>
+                  <dd className="font-mono text-2xl tabular-nums text-foreground">{h.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </motion.div>
+        )}
+
         {/* Description */}
         <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.1 }} className="mt-6 p-8 card">
           <Label as="h2" className="mb-4">About</Label>
           <p className="leading-relaxed text-foreground">{project.description}</p>
         </motion.div>
 
+        {/* Case study — long-form plates (showcase-only) */}
+        {project.sections && project.sections.length > 0 && (
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.2 }} className="mt-6 space-y-6">
+            {project.sections.map((s, i) => (
+              <section key={s.title} className="card p-8">
+                <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Plate {String(i + 1).padStart(2, "0")}</p>
+                <h2 className="mb-3 font-display text-2xl font-semibold tracking-tight text-foreground">{s.title}</h2>
+                <div className="mb-4 h-px w-full bg-border" />
+                <p className="leading-relaxed text-foreground">{s.body}</p>
+              </section>
+            ))}
+          </motion.div>
+        )}
+
         {/* Tech stack */}
         {project.tech && project.tech.length > 0 && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.15 }} className="mt-6 p-8 card">
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.25 }} className="mt-6 p-8 card">
             <Label as="h2" className="mb-4">Tech Stack</Label>
             <div className="flex flex-wrap gap-2">
               {project.tech.map((t) => (
@@ -133,7 +164,7 @@ function ProjectDetail() {
 
         {/* Stats */}
         {project.stats && project.stats.length > 0 && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.2 }} className="mt-6 p-8 card">
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.3 }} className="mt-6 p-8 card">
             <Label as="h2" className="mb-4">Stats</Label>
             <div className="flex flex-wrap gap-2">
               {project.stats.map((stat) => (
@@ -150,7 +181,7 @@ function ProjectDetail() {
 
         {/* Links panel */}
         {(project.github || project.link) && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.25 }} className="mt-6 p-8 card">
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.35 }} className="mt-6 p-8 card">
             <Label as="h2" className="mb-4">Links</Label>
             <div className="flex flex-wrap gap-3">
               {project.github && (
@@ -180,7 +211,7 @@ function ProjectDetail() {
         )}
 
         {/* Back link */}
-        <motion.div variants={fadeIn} initial="hidden" animate="show" transition={{ delay: 0.3 }} className="mt-10">
+        <motion.div variants={fadeIn} initial="hidden" animate="show" transition={{ delay: 0.4 }} className="mt-10">
           <Link to="/projects" className={backLinkClass}>
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Projects
