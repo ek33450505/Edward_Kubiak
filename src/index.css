@@ -2,31 +2,32 @@
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CARTOGRAPHIC SURVEY ATLAS — design foundation
-   Single light "parchment" theme. No dark mode. Character comes from
-   typography (engraved serif + survey mono) and cartographic detail
-   (graticule grid, neatline frames, hairlines), never from decoration.
+   Single dark "Night Survey" theme (nocturnal survey plate). No light mode,
+   no toggle, no prefers-color-scheme. Character comes from typography
+   (engraved serif + survey mono) and cartographic detail (graticule grid,
+   neatline frames, luminous hairlines on a warm dark field), never decoration.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
   /* ── Semantic palette (target API — new/migrated components use these) ──────
-     Contrast verified on --background #F5F1E6:
-       foreground 13:1 · muted-foreground 6.7:1 · primary 6.7:1                */
-  --color-background: #F5F1E6;        /* parchment field                       */
-  --color-foreground: #211E19;        /* engraved ink (darkened)               */
-  --color-card: #FBF8EF;              /* raised leaf (slightly warmer/lighter) */
-  --color-card-foreground: #211E19;
-  --color-muted: #E9E2CF;             /* recessed panel fill                   */
-  --color-muted-foreground: #4B4336;  /* secondary / caption ink (darkened)    */
-  --color-primary: #3A5540;           /* contour green (deepened)              */
-  --color-primary-foreground: #F5F1E6;
-  --color-border: #CDBFA0;            /* sepia hairline / graticule            */
-  --color-ring: #3A5540;
+     Contrast verified on --background #181410:
+       foreground 14.7:1 · muted-foreground 7.6:1 · primary 8.3:1              */
+  --color-background: #181410;        /* warm near-black survey field          */
+  --color-foreground: #EDE6D6;        /* parchment ink (luminous)              */
+  --color-card: #211C16;              /* raised leaf (warmer/lighter)          */
+  --color-card-foreground: #EDE6D6;
+  --color-muted: #241E17;             /* recessed panel fill                   */
+  --color-muted-foreground: #B3A68C;  /* secondary / caption ink               */
+  --color-primary: #8FB98A;           /* contour green → luminous sage         */
+  --color-primary-foreground: #181410;
+  --color-border: #4A4030;            /* brass/sepia hairline / graticule      */
+  --color-ring: #8FB98A;
 
   /* ── Cartographic accents (index marks, categories, status) ────────────────
-     Each verified ≥ 4.5:1 on #F5F1E6 — see scripts note in the PR.            */
-  --color-terra: #9C4A2F;             /* index contour / warm marker  (~7.0:1) */
-  --color-water: #35566E;             /* hydrography blue             (~6.7:1) */
-  --color-sepia: #6E5A2C;             /* secondary annotation         (~5.5:1) */
+     Each verified ≥ 4.5:1 on #181410.                                         */
+  --color-terra: #D98A6A;             /* index contour / warm marker  (~6.8:1) */
+  --color-water: #7FA9C9;             /* hydrography blue             (~7.4:1) */
+  --color-sepia: #B79A5E;             /* secondary annotation         (~6.8:1) */
 
   /* ── Type ──────────────────────────────────────────────────────────────────
      display = engraved variable serif (opsz/SOFT/WONK)

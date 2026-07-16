@@ -1,4 +1,4 @@
-import { ACCENT, SLATE_700 } from "../../lib/tokens";
+import { ACCENT, SLATE_700, MUTED_FOREGROUND } from "../../lib/tokens";
 
 // Fixed SVG coordinate space — scales to fill container via width="100%"
 const W = 360;
@@ -100,7 +100,7 @@ export default function RadarChart({ data, maxHeight = 280 }) {
             textAnchor={anchor}
             dominantBaseline="middle"
             fontSize={10}
-            fill="#4B4336"
+            fill={MUTED_FOREGROUND}
           >
             {d.name}
           </text>

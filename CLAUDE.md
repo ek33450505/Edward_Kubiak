@@ -26,13 +26,14 @@ npm test          # vitest
 ```
 
 ## Design system — Cartographic Survey Atlas
-Single light "parchment" reference-atlas theme, **no dark mode**. Character comes from
+Single dark "Night Survey" reference-atlas theme (nocturnal survey plate), **no light mode / no toggle**. Character comes from
 typography + cartographic detail, never decoration or textures. Restraint is the bar:
-hairlines over fills, mono over decoration, space over clutter.
+hairlines over fills, mono over decoration, space over clutter. Dark ≠ neon: luminous
+hairlines over glow, warm near-black over cold blue-black.
 
 - **Tokens:** semantic Tailwind v4 `@theme` vars in `src/index.css` —
   `background`/`foreground`/`card`/`muted`/`muted-foreground`/`primary` (contour green)/
-  `border` (sepia) + accents `terra`/`water`/`sepia`. Every text/bg pair ≥ 4.5:1 on `#F5F1E6`.
+  `border` (brass/sepia hairline) + accents `terra`/`water`/`sepia`. Every text/bg pair ≥ 4.5:1 on the dark field `#181410`.
   JS/SVG/WebGL consumers read the mirror `src/lib/tokens.js` — keep it in sync.
 - **Type:** `font-display` = Fraunces (variable serif — headlines/plate titles only) ·
   `font-mono` = JetBrains Mono (overlines, labels, coordinates, tabular figures) ·
