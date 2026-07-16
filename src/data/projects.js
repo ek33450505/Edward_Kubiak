@@ -25,6 +25,8 @@ import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
  * @property {string}   [github]          - URL to the GitHub repository
  * @property {GitHubRepo} [githubRepo]    - Structured owner/repo for the GitHub Stars API
  * @property {string[]} [stats]           - Short stat labels shown on the card
+ * @property {{label: string, value: string}[]} [highlights] - Hairline stat strip (mono figure + tracked label); showcase-only
+ * @property {{title: string, body: string}[]}  [sections]   - Long-form case-study plates (Fraunces title + body); showcase-only
  */
 
 /** @type {Project[]} */
@@ -52,7 +54,7 @@ const projects = [
     slug: "compute-atlas",
     title: "Compute Atlas",
     description:
-      "An open, mapped census of the AI datacenter buildout across North America — 232 facilities in 48 states, each scored across power draw, water use, and community impact from primary sources. Ships as an interactive MapLibre map, a sortable data table, and per-facility dossiers, with the entire dataset published as open data anyone can download and cite. Built with Next.js 16 + React 19 + TypeScript; dual-licensed MIT (code) and CC BY 4.0 (data). Live at compute-atlas.com.",
+      "An open, mapped census of the AI datacenter buildout across North America — 327 facilities in 48 states, each scored across power draw, water use, and community impact from primary sources. Ships as an interactive MapLibre map, a sortable data table, and per-facility dossiers, with the entire dataset published as open data anyone can download and cite. Built with Next.js 16 + React 19 + TypeScript; dual-licensed MIT (code) and CC BY 4.0 (data). Live at compute-atlas.com.",
     tech: ["Next.js 16", "React 19", "TypeScript", "MapLibre GL", "Tailwind", "Open Data"],
     icon: Map,
     color: "amber",
@@ -62,7 +64,25 @@ const projects = [
     github: "https://github.com/ek33450505/compute-atlas",
     githubRepo: { owner: "ek33450505", repo: "compute-atlas" },
     link: "https://www.compute-atlas.com",
-    stats: ["232 Facilities", "48 States", "120 Operators", "Open Dataset", "MIT + CC BY 4.0"],
+    stats: ["327 Facilities", "48 States", "8.2 GW Operational", "Open Dataset", "MIT + CC BY 4.0"],
+    highlights: [
+      { label: "Facilities mapped", value: "327" },
+      { label: "States covered", value: "48" },
+      { label: "Operational capacity", value: "8.2 GW" },
+      { label: "Planned pipeline", value: "142 GW" },
+      { label: "Confidence tiers", value: "3" },
+      { label: "Per-record sources", value: "≥1" },
+    ],
+    sections: [
+      { title: "The problem",
+        body: "The AI datacenter buildout is one of the largest infrastructure expansions in a generation, yet the data describing it is scattered across county permit filings, utility interconnection queues, water-authority applications, and tax-abatement agreements — opaque, non-standardized, and rarely connected to a map. Compute Atlas is an open, source-cited survey that pulls those primary records into one place: 327 facilities across 48 states, 8.2 GW operational today and roughly 142 GW more in the planned pipeline." },
+      { title: "Source-cited provenance",
+        body: "Every record cites at least one primary source — permit filings, interconnection-queue entries, subsidy disclosures, water applications, or reporting — and carries an explicit confidence level: Confirmed, Reported, or Rumored. An 'honest-zero' convention runs throughout: where a figure isn't known, the atlas records 'unknown' rather than guessing, so an empty field is a statement, not a gap." },
+      { title: "The interactive product",
+        body: "The survey ships three coordinated views over the same dataset: a MapLibre GL map of every sited facility, a sortable data table for scanning power draw and status across the fleet, and per-facility dossiers with capacity, energy and water profile, operator, and the full source trail behind each claim. Built on Next.js 16 + React 19 + TypeScript." },
+      { title: "Open data + dual licensing",
+        body: "The entire dataset is public and citable, served through a JSON API so anyone can build on it. Code is open-source under MIT; the compiled dataset is offered under CC BY 4.0. The goal is a reference layer for the compute buildout that others can verify, correct, and extend." },
+    ],
   },
 
   // ── AI & Claude Code Tools ────────────────────────────────────────────────
