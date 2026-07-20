@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { Mail, MapPin, Download, FileText } from "lucide-react";
 import { fadeUp } from "../utils/motion";
 import { skills, experience, education, printStyles, summary } from "../data/resume";
-import { LinkedinIcon, DevToIcon } from "./BrandIcons";
+import { LinkedinIcon } from "./BrandIcons";
 import Reveal from "./ui/Reveal";
 import PageWrapper from "./ui/PageWrapper";
 import Label from "./ui/Label";
@@ -46,16 +46,6 @@ const Resume = () => {
               >
                 <LinkedinIcon size={14} aria-hidden="true" />
                 linkedin.com/in/edward-kubiak
-              </a>
-              <a
-                href="https://dev.to/edwardkubiak"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="DEV.to profile (opens in new tab)"
-                className={contactLinkClass}
-              >
-                <DevToIcon size={14} aria-hidden="true" />
-                dev.to/edwardkubiak
               </a>
             </div>
           </div>

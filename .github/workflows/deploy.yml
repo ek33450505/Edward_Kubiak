@@ -321,46 +321,6 @@ jobs:
           })();
           EOF
 
-      - name: Fetch dev.to posts
-        env:
-          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
-        run: |
-          # Use authenticated endpoint if API key is set, otherwise use public endpoint
-          if [ -z "$DEVTO_API_KEY" ]; then
-            curl -s "https://dev.to/api/articles?username=edwardkubiak&per_page=3" \
-              -o raw_devto.json
-          else
-            curl -s "https://api.dev.to/api/articles/me?per_page=3" \
-              -H "api-key: $DEVTO_API_KEY" \
-              -o raw_devto.json
-          fi
-
-          node << 'EOF'
-          const fs = require('fs');
-          let raw;
-          try {
-            raw = JSON.parse(fs.readFileSync('raw_devto.json', 'utf8'));
-          } catch {
-            raw = [];
-          }
-          if (!Array.isArray(raw)) {
-            console.error('dev.to API did not return an array');
-            fs.writeFileSync('public/devto-feed.json', JSON.stringify([]));
-            process.exit(0);
-          }
-          const articles = raw.map(a => ({
-            title: a.title,
-            description: a.description,
-            url: a.url,
-            published_at: a.published_at,
-            tag_list: a.tag_list,
-            reactions: a.public_reactions_count ?? 0,
-            views: a.page_views_count ?? 0,
-          }));
-          fs.writeFileSync('public/devto-feed.json', JSON.stringify(articles));
-          console.log('Wrote', articles.length, 'dev.to articles');
-          EOF
-
       # Strava stats fetch — shelved; re-enable when STRAVA_* secrets are configured
       # - name: Fetch Strava stats
       #   env:

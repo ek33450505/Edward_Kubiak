@@ -3,7 +3,7 @@ import { useDocumentMeta } from "./hooks/useDocumentMeta";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
-import { GithubIcon, LinkedinIcon, DevToIcon } from "./Components/BrandIcons";
+import { GithubIcon, LinkedinIcon } from "./Components/BrandIcons";
 import IconButton from "./Components/ui/IconButton";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
 import ErrorBoundary from "./Components/ErrorBoundary";
@@ -111,15 +111,6 @@ function NavBar() {
           >
             <GithubIcon size={20} aria-hidden="true" />
           </IconButton>
-          <IconButton
-            href="https://dev.to/edwardkubiak"
-            target="_blank"
-            rel="noopener noreferrer"
-            label="DEV.to profile (opens in new tab)"
-            title="DEV.to"
-          >
-            <DevToIcon size={20} aria-hidden="true" />
-          </IconButton>
         </div>
 
         {/* Mobile toggle */}
@@ -176,16 +167,6 @@ function NavBar() {
                 className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-sm tracking-widest uppercase transition-colors"
               >
                 <GithubIcon size={18} aria-hidden="true" /> GITHUB
-              </a>
-              <a
-                href="https://dev.to/edwardkubiak"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="DEV.to profile (opens in new tab)"
-                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-sm tracking-widest uppercase transition-colors"
-              >
-                <DevToIcon size={18} aria-hidden="true" />
-                DEV.TO
               </a>
             </div>
           </motion.div>
@@ -293,15 +274,6 @@ function App() {
                   title="LinkedIn"
                 >
                   <LinkedinIcon size={16} aria-hidden="true" />
-                </IconButton>
-                <IconButton
-                  href="https://dev.to/edwardkubiak"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  label="DEV.to profile (opens in new tab)"
-                  title="DEV.to"
-                >
-                  <DevToIcon size={16} aria-hidden="true" />
                 </IconButton>
                 <IconButton
                   href="/rss.xml"

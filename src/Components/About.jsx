@@ -180,17 +180,7 @@ const About = () => {
                   Every component works standalone. Zero cloud, zero lock-in.
                 </p>
                 <p className="mt-4 text-muted-foreground leading-relaxed">
-                  I write about these patterns at{" "}
-                  <a
-                    href="https://dev.to/edwardkubiak"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:text-foreground underline underline-offset-4 decoration-border hover:decoration-primary transition-colors"
-                    aria-label="DEV.to profile (opens in new tab)"
-                  >
-                    dev.to/edwardkubiak
-                  </a>
-                  , and keep a running log of what I&apos;m building on the{" "}
+                  I keep a running log of what I&apos;m building on the{" "}
                   <Link
                     to="/now"
                     className="text-primary hover:text-foreground underline underline-offset-4 decoration-border hover:decoration-primary transition-colors"

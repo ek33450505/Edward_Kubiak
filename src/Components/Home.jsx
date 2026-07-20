@@ -2,7 +2,6 @@ import HeroSection from "./Home/HeroSection";
 import Competencies from "./Home/Competencies";
 import FeaturedWork from "./Home/FeaturedWork";
 import CurrentlyBuilding from "./Home/CurrentlyBuilding";
-import RecentWriting from "./Home/RecentWriting";
 import CastStats from "./CastStats";
 import GetInTouch from "./ui/GetInTouch";
 import PageWrapper from "./ui/PageWrapper";
@@ -14,7 +13,6 @@ const Home = () => {
       <Competencies />
       <FeaturedWork />
       <CurrentlyBuilding />
-      <RecentWriting />
       <CastStats />
       <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
         <GetInTouch />
