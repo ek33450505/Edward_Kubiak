@@ -157,7 +157,7 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
 <body>
 
   <div class="resume-name">EDWARD KUBIAK</div>
-  <div class="resume-contact">edward.kubiak.dev@gmail.com &nbsp;&bull;&nbsp; Columbus, Ohio &nbsp;&bull;&nbsp; dev.to/edwardkubiak &nbsp;&bull;&nbsp; github.com/ek33450505 &nbsp;&bull;&nbsp; edwardkubiak.com &nbsp;&bull;&nbsp; linkedin.com/in/edward-kubiak</div>
+  <div class="resume-contact">edward.kubiak.dev@gmail.com &nbsp;&bull;&nbsp; Columbus, Ohio &nbsp;&bull;&nbsp; github.com/ek33450505 &nbsp;&bull;&nbsp; edwardkubiak.com &nbsp;&bull;&nbsp; linkedin.com/in/edward-kubiak</div>
 
   <div class="section-head">Summary</div>
   <p>${esc(summaryText)}</p>
@@ -337,7 +337,7 @@ function renderOnePagerHtml(stats, desktopStats) {
   <div class="header">
     <h1>EDWARD KUBIAK</h1>
     <div class="subtitle">Full Stack Developer &amp; AI Systems Engineer &middot; Creator of CAST</div>
-    <div class="contact">edward.kubiak.dev@gmail.com &middot; Columbus, Ohio &middot; github.com/ek33450505 &middot; dev.to/edwardkubiak &middot; edwardkubiak.com</div>
+    <div class="contact">edward.kubiak.dev@gmail.com &middot; Columbus, Ohio &middot; github.com/ek33450505 &middot; edwardkubiak.com</div>
   </div>
 
   <hr class="divider" />
@@ -370,7 +370,7 @@ function renderOnePagerHtml(stats, desktopStats) {
   <div class="two-col">
     <div class="col-section">
       <div class="section-title">Writing &amp; Building in Public</div>
-      <p>dev.to/edwardkubiak &mdash; agent-infrastructure patterns from real systems.</p>
+      <p>github.com/ek33450505 &mdash; open-source agent infrastructure, shipped in public.</p>
     </div>
     <div class="col-section">
       <div class="section-title">Day Job &mdash; Production Track Record</div>
@@ -378,7 +378,7 @@ function renderOnePagerHtml(stats, desktopStats) {
     </div>
   </div>
 
-  <div class="footer">github.com/ek33450505 &middot; dev.to/edwardkubiak &middot; edward.kubiak.dev@gmail.com</div>
+  <div class="footer">github.com/ek33450505 &middot; edward.kubiak.dev@gmail.com</div>
 
 </body>
 </html>`;

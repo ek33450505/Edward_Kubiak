@@ -4,7 +4,6 @@ import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectsPath = join(__dirname, '../src/data/projects.js');
-const devtoPath = join(__dirname, '../public/devto-feed.json');
 const outPath = join(__dirname, '../public/rss.xml');
 
 // Read and parse projects
@@ -16,15 +15,6 @@ try {
   projects = projects.filter(p => p.featured);
 } catch (e) {
   console.error('Failed to load projects:', e.message);
-}
-
-// Read dev.to articles
-let articles = [];
-try {
-  const content = fs.readFileSync(devtoPath, 'utf8');
-  articles = JSON.parse(content) || [];
-} catch (e) {
-  console.warn('Failed to load dev.to feed:', e.message);
 }
 
 // Escape XML entities
@@ -43,19 +33,8 @@ function formatRssDate(dateString) {
   return date.toUTCString();
 }
 
-// Generate items: dev.to articles + featured projects
+// Generate items: featured projects
 const items = [];
-
-// Add dev.to articles
-for (const article of articles) {
-  items.push({
-    title: article.title,
-    description: article.description || '',
-    link: article.url,
-    pubDate: article.published_at,
-    category: 'Writing',
-  });
-}
 
 // Add featured projects
 for (const project of projects) {

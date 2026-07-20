@@ -54,7 +54,6 @@ const jumpCommands = [
 
 const externalCommands = [
   { id: "github", label: "GitHub", href: "https://github.com/ek33450505", icon: GithubIcon },
-  { id: "devto", label: "DEV.to", href: "https://dev.to/edwardkubiak", icon: ExternalLink },
   { id: "email", label: "Email", href: "mailto:edward.kubiak.dev@gmail.com", icon: Mail },
 ];
 
