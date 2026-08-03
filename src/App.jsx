@@ -11,15 +11,16 @@ import RouteLoader from "./Components/ui/RouteLoader";
 import NotFound from "./Components/ui/NotFound";
 import ScrollToTop from "./Components/ScrollToTop";
 import { ROUTE_META } from "./data/routeMeta.js";
+import Home from "./Components/Home";
+import { CommandPaletteProvider, useCommandPalette } from "./Components/CommandPaletteContext";
 import "./App.css";
 
-const Home = lazy(() => import("./Components/Home"));
 const About = lazy(() => import("./Components/About"));
 const Portfolio = lazy(() => import("./Components/Portfolio"));
 const ProjectDetail = lazy(() => import("./Components/ProjectDetail"));
 const Resume = lazy(() => import("./Components/Resume"));
 const Now = lazy(() => import("./Components/Now"));
-import CommandPalette, { CommandPaletteProvider, useCommandPalette } from "./Components/CommandPalette";
+const CommandPalette = lazy(() => import("./Components/CommandPalette"));
 const navLinks = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
@@ -227,7 +228,9 @@ function App() {
           <ScrollToTop />
           <ScrollProgress />
           <NavBar />
-          <CommandPalette />
+          <Suspense fallback={null}>
+            <CommandPalette />
+          </Suspense>
           <main id="main-content" className="pt-20">
             <ErrorBoundary>
               <AnimatedRoutes />
