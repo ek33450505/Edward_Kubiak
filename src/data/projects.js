@@ -1,6 +1,7 @@
 import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair, Map, Globe } from "lucide-react";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 import { ATLAS_STATS } from "./atlasStats.js";
+import { TOOL_VERSIONS } from "./toolStats.js";
 
 /**
  * @typedef {Object} GitHubRepo
@@ -101,7 +102,7 @@ const projects = [
     slug: "looptrip",
     title: "looptrip",
     description:
-      'A deterministic, framework-agnostic, zero-LLM detector of multi-agent coordination pathologies — duplicate-work loops, ping-pong / livelock, deadlock, and non-termination — that trips at iteration 2, not on the invoice. An observer, never a gate: it reads data you already have (OpenTelemetry GenAI handoff spans or a CAST cast.db), and the same event stream always yields the same verdict. On two real recorded runaway sessions it reproduces $792.96 of prevented duplicate-work spend in one command. Live on PyPI. pip install looptrip · brew tap ek33450505/looptrip && brew install looptrip',
+      'A deterministic, framework-agnostic, zero-LLM detector of multi-agent coordination pathologies — duplicate-work loops, ping-pong / livelock, deadlock, and non-termination — that trips at iteration 2, not on the invoice. An observer, never a gate: it reads data you already have (OpenTelemetry GenAI handoff spans or a CAST cast.db), and the same event stream always yields the same verdict. On two real recorded runaway sessions it reproduces prevented duplicate-work spend from a committed fixture in one command. Live on PyPI. pip install looptrip · brew tap ek33450505/looptrip && brew install looptrip',
     tech: ["Python", "OpenTelemetry", "Claude Code", "SQLite", "Detection"],
     icon: Repeat,
     color: "rose",
@@ -111,7 +112,7 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/looptrip",
     githubRepo: { owner: "ek33450505", repo: "looptrip" },
-    stats: ["Zero-LLM", "OTel SpanProcessor", "$792.96 Proof", "Plugin + Homebrew", "v0.1.2"],
+    stats: ["Zero-LLM", "OTel SpanProcessor", "Plugin + Homebrew", TOOL_VERSIONS.looptrip],
   },
   {
     slug: "misfire",
@@ -127,13 +128,13 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/misfire",
     githubRepo: { owner: "ek33450505", repo: "misfire" },
-    stats: ["Zero-LLM", "430+ Tests", "Evidence-Ranked", "Plugin + Homebrew", "v0.2.0"],
+    stats: ["Zero-LLM", "Evidence-Ranked", "Plugin + Homebrew", TOOL_VERSIONS.misfire],
   },
   {
     slug: "attest",
     title: "Attest",
     description:
-      'A local, deterministic, zero-LLM Claude Code hook that verifies a subagent\'s "Status: DONE" / "## Handoff" claim against the real git working-tree delta — and, opt-in, blocks a DONE whose claimed files never actually landed on disk. It adds no tokens, cannot hallucinate its own verdict, and fails open on every doubt. Validated end-to-end against real Claude Code v2.1.170 with committed payload fixtures; 325 tests, CI green. brew tap ek33450505/attest && brew install attest',
+      'A local, deterministic, zero-LLM Claude Code hook that verifies a subagent\'s "Status: DONE" / "## Handoff" claim against the real git working-tree delta — and, opt-in, blocks a DONE whose claimed files never actually landed on disk. It adds no tokens, cannot hallucinate its own verdict, and fails open on every doubt. Validated end-to-end against real Claude Code with committed payload fixtures; CI green. brew tap ek33450505/attest && brew install attest',
     tech: ["Python", "Claude Code", "Hook Architecture", "Git", "BATS", "GitHub Actions"],
     icon: ShieldCheck,
     color: "emerald",
@@ -143,13 +144,13 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/attest",
     githubRepo: { owner: "ek33450505", repo: "attest" },
-    stats: ["Zero-LLM", "325 Tests", "Plugin + Homebrew", "v0.3.0"],
+    stats: ["Zero-LLM", "Plugin + Homebrew", TOOL_VERSIONS.attest],
   },
   {
     slug: "claude-code-dashboard",
     title: "Claude Code Dashboard",
     description:
-      "Observability layer for CAST — a React 19 + TypeScript UI with a real-time SSE activity feed, session cost tracking, per-agent scorecards, evals and agent-reliability views, Cmd+K global search, and a privacy audit showing your cloud vs. local API ratio. Reads ~/.claude directly — no accounts, no telemetry. Gracefully degrades when CAST is not installed. v2.5.0",
+      "Observability layer for CAST — a React 19 + TypeScript UI with a real-time SSE activity feed, session cost tracking, per-agent scorecards, evals and agent-reliability views, Cmd+K global search, and a privacy audit showing your cloud vs. local API ratio. Reads ~/.claude directly — no accounts, no telemetry. Gracefully degrades when CAST is not installed.",
     tech: ["React 19", "TypeScript", "Vite", "Express", "SSE", "Recharts", "better-sqlite3"],
     icon: LayoutDashboard,
     color: "teal",
@@ -159,13 +160,13 @@ const projects = [
     castEcosystem: true,
     github: "https://github.com/ek33450505/claude-code-dashboard",
     githubRepo: { owner: "ek33450505", repo: "claude-code-dashboard" },
-    stats: ["8 Pages", "SSE Live Feed", "No Telemetry", "v2.5.0"],
+    stats: ["SSE Live Feed", "No Telemetry", TOOL_VERSIONS["claude-code-dashboard"]],
   },
   {
     slug: "cast-desktop",
     title: "Cast Desktop",
     description:
-      `The desktop app for CAST — every signal your agents emit, all in one place. A Tauri 2 + React 19 native app with embedded Express 5 + SQLite backend. Real PTY-backed terminal (xterm.js + Rust Forge), ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, Cmd+K command palette, search-in-terminal, font-size hotkeys, multi-tab terminal with folder-picker cwd, and 6 themes. Local-first — reads directly from ~/.claude/cast.db.`,
+      `The desktop app for CAST — every signal your agents emit, all in one place. A Tauri 2 + React 19 native app with embedded Express 5 + SQLite backend. Real PTY-backed terminal (xterm.js + Rust Forge), ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, Cmd+K command palette, search-in-terminal, font-size hotkeys, multi-tab terminal with folder-picker cwd, and multiple themes. Local-first — reads directly from ~/.claude/cast.db.`,
     tech: ["Tauri 2", "React 19", "TypeScript", "Rust", "Express 5", "SQLite", "xterm.js"],
     icon: Terminal,
     color: "accent",
@@ -183,7 +184,7 @@ const projects = [
     slug: "cast-mcp",
     title: "cast-mcp",
     description:
-      "Read-only MCP server over the Claude Code execution record (cast.db) — dispatch decisions, incidents, cost, sessions, and full-text search exposed as 5 MCP tools and 5 resources. stdlib-only, strictly read-only, no arbitrary SQL. Works with or without the full CAST framework. brew tap ek33450505/cast-mcp && brew install cast-mcp",
+      "Read-only MCP server over the Claude Code execution record (cast.db) — dispatch decisions, incidents, cost, sessions, and full-text search exposed through MCP tools and resources. stdlib-only, strictly read-only, no arbitrary SQL. Works with or without the full CAST framework. brew tap ek33450505/cast-mcp && brew install cast-mcp",
     tech: ["Python", "MCP", "SQLite", "Claude Code"],
     icon: Database,
     color: "sky",
@@ -193,7 +194,7 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-mcp",
     githubRepo: { owner: "ek33450505", repo: "cast-mcp" },
-    stats: ["Open Source", "5 MCP Tools", "Read-Only", "Homebrew Install"],
+    stats: ["Open Source", "Read-Only", "Homebrew Install"],
   },
   {
     slug: "cast-ledger",
@@ -247,7 +248,7 @@ const projects = [
     slug: "cast-doctor",
     title: "cast-doctor",
     description:
-      "A standalone, read-only health check for any Claude Code install — validates hook wiring, MCP config, agent frontmatter, cast.db core schema, and stale memories without modifying anything. 11 checks; works with or without the full CAST framework. brew tap ek33450505/cast-doctor && brew install cast-doctor",
+      "A standalone, read-only health check for any Claude Code install — validates hook wiring, MCP config, agent frontmatter, cast.db core schema, and stale memories without modifying anything. A suite of read-only checks; works with or without the full CAST framework. brew tap ek33450505/cast-doctor && brew install cast-doctor",
     tech: ["Bash", "Shell", "SQLite", "Claude Code"],
     icon: BarChart3,
     color: "teal",
@@ -257,7 +258,7 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-doctor",
     githubRepo: { owner: "ek33450505", repo: "cast-doctor" },
-    stats: ["Open Source", "Read-Only", "11 Checks", "Homebrew Install"],
+    stats: ["Open Source", "Read-Only", "Homebrew Install"],
   },
   {
     slug: "cast-memory",
@@ -279,7 +280,7 @@ const projects = [
     slug: "claudes-journal",
     title: "Claude's Journal",
     description:
-      "Three-hook journaling for Claude Code (Stop / SessionStart / UserPromptSubmit) — maintains Claude's perspective and working memory across sessions as Obsidian-compatible markdown in ~/Documents/Claude/. brew tap ek33450505/claudes-journal && brew install claudes-journal",
+      "Hook-based journaling for Claude Code (Stop / SessionStart / UserPromptSubmit) — maintains Claude's perspective and working memory across sessions as Obsidian-compatible markdown in ~/Documents/Claude/. brew tap ek33450505/claudes-journal && brew install claudes-journal",
     tech: ["Bash", "Shell", "Markdown"],
     icon: Terminal,
     color: "violet",
@@ -289,7 +290,7 @@ const projects = [
     aiEngineering: true,
     github: "https://github.com/ek33450505/cast-claudes_journal",
     githubRepo: { owner: "ek33450505", repo: "cast-claudes_journal" },
-    stats: ["Open Source", "3 Hooks", "Obsidian-Compatible", "Homebrew Install"],
+    stats: ["Open Source", "Obsidian-Compatible", "Homebrew Install"],
   },
   {
     slug: "cast-website",
@@ -311,13 +312,12 @@ const projects = [
     slug: "crosscheck",
     title: "CrossCheck",
     description:
-      "Mission-critical EMIS data validation platform serving 4,200+ users across 900+ Ohio school districts. Spearheaded the complete migration from AngularJS to React, modernizing the entire frontend architecture.",
+      "Mission-critical EMIS data validation platform serving Ohio school districts. Spearheaded the complete migration from AngularJS to React, modernizing the entire frontend architecture.",
     tech: ["React", "Node.js", "Python API"],
     icon: BarChart3,
     color: "emerald",
     category: "professional",
     group: "professional",
-    stats: ["4,200+ Users", "900+ Districts"],
   },
   {
     slug: "ses-wiki",
