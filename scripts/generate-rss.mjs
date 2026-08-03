@@ -33,6 +33,9 @@ function formatRssDate(dateString) {
   return date.toUTCString();
 }
 
+// Fallback date used only if a project somehow lacks dateAdded
+const FALLBACK_DATE = '2026-04-17';
+
 // Generate items: featured projects
 const items = [];
 
@@ -43,7 +46,7 @@ for (const project of projects) {
     title: project.title,
     description: project.description,
     link: projectLink,
-    pubDate: new Date(0).toISOString(), // Placeholder
+    pubDate: new Date(project.dateAdded || FALLBACK_DATE).toISOString(),
     category: 'Project',
   });
 }

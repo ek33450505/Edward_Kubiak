@@ -24,7 +24,7 @@
     "sync-stats": "node scripts/sync-cast-stats.mjs",
     "sync-atlas": "node scripts/sync-atlas-stats.mjs",
     "sync-versions": "node scripts/sync-tool-versions.mjs",
-    "prebuild": "node scripts/sync-cast-stats.mjs && node scripts/sync-atlas-stats.mjs && node scripts/sync-tool-versions.mjs && node scripts/generate-sitemap.mjs",
+    "prebuild": "node scripts/sync-cast-stats.mjs && node scripts/sync-atlas-stats.mjs && node scripts/sync-tool-versions.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-rss.mjs",
     "build": "vite build",
     "postbuild": "node scripts/prerender-routes.mjs",
     "prerender": "node scripts/prerender-routes.mjs",

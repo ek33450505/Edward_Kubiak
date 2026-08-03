@@ -31,10 +31,10 @@ try {
 }
 
 // Build <url> entries
-function urlEntry({ loc, priority, changefreq }) {
+function urlEntry({ loc, lastmod, priority, changefreq }) {
   return `  <url>
     <loc>${loc}</loc>
-    <lastmod>${TODAY}</lastmod>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`;
@@ -42,20 +42,22 @@ function urlEntry({ loc, priority, changefreq }) {
 
 const entries = [];
 
-// Static routes
+// Static routes — lastmod tracks deploy date since these change with every deploy
 for (const route of STATIC_ROUTES) {
   entries.push(urlEntry({
     loc: `${BASE_URL}${route.path}`,
+    lastmod: TODAY,
     priority: route.priority,
     changefreq: route.changefreq,
   }));
 }
 
-// Dynamic project routes
+// Dynamic project routes — lastmod is the project's real dateAdded
 for (const project of projects) {
   const priority = project.featured ? '0.7' : '0.6';
   entries.push(urlEntry({
     loc: `${BASE_URL}/projects/${project.slug}`,
+    lastmod: project.dateAdded || TODAY,
     priority,
     changefreq: 'monthly',
   }));
