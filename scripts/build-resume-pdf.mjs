@@ -57,8 +57,8 @@ function shortPeriod(period) {
 // No boxes, no fills, no color blocks beyond black-on-white + hairline rules.
 // ---------------------------------------------------------------------------
 function renderResumeHtml(summaryText, skillsMap, experienceList, educationList) {
-  const os = experienceList[0];
-  const meta = experienceList[1];
+  const ossRoles = experienceList.filter((e) => e.company.startsWith("Open Source"));
+  const proRoles = experienceList.filter((e) => !e.company.startsWith("Open Source"));
 
   // Skills: bullet list, one line per group
   const skillsItems = Object.entries(skillsMap)
@@ -68,15 +68,36 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
     )
     .join("\n      ");
 
-  // Open Source bullets
-  const osBullets = os.highlights
-    .map((h) => `<li>${esc(h)}</li>`)
-    .join("\n      ");
+  // Open Source role-line + bullets (role + period only, no company/location)
+  function renderOssRole(entry) {
+    const bullets = entry.highlights
+      .map((h) => `<li>${esc(h)}</li>`)
+      .join("\n      ");
+    return `<div class="role-line">
+    <span class="role-left">${esc(entry.role)}</span>
+    <span class="role-date">${esc(entry.period)}</span>
+  </div>
+  <ul>
+      ${bullets}
+  </ul>`;
+  }
 
-  // Professional Experience bullets
-  const metaBullets = meta.highlights
-    .map((h) => `<li>${esc(h)}</li>`)
-    .join("\n      ");
+  // Professional role-line + bullets (role, company, location + period)
+  function renderProRole(entry) {
+    const bullets = entry.highlights
+      .map((h) => `<li>${esc(h)}</li>`)
+      .join("\n      ");
+    return `<div class="role-line">
+    <span class="role-left">${esc(entry.role)} &nbsp;&middot;&nbsp; ${esc(entry.company)} &mdash; ${esc(entry.location)}</span>
+    <span class="role-date">${esc(entry.period)}</span>
+  </div>
+  <ul>
+      ${bullets}
+  </ul>`;
+  }
+
+  const ossHtml = ossRoles.map(renderOssRole).join("\n\n  ");
+  const proHtml = proRoles.map(renderProRole).join("\n\n  ");
 
   // Education: "• degree — institution · short year"
   const eduItems = educationList
@@ -168,22 +189,10 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
   </ul>
 
   <div class="section-head">Open Source &mdash; AI Developer Tooling</div>
-  <div class="role-line">
-    <span class="role-left">${esc(os.role)}</span>
-    <span class="role-date">${esc(os.period)}</span>
-  </div>
-  <ul>
-      ${osBullets}
-  </ul>
+  ${ossHtml}
 
   <div class="section-head">Professional Experience</div>
-  <div class="role-line">
-    <span class="role-left">${esc(meta.role)} &nbsp;&middot;&nbsp; ${esc(meta.company)} &mdash; ${esc(meta.location)}</span>
-    <span class="role-date">${esc(meta.period)}</span>
-  </div>
-  <ul>
-      ${metaBullets}
-  </ul>
+  ${proHtml}
 
   <div class="section-head">Education</div>
   <ul>
@@ -355,7 +364,7 @@ function renderOnePagerHtml(stats, desktopStats) {
       <span class="project-name">CAST (Claude Agent Specialist Team)</span><span class="project-desc"> &mdash; ${stats.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and per-agent persistent memory. v9 &ldquo;The Record That Acts&rdquo;: the ${stats.tables}-table SQLite execution record is searchable (cast ask), signed (cast ledger --verify), and predictive (cast predict). Zero cloud dependencies.</span>
     </div>
     <div class="project">
-      <span class="project-name">Cast Desktop</span><span class="project-desc"> &mdash; native Tauri 2 + React 19 + Rust app; embedded Express 5 + SQLite backend, ${desktopStats.dashboardViews} dashboard views, real PTY terminal. 1,222 tests. Shipped ${desktopStats.version}.</span>
+      <span class="project-name">Cast Desktop</span><span class="project-desc"> &mdash; native Tauri 2 + React 19 + Rust app; embedded Express 5 + SQLite backend, ${desktopStats.dashboardViews} dashboard views, real PTY terminal. Shipped ${desktopStats.version}.</span>
     </div>
     <div class="project">
       <span class="project-name">Claude Code Dashboard v2.5.0</span><span class="project-desc"> &mdash; React 19 + TypeScript + Express 5 + SSE observability UI; 8 pages, reads ~/.claude directly, no telemetry.</span>

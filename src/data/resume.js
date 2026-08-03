@@ -2,6 +2,7 @@
 // Import into Resume.jsx; do not reference from other components.
 
 import { CAST_STATS, CAST_DESKTOP_STATS } from "./castStats.js";
+import { ATLAS_STATS } from "./atlasStats.js";
 
 export const skills = {
   "AI & Agent Systems": [
@@ -23,6 +24,7 @@ export const skills = {
     "Rust",
     "Bash",
     "React 18/19",
+    "Next.js 16",
     "Express 4/5",
     "Vite",
     "Tauri 2",
@@ -59,7 +61,7 @@ export const skills = {
   ],
 };
 
-export const summary = `Full stack developer and AI systems engineer. Creator of CAST ${CAST_STATS.version} — a local-first, open-source multi-agent control plane for Claude Code whose ${CAST_STATS.tables}-table execution record is searchable, signed, and predictive — shipped as a ${CAST_STATS.packages}-package Homebrew ecosystem backed by ${CAST_STATS.tests.toLocaleString("en-US")} tests. Builds deterministic, zero-LLM agent-reliability tools (misfire, attest, looptrip) shipped on PyPI and Homebrew. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts. Open to full-stack and AI-infrastructure roles.`;
+export const summary = `Full stack developer and AI systems engineer. Creator of CAST ${CAST_STATS.version} — a local-first, open-source multi-agent control plane for Claude Code whose ${CAST_STATS.tables}-table execution record is searchable, signed, and predictive — shipped as a ${CAST_STATS.packages}-package Homebrew ecosystem backed by ${CAST_STATS.tests.toLocaleString("en-US")} tests. Creator of Compute Atlas (compute-atlas.com) — an open, source-cited map of the U.S. data-center buildout spanning ${ATLAS_STATS.facilities} facilities across ${ATLAS_STATS.states} states, published as open data with a public API. Builds deterministic, zero-LLM agent-reliability tools (misfire, attest, looptrip) shipped on PyPI and Homebrew. Ships and maintains five production web applications at META Solutions serving 4,200+ users across 900+ Ohio school districts. Open to full-stack and AI-infrastructure roles.`;
 
 export const experience = [
   {
@@ -69,9 +71,19 @@ export const experience = [
     period: "2024 — Present",
     highlights: [
       `Creator of CAST ${CAST_STATS.version} "The Record That Acts" — a local-first, open-source multi-agent control plane for Claude Code: ${CAST_STATS.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and a ${CAST_STATS.tables}-table SQLite execution record. v9 makes the record act: full-text search over every session (cast ask), signed SHA-256 audit receipts (cast ledger --verify), and telemetry-driven cost prediction (cast predict). ${CAST_STATS.tests.toLocaleString("en-US")} tests, zero cloud dependencies.`,
-      `Shipped the CAST ecosystem as ${CAST_STATS.packages} Homebrew packages plus the umbrella cast formula — the flagship framework, cast-desktop (native Tauri 2 + React 19 + Rust app with an embedded Express 5 + SQLite backend, ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, and a real PTY-backed terminal; 1,222 tests), the Claude Code Dashboard v2.5.0 (React 19 + TypeScript + Express 5 + SSE observability UI), and standalone packages for agent memory, health checks, journaling, MCP access, signed receipts, and dispatch prediction.`,
+      `Shipped the CAST ecosystem as ${CAST_STATS.packages} Homebrew packages plus the umbrella cast formula — the flagship framework, cast-desktop (native Tauri 2 + React 19 + Rust app with an embedded Express 5 + SQLite backend, ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, and a real PTY-backed terminal), the Claude Code Dashboard v2.5.0 (React 19 + TypeScript + Express 5 + SSE observability UI), and standalone packages for agent memory, health checks, journaling, MCP access, signed receipts, and dispatch prediction.`,
       "Built a family of deterministic, zero-LLM agent-reliability tools, each shipped to PyPI and Homebrew with CI: misfire v0.2.0, a trace-grounded CLAUDE.md adherence auditor that finds which rules agents actually ignore; attest v0.3.0, a hook that verifies a subagent's DONE claim against the real git delta (325 tests); and looptrip v0.1.2, a coordination-pathology detector that trips duplicate-work loops at iteration 2 and reproduces $792.96 of prevented spend from a committed fixture.",
-      "Distribute across 12 public Homebrew taps with versioned releases.",
+    ],
+  },
+  {
+    role: "Creator — Compute Atlas",
+    company: "Open Source · compute-atlas.com",
+    location: "github.com/ek33450505/compute-atlas",
+    period: "2026 — Present",
+    highlights: [
+      `Built and operate Compute Atlas (${ATLAS_STATS.version}) — an open, source-cited census of the U.S. data-center buildout: ${ATLAS_STATS.facilities} facilities across ${ATLAS_STATS.states} states, ${ATLAS_STATS.operationalGw} GW operational and ~${ATLAS_STATS.plannedGw} GW in the planned pipeline, every record carrying at least one public source and an explicit confidence level (confirmed / reported / rumored). Built solo on ${ATLAS_STATS.stack}.`,
+      `Shipped the full product: an interactive MapLibre GL map, sortable data tables, per-facility dossiers, and SEO/reference hubs (rankings, power & water, operators, metros, AI-vs-crypto), plus a public CORS-open JSON API — with the entire dataset released as open data (code MIT, data CC BY 4.0).`,
+      "Engineered an autonomous daily discovery pipeline — a single bounded `claude -p` run that discovers, enriches, and stages candidate facilities behind a fail-closed kill switch, a heartbeat, and a self-reverting cap, with human approval required before any record goes live.",
     ],
   },
   {
