@@ -79,6 +79,7 @@ export default function FeaturedWork() {
           <div className="mt-5 border-t border-border pt-4">
             <Link
               to={`/projects/${flagship.slug}`}
+              aria-label={`View the ${flagship.title} project plate`}
               className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-primary transition-colors hover:text-foreground"
             >
               View plate →
@@ -135,6 +136,7 @@ export default function FeaturedWork() {
           <div className="mt-5 flex items-center justify-between gap-3 border-t border-border pt-4">
             <Link
               to={`/projects/${atlas.slug}`}
+              aria-label={`View the ${atlas.title} project plate`}
               className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-primary transition-colors hover:text-foreground"
             >
               View plate →
@@ -190,6 +192,7 @@ export default function FeaturedWork() {
               <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
                 <Link
                   to={`/projects/${project.slug}`}
+                  aria-label={`View the ${project.title} project plate`}
                   className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-primary transition-colors hover:text-foreground"
                 >
                   View plate →

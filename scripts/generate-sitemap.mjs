@@ -42,10 +42,13 @@ function urlEntry({ loc, lastmod, priority, changefreq }) {
 
 const entries = [];
 
-// Static routes — lastmod tracks deploy date since these change with every deploy
+// Static routes — lastmod tracks deploy date since these change with every deploy.
+// Root stays `/`; every sub-route gets a trailing slash to match the 200 that
+// GitHub Pages actually serves (directory-index 301s from the no-slash form).
 for (const route of STATIC_ROUTES) {
+  const loc = route.path === '/' ? `${BASE_URL}/` : `${BASE_URL}${route.path}/`;
   entries.push(urlEntry({
-    loc: `${BASE_URL}${route.path}`,
+    loc,
     lastmod: TODAY,
     priority: route.priority,
     changefreq: route.changefreq,
@@ -56,7 +59,7 @@ for (const route of STATIC_ROUTES) {
 for (const project of projects) {
   const priority = project.featured ? '0.7' : '0.6';
   entries.push(urlEntry({
-    loc: `${BASE_URL}/projects/${project.slug}`,
+    loc: `${BASE_URL}/projects/${project.slug}/`,
     lastmod: project.dateAdded || TODAY,
     priority,
     changefreq: 'monthly',

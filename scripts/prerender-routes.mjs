@@ -104,8 +104,8 @@ function breadcrumbJsonLd(project) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: 'Projects', item: `${BASE_URL}/projects` },
-      { '@type': 'ListItem', position: 3, name: project.title, item: `${BASE_URL}/projects/${project.slug}` },
+      { '@type': 'ListItem', position: 2, name: 'Projects', item: `${BASE_URL}/projects/` },
+      { '@type': 'ListItem', position: 3, name: project.title, item: `${BASE_URL}/projects/${project.slug}/` },
     ],
   };
 }
@@ -150,7 +150,7 @@ const PROJECT_ROUTES = projects.map((p) => ({
   path: `/projects/${p.slug}`,
   title: `${p.title} — Edward Kubiak`,
   description: p.summary ?? p.description,
-  canonical: `/projects/${p.slug}`,
+  canonical: `/projects/${p.slug}/`,
   project: p,
 }));
 
