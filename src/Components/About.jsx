@@ -113,10 +113,10 @@ const About = () => {
                   >
                     META Solutions
                   </a>
-                  , I architect and maintain five production applications serving
-                  4,200+ users across 900+ Ohio school districts — from the
-                  CrossCheck data validation platform to E-Rate dashboards, EMIS
-                  scenario tools, and PowerSchool customizations.
+                  , I architect and maintain production applications serving Ohio
+                  school districts — from the CrossCheck data validation platform
+                  to E-Rate dashboards, EMIS scenario tools, and PowerSchool
+                  customizations.
                 </p>
               </div>
             </div>
