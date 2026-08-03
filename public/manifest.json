@@ -1,6 +1,8 @@
 {
   "name": "Edward Kubiak — Full Stack Developer",
   "short_name": "Edward Kubiak",
+  "description": "Portfolio of Edward Kubiak — Full Stack Developer & AI Systems Engineer in Columbus, OH. Builder of CAST and Compute Atlas.",
+  "id": "/",
   "icons": [
     {
       "src": "/favicon.svg",
@@ -26,7 +28,7 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#181410",
   "background_color": "#181410"
