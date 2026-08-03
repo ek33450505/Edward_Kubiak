@@ -23,7 +23,10 @@ function ProjectDetail() {
       : "Project Not Found — Edward Kubiak",
     description: project?.description,
     canonical: project ? `/projects/${slug}` : undefined,
-    ogImage: project ? `/og/${slug}.png` : undefined,
+    // Per-slug OG images (/og/<slug>.png) aren't generated yet — generate-og-image.mjs
+    // is not wired into prebuild. Use the site OG image so cards never 404. Restore
+    // `/og/${slug}.png` once per-slug OG generation is wired in.
+    ogImage: project ? "/og-image.png" : undefined,
   });
 
   if (!project) {

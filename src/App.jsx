@@ -29,11 +29,36 @@ const navLinks = [
 // Static per-route meta. Project detail routes are excluded — ProjectDetail
 // manages its own meta via useDocumentMeta.
 const ROUTE_META = {
-  "/":         { title: "Edward Kubiak — Full Stack Developer & AI Engineer", canonical: "/" },
-  "/about":    { title: "About — Edward Kubiak",    canonical: "/about" },
-  "/projects": { title: "Projects — Edward Kubiak", canonical: "/projects" },
-  "/resume":   { title: "Resume — Edward Kubiak",   canonical: "/resume" },
-  "/now":      { title: "Now — Edward Kubiak",      canonical: "/now" },
+  "/": {
+    title: "Edward Kubiak — Full Stack Developer & AI Systems Engineer",
+    description:
+      "Edward Kubiak — Full Stack Developer & AI Systems Engineer in Columbus, OH. Builder of CAST, a multi-agent Claude Code framework, and Compute Atlas, an open data-center census.",
+    canonical: "/",
+  },
+  "/about": {
+    title: "About — Edward Kubiak",
+    description:
+      "About Edward Kubiak: Columbus, OH full stack developer and AI systems engineer building CAST (open-source Claude Code agents) and production apps for Ohio schools.",
+    canonical: "/about",
+  },
+  "/projects": {
+    title: "Projects — Edward Kubiak",
+    description:
+      "Projects by Edward Kubiak — CAST, Compute Atlas, looptrip, misfire, and Attest, plus production React/Node.js work for Ohio school districts.",
+    canonical: "/projects",
+  },
+  "/resume": {
+    title: "Resume — Edward Kubiak",
+    description:
+      "Edward Kubiak's resume — full stack developer & AI systems engineer, React/Node.js/Python, Claude Code agent tooling. Download the PDF or view online.",
+    canonical: "/resume",
+  },
+  "/now": {
+    title: "Now — Edward Kubiak",
+    description:
+      "What Edward Kubiak is building, learning, and running right now — CAST, Compute Atlas, and AI agent-reliability tooling. Updated regularly.",
+    canonical: "/now",
+  },
 };
 
 function NavBar() {
@@ -62,7 +87,7 @@ function NavBar() {
               Edward Kubiak
             </span>
             <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.28em] uppercase text-muted-foreground mt-1">
-              Software Engineer · Columbus OH
+              Full Stack Developer · Columbus OH
             </span>
           </span>
         </Link>
