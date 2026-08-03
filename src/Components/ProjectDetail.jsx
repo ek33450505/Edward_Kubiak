@@ -108,6 +108,22 @@ function ProjectDetail() {
           </div>
         </motion.div>
 
+        {/* Hero image — showcase-only */}
+        {project.heroImage && (
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.05 }} className="mt-6">
+            <figure className="neatline overflow-hidden bg-card">
+              <img
+                src={project.heroImage}
+                alt={`${project.title} interface — interactive map view`}
+                className="block w-full"
+                loading="lazy"
+                width="1200"
+                height="707"
+              />
+            </figure>
+          </motion.div>
+        )}
+
         {/* Highlights — hairline survey readout (showcase-only) */}
         {project.highlights && project.highlights.length > 0 && (
           <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.1 }} className="mt-6 neatline bg-card p-8">

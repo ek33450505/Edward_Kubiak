@@ -1,5 +1,6 @@
-import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair, Map } from "lucide-react";
+import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair, Map, Globe } from "lucide-react";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
+import { ATLAS_STATS } from "./atlasStats.js";
 
 /**
  * @typedef {Object} GitHubRepo
@@ -54,8 +55,8 @@ const projects = [
     slug: "compute-atlas",
     title: "Compute Atlas",
     description:
-      "An open, mapped census of the AI datacenter buildout across North America — 327 facilities in 48 states, each scored across power draw, water use, and community impact from primary sources. Ships as an interactive MapLibre map, a sortable data table, and per-facility dossiers, with the entire dataset published as open data anyone can download and cite. Built with Next.js 16 + React 19 + TypeScript; dual-licensed MIT (code) and CC BY 4.0 (data). Live at compute-atlas.com.",
-    tech: ["Next.js 16", "React 19", "TypeScript", "MapLibre GL", "Tailwind", "Open Data"],
+      `An open, source-cited census of the U.S. AI datacenter buildout — ${ATLAS_STATS.facilities} facilities across ${ATLAS_STATS.states} states, from proposed and permitted through under-construction and operational, each with a public source and an explicit confidence level. Ships as an interactive MapLibre GL map, sortable data tables, and per-facility dossiers, with the entire dataset published as open data anyone can query through a JSON API. A scheduled, autonomous discovery pipeline expands coverage daily. Built on ${ATLAS_STATS.stack}; dual-licensed ${ATLAS_STATS.license}. Live at compute-atlas.com.`,
+    tech: ["Next.js 16", "React 19", "TypeScript", "MapLibre GL", "Neon Postgres", "Vercel", "Open Data"],
     icon: Map,
     color: "amber",
     category: "personal",
@@ -64,22 +65,32 @@ const projects = [
     github: "https://github.com/ek33450505/compute-atlas",
     githubRepo: { owner: "ek33450505", repo: "compute-atlas" },
     link: "https://www.compute-atlas.com",
-    stats: ["327 Facilities", "48 States", "8.2 GW Operational", "Open Dataset", "MIT + CC BY 4.0"],
+    heroImage: "/media/compute-atlas.png",
+    stats: [
+      `${ATLAS_STATS.facilities} Facilities`,
+      `${ATLAS_STATS.states} States`,
+      `${ATLAS_STATS.operationalGw} GW Operational`,
+      `${ATLAS_STATS.plannedGw} GW Planned`,
+      ATLAS_STATS.version,
+      "MIT + CC BY 4.0",
+    ],
     highlights: [
-      { label: "Facilities mapped", value: "327" },
-      { label: "States covered", value: "48" },
-      { label: "Operational capacity", value: "8.2 GW" },
-      { label: "Planned pipeline", value: "142 GW" },
-      { label: "Confidence tiers", value: "3" },
+      { label: "Facilities mapped", value: `${ATLAS_STATS.facilities}` },
+      { label: "States covered", value: `${ATLAS_STATS.states}` },
+      { label: "Operational capacity", value: `${ATLAS_STATS.operationalGw} GW` },
+      { label: "Under construction", value: `${ATLAS_STATS.underConstructionGw} GW` },
+      { label: "Planned pipeline", value: `${ATLAS_STATS.plannedGw} GW` },
       { label: "Per-record sources", value: "≥1" },
     ],
     sections: [
       { title: "The problem",
-        body: "The AI datacenter buildout is one of the largest infrastructure expansions in a generation, yet the data describing it is scattered across county permit filings, utility interconnection queues, water-authority applications, and tax-abatement agreements — opaque, non-standardized, and rarely connected to a map. Compute Atlas is an open, source-cited survey that pulls those primary records into one place: 327 facilities across 48 states, 8.2 GW operational today and roughly 142 GW more in the planned pipeline." },
+        body: `The AI datacenter buildout is one of the largest infrastructure expansions in a generation, yet the data describing it is scattered across county permit filings, utility interconnection queues, water-authority applications, and tax-abatement agreements — opaque, non-standardized, and rarely connected to a map. Compute Atlas pulls those primary records into one source-cited survey: ${ATLAS_STATS.facilities} facilities across ${ATLAS_STATS.states} states, ${ATLAS_STATS.operationalGw} GW operational today and roughly ${ATLAS_STATS.plannedGw} GW more in the planned pipeline.` },
       { title: "Source-cited provenance",
         body: "Every record cites at least one primary source — permit filings, interconnection-queue entries, subsidy disclosures, water applications, or reporting — and carries an explicit confidence level: Confirmed, Reported, or Rumored. An 'honest-zero' convention runs throughout: where a figure isn't known, the atlas records 'unknown' rather than guessing, so an empty field is a statement, not a gap." },
       { title: "The interactive product",
-        body: "The survey ships three coordinated views over the same dataset: a MapLibre GL map of every sited facility, a sortable data table for scanning power draw and status across the fleet, and per-facility dossiers with capacity, energy and water profile, operator, and the full source trail behind each claim. Built on Next.js 16 + React 19 + TypeScript." },
+        body: `The survey ships three coordinated views over the same dataset — a MapLibre GL map of every sited facility, sortable data tables for scanning power draw and status across the fleet, and per-facility dossiers with capacity, energy and water profile, operator, and the full source trail behind each claim — plus SEO and reference hubs for rankings, power & water, operators, metros, and AI-vs-crypto classification. Built on ${ATLAS_STATS.stack}.` },
+      { title: "Autonomous discovery pipeline",
+        body: "Coverage grows through a scheduled daily research run: a single bounded `claude -p` invocation that discovers candidate facilities, folds in light enrichment, and stages them for review. The pipeline is hardened with a fail-closed kill switch, a heartbeat, and a self-reverting cap so a bad run reverts itself. The core invariant holds regardless: nothing becomes a live facility without human approval." },
       { title: "Open data + dual licensing",
         body: "The entire dataset is public and citable, served through a JSON API so anyone can build on it. Code is open-source under MIT; the compiled dataset is offered under CC BY 4.0. The goal is a reference layer for the compute buildout that others can verify, correct, and extend." },
     ],
@@ -279,6 +290,20 @@ const projects = [
     github: "https://github.com/ek33450505/cast-claudes_journal",
     githubRepo: { owner: "ek33450505", repo: "cast-claudes_journal" },
     stats: ["Open Source", "3 Hooks", "Obsidian-Compatible", "Homebrew Install"],
+  },
+  {
+    slug: "cast-website",
+    title: "cast-website",
+    description:
+      "Marketing and documentation site for the CAST framework — a React 19 + Vite + Tailwind v4 build with Framer Motion and Lenis smooth-scroll, deployed on Vercel at castframework.dev. Presents the framework, its ecosystem packages, and install paths.",
+    tech: ["React 19", "Vite", "Tailwind v4", "Framer Motion", "Vercel"],
+    icon: Globe,
+    color: "teal",
+    category: "personal",
+    group: "ecosystem",
+    castEcosystem: true,
+    link: "https://castframework.dev",
+    stats: ["React 19", "Vite", "Tailwind v4", "Live Site"],
   },
 
   // ── Professional ──────────────────────────────────────────────────────────
