@@ -10,6 +10,7 @@ import ErrorBoundary from "./Components/ErrorBoundary";
 import RouteLoader from "./Components/ui/RouteLoader";
 import NotFound from "./Components/ui/NotFound";
 import ScrollToTop from "./Components/ScrollToTop";
+import { ROUTE_META } from "./data/routeMeta.js";
 import "./App.css";
 
 const Home = lazy(() => import("./Components/Home"));
@@ -25,41 +26,6 @@ const navLinks = [
   { to: "/resume", label: "Resume" },
   { to: "/now", label: "Now" },
 ];
-
-// Static per-route meta. Project detail routes are excluded — ProjectDetail
-// manages its own meta via useDocumentMeta.
-const ROUTE_META = {
-  "/": {
-    title: "Edward Kubiak — Full Stack Developer & AI Systems Engineer",
-    description:
-      "Edward Kubiak — Full Stack Developer & AI Systems Engineer in Columbus, OH. Builder of CAST, a multi-agent Claude Code framework, and Compute Atlas, an open data-center census.",
-    canonical: "/",
-  },
-  "/about": {
-    title: "About — Edward Kubiak",
-    description:
-      "About Edward Kubiak: Columbus, OH full stack developer and AI systems engineer building CAST (open-source Claude Code agents) and production apps for Ohio schools.",
-    canonical: "/about",
-  },
-  "/projects": {
-    title: "Projects — Edward Kubiak",
-    description:
-      "Projects by Edward Kubiak — CAST, Compute Atlas, looptrip, misfire, and Attest, plus production React/Node.js work for Ohio school districts.",
-    canonical: "/projects",
-  },
-  "/resume": {
-    title: "Resume — Edward Kubiak",
-    description:
-      "Edward Kubiak's resume — full stack developer & AI systems engineer, React/Node.js/Python, Claude Code agent tooling. Download the PDF or view online.",
-    canonical: "/resume",
-  },
-  "/now": {
-    title: "Now — Edward Kubiak",
-    description:
-      "What Edward Kubiak is building, learning, and running right now — CAST, Compute Atlas, and AI agent-reliability tooling. Updated regularly.",
-    canonical: "/now",
-  },
-};
 
 function NavBar() {
   const [open, setOpen] = useState(false);
