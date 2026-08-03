@@ -21,7 +21,7 @@ function ProjectDetail() {
     title: project
       ? `${project.title} — Edward Kubiak`
       : "Project Not Found — Edward Kubiak",
-    description: project?.description,
+    description: project?.summary ?? project?.description,
     canonical: project ? `/projects/${slug}` : undefined,
     // Per-slug OG images (/og/<slug>.png) aren't generated yet — generate-og-image.mjs
     // is not wired into prebuild. Use the site OG image so cards never 404. Restore

@@ -16,6 +16,7 @@ import { TOOL_VERSIONS } from "./toolStats.js";
  * @property {string}   slug          - URL-safe unique identifier
  * @property {string}   title         - Display name
  * @property {string}   description   - Long-form project description
+ * @property {string}   [summary]     - Short (≤160 char) meta-description summary for SEO
  * @property {string[]} tech          - Technology labels shown as badges
  * @property {React.ComponentType} icon - Lucide icon component for the card
  * @property {string}   color         - Tailwind color key (e.g. "violet", "teal")
@@ -39,6 +40,7 @@ const projects = [
     title: "CAST — Claude Agent Team",
     description:
       `Local-first, open-source multi-agent framework embedded into Claude Code at the hook layer. ${CAST_STATS.agents} specialist agents and hook-driven dispatch — no routing tables, no cloud. The execution record is a local, tamper-evident, queryable substrate that acts: \`cast ask\` runs full-text search over every session; \`cast ledger --verify\` produces signed SHA-256 audit receipts; \`cast predict\` gives pre-flight cost and agent suggestions from telemetry; \`cast mcp\` exposes cast.db as a read-only MCP server. The full ecosystem ships as ${CAST_ECOSYSTEM.tapsPlusUmbrella}. Install only what you need. brew tap ek33450505/cast && brew install cast`,
+    summary: "Open-source, local-first multi-agent framework embedded in Claude Code at the hook layer — specialist agents, hook-driven dispatch, a tamper-evident record.",
     tech: ["Claude Code", "Bash", "Hook Architecture", "Node.js", "SQLite", "BATS"],
     icon: Network,
     color: "violet",
@@ -57,6 +59,7 @@ const projects = [
     title: "Compute Atlas",
     description:
       `An open, source-cited census of the U.S. AI datacenter buildout — ${ATLAS_STATS.facilities} facilities across ${ATLAS_STATS.states} states, from proposed and permitted through under-construction and operational, each with a public source and an explicit confidence level. Ships as an interactive MapLibre GL map, sortable data tables, and per-facility dossiers, with the entire dataset published as open data anyone can query through a JSON API. A scheduled, autonomous discovery pipeline expands coverage daily. Built on ${ATLAS_STATS.stack}; dual-licensed ${ATLAS_STATS.license}. Live at compute-atlas.com.`,
+    summary: "An open, source-cited census of the U.S. AI datacenter buildout — interactive MapLibre map, sortable tables, per-facility dossiers, and an open-data JSON API.",
     tech: ["Next.js 16", "React 19", "TypeScript", "MapLibre GL", "Neon Postgres", "Vercel", "Open Data"],
     icon: Map,
     color: "amber",
@@ -103,6 +106,7 @@ const projects = [
     title: "looptrip",
     description:
       'A deterministic, framework-agnostic, zero-LLM detector of multi-agent coordination pathologies — duplicate-work loops, ping-pong / livelock, deadlock, and non-termination — that trips at iteration 2, not on the invoice. An observer, never a gate: it reads data you already have (OpenTelemetry GenAI handoff spans or a CAST cast.db), and the same event stream always yields the same verdict. On two real recorded runaway sessions it reproduces prevented duplicate-work spend from a committed fixture in one command. Live on PyPI. pip install looptrip · brew tap ek33450505/looptrip && brew install looptrip',
+    summary: "Deterministic, zero-LLM detector of multi-agent coordination failures — loops, ping-pong, deadlock, non-termination — trips at iteration 2, not the invoice.",
     tech: ["Python", "OpenTelemetry", "Claude Code", "SQLite", "Detection"],
     icon: Repeat,
     color: "rose",
@@ -119,6 +123,7 @@ const projects = [
     title: "misfire",
     description:
       'Linters tell you your rules are messy; misfire tells you which rules your agents actually ignore — and converts only those into hooks, keeping safety rules as prose. A deterministic, local-first, zero-LLM CLI that reads your CLAUDE.md / .claude/rules and your own run history, ranks prose-rule violations from real transcripts, and scaffolds a reviewable hook for the machine-checkable subset. An observer and recommender — never auto-deletes a rule, never auto-applies a change, never writes settings.json. Stdlib-only, no database required. pip install misfire · brew tap ek33450505/misfire && brew install misfire',
+    summary: "Zero-LLM CLI that reads your CLAUDE.md rules and run history, ranks which prose rules agents actually ignore, and scaffolds hooks for the checkable subset.",
     tech: ["Python", "Claude Code", "Hook Architecture", "CLI", "BATS"],
     icon: Crosshair,
     color: "sky",
@@ -135,6 +140,7 @@ const projects = [
     title: "Attest",
     description:
       'A local, deterministic, zero-LLM Claude Code hook that verifies a subagent\'s "Status: DONE" / "## Handoff" claim against the real git working-tree delta — and, opt-in, blocks a DONE whose claimed files never actually landed on disk. It adds no tokens, cannot hallucinate its own verdict, and fails open on every doubt. Validated end-to-end against real Claude Code with committed payload fixtures; CI green. brew tap ek33450505/attest && brew install attest',
+    summary: "Local, zero-LLM Claude Code hook that verifies a subagent's DONE claim against the real git working-tree delta — and can block a DONE whose files never landed.",
     tech: ["Python", "Claude Code", "Hook Architecture", "Git", "BATS", "GitHub Actions"],
     icon: ShieldCheck,
     color: "emerald",
@@ -151,6 +157,7 @@ const projects = [
     title: "Claude Code Dashboard",
     description:
       "Observability layer for CAST — a React 19 + TypeScript UI with a real-time SSE activity feed, session cost tracking, per-agent scorecards, evals and agent-reliability views, Cmd+K global search, and a privacy audit showing your cloud vs. local API ratio. Reads ~/.claude directly — no accounts, no telemetry. Gracefully degrades when CAST is not installed.",
+    summary: "Observability UI for CAST — real-time SSE activity feed, cost tracking, per-agent scorecards, evals, and Cmd+K search. Reads ~/.claude directly, no telemetry.",
     tech: ["React 19", "TypeScript", "Vite", "Express", "SSE", "Recharts", "better-sqlite3"],
     icon: LayoutDashboard,
     color: "teal",
@@ -167,6 +174,7 @@ const projects = [
     title: "Cast Desktop",
     description:
       `The desktop app for CAST — every signal your agents emit, all in one place. A Tauri 2 + React 19 native app with embedded Express 5 + SQLite backend. Real PTY-backed terminal (xterm.js + Rust Forge), ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, Cmd+K command palette, search-in-terminal, font-size hotkeys, multi-tab terminal with folder-picker cwd, and multiple themes. Local-first — reads directly from ~/.claude/cast.db.`,
+    summary: "Desktop app for CAST — a Tauri 2 + React 19 native app with an embedded Express/SQLite backend, a real PTY-backed terminal, and dashboard views. Local-first.",
     tech: ["Tauri 2", "React 19", "TypeScript", "Rust", "Express 5", "SQLite", "xterm.js"],
     icon: Terminal,
     color: "accent",
@@ -185,6 +193,7 @@ const projects = [
     title: "cast-mcp",
     description:
       "Read-only MCP server over the Claude Code execution record (cast.db) — dispatch decisions, incidents, cost, sessions, and full-text search exposed through MCP tools and resources. stdlib-only, strictly read-only, no arbitrary SQL. Works with or without the full CAST framework. brew tap ek33450505/cast-mcp && brew install cast-mcp",
+    summary: "Read-only MCP server over the Claude Code execution record — dispatch decisions, incidents, cost, sessions, and full-text search as MCP tools. Stdlib-only.",
     tech: ["Python", "MCP", "SQLite", "Claude Code"],
     icon: Database,
     color: "sky",
@@ -201,6 +210,7 @@ const projects = [
     title: "cast-ledger",
     description:
       "Signed, hash-chained, tamper-evident session receipts for Claude Code — renders a SHA-256-stamped audit receipt from cast.db, verifies it with --verify, and optionally chains provenance across sessions. Strictly read-only, stdlib-only, local-only. brew tap ek33450505/cast-ledger && brew install cast-ledger",
+    summary: "Signed, hash-chained, tamper-evident session receipts for Claude Code — renders a SHA-256 audit receipt from cast.db and verifies it with --verify. Read-only.",
     tech: ["Python", "SQLite", "SHA-256", "Claude Code"],
     icon: ShieldCheck,
     color: "emerald",
@@ -217,6 +227,7 @@ const projects = [
     title: "cast-predict",
     description:
       "Telemetry-driven dispatch prediction for Claude Code — reads cast.db to predict a task's likely cost, suggest agents ranked by past performance, and surface related incidents before you run it. Strictly read-only, stdlib-only. brew tap ek33450505/cast-predict && brew install cast-predict",
+    summary: "Telemetry-driven dispatch prediction for Claude Code — reads cast.db to forecast task cost, rank agents by past performance, and surface incidents beforehand.",
     tech: ["Python", "SQLite", "Telemetry", "Claude Code"],
     icon: BarChart3,
     color: "violet",
@@ -233,6 +244,7 @@ const projects = [
     title: "cast-time",
     description:
       "A single-purpose Claude Code SessionStart hook that solves a fundamental LLM limitation: Claude has no clock. Injects local time, timezone, and a semantic time-of-day bucket (morning/afternoon/evening/night) at session start — no rules, no slash commands, just context. brew tap ek33450505/cast-time && brew install cast-time",
+    summary: "A single-purpose Claude Code SessionStart hook that fixes a basic LLM gap: no clock. Injects local time, timezone, and a time-of-day bucket at session start.",
     tech: ["Bash", "Shell", "Hook Architecture", "Claude Code"],
     icon: Terminal,
     color: "sky",
@@ -249,6 +261,7 @@ const projects = [
     title: "cast-doctor",
     description:
       "A standalone, read-only health check for any Claude Code install — validates hook wiring, MCP config, agent frontmatter, cast.db core schema, and stale memories without modifying anything. A suite of read-only checks; works with or without the full CAST framework. brew tap ek33450505/cast-doctor && brew install cast-doctor",
+    summary: "Standalone, read-only health check for any Claude Code install — validates hook wiring, MCP config, agent frontmatter, cast.db schema, and stale memories.",
     tech: ["Bash", "Shell", "SQLite", "Claude Code"],
     icon: BarChart3,
     color: "teal",
@@ -265,6 +278,7 @@ const projects = [
     title: "cast-memory",
     description:
       "Persistent, searchable memory for Claude Code agents — FTS5 full-text search, weighted relevance scoring, temporal validity, optional Ollama semantic embeddings, and weekly consolidation over cast.db. brew tap ek33450505/cast-memory && brew install cast-memory",
+    summary: "Persistent, searchable memory for Claude Code agents — FTS5 full-text search, weighted relevance, temporal validity, and optional Ollama semantic embeddings.",
     tech: ["Python", "SQLite", "FTS5", "MCP", "Ollama"],
     icon: Database,
     color: "emerald",
@@ -281,6 +295,7 @@ const projects = [
     title: "Claude's Journal",
     description:
       "Hook-based journaling for Claude Code (Stop / SessionStart / UserPromptSubmit) — maintains Claude's perspective and working memory across sessions as Obsidian-compatible markdown in ~/Documents/Claude/. brew tap ek33450505/claudes-journal && brew install claudes-journal",
+    summary: "Hook-based journaling for Claude Code — maintains Claude's perspective and memory across sessions as Obsidian-compatible markdown in ~/Documents/Claude/.",
     tech: ["Bash", "Shell", "Markdown"],
     icon: Terminal,
     color: "violet",
@@ -297,6 +312,7 @@ const projects = [
     title: "cast-website",
     description:
       "Marketing and documentation site for the CAST framework — a React 19 + Vite + Tailwind v4 build with Framer Motion and Lenis smooth-scroll, deployed on Vercel at castframework.dev. Presents the framework, its ecosystem packages, and install paths.",
+    summary: "Marketing and documentation site for the CAST framework — a React 19 + Vite + Tailwind v4 build with Framer Motion and Lenis smooth-scroll, deployed on Vercel.",
     tech: ["React 19", "Vite", "Tailwind v4", "Framer Motion", "Vercel"],
     icon: Globe,
     color: "teal",
@@ -313,6 +329,7 @@ const projects = [
     title: "CrossCheck",
     description:
       "Mission-critical EMIS data validation platform serving Ohio school districts. Spearheaded the complete migration from AngularJS to React, modernizing the entire frontend architecture.",
+    summary: "Mission-critical EMIS data-validation platform serving Ohio school districts. Spearheaded the full frontend migration from AngularJS to React.",
     tech: ["React", "Node.js", "Python API"],
     icon: BarChart3,
     color: "emerald",
@@ -324,6 +341,7 @@ const projects = [
     title: "SES-Wiki",
     description:
       "EMIS scenario reference tool I built from the ground up — React 19 + Express 5 with JSON data persistence, automated backups, and full test coverage via Vitest. The go-to resource for Ohio education data teams.",
+    summary: "EMIS scenario reference tool built from the ground up — React 19 + Express 5 with JSON persistence, automated backups, and full Vitest coverage.",
     tech: ["React 19", "Vite", "Express 5", "Vitest"],
     icon: Database,
     color: "rose",
@@ -336,6 +354,7 @@ const projects = [
     title: "CWS",
     description:
       "Internal catalog platform enabling school districts to browse, request, and manage PowerSchool customizations. Streamlined a process that previously required manual email coordination.",
+    summary: "Internal catalog platform letting Ohio school districts browse, request, and manage PowerSchool customizations — replacing a manual email-coordination process.",
     tech: ["React 19", "Vite"],
     icon: ShoppingBag,
     color: "accent",
@@ -348,6 +367,7 @@ const projects = [
     title: "E-Rate Dashboard",
     description:
       "Full-stack platform for managing federal E-Rate telecom discount program data — helping districts capture funding they're entitled to. Architected as a Docker Compose monorepo with dual React frontends, a Flask API layer, and PostgreSQL.",
+    summary: "Full-stack platform for managing federal E-Rate telecom-discount data — a Docker Compose monorepo with dual React frontends, a Flask API, and PostgreSQL.",
     tech: ["React", "Flask", "PostgreSQL", "Docker", "TypeScript", "MUI"],
     icon: DollarSign,
     color: "sky",
