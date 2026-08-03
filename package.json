@@ -9,19 +9,14 @@
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@fontsource/dm-sans": "^5.2.8",
     "@fontsource/space-mono": "^5.2.9",
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.5.0",
-    "@react-three/postprocessing": "^3.0.4",
     "@tailwindcss/vite": "^4.3.0",
     "cmdk": "^1.1.1",
     "lucide-react": "^0.577.0",
     "motion": "^12.38.0",
-    "postprocessing": "^6.39.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.1",
-    "tailwindcss": "^4.3.0",
-    "three": "^0.183.2"
+    "tailwindcss": "^4.3.0"
   },
   "scripts": {
     "test": "vitest",
