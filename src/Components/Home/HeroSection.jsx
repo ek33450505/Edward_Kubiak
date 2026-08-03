@@ -71,12 +71,13 @@ export default function HeroSection() {
           {COORDINATE}
         </motion.p>
 
-        {/* Frontispiece headline — the name, engraved serif */}
+        {/* Frontispiece headline — the name, engraved serif.
+            Renders opaque on the first frame (no entrance) so it's a valid
+            immediate LCP element — only this element skips the fade-in. */}
         <motion.h1
           variants={fadeUp}
-          initial="hidden"
+          initial={false}
           animate="show"
-          transition={{ duration: 0.6, delay: 0.1 }}
           className="font-display max-w-3xl text-5xl font-semibold leading-[1.04] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
         >
           Edward Kubiak

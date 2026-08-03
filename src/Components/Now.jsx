@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import now from "../data/now";
 import { fadeUp, fadeIn } from "../utils/motion";
 import PageWrapper from "./ui/PageWrapper";
@@ -98,6 +99,29 @@ const Now = () => {
           >
             nownownow.com
           </a>
+        </Reveal>
+
+        {/* ── See also ────────────────────────────────────────────────────── */}
+        <Reveal
+          as="nav"
+          aria-label="See also"
+          variants={fadeIn}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs tracking-wider text-muted-foreground"
+        >
+          <span className="uppercase tracking-[0.28em]">See also</span>
+          <Link
+            to="/resume"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+          >
+            Resume
+          </Link>
+          <Link
+            to="/projects"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+          >
+            Projects
+          </Link>
         </Reveal>
 
       </PageWrapper>

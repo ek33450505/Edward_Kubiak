@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import { Mail, MapPin, Download, FileText } from "lucide-react";
 import { fadeUp } from "../utils/motion";
 import { skills, experience, education, printStyles, summary } from "../data/resume";
@@ -158,6 +159,29 @@ const Resume = () => {
               </div>
             ))}
           </div>
+        </Reveal>
+
+        {/* ── See also ────────────────────────────────────────────────────── */}
+        <Reveal
+          as="nav"
+          aria-label="See also"
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mt-8 mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs tracking-wider text-muted-foreground"
+          data-print-hide
+        >
+          <span className="uppercase tracking-[0.28em]">See also</span>
+          <Link
+            to="/now"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+          >
+            Now
+          </Link>
+          <Link
+            to="/projects"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+          >
+            Projects
+          </Link>
         </Reveal>
       </PageWrapper>
     </div>

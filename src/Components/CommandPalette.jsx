@@ -1,10 +1,11 @@
-import { useEffect, useState, useCallback, useRef, createContext, useContext } from "react";
+import { useEffect, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Hash } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
+import { useCommandPalette } from "./CommandPaletteContext";
 
 const FOCUSABLE_SELECTORS = [
   'a[href]',
@@ -14,25 +15,6 @@ const FOCUSABLE_SELECTORS = [
   'select:not([disabled])',
   '[tabindex]:not([tabindex="-1"])',
 ].join(', ');
-
-// --- Context ---
-const CommandPaletteContext = createContext(null);
-
-export function CommandPaletteProvider({ children }) {
-  const [open, setOpen] = useState(false);
-  const toggle = useCallback(() => setOpen((prev) => !prev), []);
-  return (
-    <CommandPaletteContext.Provider value={{ open, setOpen, toggle }}>
-      {children}
-    </CommandPaletteContext.Provider>
-  );
-}
-
-export function useCommandPalette() {
-  const ctx = useContext(CommandPaletteContext);
-  if (!ctx) throw new Error("useCommandPalette must be used within CommandPaletteProvider");
-  return ctx;
-}
 
 // --- Commands ---
 const navigateCommands = [
