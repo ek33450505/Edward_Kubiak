@@ -30,27 +30,27 @@ for (let i = 0; i < args.length; i++) {
 function generateOgSvg(mainText, subtitle = "Full Stack Developer &amp; AI Systems Engineer · Columbus, OH") {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}">
   <!-- Background -->
-  <rect width="${WIDTH}" height="${HEIGHT}" fill="#0a0f1a"/>
+  <rect width="${WIDTH}" height="${HEIGHT}" fill="#181410"/>
 
   <!-- Subtle grid lines -->
-  <line x1="0" y1="200" x2="${WIDTH}" y2="200" stroke="#1e293b" stroke-width="1"/>
-  <line x1="0" y1="400" x2="${WIDTH}" y2="400" stroke="#1e293b" stroke-width="1"/>
-  <line x1="400" y1="0" x2="400" y2="${HEIGHT}" stroke="#1e293b" stroke-width="1"/>
-  <line x1="800" y1="0" x2="800" y2="${HEIGHT}" stroke="#1e293b" stroke-width="1"/>
+  <line x1="0" y1="200" x2="${WIDTH}" y2="200" stroke="#4A4030" stroke-width="1"/>
+  <line x1="0" y1="400" x2="${WIDTH}" y2="400" stroke="#4A4030" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="${HEIGHT}" stroke="#4A4030" stroke-width="1"/>
+  <line x1="800" y1="0" x2="800" y2="${HEIGHT}" stroke="#4A4030" stroke-width="1"/>
 
-  <!-- Mint accent line -->
-  <rect x="100" y="200" width="160" height="6" fill="#00ffc2" rx="3"/>
+  <!-- Sage accent rule -->
+  <rect x="100" y="200" width="160" height="6" fill="#8FB98A" rx="3"/>
 
-  <!-- Celestial dot mark — upper-right quadrant (matches favicon design from PR #10) -->
+  <!-- Survey marker — upper-right quadrant (recolored from PR #10 celestial mark) -->
   <!-- Dark halo -->
-  <circle cx="1100" cy="80" r="40" fill="#0d1424"/>
-  <!-- Mint core -->
-  <circle cx="1100" cy="80" r="8" fill="#00ffc2"/>
+  <circle cx="1100" cy="80" r="40" fill="#211C16"/>
+  <!-- Sage core -->
+  <circle cx="1100" cy="80" r="8" fill="#8FB98A"/>
   <!-- 4 satellite dots at r=4 on 24px radius orbit (0/90/180/270 degrees) -->
-  <circle cx="1124" cy="80" r="4" fill="#00ffc2" opacity="0.7"/>
-  <circle cx="1100" cy="104" r="4" fill="#00ffc2" opacity="0.7"/>
-  <circle cx="1076" cy="80" r="4" fill="#00ffc2" opacity="0.7"/>
-  <circle cx="1100" cy="56" r="4" fill="#00ffc2" opacity="0.7"/>
+  <circle cx="1124" cy="80" r="4" fill="#8FB98A" opacity="0.7"/>
+  <circle cx="1100" cy="104" r="4" fill="#8FB98A" opacity="0.7"/>
+  <circle cx="1076" cy="80" r="4" fill="#8FB98A" opacity="0.7"/>
+  <circle cx="1100" cy="56" r="4" fill="#8FB98A" opacity="0.7"/>
 
   <!-- Headline -->
   <text
@@ -59,7 +59,7 @@ function generateOgSvg(mainText, subtitle = "Full Stack Developer &amp; AI Syste
     font-family="'Courier New', Courier, monospace"
     font-size="96"
     font-weight="700"
-    fill="#f8fafc"
+    fill="#EDE6D6"
     letter-spacing="-2"
   >${mainText}</text>
 
@@ -70,7 +70,7 @@ function generateOgSvg(mainText, subtitle = "Full Stack Developer &amp; AI Syste
     font-family="'Courier New', Courier, monospace"
     font-size="34"
     font-weight="400"
-    fill="#cbd5e1"
+    fill="#B3A68C"
     letter-spacing="1"
   >${subtitle}</text>
 
@@ -81,7 +81,7 @@ function generateOgSvg(mainText, subtitle = "Full Stack Developer &amp; AI Syste
     font-family="'Courier New', Courier, monospace"
     font-size="26"
     font-weight="400"
-    fill="#94a3b8"
+    fill="#B3A68C"
     letter-spacing="2"
   >edwardkubiak.com</text>
 </svg>`;
