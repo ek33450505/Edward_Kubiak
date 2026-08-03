@@ -93,21 +93,19 @@ jobs:
 
           const repos = [
             'claude-agent-team',
+            'compute-atlas',
             'claude-code-dashboard',
-            'cast-agents',
-            'cast-observe',
-            'cast-security',
-            'cast-hooks',
-            'cast-dash',
-            'cast-memory',
-            'cast-parallel',
-            'cast-routines',
-            'cast-doctor',
-            'cast-time',
-            'cast-website',
-            'cast-claudes_journal',
             'cast-desktop',
-            'promptbot',
+            'misfire',
+            'attest',
+            'looptrip',
+            'cast-mcp',
+            'cast-ledger',
+            'cast-predict',
+            'cast-time',
+            'cast-doctor',
+            'cast-memory',
+            'cast-claudes_journal',
           ];
 
           const token = process.env.GH_TOKEN;
@@ -169,13 +167,13 @@ jobs:
           // Fallback values — bump these to match castframework.dev whenever the
           // dynamic fetch is unavailable. Auto-derived values override below.
           const fallback = {
-            version: 'v9.0.0',
-            agents: 23,
-            tests: 2068,
+            version: 'v9.5.3',
+            agents: 27,
+            tests: 2389,
             packages: 9,
             commands: 21,
             skills: 17,
-            tables: 38,
+            tables: 39,
           };
 
           let version = fallback.version;
