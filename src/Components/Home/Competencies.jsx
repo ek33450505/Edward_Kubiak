@@ -13,12 +13,12 @@ const competencies = [
   {
     title: "React Specialist",
     description:
-      "5+ production React apps, from greenfield React 19 builds to AngularJS-to-React migrations",
+      "Production React apps, from greenfield React 19 builds to AngularJS-to-React migrations",
   },
   {
     title: "Legacy Modernization",
     description:
-      "Migrated CrossCheck from AngularJS to React, serving 4,200+ users across 900+ Ohio school districts",
+      "Migrated CrossCheck from AngularJS to React for Ohio's school districts",
   },
   {
     title: "AI / LLM Integration",
