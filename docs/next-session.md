@@ -13,11 +13,29 @@
   `npx vite build --outDir /tmp/vite-verify`. Tests are not a per-merge gate (see CLAUDE.md policy).
 - Push is manual/CI — deploys auto-publish on push to `main` + daily cron (`deploy.yml`).
 
-## Status: QUICK-WIN WAVE COMPLETE (Units 1–2 committed) — awaiting push/PR decision
+## Status: QUICK-WIN WAVE SHIPPED — PR #26 open, CI pending
 
-**Branch:** `feature/seo-quick-wins` (NOT main — deploys auto-publish on push to main; PR the branch when ready).
-**Unpushed commits:** `5f72e96` (Unit 1), `9d5c61f` (Unit 2), + a `docs:` commit for the audit/checkpoint.
-**Next action:** push branch → open PR → CI. Then Unit 3 (H2) in a fresh session, or continue if context allows.
+**PR:** https://github.com/ek33450505/Edward_Kubiak/pull/26 · **Branch:** `feature/seo-quick-wins` (pushed).
+Deploys auto-publish on merge/push to `main` + daily cron — so merging PR #26 ships these fixes live.
+
+### ▶ KICKOFF BLOCK (paste into a fresh session)
+```
+Resume Edward_Kubiak SEO work. Read docs/next-session.md + docs/seo-audit-2026-08-03.md first.
+
+PRE-FLIGHT:
+1. Check PR #26 (feature/seo-quick-wins) — merged? If yes: git checkout main && git pull --ff-only,
+   delete the merged branch. If CI still pending, watch it.
+2. Confirm clean tree.
+
+NEXT UNIT — H2 (per-project meta summaries):
+- Add a ~155-char `summary` field to each of the 19 projects in src/data/projects.js.
+- Wire src/Components/ProjectDetail.jsx:24 → `description: project?.summary ?? project?.description`.
+- Ceremony: frontend-writer → orchestrator-run code-reviewer gate (nested self-dispatch is
+  blocked by a background-agent limit — run code-reviewer at main level) → scoped commit.
+- This is content authoring (19 short blurbs), not mechanical — budget accordingly.
+
+THEN: pick from the backlog below (C1 prerender needs an Ed decision first).
+```
 
 | Unit | Scope | Files | State |
 |---|---|---|---|
@@ -55,4 +73,5 @@
 ## Checkpoint log
 - 2026-08-03 — Audit complete (`docs/seo-audit-2026-08-03.md`), 8-agent fan-out, findings cross-verified. Quick-win Unit 1 dispatched.
 - 2026-08-03 — Unit 1 committed `5f72e96` on `feature/seo-quick-wins` (code-reviewer PASS, 17/17 tests). Unit 2 dispatched.
-- 2026-08-03 — Unit 2 committed `9d5c61f` (code-reviewer PASS). Quick-win wave (C2/C3/H1/P2-title + manifest hygiene) complete. `docs/` committed separately. **Awaiting Ed's push/PR go-ahead.** Next unit: H2 (19 per-project summaries).
+- 2026-08-03 — Unit 2 committed `9d5c61f` (code-reviewer PASS). Quick-win wave (C2/C3/H1/P2-title + manifest hygiene) complete. `docs/` committed as `7296ee0`.
+- 2026-08-03 — Branch pushed (remote SHA verified = local), **PR #26 opened** against `main`. Session wrapped here. Next unit: H2 (19 per-project summaries) — see KICKOFF BLOCK above.
