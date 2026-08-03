@@ -6,12 +6,12 @@
 export const CAST_STATS = {
   "version": "v9.5.3",
   "agents": 27,
-  "tests": 2353,
+  "tests": 2389,
   "packages": 9,
   "commands": 21,
   "skills": 17,
   "tables": 39,
-  "updated": "2026-07-11"
+  "updated": "2026-07-30"
 };
 
 export const CAST_DESKTOP_STATS = {

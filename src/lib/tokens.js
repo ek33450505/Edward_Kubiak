@@ -1,5 +1,5 @@
 // Mirror of the @theme tokens in src/index.css — keep in sync.
-// For JS/SVG/WebGL consumers that can't read CSS custom properties.
+// For JS/SVG consumers that can't read CSS custom properties.
 // "Night Survey" dark theme — verified ≥ 4.5:1 on --background #181410.
 
 export const ACCENT = "#8FB98A";      // contour green → luminous sage (primary)

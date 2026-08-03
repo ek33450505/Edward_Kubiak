@@ -9,7 +9,7 @@ Personal portfolio and professional site showcasing full-stack development, AI/L
 - **Cartographic Design System** — A single dark "Night Survey" reference-atlas theme with semantic Tailwind v4 tokens, Fraunces display type, JetBrains Mono overlines, and cartographic utilities (graticule grid, neatline frames). Zero toggles, zero light mode.
 - **Typographic Frontispiece Hero** — Clean, semantic layout without 3D effects. The legacy Three.js starfield was retired in PR #18.
 - **Command Palette (⌘K)** — Fast navigation and search via `cmdk`
-- **Flagship Projects** — [CAST](https://castframework.dev) (27-agent multi-agent framework for Claude Code) and [Compute Atlas](https://compute-atlas.com) (327-facility AI datacenter census)
+- **Flagship Projects** — [CAST](https://castframework.dev) (a local-first multi-agent framework for Claude Code) and [Compute Atlas](https://compute-atlas.com) (a source-cited U.S. data-center census)
 - **Accessibility** — WCAG AA contrast, semantic HTML, ARIA labels, skip links, focus-visible states, global reduced-motion support
 - **Performance** — Lazy-loaded routes; automatic stats sync from canonical sources
 
@@ -18,7 +18,7 @@ Personal portfolio and professional site showcasing full-stack development, AI/L
 | Layer | Stack |
 |-------|-------|
 | **Frontend** | React 19, Vite 8, Tailwind CSS v4, motion/react |
-| **Routing & UI** | React Router 7, recharts, cmdk, Lucide React |
+| **Routing & UI** | React Router 7, motion, cmdk, Lucide React |
 | **Testing** | Vitest |
 | **Deploy** | GitHub Pages (published on every push to `main` + daily cron) |
 
@@ -37,13 +37,15 @@ npm run preview    # preview production build
 
 ### Build & deploy
 ```bash
-npm run build      # production build (auto-runs prebuild: sync-stats + sitemap)
+npm run build      # production build (auto-runs prebuild: sync-cast-stats + sync-atlas-stats + sync-tool-versions + sitemap)
 npm run deploy     # build + push to gh-pages branch
 ```
 
 ### Other commands
 ```bash
 npm run sync-stats      # refresh CAST stats from canonical source (no local clone required)
+npm run sync-atlas      # refresh Compute Atlas stats from canonical source (graceful fallback)
+npm run sync-versions   # resolve ecosystem tool versions from GitHub API (graceful fallback)
 npm run build-pdfs      # regenerate resume + one-pager PDFs from src/data/resume.js
 npm run build-resume    # legacy: docx→PDF (superseded by build-pdfs)
 npm test                # run Vitest suite
@@ -62,8 +64,10 @@ Single dark "Night Survey" reference-atlas theme (nocturnal survey plate) — **
 
 **Stats Pipeline**
 - `npm run sync-stats` fetches canonical CAST stats **over HTTPS** from `claude-agent-team/cast-stats.json` (with timeout + graceful fallback to `public/cast-stats.json`). No local clone required.
-- `prebuild` hook runs automatically before every `npm run build`.
-- `deploy.yml` re-fetches stats at deploy time, so the live site self-heals stats drifts.
+- `npm run sync-atlas` fetches Compute Atlas figures from `compute-atlas.com/api/stats` with graceful fallback to `public/atlas-stats.json`.
+- `npm run sync-versions` resolves ecosystem tool versions from GitHub tags/releases with graceful fallback to `public/tool-versions.json`.
+- `prebuild` hook runs all three feeds automatically before every `npm run build`.
+- `deploy.yml` re-fetches all stats at deploy time, so the live site self-heals stats drifts.
 - CI gate (`cast-stats-check.yml`) blocks commits if stats drift from canonical.
 
 **Resume Pipeline**
@@ -77,8 +81,7 @@ Single dark "Night Survey" reference-atlas theme (nocturnal survey plate) — **
 
 **Hero**
 - The hero is a typographic **frontispiece** (`src/Components/Home/HeroSection.jsx`), not a 3D scene.
-- The old Three.js celestial starfield (deterministic meteor, selective bloom) was **retired in PR #18** and is no longer mounted. Files preserved in `src/Components/Celestial/` and recoverable via the `era/celestial-revival` tag.
-- Retiring the 3D scene dropped the entire `three` chunk from the production bundle.
+- The old Three.js celestial starfield, `src/Components/Celestial/`, the `three`/`@react-three`/`postprocessing` dependencies, and the orphaned StravaStats widget were **removed entirely** in this session (recoverable via the `era/celestial-revival` tag).
 
 ## Routes
 

@@ -16,7 +16,7 @@ npm run preview   # preview production build locally
 
 ## Build
 ```bash
-npm run build     # prebuild (sync-stats + generate-sitemap) then vite build
+npm run build     # prebuild (sync-cast-stats + sync-atlas-stats + sync-tool-versions + generate-sitemap) then vite build
 npm run deploy    # build + push to gh-pages branch
 ```
 
@@ -48,12 +48,11 @@ hairlines over glow, warm near-black over cold blue-black.
 
 ## Non-obvious
 
-- `prebuild` runs `sync-stats` + `generate-sitemap` before every `npm run build`.
-  `sync-cast-stats.mjs` fetches canonical CAST stats from the flagship repo over https
-  (with a timeout + graceful fallback to the committed `public/cast-stats.json`), so it does
-  NOT require a local `~/Projects/personal/claude-agent-team` clone and will not fail the
-  build if one is absent. Run `npm run sync-stats` any time to refresh dev + the committed
-  snapshot from canonical.
+- `prebuild` runs `sync-cast-stats`, `sync-atlas-stats`, `sync-tool-versions`, and `generate-sitemap` before every `npm run build`.
+  - `sync-cast-stats.mjs` fetches canonical CAST stats from the flagship repo over https (with a timeout + graceful fallback to `public/cast-stats.json`). Does NOT require a local `~/Projects/personal/claude-agent-team` clone.
+  - `sync-atlas-stats.mjs` fetches Compute Atlas figures from `compute-atlas.com/api/stats`, producing `src/data/atlasStats.js` (`ATLAS_STATS`) and `public/atlas-stats.json` with graceful fallback.
+  - `sync-tool-versions.mjs` resolves ecosystem tool versions from GitHub API, producing `src/data/toolStats.js` (`TOOL_VERSIONS`) and `public/tool-versions.json` with graceful fallback.
+  All three are best-effort with graceful fallback and re-run at deploy time for self-healing.
 - Resume / one-pager PDFs: `npm run build-pdfs` (`build-resume-pdf.mjs`, puppeteer) renders
   `public/Edward_Kubiak_Resume.pdf` + `CAST_Portfolio_OnePager.pdf` from `src/data/resume.js`
   (the single source of truth) as **classic paper** — black-on-white via the `printStyles`
@@ -71,10 +70,14 @@ hairlines over glow, warm near-black over cold blue-black.
 - During agent work, never `npm run build` (prebuild churns `src/data/castStats.js` and
   `public/sitemap.xml`) — verify with `npx vite build --outDir /tmp/vite-verify`.
 - The hero is a typographic **frontispiece** (`src/Components/Home/HeroSection.jsx`), not a
-  3D scene. The old Celestial WebGL starfield (`src/Components/Celestial/`, deterministic
-  mulberry32; shared utils in `src/lib/three/`) was retired in the atlas redesign (PR #18)
-  and is no longer mounted — files are kept for history and recoverable via the
-  `era/celestial-revival` tag. Retiring it also dropped the entire `three` chunk from the bundle.
+  3D scene. The old Celestial WebGL starfield (`src/Components/Celestial/`), the shared
+  `src/lib/three/` utilities, the `three`/`@react-three`/`postprocessing` dependencies,
+  and the orphaned StravaStats widget were **removed entirely** in this session (recoverable
+  via the `era/celestial-revival` tag).
 - Theme-era git tags (all pushed): `era/celestial-v1` (b7c9ff5), `era/nature-trailterrain`
   (4f11685), `era/celestial-revival` (pre-squash PR #10 head). Current era: **Cartographic
   Survey Atlas** (PR #18).
+
+## Data-Point Discipline
+
+Every stat shown in the UI is interpolated from a self-healing feed — `CAST_STATS` (castStats.js), `ATLAS_STATS` (atlasStats.js), or `TOOL_VERSIONS` (toolStats.js) — or it is removed. No hardcoded counts, versions, or facility numbers live in components, so numbers can't drift. This discipline governs feature work: pull stats dynamically, never hardcode them.
