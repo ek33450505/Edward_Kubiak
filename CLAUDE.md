@@ -69,6 +69,11 @@ hairlines over glow, warm near-black over cold blue-black.
   `public/cast-stats.json` + `src/data/castStats.js`.
 - During agent work, never `npm run build` (prebuild churns `src/data/castStats.js` and
   `public/sitemap.xml`) — verify with `npx vite build --outDir /tmp/vite-verify`.
+- Home → Featured Work plate order is deliberate and hardcoded in
+  `src/Components/Home/FeaturedWork.jsx`: Compute Atlas is plate 001 ("Live Atlas"), CAST is
+  plate 002 ("Flagship"). `src/data/projects.js` mirrors that order in the flagship group.
+  Both the plate number (`idx(n)`) and the motion `delay` are per-block literals — swapping
+  the blocks means swapping those too.
 - The hero is a typographic **frontispiece** (`src/Components/Home/HeroSection.jsx`), not a
   3D scene. The old Celestial WebGL starfield (`src/Components/Celestial/`), the shared
   `src/lib/three/` utilities, the `three`/`@react-three`/`postprocessing` dependencies,

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Generates src/data/atlasStats.js AND refreshes public/atlas-stats.json from the
 // live Compute Atlas API, so the portfolio's Compute Atlas case-study numbers
-// self-heal at build time instead of being hand-edited (they drifted 327→760).
+// self-heal at build time instead of being hand-edited (they drifted 327→760→1231).
 //
 // Source priority (highest wins):
 //   1. Canonical fetch — https://www.compute-atlas.com/api/stats
@@ -24,17 +24,17 @@ const CANONICAL_URL = "https://www.compute-atlas.com/api/stats";
 
 // Offline/first-run fallback. Bump alongside canonical when convenient.
 const FALLBACK = {
-  count: 760,
+  count: 1231,
   states: 50,
-  operationalMw: 11039,
-  plannedMw: 194994,
-  underConstructionMw: 83479,
+  operationalMw: 26519,
+  plannedMw: 313508,
+  underConstructionMw: 107471,
 };
 
 // Not returned by the API — kept as easy-to-bump constants (mirrors the
 // cast-desktop version default in sync-cast-stats.mjs).
-const VERSION = "v1.14.0";
-const STACK = "Next.js 16 · React 19 · TypeScript · Neon Postgres · Vercel";
+const VERSION = "v1.29.0";
+const STACK = "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel";
 const LICENSE = "MIT + CC BY 4.0";
 
 function fetchJson(url, timeoutMs = 4000) {

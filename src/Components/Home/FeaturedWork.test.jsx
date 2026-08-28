@@ -33,6 +33,26 @@ describe('FeaturedWork — section structure', () => {
   });
 });
 
+describe('FeaturedWork — plate order', () => {
+  // Order is a deliberate editorial decision, not incidental: Compute Atlas is the
+  // lead plate (001) and CAST is second (002). Both the plate number and the motion
+  // delay are per-block literals in the component, so a careless block swap silently
+  // produces two plates numbered 001. This is the one place order is pinned on
+  // purpose — see CLAUDE.md "Featured Work plate order".
+  it('renders Compute Atlas as the lead plate, ahead of CAST', () => {
+    renderFeaturedWork();
+    const slugs = screen
+      .getAllByRole('link')
+      .map((l) => l.getAttribute('href') ?? '')
+      .filter((h) => h.startsWith('/projects/'));
+
+    expect(slugs.indexOf('/projects/compute-atlas')).toBeGreaterThanOrEqual(0);
+    expect(slugs.indexOf('/projects/compute-atlas')).toBeLessThan(
+      slugs.indexOf('/projects/cast-claude-agent-team')
+    );
+  });
+});
+
 describe('FeaturedWork — flagship card', () => {
   it('renders a "View project →" link pointing to the CAST flagship slug', () => {
     renderFeaturedWork();

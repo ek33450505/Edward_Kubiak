@@ -35,8 +35,8 @@ export default function FeaturedWork() {
         </SectionHeader>
       </div>
 
-      {/* CAST flagship — full-width plate */}
-      {flagship && (
+      {/* Compute Atlas — lead full-width plate */}
+      {atlas && (
         <motion.article
           variants={staggerItem}
           initial="hidden"
@@ -49,59 +49,6 @@ export default function FeaturedWork() {
           <div className="flex items-baseline justify-between">
             <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums">
               {idx(1)}
-            </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
-              Flagship
-            </span>
-          </div>
-
-          <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
-            {flagship.title}
-          </h3>
-
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            {flagship.description}
-          </p>
-
-          <div
-            className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground"
-            aria-label="CAST stats"
-          >
-            <span className="text-primary tabular-nums">{CAST_STATS.version}</span>
-            <span className="tabular-nums">{CAST_STATS.agents} Agents</span>
-            <span className="tabular-nums">{CAST_STATS.tests} Tests</span>
-            <span aria-hidden="true" className="text-border">·</span>
-            {flagshipTech.map((tag) => (
-              <span key={tag}>{tag}</span>
-            ))}
-          </div>
-
-          <div className="mt-5 border-t border-border pt-4">
-            <Link
-              to={`/projects/${flagship.slug}`}
-              aria-label={`View the ${flagship.title} project plate`}
-              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-primary transition-colors hover:text-foreground"
-            >
-              View plate →
-            </Link>
-          </div>
-        </motion.article>
-      )}
-
-      {/* Compute Atlas — second full-width plate */}
-      {atlas && (
-        <motion.article
-          variants={staggerItem}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-          className="neatline group mb-4 flex flex-col bg-card p-6 transition-colors duration-300 hover:border-primary/50 md:p-8"
-        >
-          <div className="flex items-baseline justify-between">
-            <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums">
-              {idx(2)}
             </span>
             <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
               Live Atlas
@@ -153,6 +100,59 @@ export default function FeaturedWork() {
                 <ExternalLink size={10} aria-hidden="true" />
               </a>
             )}
+          </div>
+        </motion.article>
+      )}
+
+      {/* CAST flagship — second full-width plate */}
+      {flagship && (
+        <motion.article
+          variants={staggerItem}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
+          className="neatline group mb-4 flex flex-col bg-card p-6 transition-colors duration-300 hover:border-primary/50 md:p-8"
+        >
+          <div className="flex items-baseline justify-between">
+            <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums">
+              {idx(2)}
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+              Flagship
+            </span>
+          </div>
+
+          <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
+            {flagship.title}
+          </h3>
+
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            {flagship.description}
+          </p>
+
+          <div
+            className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground"
+            aria-label="CAST stats"
+          >
+            <span className="text-primary tabular-nums">{CAST_STATS.version}</span>
+            <span className="tabular-nums">{CAST_STATS.agents} Agents</span>
+            <span className="tabular-nums">{CAST_STATS.tests.toLocaleString("en-US")} Tests</span>
+            <span aria-hidden="true" className="text-border">·</span>
+            {flagshipTech.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
+          </div>
+
+          <div className="mt-5 border-t border-border pt-4">
+            <Link
+              to={`/projects/${flagship.slug}`}
+              aria-label={`View the ${flagship.title} project plate`}
+              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-primary transition-colors hover:text-foreground"
+            >
+              View plate →
+            </Link>
           </div>
         </motion.article>
       )}

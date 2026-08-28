@@ -9,7 +9,7 @@ Personal portfolio and professional site showcasing full-stack development, AI/L
 - **Cartographic Design System** — A single dark "Night Survey" reference-atlas theme with semantic Tailwind v4 tokens, Fraunces display type, JetBrains Mono overlines, and cartographic utilities (graticule grid, neatline frames). Zero toggles, zero light mode.
 - **Typographic Frontispiece Hero** — Clean, semantic layout without 3D effects. The legacy Three.js starfield was retired in PR #18.
 - **Command Palette (⌘K)** — Fast navigation and search via `cmdk`
-- **Flagship Projects** — [CAST](https://castframework.dev) (a local-first multi-agent framework for Claude Code) and [Compute Atlas](https://compute-atlas.com) (a source-cited U.S. data-center census)
+- **Flagship Projects** — [CAST](https://castframework.dev) (a local-first multi-agent framework for Claude Code) and [Compute Atlas](https://compute-atlas.com) (a source-cited census of U.S. grid-scale compute — data centers, crypto mining, and dedicated power)
 - **Accessibility** — WCAG AA contrast, semantic HTML, ARIA labels, skip links, focus-visible states, global reduced-motion support
 - **Performance** — Lazy-loaded routes; automatic stats sync from canonical sources
 

@@ -6,7 +6,7 @@
     <description>Full Stack Developer &amp; AI Systems Engineer — articles, projects, and insights</description>
     <language>en-us</language>
     <atom:link href="https://edwardkubiak.com/rss.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Mon, 03 Aug 2026 22:17:01 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 28 Aug 2026 01:27:27 GMT</lastBuildDate>
     <image>
       <url>https://edwardkubiak.com/favicon.svg</url>
       <title>Edward Kubiak</title>
@@ -15,7 +15,7 @@
 
   <item>
     <title>Compute Atlas</title>
-    <description>An open, source-cited census of the U.S. AI datacenter buildout — 786 facilities across 50 states, from proposed and permitted through under-construction and operational, each with a public source and an explicit confidence level. Ships as an interactive MapLibre GL map, sortable data tables, and per-facility dossiers, with the entire dataset published as open data anyone can query through a JSON API. A scheduled, autonomous discovery pipeline expands coverage daily. Built on Next.js 16 · React 19 · TypeScript · Neon Postgres · Vercel; dual-licensed MIT + CC BY 4.0. Live at compute-atlas.com.</description>
+    <description>An open, source-cited census of U.S. grid-scale compute — 1,231 facilities across 50 states, spanning hyperscale and AI campuses, crypto-mining sites, and the dedicated power generation contracted to feed them, from proposed and permitted through under-construction and operational. Every record cites a public source and carries an explicit confidence level. It ships as an interactive MapLibre GL map, sortable tables, and per-facility dossiers, alongside reference hubs for power, water, operators, metros, community opposition, and named stakeholders — with the whole dataset published as open data behind a JSON API. A scheduled autonomous discovery pipeline expands coverage daily, and nothing goes live without human approval. Built on Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel; dual-licensed MIT + CC BY 4.0. Live at compute-atlas.com.</description>
     <link>https://edwardkubiak.com/projects/compute-atlas</link>
     <category>Project</category>
     <pubDate>Wed, 08 Jul 2026 00:00:00 GMT</pubDate>
