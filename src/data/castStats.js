@@ -4,14 +4,14 @@
 // Refresh: run `npm run sync-stats` or any `npm run build` (prebuild hook).
 
 export const CAST_STATS = {
-  "version": "v9.5.3",
+  "version": "v10.0.0",
   "agents": 27,
-  "tests": 2389,
+  "tests": 3323,
   "packages": 9,
   "commands": 21,
-  "skills": 17,
-  "tables": 39,
-  "updated": "2026-07-30"
+  "skills": 18,
+  "tables": 42,
+  "updated": "2026-08-27"
 };
 
 export const CAST_DESKTOP_STATS = {

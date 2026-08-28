@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { CAST_STATS } from "../data/castStats";
+import { ATLAS_STATS } from "../data/atlasStats";
 import { fetchStarsMap } from "../hooks/useGitHubStars";
 import Reveal from "./ui/Reveal";
 
@@ -21,6 +22,7 @@ const STAR_REPOS = [
 ];
 
 const STATIC_PILLS = [
+  { label: "Facilities", value: ATLAS_STATS.facilities.toLocaleString("en-US") },
   { label: "Taps", value: `${CAST_STATS.packages}` },
   { label: "CAST", value: CAST_STATS.version },
 ];
@@ -67,7 +69,7 @@ function HeroStats() {
     >
       {loading ? (
         <>
-          {[0, 1, 2].map((i) => (
+          {cells.map((_, i) => (
             <div key={i} className="px-6 py-3" aria-hidden="true">
               <div className="h-6 w-16 animate-pulse bg-muted" />
               <div className="mt-2 h-2 w-10 animate-pulse bg-muted" />

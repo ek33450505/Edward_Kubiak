@@ -5,7 +5,7 @@ export const ROUTE_META = {
   "/": {
     title: "Edward Kubiak — Full Stack Developer & AI Systems Engineer",
     description:
-      "Edward Kubiak — Full Stack Developer & AI Systems Engineer in Columbus, OH. Builder of CAST, a multi-agent Claude Code framework, and Compute Atlas, an open data-center census.",
+      "Edward Kubiak — Full Stack Developer & AI Systems Engineer in Columbus, OH. Creator of CAST, a Claude Code agent framework, and Compute Atlas, a compute census.",
     canonical: "/",
   },
   "/about": {

@@ -26,14 +26,14 @@ const CANONICAL_URL =
 
 // Offline/first-run fallback. Bump alongside canonical when convenient.
 const FALLBACK = {
-  version: "v9.2.0",
-  agents: 23,
-  tests: 2275,
+  version: "v10.0.0",
+  agents: 27,
+  tests: 3323,
   packages: 9,
   commands: 21,
-  skills: 17,
-  tables: 39,
-  updated: "2026-07-06",
+  skills: 18,
+  tables: 42,
+  updated: "2026-08-27",
 };
 
 // Fields baked into the JS bundle (curated — keeps castStats.js clean).
@@ -99,7 +99,7 @@ for (const k of CORE_FIELDS) cast[k] = merged[k];
 // cast-desktop stats — from local clone if available (CI: last-committed defaults).
 let desktop = {
   version: "v1.2.12",
-  dashboardViews: 12,
+  dashboardViews: 11,
 };
 const desktopRepo = path.join(os.homedir(), "Projects", "personal", "cast-desktop");
 try {
