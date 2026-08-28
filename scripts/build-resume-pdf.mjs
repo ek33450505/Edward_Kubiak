@@ -22,6 +22,7 @@ import os from "node:os";
 import puppeteer from "puppeteer";
 
 import { CAST_STATS, CAST_DESKTOP_STATS } from "../src/data/castStats.js";
+import { ATLAS_STATS } from "../src/data/atlasStats.js";
 import { TOOL_VERSIONS } from "../src/data/toolStats.js";
 import { summary, skills, experience, education } from "../src/data/resume.js";
 
@@ -362,13 +363,16 @@ function renderOnePagerHtml(stats, desktopStats) {
   <div class="section-title">What I Build</div>
   <div class="projects">
     <div class="project">
-      <span class="project-name">CAST (Claude Agent Specialist Team)</span><span class="project-desc"> &mdash; ${stats.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and per-agent persistent memory. v9 &ldquo;The Record That Acts&rdquo;: the ${stats.tables}-table SQLite execution record is searchable (cast ask), signed (cast ledger --verify), and predictive (cast predict). Zero cloud dependencies.</span>
+      <span class="project-name">CAST (Claude Agent Specialist Team)</span><span class="project-desc"> &mdash; ${stats.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and per-agent persistent memory. ${stats.version} &ldquo;Make the Gates Tell the Truth&rdquo;: the ${stats.tables}-table SQLite execution record is searchable (cast ask), signed (cast ledger --verify), and predictive (cast predict), and every quality gate is mutation-tested against the defect it guards. Zero cloud dependencies.</span>
+    </div>
+    <div class="project">
+      <span class="project-name">Compute Atlas ${ATLAS_STATS.version}</span><span class="project-desc"> &mdash; an open, source-cited census of U.S. grid-scale compute: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.states} states, ${ATLAS_STATS.operationalGw} GW operational and ~${ATLAS_STATS.plannedGw} GW planned &mdash; data centers, crypto mining, and the dedicated power generation built to feed them. Interactive MapLibre map, per-facility dossiers, open data + public JSON API, and an autonomous daily discovery pipeline that verifies its own sources. compute-atlas.com</span>
     </div>
     <div class="project">
       <span class="project-name">Cast Desktop</span><span class="project-desc"> &mdash; native Tauri 2 + React 19 + Rust app; embedded Express 5 + SQLite backend, ${desktopStats.dashboardViews} dashboard views, real PTY terminal. Shipped ${desktopStats.version}.</span>
     </div>
     <div class="project">
-      <span class="project-name">Claude Code Dashboard ${TOOL_VERSIONS["claude-code-dashboard"]}</span><span class="project-desc"> &mdash; React 19 + TypeScript + Express 5 + SSE observability UI; 8 pages, reads ~/.claude directly, no telemetry.</span>
+      <span class="project-name">Claude Code Dashboard ${TOOL_VERSIONS["claude-code-dashboard"]}</span><span class="project-desc"> &mdash; React 19 + TypeScript + Express 5 + SSE observability UI; session cost tracking, per-agent scorecards, evals, reads ~/.claude directly, no telemetry.</span>
     </div>
     <div class="project">
       <span class="project-name">Agent-reliability tools (zero-LLM, deterministic)</span><span class="project-desc"> &mdash; misfire ${TOOL_VERSIONS.misfire}: trace-grounded CLAUDE.md adherence auditor; attest ${TOOL_VERSIONS.attest}: verifies a subagent&rsquo;s DONE against the real git delta; looptrip ${TOOL_VERSIONS.looptrip}: trips coordination loops at iteration 2 &mdash; reproduces prevented duplicate-work spend from a committed fixture.</span>
