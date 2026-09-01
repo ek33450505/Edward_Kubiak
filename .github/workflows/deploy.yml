@@ -30,6 +30,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history: generate-sitemap.mjs derives <lastmod> from the last
+          # commit touching each route's sources. A shallow clone answers
+          # wrongly without erroring — the grafted tip reads as having added
+          # every file, dating every route to the deploy.
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
