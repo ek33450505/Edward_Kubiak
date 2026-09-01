@@ -246,11 +246,11 @@ const About = () => {
                     Trail Runner
                   </h2>
                   <p className="text-muted-foreground leading-relaxed text-sm">
-                    I&apos;ve finished six 100-mile ultramarathons along with a
+                    I&apos;ve finished five 100-mile ultramarathons along with a
                     handful of 50K to 100K races over the years. Long days on
-                    singletrack are where I think best. Mohican 100 just ran
-                    May 23-24 2026 — recap pending. Rim to River 100 in
-                    October 2024 is in the books.
+                    singletrack are where I think best. Mohican 100 ended in a
+                    DNF this year. Next up: Rim to River 100 in October —
+                    deep in training now.
                   </p>
                 </div>
               </div>
