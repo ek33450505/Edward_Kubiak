@@ -1,7 +1,13 @@
 {
-  "count": 1231,
+  "count": 1355,
   "states": 50,
-  "operationalMw": 26519.439999999995,
-  "plannedMw": 313507.5,
-  "underConstructionMw": 107471.2
+  "operationalMw": 27402.8,
+  "plannedMw": 343789.5,
+  "underConstructionMw": 111794.2,
+  "edition": {
+    "version": "1.30.0",
+    "asOf": "2026-09-03T14:46:35.187Z",
+    "recordCount": 1351,
+    "schemaVersion": 1
+  }
 }

@@ -14,5 +14,5 @@ export const TOOL_VERSIONS = {
   "cast-doctor": "v0.1.3",
   "cast-memory": "v0.4.1",
   "claudes-journal": "v0.3.1",
-  "claude-code-dashboard": "v2.7.0"
+  "claude-code-dashboard": "v3.0.0"
 };
