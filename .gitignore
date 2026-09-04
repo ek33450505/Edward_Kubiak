@@ -7,3 +7,6 @@ dist
 coverage
 .claude/
 public/strava-stats.json
+
+# Local-only working artifact — verification checklist, deliberately untracked
+docs/claims-ledger.md
