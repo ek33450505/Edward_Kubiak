@@ -32,4 +32,10 @@ export const ROUTE_META = {
       "What Edward Kubiak is building, learning, and running right now — CAST, Compute Atlas, and AI agent-reliability tooling. Updated regularly.",
     canonical: "/now/",
   },
+  "/practice": {
+    title: "How I Work With Agents — Edward Kubiak",
+    description:
+      "How Edward Kubiak plans, prompts, reviews and verifies AI-agent work — the judgment layer, with real cases where plausible code was not correct.",
+    canonical: "/practice/",
+  },
 };

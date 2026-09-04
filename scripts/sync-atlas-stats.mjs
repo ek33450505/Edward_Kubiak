@@ -31,7 +31,9 @@ const FALLBACK = {
   underConstructionMw: 107471,
 };
 
-// Not returned by the API — kept as easy-to-bump constants (mirrors the
+// VERSION is now a fallback only — the live API returns edition.version,
+// which deriveAtlasStats() prefers when present. STACK/LICENSE are still
+// not returned by the API, so they stay hand-bumped constants (mirrors the
 // cast-desktop version default in sync-cast-stats.mjs).
 const VERSION = "v1.29.0";
 const STACK = "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel";
@@ -66,8 +68,23 @@ function round1(n) {
   return Math.round(n * 10) / 10;
 }
 
+// Normalizes an edition version string to the site's "vX.Y.Z" format: trims
+// surrounding whitespace, then ensures exactly one lowercase "v" prefix
+// (matched case-insensitively, so "V1.30.0" and "v1.30.0" both normalize to
+// "v1.30.0") without double-prefixing. The rest of the string is left
+// untouched — a version may legitimately carry an uppercase pre-release tag
+// (e.g. "1.30.0-RC1"), and lowercasing the whole string would corrupt it.
+// Returns null for non-string, empty, or whitespace-only input.
+function normalizeVersion(v) {
+  if (typeof v !== "string") return null;
+  const trimmed = v.trim();
+  if (trimmed === "") return null;
+  return /^v/i.test(trimmed) ? `v${trimmed.slice(1)}` : `v${trimmed}`;
+}
+
 // Pure — derives the curated bundle baked into src/data/atlasStats.js from the
-// raw API shape (count/states/*Mw). No side effects; safe to import for tests.
+// raw API shape (count/states/*Mw[/edition.version]). No side effects; safe to
+// import for tests.
 export function deriveAtlasStats(raw) {
   return {
     facilities: raw.count,
@@ -78,7 +95,7 @@ export function deriveAtlasStats(raw) {
     underConstructionGw: round1(raw.underConstructionMw / 1000),
     plannedMw: Math.round(raw.plannedMw),
     plannedGw: round1(raw.plannedMw / 1000),
-    version: VERSION,
+    version: normalizeVersion(raw.edition?.version) ?? VERSION,
     stack: STACK,
     license: LICENSE,
   };

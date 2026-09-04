@@ -69,7 +69,7 @@ export const experience = [
     role: "Creator & Maintainer — CAST & Agent-Reliability Tools",
     company: "Open Source",
     location: "github.com/ek33450505",
-    period: "2024 — Present",
+    period: "2026 — Present",
     highlights: [
       `Creator of CAST ${CAST_STATS.version} "Make the Gates Tell the Truth" — a local-first, open-source multi-agent control plane for Claude Code: ${CAST_STATS.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and a ${CAST_STATS.tables}-table SQLite execution record that acts: full-text search over every session (cast ask), signed SHA-256 audit receipts (cast ledger --verify), and telemetry-driven cost prediction (cast predict). v10 audited every quality gate against one question — what does this check report when the thing it guards did not happen? — and rebuilt the ones that reported success either way; new tests are mutation-tested against the bug they guard before they are trusted. ${CAST_STATS.tests.toLocaleString("en-US")} tests, zero cloud dependencies.`,
       `Shipped the CAST ecosystem as ${CAST_STATS.packages} Homebrew packages plus the umbrella cast formula — the flagship framework, cast-desktop (native Tauri 2 + React 19 + Rust app with an embedded Express 5 + SQLite backend, ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, and a real PTY-backed terminal), the Claude Code Dashboard ${TOOL_VERSIONS["claude-code-dashboard"]} (React 19 + TypeScript + Express 5 + SSE observability UI), and standalone packages for agent memory, health checks, journaling, MCP access, signed receipts, and dispatch prediction.`,
