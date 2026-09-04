@@ -352,6 +352,8 @@ const projects = [
       "Mission-critical EMIS data validation platform serving Ohio school districts. Spearheaded the complete migration from AngularJS to React, modernizing the entire frontend architecture.",
     summary: "Mission-critical EMIS data-validation platform serving Ohio school districts. Spearheaded the full frontend migration from AngularJS to React.",
     tech: ["React", "Node.js", "Python API"],
+    accessNote:
+      "Internal to META Solutions and the Ohio school districts it serves — the application sits behind authentication and the source is private, so there is no repository or demo URL to share. Architecture and decisions are described above; I'm glad to go deeper in conversation.",
     icon: BarChart3,
     color: "emerald",
     category: "professional",
@@ -364,6 +366,8 @@ const projects = [
     description:
       "EMIS scenario reference tool I built from the ground up — React 19 + Express 5 with JSON data persistence, automated backups, and full test coverage via Vitest. The go-to resource for Ohio education data teams.",
     summary: "EMIS scenario reference tool built from the ground up — React 19 + Express 5 with JSON persistence, automated backups, and full Vitest coverage.",
+    accessNote:
+      "Built for META Solutions on a private repository. The application is running in QA and has not been rolled out yet, so there is no public URL — the stack and architecture are described above.",
     tech: ["React 19", "Vite", "Express 5", "Vitest"],
     icon: Database,
     color: "rose",
@@ -378,6 +382,7 @@ const projects = [
     description:
       "Internal catalog platform enabling school districts to browse, request, and manage PowerSchool customizations. Streamlined a process that previously required manual email coordination.",
     summary: "Internal catalog platform letting Ohio school districts browse, request, and manage PowerSchool customizations — replacing a manual email-coordination process.",
+    link: "https://customizations.metasolutions.net/",
     tech: ["React 19", "Vite"],
     icon: ShoppingBag,
     color: "accent",
@@ -392,6 +397,8 @@ const projects = [
     description:
       "Full-stack platform for managing federal E-Rate telecom discount program data — helping districts capture funding they're entitled to. Architected as a Docker Compose monorepo with dual React frontends, a Flask API layer, and PostgreSQL.",
     summary: "Full-stack platform for managing federal E-Rate telecom-discount data — a Docker Compose monorepo with dual React frontends, a Flask API, and PostgreSQL.",
+    accessNote:
+      "Internal to META Solutions on a private repository, with no public URL. The stack and architecture are described above.",
     tech: ["React", "Flask", "PostgreSQL", "Docker", "TypeScript", "MUI"],
     icon: DollarSign,
     color: "sky",

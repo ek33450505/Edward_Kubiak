@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { fadeUp, fadeIn } from "../utils/motion";
-import { ExternalLink, ArrowLeft } from "lucide-react";
+import { ExternalLink, ArrowLeft, Lock } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 import PageWrapper from "./ui/PageWrapper";
@@ -12,6 +12,12 @@ import { useDocumentMeta } from "../hooks/useDocumentMeta";
 
 const backLinkClass =
   "inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary";
+
+// Professional work is internal by default: private source, no shareable URL. Without
+// this, such a project renders a detail page with no out-links and no explanation for
+// their absence, which reads as an unfinished page rather than a deliberate one.
+const DEFAULT_ACCESS_NOTE =
+  "Internal work — the source is private and there is no public URL. The architecture and decisions are described above, and I'm glad to go deeper in conversation.";
 
 function ProjectDetail() {
   const { slug } = useParams();
@@ -43,6 +49,8 @@ function ProjectDetail() {
   const categoryLabel = `${project.category}${
     project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""
   }`;
+
+  const hasOutLinks = Boolean(project.github || project.link);
 
   return (
     <div className="min-h-[calc(100vh-80px)] py-20">
@@ -82,8 +90,14 @@ function ProjectDetail() {
                 </div>
               </div>
 
-              {/* Out-links */}
+              {/* Out-links — or, for internal work, why there are none */}
               <div className="flex shrink-0 gap-2">
+                {!hasOutLinks && (
+                  <span className="inline-flex items-center gap-2 rounded border border-border px-2.5 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    <Lock size={13} aria-hidden="true" />
+                    Internal — no public repo
+                  </span>
+                )}
                 {project.github && (
                   <a
                     href={project.github}
@@ -198,8 +212,19 @@ function ProjectDetail() {
           </motion.div>
         )}
 
+        {/* Access plate — stands in for the Links panel on internal work */}
+        {!hasOutLinks && (
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.35 }} className="mt-6 p-8 card">
+            <Label as="h2" className="mb-4">Access</Label>
+            <p className="flex items-start gap-3 leading-relaxed text-muted-foreground">
+              <Lock size={16} aria-hidden="true" className="mt-1 shrink-0 text-primary" />
+              <span>{project.accessNote ?? DEFAULT_ACCESS_NOTE}</span>
+            </p>
+          </motion.div>
+        )}
+
         {/* Links panel */}
-        {(project.github || project.link) && (
+        {hasOutLinks && (
           <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.35 }} className="mt-6 p-8 card">
             <Label as="h2" className="mb-4">Links</Label>
             <div className="flex flex-wrap gap-3">
