@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { execFileSync } from 'child_process';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -41,30 +41,20 @@ const IS_SHALLOW = git(['rev-parse', '--is-shallow-repository']) === 'true';
 
 // Static route table — order matters for sitemap priority scanning.
 // `sources` are the files whose commits genuinely change the rendered page.
-const STATIC_ROUTES = [
+export const STATIC_ROUTES = [
   { path: '/',         priority: '1.0', changefreq: 'weekly',
     sources: ['src/Components/Home.jsx', 'src/Components/Home', 'src/data/projects.js'] },
   { path: '/projects', priority: '0.9', changefreq: 'weekly',
     sources: ['src/Components/Portfolio.jsx', 'src/data/projects.js'] },
   { path: '/about',    priority: '0.8', changefreq: 'monthly',
     sources: ['src/Components/About.jsx'] },
+  { path: '/practice', priority: '0.9', changefreq: 'monthly',
+    sources: ['src/Components/Practice.jsx', 'src/data/practice.js'] },
   { path: '/resume',   priority: '0.7', changefreq: 'monthly',
     sources: ['src/Components/Resume.jsx', 'src/data/resume.js'] },
   { path: '/now',      priority: '0.5', changefreq: 'weekly',
     sources: ['src/Components/Now.jsx', 'src/data/now.js'] },
 ];
-
-// Read and parse projects
-let projects = [];
-try {
-  const projectsModule = await import(projectsPath);
-  projects = projectsModule.default || [];
-  // Filter out archived projects (no archived flag → include all)
-  projects = projects.filter(p => !p.archived);
-} catch (e) {
-  console.error('Failed to load projects:', e.message);
-  process.exit(1);
-}
 
 // Build <url> entries
 function urlEntry({ loc, lastmod, priority, changefreq }) {
@@ -76,60 +66,77 @@ function urlEntry({ loc, lastmod, priority, changefreq }) {
   </url>`;
 }
 
-const entries = [];
+async function main() {
+  // Read and parse projects
+  let projects = [];
+  try {
+    const projectsModule = await import(projectsPath);
+    projects = projectsModule.default || [];
+    // Filter out archived projects (no archived flag → include all)
+    projects = projects.filter(p => !p.archived);
+  } catch (e) {
+    console.error('Failed to load projects:', e.message);
+    process.exit(1);
+  }
 
-// Static routes — lastmod is the last commit date of the files backing the page,
-// falling back to today only when git can't answer (see gitLastModified).
-// Root stays `/`; every sub-route gets a trailing slash to match the 200 that
-// GitHub Pages actually serves (directory-index 301s from the no-slash form).
-let staleLastmod = 0;
-for (const route of STATIC_ROUTES) {
-  const loc = route.path === '/' ? `${BASE_URL}/` : `${BASE_URL}${route.path}/`;
-  const lastmod = gitLastModified(route.sources);
-  if (!lastmod) staleLastmod++;
-  entries.push(urlEntry({
-    loc,
-    lastmod: lastmod || TODAY,
-    priority: route.priority,
-    changefreq: route.changefreq,
-  }));
-}
+  const entries = [];
 
-// Dynamic project routes — lastmod is the project's real dateAdded
-for (const project of projects) {
-  const priority = project.featured ? '0.7' : '0.6';
-  entries.push(urlEntry({
-    loc: `${BASE_URL}/projects/${project.slug}/`,
-    lastmod: project.dateAdded || TODAY,
-    priority,
-    changefreq: 'monthly',
-  }));
-}
+  // Static routes — lastmod is the last commit date of the files backing the page,
+  // falling back to today only when git can't answer (see gitLastModified).
+  // Root stays `/`; every sub-route gets a trailing slash to match the 200 that
+  // GitHub Pages actually serves (directory-index 301s from the no-slash form).
+  let staleLastmod = 0;
+  for (const route of STATIC_ROUTES) {
+    const loc = route.path === '/' ? `${BASE_URL}/` : `${BASE_URL}${route.path}/`;
+    const lastmod = gitLastModified(route.sources);
+    if (!lastmod) staleLastmod++;
+    entries.push(urlEntry({
+      loc,
+      lastmod: lastmod || TODAY,
+      priority: route.priority,
+      changefreq: route.changefreq,
+    }));
+  }
 
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+  // Dynamic project routes — lastmod is the project's real dateAdded
+  for (const project of projects) {
+    const priority = project.featured ? '0.7' : '0.6';
+    entries.push(urlEntry({
+      loc: `${BASE_URL}/projects/${project.slug}/`,
+      lastmod: project.dateAdded || TODAY,
+      priority,
+      changefreq: 'monthly',
+    }));
+  }
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${entries.join('\n')}
 </urlset>
 `;
 
-fs.writeFileSync(outPath, sitemap);
-console.log(`Wrote sitemap to ${outPath}`);
-console.log(`  ${STATIC_ROUTES.length} static routes + ${projects.length} project routes = ${entries.length} total URLs`);
+  fs.writeFileSync(outPath, sitemap);
+  console.log(`Wrote sitemap to ${outPath}`);
+  console.log(`  ${STATIC_ROUTES.length} static routes + ${projects.length} project routes = ${entries.length} total URLs`);
 
-if (IS_SHALLOW) {
-  console.warn(
-    `WARNING: shallow git clone — <lastmod> for all ${STATIC_ROUTES.length} static routes ` +
-    `is dated to this build, not to real content change. Set fetch-depth: 0 on the CI checkout.`
-  );
-} else if (staleLastmod > 0) {
-  console.warn(
-    `WARNING: ${staleLastmod}/${STATIC_ROUTES.length} static routes fell back to today's date for <lastmod> ` +
-    `(git unavailable or sources never committed).`
-  );
+  if (IS_SHALLOW) {
+    console.warn(
+      `WARNING: shallow git clone — <lastmod> for all ${STATIC_ROUTES.length} static routes ` +
+      `is dated to this build, not to real content change. Set fetch-depth: 0 on the CI checkout.`
+    );
+  } else if (staleLastmod > 0) {
+    console.warn(
+      `WARNING: ${staleLastmod}/${STATIC_ROUTES.length} static routes fell back to today's date for <lastmod> ` +
+      `(git unavailable or sources never committed).`
+    );
+  }
+
+  // Print all project slugs for verification
+  console.log('\nProject slugs included:');
+  for (const p of projects) {
+    console.log(`  /projects/${p.slug}`);
+  }
 }
 
-// Print all project slugs for verification
-console.log('\nProject slugs included:');
-for (const p of projects) {
-  console.log(`  /projects/${p.slug}`);
-}
+const isMain = import.meta.url === pathToFileURL(process.argv[1] || "").href;
+if (isMain) await main();

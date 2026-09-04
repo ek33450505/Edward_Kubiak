@@ -20,10 +20,12 @@ const Portfolio = lazy(() => import("./Components/Portfolio"));
 const ProjectDetail = lazy(() => import("./Components/ProjectDetail"));
 const Resume = lazy(() => import("./Components/Resume"));
 const Now = lazy(() => import("./Components/Now"));
+const Practice = lazy(() => import("./Components/Practice"));
 const CommandPalette = lazy(() => import("./Components/CommandPalette"));
 const navLinks = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
+  { to: "/practice", label: "Practice" },
   { to: "/resume", label: "Resume" },
   { to: "/now", label: "Now" },
 ];
@@ -53,7 +55,7 @@ function NavBar() {
             <span className="font-display text-lg sm:text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
               Edward Kubiak
             </span>
-            <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.28em] uppercase text-muted-foreground mt-1">
+            <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.28em] uppercase text-muted-foreground mt-1 md:hidden lg:block">
               Full Stack Developer · Columbus OH
             </span>
           </span>
@@ -205,6 +207,7 @@ function AnimatedRoutes() {
             <Route path="/projects/:slug" element={<ProjectDetail />} />
             <Route path="/resume" element={<Resume />} />
             <Route path="/now" element={<Now />} />
+            <Route path="/practice" element={<Practice />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

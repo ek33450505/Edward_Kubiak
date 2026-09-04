@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Hash } from "lucide-react";
+import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Hash, Workflow } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import { useCommandPalette } from "./CommandPaletteContext";
 
@@ -21,6 +21,7 @@ const navigateCommands = [
   { id: "home", label: "Home", icon: Home, to: "/" },
   { id: "about", label: "About", icon: User, to: "/about" },
   { id: "projects", label: "Projects", icon: FolderOpen, to: "/projects" },
+  { id: "practice", label: "Practice", icon: Workflow, to: "/practice" },
   { id: "resume", label: "Resume", icon: FileText, to: "/resume" },
   { id: "now", label: "Now", icon: Clock, to: "/now" },
 ];
