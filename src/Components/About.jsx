@@ -67,42 +67,6 @@ const About = () => {
                   <code className="text-primary font-mono text-[0.92em]">cast predict</code>.
                 </p>
 
-                {/* Survey stats strip — hairline-divided tabular figures */}
-                <div className="mt-5 mx-auto flex w-fit flex-wrap items-stretch divide-x divide-border border-y border-border">
-                  <div className="flex flex-col gap-1 px-4 py-2">
-                    <span className="font-mono text-xl font-semibold tabular-nums leading-none text-foreground">
-                      {CAST_STATS.tests.toLocaleString("en-US")}
-                    </span>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                      Tests
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1 px-4 py-2">
-                    <span className="font-mono text-xl font-semibold tabular-nums leading-none text-foreground">
-                      {CAST_STATS.tables}
-                    </span>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                      Tables
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1 px-4 py-2">
-                    <span className="font-mono text-xl font-semibold tabular-nums leading-none text-foreground">
-                      {CAST_STATS.packages}
-                    </span>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                      Packages
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1 px-4 py-2">
-                    <span className="font-mono text-xl font-semibold tabular-nums leading-none text-foreground">
-                      {CAST_STATS.agents}
-                    </span>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                      Agents
-                    </span>
-                  </div>
-                </div>
-
                 <p className="mt-4 text-muted-foreground leading-relaxed">
                   At{" "}
                   <a
