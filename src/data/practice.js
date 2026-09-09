@@ -1,10 +1,10 @@
 import { CAST_STATS } from "./castStats.js";
 
 const practice = {
-  updated: "September 3, 2026",
+  updated: "September 9, 2026",
 
   lede:
-    "Agents write most of my code. That moves the work, it doesn't remove it — the judgment, the verification, and the consequences stay put. This is the loop I actually run, where I spend review time, and four times the output looked right and wasn't.",
+    "Agents write most of my code. That moves the work, it doesn't remove it — the judgment, the verification, and the consequences stay put. This is the loop I actually run, where I spend review time, and six times the output looked right and wasn't.",
 
   loop: [
     {
@@ -113,6 +113,37 @@ const practice = {
       lesson:
         "Verify content after the gate, not only before. A tool with write access will sometimes use it, whatever its role says.",
       provenance: "CAST · 2026-08-15",
+    },
+    {
+      id: "alert-named-wrong-file",
+      title: "The alert that named the wrong file, precisely",
+      symptom:
+        "A nightly schema-drift check failing six nights running — loudly, and since the day it was created.",
+      lookedRight:
+        "A table declared in the schema module is missing from the live database: a migration reached main but was never applied. The alert named the file, named the failure mode, and prescribed the fix.",
+      actuallyWas:
+        "The job never reached the database. It died resolving a local environment file, exit 9, before a connection was opened. Run properly, every table was present.",
+      caughtBy:
+        "Reading the job's exit code and its first error line instead of its last.",
+      fix: "Fix the environment resolution, then split the check's two outcomes apart: could not connect is not the same result as connected and found drift, and only one of them should ever recommend a migration.",
+      lesson:
+        "The specificity is what made it dangerous. A vague failure sends you to go look; a precise, credible, actionable one invites you to act — and the action this one prescribed was to run a migration against production. The better written a wrong message is, the worse it is. It also fed a wrong causal story: a routine manual sync looked like the cause of a mechanism that had never once functioned.",
+      provenance: "Compute Atlas · 2026-09-09 · six consecutive red runs, none of them about the database",
+    },
+    {
+      id: "existence-not-identity",
+      title: "Verified that it existed, never that it was mine",
+      symptom: "None. The check returned a success code and read back a version number.",
+      lookedRight:
+        "A package registry answered HTTP 200 for the name and reported a published version, so the tool was recorded as shipped there.",
+      actuallyWas:
+        "Not my package. The name belongs to an unrelated library published by someone else in 2012. A false distribution claim reached my own resume on the strength of a status code.",
+      caughtBy:
+        "Fetching the package's metadata and reading its project URLs for the owning account, rather than trusting that the name resolved.",
+      fix: "The claim was corrected, and the audit procedure now requires a distribution claim to match the owning account in the package's own metadata — never the response code alone.",
+      lesson:
+        "Existence was verified. Identity was not. Those are different questions and only one of them had been asked. The uncomfortable part is the rest of that pass: it went on to flag two packages as stale because a pattern only understood one of two legitimate URL shapes. Three of its four findings were wrong — the tooling I built to check my claims was less reliable than the claims it was checking.",
+      provenance: "This portfolio · 2026-09-04 · four public claims corrected, one of them on the resume",
     },
   ],
 
