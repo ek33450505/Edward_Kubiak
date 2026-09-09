@@ -54,12 +54,27 @@ const About = () => {
                   The Developer
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  I&apos;m a full stack developer and AI systems engineer who
-                  builds developer tooling and production applications. My
-                  flagship work is CAST {CAST_STATS.version} — a local-first,
-                  open-source multi-agent framework for Claude Code where every
-                  agent run lands in a tamper-evident record the system acts on:
-                  full-text search with{" "}
+                  I&apos;m a full stack developer and AI systems engineer. Agents
+                  write most of my code now. That moved the work rather than
+                  removing it — the judgment, the verification and the
+                  consequences all stayed put — and most of what I build is the
+                  tooling that keeps that honest. There&apos;s a longer write-up
+                  of the loop I actually run, and of the times the output looked
+                  right and wasn&apos;t, on{" "}
+                  <Link
+                    to="/practice"
+                    className="text-primary hover:text-foreground underline underline-offset-4 decoration-border hover:decoration-primary transition-colors"
+                  >
+                    How I Work With Agents
+                  </Link>
+                  .
+                </p>
+
+                <p className="mt-4 text-muted-foreground leading-relaxed">
+                  CAST {CAST_STATS.version} is that practice made mechanical — a
+                  local-first, open-source multi-agent control plane for Claude
+                  Code where every agent run lands in a tamper-evident record the
+                  system acts on: full-text search with{" "}
                   <code className="text-primary font-mono text-[0.92em]">cast ask</code>,
                   signed SHA-256 audit receipts with{" "}
                   <code className="text-primary font-mono text-[0.92em]">cast ledger --verify</code>,
@@ -76,11 +91,13 @@ const About = () => {
                     className="text-primary hover:text-foreground underline underline-offset-4 decoration-border hover:decoration-primary transition-colors"
                   >
                     META Solutions
-                  </a>
-                  , I architect and maintain production applications serving Ohio
-                  school districts — from the CrossCheck data validation platform
-                  to E-Rate dashboards, EMIS scenario tools, and PowerSchool
-                  customizations.
+                  </a>{" "}
+                  I build and own production applications serving Ohio school
+                  districts: CrossCheck, the EMIS data-validation platform I was
+                  hired out of a certificate program to rewrite in React and have
+                  owned since; SES-Wiki, a full-stack EMIS reference built from an
+                  empty directory; the public PowerSchool customization catalog;
+                  and the E-Rate dashboard front end.
                 </p>
               </div>
             </div>

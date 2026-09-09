@@ -122,6 +122,12 @@ const Now = () => {
           >
             Projects
           </Link>
+          <Link
+            to="/practice"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+          >
+            Practice
+          </Link>
         </Reveal>
 
       </PageWrapper>
