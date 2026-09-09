@@ -14,7 +14,7 @@ const practice = {
       artifact:
         "A three-tier planning rule. Most work stays single-agent — most work does not actually fan out.",
       resumeLine:
-        "Ceremony scaled to blast radius, not line count — a one-line edit to an enforcement file gets a written plan; a documentation typo gets applied inline.",
+        "Ceremony scales to blast radius, not line count: a one-line edit to an enforcement file gets a written plan; a doc typo gets applied inline.",
     },
     {
       id: "articulate-intent",
@@ -23,7 +23,7 @@ const practice = {
       artifact:
         "A dispatch contract, written after one run read eight files, produced nothing, and burned 95,000 tokens. That was an authoring failure, not a model failure.",
       resumeLine:
-        "The prompt is the specification: if an agent would have to read four files before it could write anything, that context belongs in the dispatch, compressed, with exact anchors.",
+        "The prompt is the specification — if an agent would have to read four files before writing anything, that context belongs in the dispatch, with exact anchors.",
     },
     {
       id: "dispatch-narrow",
@@ -32,7 +32,7 @@ const practice = {
       artifact:
         "Every agent carries a turn cap. Runs that go quiet are reaped and recorded as abandoned, not left looking finished.",
       resumeLine:
-        "One logical unit per dispatch, sized to the agent's turn budget — an agent that exhausts its budget stops mid-sentence with no error, which reads exactly like success.",
+        "One unit per dispatch, sized to the agent's turn budget: an agent that exhausts it stops mid-sentence with no error, which reads exactly like success.",
     },
     {
       id: "spend-review-time",
@@ -41,7 +41,7 @@ const practice = {
       artifact:
         "Review is mandatory per logical unit, and the dispatching session runs it — an agent cannot mark its own work reviewed.",
       resumeLine:
-        "Review time goes where it is cheap to be wrong: generated tests get read harder than generated implementations, because a wrong test is invisible and a wrong implementation usually is not.",
+        "Review time goes where it is cheap to be wrong — generated tests get read harder than implementations, because a wrong test is invisible.",
     },
     {
       id: "verify-mechanically",
@@ -50,7 +50,7 @@ const practice = {
       artifact:
         "A hook that checks a claimed DONE against the real git delta and refuses the claim when the files never landed.",
       resumeLine:
-        "Verify mechanically, then read the verdict — confirm the change is on disk before evaluating whether it is good. A verdict is evidence about quality, never about existence.",
+        "Verify mechanically, then read the verdict: confirm the change is on disk before judging whether it is good. A verdict is evidence about quality, never existence.",
     },
   ],
 
