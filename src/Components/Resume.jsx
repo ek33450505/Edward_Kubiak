@@ -2,7 +2,15 @@ import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { Mail, MapPin, Download, FileText } from "lucide-react";
 import { fadeUp } from "../utils/motion";
-import { skills, experience, education, printStyles, summary } from "../data/resume";
+import {
+  skills,
+  experience,
+  education,
+  earlierCareer,
+  aiPractice,
+  printStyles,
+  summary,
+} from "../data/resume";
 import { LinkedinIcon } from "./BrandIcons";
 import Reveal from "./ui/Reveal";
 import PageWrapper from "./ui/PageWrapper";
@@ -78,6 +86,30 @@ const Resume = () => {
           <p className="leading-relaxed text-foreground">{summary}</p>
         </Reveal>
 
+        {/* AI-assisted engineering practice — condensed from /practice */}
+        <Reveal className="mt-8 p-6 card" transition={{ duration: 0.5, delay: 0.1 }}>
+          <Label as="h2" className="mb-3">
+            AI-Assisted Engineering Practice
+          </Label>
+          <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
+            {aiPractice.note}
+          </p>
+          <ul className="space-y-2.5">
+            {aiPractice.items.map((item) => (
+              <li
+                key={item}
+                className="relative pl-4 text-sm leading-relaxed text-foreground"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute left-0 top-[0.5em] h-1.5 w-1.5 bg-primary"
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+
         {/* Skills grid */}
         <Reveal className="mt-8" transition={{ duration: 0.5, delay: 0.1 }}>
           <Label as="h2" className="mb-3">Skills</Label>
@@ -124,6 +156,18 @@ const Resume = () => {
                   {job.period}
                 </span>
               </div>
+              {job.tech?.length ? (
+                <div className="mb-4 flex flex-wrap gap-1">
+                  {job.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="skill-chip rounded border border-border px-1.5 py-px font-mono text-[10px] tracking-wide text-muted-foreground"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
               <ul className="space-y-3">
                 {job.highlights.map((h, i) => (
                   <motion.li
@@ -141,6 +185,39 @@ const Resume = () => {
               </ul>
             </div>
           ))}
+        </Reveal>
+
+        {/* Earlier career — pre-engineering roles, deliberately compact */}
+        <Reveal className="mt-8" transition={{ duration: 0.5, delay: 0.1 }}>
+          <Label as="h2" className="mb-4">
+            Earlier Career
+          </Label>
+          <div className="p-6 card">
+            <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
+              {earlierCareer.note}
+            </p>
+            <ul className="space-y-3">
+              {earlierCareer.roles.map((job) => (
+                <li
+                  key={job.company}
+                  className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between"
+                >
+                  <span className="text-sm text-foreground">
+                    <span className="font-semibold">{job.role}</span>
+                    <span className="text-muted-foreground">
+                      {" \u00b7 "}
+                      {job.company}
+                      {" \u00b7 "}
+                      {job.location}
+                    </span>
+                  </span>
+                  <span className="shrink-0 font-mono text-xs tracking-wider text-muted-foreground">
+                    {job.period}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </Reveal>
 
         {/* Education */}
@@ -181,6 +258,12 @@ const Resume = () => {
             className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
           >
             Projects
+          </Link>
+          <Link
+            to="/practice"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+          >
+            Practice
           </Link>
         </Reveal>
       </PageWrapper>
