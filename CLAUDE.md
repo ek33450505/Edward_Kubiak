@@ -53,11 +53,21 @@ hairlines over glow, warm near-black over cold blue-black.
   - `sync-atlas-stats.mjs` fetches Compute Atlas figures from `compute-atlas.com/api/stats`, producing `src/data/atlasStats.js` (`ATLAS_STATS`) and `public/atlas-stats.json` with graceful fallback.
   - `sync-tool-versions.mjs` resolves ecosystem tool versions from GitHub API, producing `src/data/toolStats.js` (`TOOL_VERSIONS`) and `public/tool-versions.json` with graceful fallback.
   All three are best-effort with graceful fallback and re-run at deploy time for self-healing.
-- Resume / one-pager PDFs: `npm run build-pdfs` (`build-resume-pdf.mjs`, puppeteer) renders
-  `public/Edward_Kubiak_Resume.pdf` + `CAST_Portfolio_OnePager.pdf` from `src/data/resume.js`
-  (the single source of truth) as **classic paper** — black-on-white via the `printStyles`
-  export, never UI-styled — and also copies both to `~/Desktop`. The legacy
-  `npm run build-resume` (docx → LibreOffice headless) still exists but is superseded.
+- PDFs: `npm run build-pdfs` (`build-resume-pdf.mjs`, puppeteer) regenerates
+  `public/CAST_Portfolio_OnePager.pdf` and copies it to `~/Desktop`.
+  - **`public/Edward_Kubiak_Resume.pdf` is a HAND-DESIGNED artifact** (Ed, 2026-09-09) and is
+    **skipped by default** so the script cannot overwrite it. `RESUME_PDF_REGENERATE=1` rebuilds
+    it from `src/data/resume.js` as classic paper (black-on-white via `printStyles`, never
+    UI-styled) instead. ⚠️ **The designed PDF therefore does NOT track `resume.js` edits** —
+    `/resume` (the page) and the downloadable PDF can drift, and re-exporting the design is a
+    manual step. Update both, or neither.
+  - Both PDFs pass a fail-closed page-count gate (`assertPageBudget`): budgets live in
+    `paperContract` in `resume.js`, which also drives `printStyles` so Cmd+P and the generated
+    PDF share one paper contract. Note `page.pdf()` ignores CSS `@page` margins — they are
+    passed explicitly.
+  - `RESUME_PDF_OUT_DIR` redirects output for verification runs. The module only runs `main()`
+    when invoked directly, so importing a renderer no longer overwrites `public/` or `~/Desktop`.
+  - The legacy `npm run build-resume` (docx → LibreOffice headless) still exists but is superseded.
 - Animation package is `motion` (npm) not `framer-motion` — `import { motion } from "motion/react"`.
 - Deploy target is GitHub Pages (`gh-pages -d dist`); no Vercel or Netlify config.
 - Deploys are AUTOMATIC: `deploy.yml` publishes to gh-pages on every push to `main` and on a

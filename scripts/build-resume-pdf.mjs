@@ -4,6 +4,8 @@
  *
  * Puppeteer-based print pipeline:
  *   1. public/Edward_Kubiak_Resume.pdf    — classic paper resume from src/data/resume.js data
+ *                                           DISABLED BY DEFAULT: the shipped file is a
+ *                                           hand-designed artifact. See REGENERATE_RESUME.
  *   2. public/CAST_Portfolio_OnePager.pdf — one-pager from castStats data
  *
  * Both PDFs are also copied to ~/Desktop/ for review.
@@ -47,6 +49,22 @@ const COPY_TO_DESKTOP = !process.env.RESUME_PDF_OUT_DIR;
 const RESUME_PDF = path.join(OUT_DIR, "Edward_Kubiak_Resume.pdf");
 const ONEPAGER_PDF = path.join(OUT_DIR, "CAST_Portfolio_OnePager.pdf");
 const DESKTOP = os.homedir();
+
+// ---------------------------------------------------------------------------
+// The shipped public/Edward_Kubiak_Resume.pdf is a HAND-DESIGNED artifact
+// (Ed, 2026-09-09) — not this script's output. Regenerating would silently
+// replace a designed document with the generated one, which is exactly the kind
+// of quiet clobber this file has already caused once.
+//
+// So resume generation is OFF by default. Set RESUME_PDF_REGENERATE=1 to turn it
+// back on, which also re-applies the two-page budget gate. The one-pager is
+// unaffected and still regenerates every run.
+//
+// NOTE: src/data/resume.js remains the source of truth for the /resume PAGE.
+// While this flag is off the designed PDF does NOT track edits to that data —
+// the two can drift, and re-exporting the design is a manual step.
+// ---------------------------------------------------------------------------
+const REGENERATE_RESUME = process.env.RESUME_PDF_REGENERATE === "1";
 
 // ---------------------------------------------------------------------------
 // HTML escaping
@@ -529,30 +547,38 @@ async function main() {
     browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
-    // Resume PDF — classic paper template
-    console.log("Rendering resume PDF ...");
-    const resumeHtml = renderResumeHtml(
-      summary,
-      skills,
-      experience,
-      education,
-      earlierCareer,
-      aiPractice
-    );
-    await page.setContent(resumeHtml, { waitUntil: "domcontentloaded" });
-    const resumeBuffer = await page.pdf({
-      path: RESUME_PDF,
-      format: paperContract.size,
-      printBackground: true,
-      margin: {
-        top: paperContract.margin,
-        right: paperContract.margin,
-        bottom: paperContract.margin,
-        left: paperContract.margin,
-      },
-    });
-    console.log("Resume PDF written: " + RESUME_PDF);
-    assertPageBudget(resumeBuffer, "Resume", paperContract.maxPages);
+    // Resume PDF — classic paper template (opt-in; see REGENERATE_RESUME)
+    if (!REGENERATE_RESUME) {
+      console.log(
+        "Skipping resume PDF — public/Edward_Kubiak_Resume.pdf is a hand-designed\n" +
+          "artifact and would be overwritten. Set RESUME_PDF_REGENERATE=1 to rebuild it\n" +
+          "from src/data/resume.js instead."
+      );
+    } else {
+      console.log("Rendering resume PDF ...");
+      const resumeHtml = renderResumeHtml(
+        summary,
+        skills,
+        experience,
+        education,
+        earlierCareer,
+        aiPractice
+      );
+      await page.setContent(resumeHtml, { waitUntil: "domcontentloaded" });
+      var resumeBuffer = await page.pdf({
+        path: RESUME_PDF,
+        format: paperContract.size,
+        printBackground: true,
+        margin: {
+          top: paperContract.margin,
+          right: paperContract.margin,
+          bottom: paperContract.margin,
+          left: paperContract.margin,
+        },
+      });
+      console.log("Resume PDF written: " + RESUME_PDF);
+      assertPageBudget(resumeBuffer, "Resume", paperContract.maxPages);
+    }
 
     // One-pager PDF
     console.log("Rendering one-pager PDF ...");
@@ -573,13 +599,15 @@ async function main() {
       return;
     }
 
-    const desktopResume = path.join(DESKTOP, "Desktop", "Edward_Kubiak_Resume.pdf");
     const desktopOnePager = path.join(DESKTOP, "Desktop", "CAST_Portfolio_OnePager.pdf");
-    fs.copyFileSync(RESUME_PDF, desktopResume);
     fs.copyFileSync(ONEPAGER_PDF, desktopOnePager);
     console.log("\nCopied to ~/Desktop:");
-    console.log("  " + desktopResume);
     console.log("  " + desktopOnePager);
+    if (REGENERATE_RESUME) {
+      const desktopResume = path.join(DESKTOP, "Desktop", "Edward_Kubiak_Resume.pdf");
+      fs.copyFileSync(RESUME_PDF, desktopResume);
+      console.log("  " + desktopResume);
+    }
 
     console.log("\nDone.");
   } finally {
