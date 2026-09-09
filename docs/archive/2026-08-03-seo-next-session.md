@@ -1,3 +1,8 @@
+> **Archived 2026-09-09.** Complete — the backlog below is wrapped. Paths inside this
+> document refer to its pre-archive locations: `docs/seo-audit-2026-08-03.md` is now
+> `docs/archive/2026-08-03-seo-audit.md`, and this file was `docs/next-session.md`.
+> Left as written rather than rewritten, since it is a record.
+
 # Next Session — Portfolio SEO fixes (continuation)
 
 **Started:** 2026-08-03 · **Base commit at start:** `5c80fc8` · **Branch:** `main`
