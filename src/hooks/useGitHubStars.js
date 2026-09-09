@@ -47,45 +47,52 @@ export function fetchStarsMap() {
  *
  * @param {string|undefined} owner - GitHub org or user
  * @param {string|undefined} repo  - repository name
- * @returns {{ stars: number|null, loading: boolean }}
+ * @returns {{ stars: number|null, loading: boolean }} loading is derived, not stored
  */
 export function useGitHubStars(owner, repo) {
-  const [stars, setStars] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const target = owner && repo ? `${owner}/${repo}` : null;
+
+  // One piece of state, tagged with the target it describes. Loading is DERIVED
+  // from whether the resolved target matches the requested one, so the effect
+  // never calls setState in its own body — only from async callbacks, which is
+  // what effects are for. It also means a stale count is never reported while a
+  // new owner/repo is still resolving.
+  const [resolved, setResolved] = useState({ target: null, stars: null });
 
   useEffect(() => {
-    if (!owner || !repo) {
-      setLoading(false);
-      return;
-    }
+    if (!target) return undefined;
+
     let cancelled = false;
     fetchStarsMap()
       .then((map) => {
-        if (cancelled) return;
+        if (cancelled) return undefined;
         if (repo in map) {
-          setStars(map[repo]);
-          setLoading(false);
-        } else {
-          return fetch(`https://api.github.com/repos/${owner}/${repo}`)
-            .then((res) => {
-              if (!res.ok) throw new Error("API error");
-              return res.json();
-            })
-            .then((data) => {
-              if (!cancelled) {
-                setStars(data.stargazers_count ?? null);
-                setLoading(false);
-              }
-            });
+          setResolved({ target, stars: map[repo] });
+          return undefined;
         }
+        return fetch(`https://api.github.com/repos/${owner}/${repo}`)
+          .then((res) => {
+            if (!res.ok) throw new Error("API error");
+            return res.json();
+          })
+          .then((data) => {
+            if (!cancelled) {
+              setResolved({ target, stars: data.stargazers_count ?? null });
+            }
+          });
       })
       .catch(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setResolved({ target, stars: null });
       });
+
     return () => {
       cancelled = true;
     };
-  }, [owner, repo]);
+  }, [owner, repo, target]);
 
-  return { stars, loading };
+  const isCurrent = resolved.target === target;
+  return {
+    stars: isCurrent ? resolved.stars : null,
+    loading: target !== null && !isCurrent,
+  };
 }
