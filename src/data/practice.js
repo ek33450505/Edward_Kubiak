@@ -1,10 +1,10 @@
 import { CAST_STATS } from "./castStats.js";
 
 const practice = {
-  updated: "September 3, 2026",
+  updated: "September 9, 2026",
 
   lede:
-    "Agents write most of my code. That moves the work, it doesn't remove it — the judgment, the verification, and the consequences stay put. This is the loop I actually run, where I spend review time, and four times the output looked right and wasn't.",
+    "Agents write most of my code. That moves the work, it doesn't remove it — the judgment, the verification, and the consequences stay put. This is the loop I actually run, where I spend review time, and six times the output looked right and wasn't.",
 
   loop: [
     {
@@ -13,6 +13,8 @@ const practice = {
       body: "Ceremony scaled to blast radius, not line count. A typo in a doc gets applied inline; anything touching a hook, a gate, or a migration gets a written plan first. A one-line edit to an enforcement file has a larger blast radius than a hundred lines of prose.",
       artifact:
         "A three-tier planning rule. Most work stays single-agent — most work does not actually fan out.",
+      resumeLine:
+        "Ceremony scales to blast radius, not line count: a one-line edit to an enforcement file gets a written plan; a doc typo gets applied inline.",
     },
     {
       id: "articulate-intent",
@@ -20,6 +22,8 @@ const practice = {
       body: "The prompt is the specification. If an agent would have to read four files before it could write anything, that context belongs in the prompt: compressed, with exact anchors and old-to-new strings.",
       artifact:
         "A dispatch contract, written after one run read eight files, produced nothing, and burned 95,000 tokens. That was an authoring failure, not a model failure.",
+      resumeLine:
+        "The prompt is the specification — if an agent would have to read four files before writing anything, that context belongs in the dispatch, with exact anchors.",
     },
     {
       id: "dispatch-narrow",
@@ -27,6 +31,8 @@ const practice = {
       body: "One logical unit per dispatch, sized to the agent's turn budget. Split large work rather than relying on a resume: an agent that exhausts its budget stops mid-sentence with no error and no completion signal, which reads exactly like success.",
       artifact:
         "Every agent carries a turn cap. Runs that go quiet are reaped and recorded as abandoned, not left looking finished.",
+      resumeLine:
+        "One unit per dispatch, sized to the agent's turn budget: an agent that exhausts it stops mid-sentence with no error, which reads exactly like success.",
     },
     {
       id: "spend-review-time",
@@ -34,6 +40,8 @@ const practice = {
       body: "Not all output deserves equal scrutiny. Generated tests get read harder than generated implementations, because a wrong test is invisible and a wrong implementation usually isn't. Data-shaping code gets read hardest: it fails silently and then publishes.",
       artifact:
         "Review is mandatory per logical unit, and the dispatching session runs it — an agent cannot mark its own work reviewed.",
+      resumeLine:
+        "Review time goes where it is cheap to be wrong — generated tests get read harder than implementations, because a wrong test is invisible.",
     },
     {
       id: "verify-mechanically",
@@ -41,6 +49,8 @@ const practice = {
       body: "Confirm the change is on disk before reading any review of it. Checksum the files before the gate, compare after. A verdict is evidence about quality; it is never evidence about existence.",
       artifact:
         "A hook that checks a claimed DONE against the real git delta and refuses the claim when the files never landed.",
+      resumeLine:
+        "Verify mechanically, then read the verdict: confirm the change is on disk before judging whether it is good. A verdict is evidence about quality, never existence.",
     },
   ],
 
@@ -104,6 +114,37 @@ const practice = {
         "Verify content after the gate, not only before. A tool with write access will sometimes use it, whatever its role says.",
       provenance: "CAST · 2026-08-15",
     },
+    {
+      id: "alert-named-wrong-file",
+      title: "The alert that named the wrong file, precisely",
+      symptom:
+        "A nightly schema-drift check failing six nights running — loudly, and since the day it was created.",
+      lookedRight:
+        "A table declared in the schema module is missing from the live database: a migration reached main but was never applied. The alert named the file, named the failure mode, and prescribed the fix.",
+      actuallyWas:
+        "The job never reached the database. It died resolving a local environment file, exit 9, before a connection was opened. Run properly, every table was present.",
+      caughtBy:
+        "Reading the job's exit code and its first error line instead of its last.",
+      fix: "Fix the environment resolution, then split the check's two outcomes apart: could not connect is not the same result as connected and found drift, and only one of them should ever recommend a migration.",
+      lesson:
+        "The specificity is what made it dangerous. A vague failure sends you to go look; a precise, credible, actionable one invites you to act — and the action this one prescribed was to run a migration against production. The better written a wrong message is, the worse it is. It also fed a wrong causal story: a routine manual sync looked like the cause of a mechanism that had never once functioned.",
+      provenance: "Compute Atlas · 2026-09-09 · six consecutive red runs, none of them about the database",
+    },
+    {
+      id: "existence-not-identity",
+      title: "Verified that it existed, never that it was mine",
+      symptom: "None. The check returned a success code and read back a version number.",
+      lookedRight:
+        "A package registry answered HTTP 200 for the name and reported a published version, so the tool was recorded as shipped there.",
+      actuallyWas:
+        "Not my package. The name belongs to an unrelated library published by someone else in 2012. A false distribution claim reached my own resume on the strength of a status code.",
+      caughtBy:
+        "Fetching the package's metadata and reading its project URLs for the owning account, rather than trusting that the name resolved.",
+      fix: "The claim was corrected, and the audit procedure now requires a distribution claim to match the owning account in the package's own metadata — never the response code alone.",
+      lesson:
+        "Existence was verified. Identity was not. Those are different questions and only one of them had been asked. The uncomfortable part is the rest of that pass: it went on to flag two packages as stale because a pattern only understood one of two legitimate URL shapes. Three of its four findings were wrong — the tooling I built to check my claims was less reliable than the claims it was checking.",
+      provenance: "This portfolio · 2026-09-04 · four public claims corrected, one of them on the resume",
+    },
   ],
 
   principles: [
@@ -118,6 +159,8 @@ const practice = {
     {
       title: "A gate that cannot fail is not a gate.",
       body: "Every new check is mutation-tested: revert the fix, confirm the check goes red, restore. An assertion that never fails is indistinguishable from one that cannot.",
+      resumeLine:
+        "Every new gate is mutation-tested — revert the fix, confirm the check goes red, restore. An assertion that never fails is indistinguishable from one that cannot.",
     },
     {
       title: "Silence is not success.",

@@ -2,16 +2,51 @@
 
 **[edwardkubiak.com](https://edwardkubiak.com/) — Full Stack Developer & AI Systems Engineer**
 
-Personal portfolio and professional site showcasing full-stack development, AI/LLM integration, and open-source work. Built with React 19, Vite 8, and a custom "Night Survey" cartographic design system.
+I build production web applications and the tooling that keeps agent-written code
+honest. Agents write most of my code now; that moved the work rather than removing
+it, because the judgment, the verification and the consequences all stayed put.
 
-## Highlights
+- **Day job** — Applications Developer at [META Solutions](https://www.metasolutions.net/)
+  since August 2022, building and owning React applications across Ohio's K-12
+  education ecosystem. The largest is CrossCheck, the EMIS data-validation platform I
+  was hired out of a certificate program to rewrite in React and have owned since.
+- **[CAST](https://castframework.dev)** — a local-first, open-source multi-agent
+  control plane for Claude Code. Every agent run lands in a tamper-evident SQLite
+  record the system acts on: full-text search (`cast ask`), signed SHA-256 audit
+  receipts (`cast ledger --verify`), telemetry-driven cost prediction (`cast predict`).
+- **[Compute Atlas](https://compute-atlas.com)** — an open, source-cited census of the
+  U.S. grid-scale compute buildout: data centers, crypto mining, and the dedicated
+  power generation contracted to feed them. Released as open data with a public API.
+- **Agent-reliability tools** — deterministic and zero-LLM: `misfire` asks which of
+  your rules agents actually ignore, `attest` checks whether a claimed DONE landed on
+  disk, `looptrip` trips coordination loops at iteration 2 rather than on the invoice.
+- **[How I work with agents](https://edwardkubiak.com/practice)** — the loop I actually
+  run, where review time goes, and dated case studies of output that looked right and
+  wasn't.
 
-- **Cartographic Design System** — A single dark "Night Survey" reference-atlas theme with semantic Tailwind v4 tokens, Fraunces display type, JetBrains Mono overlines, and cartographic utilities (graticule grid, neatline frames). Zero toggles, zero light mode.
-- **Typographic Frontispiece Hero** — Clean, semantic layout without 3D effects. The legacy Three.js starfield was retired in PR #18.
-- **Command Palette (⌘K)** — Fast navigation and search via `cmdk`
-- **Flagship Projects** — [CAST](https://castframework.dev) (a local-first multi-agent framework for Claude Code) and [Compute Atlas](https://compute-atlas.com) (a source-cited census of U.S. grid-scale compute — data centers, crypto mining, and dedicated power)
-- **Accessibility** — WCAG AA contrast, semantic HTML, ARIA labels, skip links, focus-visible states, global reduced-motion support
-- **Performance** — Lazy-loaded routes; automatic stats sync from canonical sources
+Résumé: [edwardkubiak.com/resume](https://edwardkubiak.com/resume) ·
+Reach me at [edward.kubiak.dev@gmail.com](mailto:edward.kubiak.dev@gmail.com)
+
+---
+
+## About this repository
+
+This repo is the source of that site: React 19, Vite 8, and a custom dark "Night
+Survey" cartographic design system.
+
+- **Cartographic design system** — a single dark reference-atlas theme with semantic
+  Tailwind v4 tokens, Fraunces display type, JetBrains Mono overlines, and cartographic
+  utilities (graticule grid, neatline frames). No toggles, no light mode.
+- **Typographic frontispiece hero** — no 3D; the legacy Three.js starfield was retired
+  in PR #18.
+- **Command palette (⌘K)** — navigation and search via `cmdk`.
+- **Self-healing stats** — every figure in the UI is interpolated from a feed that
+  re-syncs at build and deploy time, or it is removed. No hardcoded counts or versions,
+  so published numbers cannot quietly drift.
+- **Accessibility** — WCAG AA contrast, semantic HTML, ARIA labels, skip links,
+  focus-visible states, global reduced-motion support.
+- **Performance and SEO** — lazy-loaded routes plus a build-time head-only prerender,
+  so deep links serve real 200s with correct metadata on GitHub Pages.
 
 ## Tech Stack
 
@@ -91,6 +126,7 @@ Single dark "Night Survey" reference-atlas theme (nocturnal survey plate) — **
 - `/projects/:slug` — Project detail (case studies, stats, open-source info)
 - `/resume` — Downloadable resume + skills breakdown
 - `/now` — What I'm working on this week
+- `/practice` — How I work with agents: the loop, the review budget, dated case studies
 - `/*` — 404 page
 
 ## Contact

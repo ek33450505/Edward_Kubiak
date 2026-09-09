@@ -70,3 +70,30 @@ describe('Practice — navigation links', () => {
     expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '/about');
   });
 });
+
+describe('Practice — the lede counts the cases it promises', () => {
+  // Reading two artifacts against each other: the prose number and the array length.
+  // A description that keeps asserting the old world is the exact defect this page is about.
+  const NUMBER_WORDS = [
+    'zero', 'one', 'two', 'three', 'four', 'five', 'six',
+    'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
+  ];
+
+  it('names the same number of case studies as it ships', () => {
+    const expected = NUMBER_WORDS[practice.cases.length];
+    expect(expected, `no number word for ${practice.cases.length} cases`).toBeDefined();
+    expect(practice.lede).toContain(`${expected} times the output looked right`);
+  });
+
+  it('gives every case a unique id and a dated provenance line', () => {
+    const ids = practice.cases.map((c) => c.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    practice.cases.forEach((c) => {
+      expect(c.provenance, `${c.id} provenance`).toMatch(/\d{4}-\d{2}-\d{2}/);
+    });
+  });
+
+  it('closes on the verification-tooling case, per the page\'s intended arc', () => {
+    expect(practice.cases.at(-1).id).toBe('existence-not-identity');
+  });
+});

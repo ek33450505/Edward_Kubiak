@@ -24,13 +24,28 @@ import puppeteer from "puppeteer";
 import { CAST_STATS, CAST_DESKTOP_STATS } from "../src/data/castStats.js";
 import { ATLAS_STATS } from "../src/data/atlasStats.js";
 import { TOOL_VERSIONS } from "../src/data/toolStats.js";
-import { summary, skills, experience, education } from "../src/data/resume.js";
+import {
+  summary,
+  skills,
+  experience,
+  education,
+  earlierCareer,
+  aiPractice,
+  paperContract,
+} from "../src/data/resume.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 
-const RESUME_PDF = path.join(ROOT, "public", "Edward_Kubiak_Resume.pdf");
-const ONEPAGER_PDF = path.join(ROOT, "public", "CAST_Portfolio_OnePager.pdf");
+// RESUME_PDF_OUT_DIR lets a verification run write somewhere other than the tracked
+// public/ copies — the real PDFs are regenerated deliberately, once, at the end.
+const OUT_DIR = process.env.RESUME_PDF_OUT_DIR
+  ? path.resolve(process.env.RESUME_PDF_OUT_DIR)
+  : path.join(ROOT, "public");
+const COPY_TO_DESKTOP = !process.env.RESUME_PDF_OUT_DIR;
+
+const RESUME_PDF = path.join(OUT_DIR, "Edward_Kubiak_Resume.pdf");
+const ONEPAGER_PDF = path.join(OUT_DIR, "CAST_Portfolio_OnePager.pdf");
 const DESKTOP = os.homedir();
 
 // ---------------------------------------------------------------------------
@@ -58,7 +73,7 @@ function shortPeriod(period) {
 // Flat single-column paper resume HTML — mirrors the docx layout exactly.
 // No boxes, no fills, no color blocks beyond black-on-white + hairline rules.
 // ---------------------------------------------------------------------------
-function renderResumeHtml(summaryText, skillsMap, experienceList, educationList) {
+function renderResumeHtml(summaryText, skillsMap, experienceList, educationList, earlier, practice) {
   const ossRoles = experienceList.filter((e) => e.company.startsWith("Open Source"));
   const proRoles = experienceList.filter((e) => !e.company.startsWith("Open Source"));
 
@@ -66,7 +81,7 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
   const skillsItems = Object.entries(skillsMap)
     .map(
       ([group, items]) =>
-        `<li><strong>${esc(group)}:</strong> ${esc(items.join(", "))}</li>`
+        `<div class="skill-row"><strong>${esc(group)}:</strong> ${esc(items.join(", "))}</div>`
     )
     .join("\n      ");
 
@@ -89,10 +104,13 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
     const bullets = entry.highlights
       .map((h) => `<li>${esc(h)}</li>`)
       .join("\n      ");
+    const tech = entry.tech?.length
+      ? `\n  <div class="tech">${esc(entry.tech.join(" \u00b7 "))}</div>`
+      : "";
     return `<div class="role-line">
     <span class="role-left">${esc(entry.role)} &nbsp;&middot;&nbsp; ${esc(entry.company)} &mdash; ${esc(entry.location)}</span>
     <span class="role-date">${esc(entry.period)}</span>
-  </div>
+  </div>${tech}
   <ul>
       ${bullets}
   </ul>`;
@@ -100,6 +118,21 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
 
   const ossHtml = ossRoles.map(renderOssRole).join("\n\n  ");
   const proHtml = proRoles.map(renderProRole).join("\n\n  ");
+
+  // AI-practice block — condensed lines derived from practice.js
+  const practiceItems = practice.items
+    .map((item) => `<li>${esc(item)}</li>`)
+    .join("\n      ");
+
+  // Earlier career: framing note + one line per pre-engineering role
+  const earlierRows = earlier.roles
+    .map(
+      (r) => `<div class="role-line">
+    <span class="role-left">${esc(r.role)} &nbsp;&middot;&nbsp; ${esc(r.company)} &mdash; ${esc(r.location)}</span>
+    <span class="role-date">${esc(r.period)}</span>
+  </div>`
+    )
+    .join("\n  ");
 
   // Education: "• degree — institution · short year"
   const eduItems = educationList
@@ -119,22 +152,22 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
 
     body {
       font-family: Helvetica, Arial, sans-serif;
-      font-size: 10.5pt;
-      line-height: 1.35;
+      font-size: ${paperContract.bodyPt}pt;
+      line-height: ${paperContract.lineHeight};
       color: #000;
       background: #fff;
     }
 
     /* Header */
     .resume-name {
-      font-size: 22pt;
+      font-size: 19pt;
       font-weight: bold;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
     .resume-contact {
-      font-size: 9pt;
+      font-size: 8.5pt;
       color: #333;
-      margin-bottom: 12px;
+      margin-bottom: 6px;
     }
 
     /* Section headers: bold, sentence case, thin rule — no small-caps, no letter-spacing */
@@ -144,8 +177,8 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
       color: #000;
       border-bottom: 0.75pt solid #666;
       padding-bottom: 1px;
-      margin-top: 11px;
-      margin-bottom: 4px;
+      margin-top: 6px;
+      margin-bottom: 2px;
     }
 
     /* Role line: role/company left, date right */
@@ -164,17 +197,43 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
       flex-shrink: 0;
     }
 
+    /* Per-role tech tags */
+    .tech {
+      font-size: 8.5pt;
+      color: #444;
+      font-style: italic;
+      margin-bottom: 3px;
+    }
+    .skill-row {
+      margin: 0.5px 0;
+      page-break-inside: avoid;
+    }
+    /* Never split a role header away from its first bullets. */
+    .role-line {
+      page-break-after: avoid;
+    }
+    .note {
+      font-size: 9pt;
+      color: #333;
+      margin-bottom: 3px;
+    }
+
     /* Bullet lists */
     ul {
       margin: 0;
-      padding-left: 18px;
+      padding-left: 14px;
     }
     li {
-      margin: 2px 0;
-      page-break-inside: avoid;
+      margin: 1px 0;
+      /* Allow a long bullet to break across pages, but never orphan/widow a single
+         line. page-break-inside:avoid pushed whole 6-line bullets to the next
+         page, wasting ~46px at the boundary and spilling a 2-page resume onto a
+         third — and it made the fit knife-edge against any future content edit. */
+      orphans: 2;
+      widows: 2;
     }
 
-    @page { margin: 0.65in; size: Letter; }
+    @page { margin: ${paperContract.margin}; size: ${paperContract.size}; }
   </style>
 </head>
 <body>
@@ -186,15 +245,23 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList)
   <p>${esc(summaryText)}</p>
 
   <div class="section-head">Skills</div>
-  <ul>
       ${skillsItems}
+
+  <div class="section-head">AI-Assisted Engineering Practice</div>
+  <div class="note">${esc(practice.note)}</div>
+  <ul>
+      ${practiceItems}
   </ul>
+
+  <div class="section-head">Professional Experience</div>
+  ${proHtml}
 
   <div class="section-head">Open Source &mdash; AI Developer Tooling</div>
   ${ossHtml}
 
-  <div class="section-head">Professional Experience</div>
-  ${proHtml}
+  <div class="section-head">Earlier Career</div>
+  <div class="note">${esc(earlier.note)}</div>
+  ${earlierRows}
 
   <div class="section-head">Education</div>
   <ul>
@@ -398,6 +465,58 @@ function renderOnePagerHtml(stats, desktopStats) {
 </html>`;
 }
 
+
+// ---------------------------------------------------------------------------
+// Page-count gate.
+//
+// Nothing pinned the resume's length before this, so it could silently grow past
+// the two-page budget on any content edit. Two independent counts are taken from
+// the PDF's own bytes and must agree; anything ambiguous THROWS rather than
+// passing, because a check that cannot determine its answer must not report
+// success. A passing check while the budget is blown looks like: the assertion
+// below never fires — which is exactly why maxPages is mutation-tested.
+// ---------------------------------------------------------------------------
+function pdfPageCount(bytes) {
+  // page.pdf() resolves a Uint8Array on current Puppeteer, not a Buffer — calling
+  // .toString("latin1") on it ignores the encoding and yields comma-joined digits,
+  // which silently matches nothing. Normalize before reading.
+  const raw = Buffer.from(bytes).toString("latin1");
+
+  // Count 1: page objects in the document (/Type /Page, never /Type /Pages).
+  const pageObjects = (raw.match(/\/Type\s*\/Page(?![s])/g) || []).length;
+
+  // Count 2: the page-tree root's declared /Count. Take the largest declared
+  // count, which is the root of the tree.
+  const counts = [...raw.matchAll(/\/Count\s+(\d+)/g)].map((m) => Number(m[1]));
+  const declared = counts.length ? Math.max(...counts) : null;
+
+  if (!pageObjects) {
+    throw new Error("page-count gate: found no page objects in the generated PDF");
+  }
+  if (declared === null) {
+    throw new Error("page-count gate: PDF declares no page-tree /Count");
+  }
+  if (declared !== pageObjects) {
+    throw new Error(
+      `page-count gate: the two counts disagree (${pageObjects} page objects vs /Count ${declared}) — refusing to guess`
+    );
+  }
+  return declared;
+}
+
+function assertPageBudget(buffer, label, maxPages) {
+  const pages = pdfPageCount(buffer);
+  const verdict = pages <= maxPages ? "within" : "OVER";
+  console.log(`  ${label}: ${pages} page(s), budget ${maxPages} — ${verdict} budget`);
+  if (pages > maxPages) {
+    throw new Error(
+      `${label} is ${pages} pages, over the ${maxPages}-page budget in paperContract. ` +
+        `Trim content in src/data/resume.js or raise paperContract.maxPages deliberately.`
+    );
+  }
+  return pages;
+}
+
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
@@ -405,33 +524,55 @@ async function main() {
   let browser = null;
 
   try {
+    fs.mkdirSync(OUT_DIR, { recursive: true });
     console.log("Launching Puppeteer ...");
     browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     // Resume PDF — classic paper template
     console.log("Rendering resume PDF ...");
-    const resumeHtml = renderResumeHtml(summary, skills, experience, education);
+    const resumeHtml = renderResumeHtml(
+      summary,
+      skills,
+      experience,
+      education,
+      earlierCareer,
+      aiPractice
+    );
     await page.setContent(resumeHtml, { waitUntil: "domcontentloaded" });
-    await page.pdf({
+    const resumeBuffer = await page.pdf({
       path: RESUME_PDF,
-      format: "Letter",
+      format: paperContract.size,
       printBackground: true,
+      margin: {
+        top: paperContract.margin,
+        right: paperContract.margin,
+        bottom: paperContract.margin,
+        left: paperContract.margin,
+      },
     });
     console.log("Resume PDF written: " + RESUME_PDF);
+    assertPageBudget(resumeBuffer, "Resume", paperContract.maxPages);
 
     // One-pager PDF
     console.log("Rendering one-pager PDF ...");
     const onePagerHtml = renderOnePagerHtml(CAST_STATS, CAST_DESKTOP_STATS);
     await page.setContent(onePagerHtml, { waitUntil: "domcontentloaded" });
-    await page.pdf({
+    const onePagerBuffer = await page.pdf({
       path: ONEPAGER_PDF,
-      format: "Letter",
+      format: paperContract.size,
       printBackground: true,
     });
     console.log("One-pager PDF written: " + ONEPAGER_PDF);
+    assertPageBudget(onePagerBuffer, "One-pager", 1);
 
     // Copy both to ~/Desktop
+    if (!COPY_TO_DESKTOP) {
+      console.log("\nRESUME_PDF_OUT_DIR set — wrote to " + OUT_DIR + ", skipped ~/Desktop copies.");
+      console.log("\nDone.");
+      return;
+    }
+
     const desktopResume = path.join(DESKTOP, "Desktop", "Edward_Kubiak_Resume.pdf");
     const desktopOnePager = path.join(DESKTOP, "Desktop", "CAST_Portfolio_OnePager.pdf");
     fs.copyFileSync(RESUME_PDF, desktopResume);
@@ -449,7 +590,17 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error("Fatal:", err.message);
-  process.exit(1);
-});
+// Only run when invoked as a script. Importing this module used to execute main()
+// as a side effect, which overwrote the tracked public/*.pdf and the ~/Desktop
+// copies of anything that imported it to reuse a renderer.
+const INVOKED_DIRECTLY =
+  process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (INVOKED_DIRECTLY) {
+  main().catch((err) => {
+    console.error("Fatal:", err.message);
+    process.exit(1);
+  });
+}
+
+export { renderResumeHtml, renderOnePagerHtml, pdfPageCount, assertPageBudget };

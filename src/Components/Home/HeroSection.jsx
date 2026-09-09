@@ -123,6 +123,12 @@ export default function HeroSection() {
             View Projects
             <ArrowRight size={14} aria-hidden="true" className="transition-transform group-hover:translate-x-1" />
           </Link>
+          <Link
+            to="/practice"
+            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary"
+          >
+            How I work with agents
+          </Link>
           <a
             href="mailto:edward.kubiak.dev@gmail.com"
             className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary"
