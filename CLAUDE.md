@@ -54,20 +54,30 @@ hairlines over glow, warm near-black over cold blue-black.
   - `sync-tool-versions.mjs` resolves ecosystem tool versions from GitHub API, producing `src/data/toolStats.js` (`TOOL_VERSIONS`) and `public/tool-versions.json` with graceful fallback.
   All three are best-effort with graceful fallback and re-run at deploy time for self-healing.
 - PDFs: `npm run build-pdfs` (`build-resume-pdf.mjs`, puppeteer) regenerates
-  `public/CAST_Portfolio_OnePager.pdf` and copies it to `~/Desktop`.
-  - **`public/Edward_Kubiak_Resume.pdf` is a HAND-DESIGNED artifact** (Ed, 2026-09-09) and is
-    **skipped by default** so the script cannot overwrite it. `RESUME_PDF_REGENERATE=1` rebuilds
-    it from `src/data/resume.js` as classic paper (black-on-white via `printStyles`, never
-    UI-styled) instead. ⚠️ **The designed PDF therefore does NOT track `resume.js` edits** —
-    `/resume` (the page) and the downloadable PDF can drift, and re-exporting the design is a
-    manual step. Update both, or neither.
-  - Both PDFs pass a fail-closed page-count gate (`assertPageBudget`): budgets live in
-    `paperContract` in `resume.js`, which also drives `printStyles` so Cmd+P and the generated
-    PDF share one paper contract. Note `page.pdf()` ignores CSS `@page` margins — they are
-    passed explicitly.
-  - `RESUME_PDF_OUT_DIR` redirects output for verification runs. The module only runs `main()`
-    when invoked directly, so importing a renderer no longer overwrites `public/` or `~/Desktop`.
-  - The legacy `npm run build-resume` (docx → LibreOffice headless) still exists but is superseded.
+  `public/Edward_Kubiak_Resume.pdf` (2 pages) and `public/CAST_Portfolio_OnePager.pdf`
+  (1 page) from `src/data/resume.js` + the stat feeds, and copies both to `~/Desktop`.
+  - **Design system: `scripts/lib/print-design.mjs`** — Ed's designed resume
+    (2026-09-09) rebuilt as the template, shared by BOTH documents so they cannot drift
+    apart visually. IBM Plex Sans/Mono inlined as base64 (devDependencies
+    `@fontsource/ibm-plex-sans` + `-mono`; it throws if a face is missing rather than
+    rendering unstyled), accent `#0c5a4e`, ink `#191919`, hairlines `#bbbbbb`/`#d4d4d4`.
+    Portrait Letter — the original export was landscape only because it was printed
+    from Firefox.
+  - **`paperContract`** in `resume.js` (`size`/`margin`/`bodyPt`/`lineHeight`/`maxPages`)
+    drives the PDF *and* `printStyles`, so Cmd+P on `/resume` and the download share one
+    paper contract. ⚠️ `page.pdf()` ignores CSS `@page` margins — they are passed
+    explicitly in the `page.pdf()` options.
+  - **Fitting the page budget is about the line box, not the type size.** Height scales
+    with `bodyPt × lineHeight`: 10pt/1.20 and 9.4pt/1.28 are the same height. Current
+    9.2pt/1.22 leaves ~69px spare on two pages.
+  - **`assertPageBudget`** is fail-closed: two independent counts from the PDF bytes must
+    agree, and it throws on anything ambiguous rather than passing.
+  - `RESUME_PDF_OUT_DIR` redirects output for verification runs. `main()` only runs on
+    direct invocation, so importing a renderer never overwrites `public/` or `~/Desktop`.
+  - `tagline` and `contact` in `resume.js` are shared by `/resume` and both PDFs — the
+    designed export had silently dropped LinkedIn while the page still showed it.
+  - The legacy `npm run build-resume` (docx → LibreOffice headless) still exists but is
+    superseded.
 - Animation package is `motion` (npm) not `framer-motion` — `import { motion } from "motion/react"`.
 - Deploy target is GitHub Pages (`gh-pages -d dist`); no Vercel or Netlify config.
 - Deploys are AUTOMATIC: `deploy.yml` publishes to gh-pages on every push to `main` and on a
