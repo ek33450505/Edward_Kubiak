@@ -3,9 +3,8 @@
  * build-resume-pdf.mjs
  *
  * Puppeteer-based print pipeline:
- *   1. public/Edward_Kubiak_Resume.pdf    — classic paper resume from src/data/resume.js data
- *                                           DISABLED BY DEFAULT: the shipped file is a
- *                                           hand-designed artifact. See REGENERATE_RESUME.
+ *   1. public/Edward_Kubiak_Resume.pdf    — resume from src/data/resume.js, in the
+ *                                           shared print design (scripts/lib/print-design.mjs)
  *   2. public/CAST_Portfolio_OnePager.pdf — one-pager from castStats data
  *
  * Both PDFs are also copied to ~/Desktop/ for review.
@@ -33,8 +32,11 @@ import {
   education,
   earlierCareer,
   aiPractice,
+  tagline,
+  contact,
   paperContract,
 } from "../src/data/resume.js";
+import { baseCss, PALETTE, MONO } from "./lib/print-design.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -50,21 +52,10 @@ const RESUME_PDF = path.join(OUT_DIR, "Edward_Kubiak_Resume.pdf");
 const ONEPAGER_PDF = path.join(OUT_DIR, "CAST_Portfolio_OnePager.pdf");
 const DESKTOP = os.homedir();
 
-// ---------------------------------------------------------------------------
-// The shipped public/Edward_Kubiak_Resume.pdf is a HAND-DESIGNED artifact
-// (Ed, 2026-09-09) — not this script's output. Regenerating would silently
-// replace a designed document with the generated one, which is exactly the kind
-// of quiet clobber this file has already caused once.
-//
-// So resume generation is OFF by default. Set RESUME_PDF_REGENERATE=1 to turn it
-// back on, which also re-applies the two-page budget gate. The one-pager is
-// unaffected and still regenerates every run.
-//
-// NOTE: src/data/resume.js remains the source of truth for the /resume PAGE.
-// While this flag is off the designed PDF does NOT track edits to that data —
-// the two can drift, and re-exporting the design is a manual step.
-// ---------------------------------------------------------------------------
-const REGENERATE_RESUME = process.env.RESUME_PDF_REGENERATE === "1";
+// Ed's designed resume (2026-09-09) is now the TEMPLATE this script renders, so
+// generation is on again and the PDFs track the live stat feeds instead of
+// freezing at export time. The design system lives in scripts/lib/print-design.mjs
+// and is shared with the one-pager so the two cannot drift apart visually.
 
 // ---------------------------------------------------------------------------
 // HTML escaping
@@ -91,74 +82,91 @@ function shortPeriod(period) {
 // Flat single-column paper resume HTML — mirrors the docx layout exactly.
 // No boxes, no fills, no color blocks beyond black-on-white + hairline rules.
 // ---------------------------------------------------------------------------
-function renderResumeHtml(summaryText, skillsMap, experienceList, educationList, earlier, practice) {
-  const ossRoles = experienceList.filter((e) => e.company.startsWith("Open Source"));
+function renderResumeHtml(
+  summaryText,
+  skillsMap,
+  experienceList,
+  educationList,
+  earlier,
+  practice,
+  identity
+) {
   const proRoles = experienceList.filter((e) => !e.company.startsWith("Open Source"));
+  const ossRoles = experienceList.filter((e) => e.company.startsWith("Open Source"));
 
-  // Skills: bullet list, one line per group
-  const skillsItems = Object.entries(skillsMap)
+  // Emphasise the two proper nouns the summary is really about, without letting
+  // the data carry markup.
+  const emphasised = esc(summaryText)
+    .replace(/CAST (v[\d.]+)/, "<strong>CAST $1</strong>")
+    .replace(/Compute Atlas/, "<strong>Compute Atlas</strong>");
+
+  const skillRows = Object.entries(skillsMap)
     .map(
       ([group, items]) =>
-        `<div class="skill-row"><strong>${esc(group)}:</strong> ${esc(items.join(", "))}</div>`
+        `    <dt>${esc(group)}</dt>\n    <dd>${esc(items.join(", "))}</dd>`
     )
-    .join("\n      ");
+    .join("\n");
 
-  // Open Source role-line + bullets (role + period only, no company/location)
-  function renderOssRole(entry) {
-    const bullets = entry.highlights
-      .map((h) => `<li>${esc(h)}</li>`)
-      .join("\n      ");
-    return `<div class="role-line">
-    <span class="role-left">${esc(entry.role)}</span>
-    <span class="role-date">${esc(entry.period)}</span>
-  </div>
-  <ul>
-      ${bullets}
-  </ul>`;
-  }
+  const bullets = (entry) =>
+    entry.highlights
+      .map((h) => {
+        // Bold the product names the eye should catch when scanning.
+        const body = esc(h).replace(
+          /\b(CrossCheck|SES-Wiki|Customization Web Store|E-Rate dashboard|misfire|attest|looptrip|Compute Atlas|CAST v[\d.]+)\b/g,
+          "<strong>$1</strong>"
+        );
+        return `      <li>${body}</li>`;
+      })
+      .join("\n");
 
-  // Professional role-line + bullets (role, company, location + period)
-  function renderProRole(entry) {
-    const bullets = entry.highlights
-      .map((h) => `<li>${esc(h)}</li>`)
-      .join("\n      ");
-    const tech = entry.tech?.length
-      ? `\n  <div class="tech">${esc(entry.tech.join(" \u00b7 "))}</div>`
+  const renderRole = (entry, { showOrg }) => {
+    const org = showOrg
+      ? ` <span class="org">&middot; ${esc(entry.company)} &mdash; ${esc(entry.location)}</span>`
       : "";
-    return `<div class="role-line">
-    <span class="role-left">${esc(entry.role)} &nbsp;&middot;&nbsp; ${esc(entry.company)} &mdash; ${esc(entry.location)}</span>
-    <span class="role-date">${esc(entry.period)}</span>
-  </div>${tech}
-  <ul>
-      ${bullets}
-  </ul>`;
-  }
+    const tech = entry.tech?.length
+      ? `\n    <div class="tech">${esc(entry.tech.join("  \u00b7  "))}</div>`
+      : "";
+    return `  <div class="entry">
+    <div class="entry-head">
+      <span class="entry-title">${esc(entry.role)}${org}</span>
+      <span class="entry-date">${esc(shortMonths(entry.period))}</span>
+    </div>${tech}
+    <ul class="bullets">
+${bullets(entry)}
+    </ul>
+  </div>`;
+  };
 
-  const ossHtml = ossRoles.map(renderOssRole).join("\n\n  ");
-  const proHtml = proRoles.map(renderProRole).join("\n\n  ");
-
-  // AI-practice block — condensed lines derived from practice.js
   const practiceItems = practice.items
-    .map((item) => `<li>${esc(item)}</li>`)
-    .join("\n      ");
+    .map((item) => `      <li>${esc(item)}</li>`)
+    .join("\n");
 
-  // Earlier career: framing note + one line per pre-engineering role
-  const earlierRows = earlier.roles
+  const earlierLines = earlier.roles
     .map(
-      (r) => `<div class="role-line">
-    <span class="role-left">${esc(r.role)} &nbsp;&middot;&nbsp; ${esc(r.company)} &mdash; ${esc(r.location)}</span>
-    <span class="role-date">${esc(r.period)}</span>
+      (r) => `  <div class="line">
+    <span><span class="entry-title">${esc(r.role)}</span> <span class="org">&middot; ${esc(r.company)} &mdash; ${esc(r.location)}</span></span>
+    <span class="entry-date">${esc(shortMonths(r.period))}</span>
   </div>`
     )
-    .join("\n  ");
+    .join("\n");
 
-  // Education: "• degree — institution · short year"
-  const eduItems = educationList
+  const eduLines = educationList
     .map(
-      (entry) =>
-        `<li>${esc(entry.degree)} &mdash; ${esc(entry.institution)} &middot; ${shortPeriod(entry.period)}</li>`
+      (e) => `  <div class="line">
+    <span><span class="entry-title">${esc(e.degree)}</span> <span class="org">&mdash; ${esc(e.institution)}</span></span>
+    <span class="entry-date">${shortPeriod(e.period)}</span>
+  </div>`
     )
-    .join("\n      ");
+    .join("\n");
+
+  const sep = '<span class="sep">/</span>';
+  const metaLine = [
+    esc(identity.contact.location),
+    `<a href="mailto:${esc(identity.contact.email)}">${esc(identity.contact.email)}</a>`,
+    `<a href="https://${esc(identity.contact.site)}">${esc(identity.contact.site)}</a>`,
+    `<a href="https://${esc(identity.contact.github)}">${esc(identity.contact.github)}</a>`,
+    `<a href="https://${esc(identity.contact.linkedin)}">${esc(identity.contact.linkedin)}</a>`,
+  ].join(sep);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -166,134 +174,59 @@ function renderResumeHtml(summaryText, skillsMap, experienceList, educationList,
   <meta charset="UTF-8" />
   <title>Edward Kubiak Resume</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: Helvetica, Arial, sans-serif;
-      font-size: ${paperContract.bodyPt}pt;
-      line-height: ${paperContract.lineHeight};
-      color: #000;
-      background: #fff;
-    }
-
-    /* Header */
-    .resume-name {
-      font-size: 19pt;
-      font-weight: bold;
-      margin-bottom: 2px;
-    }
-    .resume-contact {
-      font-size: 8.5pt;
-      color: #333;
-      margin-bottom: 6px;
-    }
-
-    /* Section headers: bold, sentence case, thin rule — no small-caps, no letter-spacing */
-    .section-head {
-      font-weight: bold;
-      font-size: 10.5pt;
-      color: #000;
-      border-bottom: 0.75pt solid #666;
-      padding-bottom: 1px;
-      margin-top: 6px;
-      margin-bottom: 2px;
-    }
-
-    /* Role line: role/company left, date right */
-    .role-line {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-      margin-bottom: 2px;
-    }
-    .role-left { font-weight: bold; }
-    .role-date {
-      font-size: 9.5pt;
-      color: #333;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    /* Per-role tech tags */
-    .tech {
-      font-size: 8.5pt;
-      color: #444;
-      font-style: italic;
-      margin-bottom: 3px;
-    }
-    .skill-row {
-      margin: 0.5px 0;
-      page-break-inside: avoid;
-    }
-    /* Never split a role header away from its first bullets. */
-    .role-line {
-      page-break-after: avoid;
-    }
-    .note {
-      font-size: 9pt;
-      color: #333;
-      margin-bottom: 3px;
-    }
-
-    /* Bullet lists */
-    ul {
-      margin: 0;
-      padding-left: 14px;
-    }
-    li {
-      margin: 1px 0;
-      /* Allow a long bullet to break across pages, but never orphan/widow a single
-         line. page-break-inside:avoid pushed whole 6-line bullets to the next
-         page, wasting ~46px at the boundary and spilling a 2-page resume onto a
-         third — and it made the fit knife-edge against any future content edit. */
-      orphans: 2;
-      widows: 2;
-    }
-
+${baseCss({ bodyPt: paperContract.bodyPt, lineHeight: paperContract.lineHeight })}
     @page { margin: ${paperContract.margin}; size: ${paperContract.size}; }
   </style>
 </head>
 <body>
 
-  <div class="resume-name">EDWARD KUBIAK</div>
-  <div class="resume-contact">edward.kubiak.dev@gmail.com &nbsp;&bull;&nbsp; Columbus, Ohio &nbsp;&bull;&nbsp; github.com/ek33450505 &nbsp;&bull;&nbsp; edwardkubiak.com &nbsp;&bull;&nbsp; linkedin.com/in/edward-kubiak</div>
+  <div class="name">Edward Kubiak</div>
+  <div class="tagline">${esc(identity.tagline)}</div>
+  <div class="meta">${metaLine}</div>
+  <div class="masthead-rule"></div>
 
-  <div class="section-head">Summary</div>
-  <p>${esc(summaryText)}</p>
+  <p>${emphasised}</p>
 
   <div class="section-head">Skills</div>
-      ${skillsItems}
+  <dl class="rows">
+${skillRows}
+  </dl>
+
+  <div class="section-head">Professional Experience</div>
+${proRoles.map((r) => renderRole(r, { showOrg: true })).join("\n")}
+
+  <div class="section-head">Open Source &mdash; AI Developer Tooling</div>
+${ossRoles.map((r) => renderRole(r, { showOrg: false })).join("\n")}
 
   <div class="section-head">AI-Assisted Engineering Practice</div>
   <div class="note">${esc(practice.note)}</div>
-  <ul>
-      ${practiceItems}
+  <ul class="bullets">
+${practiceItems}
   </ul>
-
-  <div class="section-head">Professional Experience</div>
-  ${proHtml}
-
-  <div class="section-head">Open Source &mdash; AI Developer Tooling</div>
-  ${ossHtml}
 
   <div class="section-head">Earlier Career</div>
   <div class="note">${esc(earlier.note)}</div>
-  ${earlierRows}
+${earlierLines}
 
   <div class="section-head">Education</div>
-  <ul>
-      ${eduItems}
-  </ul>
+${eduLines}
 
 </body>
 </html>`;
 }
 
+// "August 2022 — Present" → "Aug 2022 — Present"; keeps mono dates compact.
+function shortMonths(period) {
+  return period.replace(
+    /\b(January|February|March|April|May|June|July|August|September|October|November|December)\b/g,
+    (m) => m.slice(0, 3)
+  );
+}
+
 // ---------------------------------------------------------------------------
 // One-pager standalone HTML
 // ---------------------------------------------------------------------------
-function renderOnePagerHtml(stats, desktopStats) {
+function renderOnePagerHtml(stats, desktopStats, identity) {
   const statCells = [
     { label: "CAST version", value: stats.version },
     { label: "specialist agents", value: stats.agents },
@@ -306,183 +239,149 @@ function renderOnePagerHtml(stats, desktopStats) {
 
   const statBandHtml = statCells
     .map(
-      (c) => `
-    <div class="stat-cell">
-      <span class="stat-value">${c.value}</span>
-      <span class="stat-label">${c.label}</span>
-    </div>`
+      (c) => `      <div class="stat-cell">
+        <span class="stat-value">${esc(c.value)}</span>
+        <span class="stat-label">${esc(c.label)}</span>
+      </div>`
     )
-    .join("");
+    .join("\n");
+
+  const projects = [
+    [
+      "CAST (Claude Agent Specialist Team)",
+      `${stats.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and per-agent persistent memory. ${stats.version} "Make the Gates Tell the Truth": the ${stats.tables}-table SQLite execution record is searchable (cast ask), signed (cast ledger --verify), and predictive (cast predict), and every quality gate is mutation-tested against the defect it guards. ${stats.tests.toLocaleString("en-US")} tests, zero cloud dependencies.`,
+    ],
+    [
+      `Compute Atlas ${ATLAS_STATS.version}`,
+      `an open, source-cited census of U.S. grid-scale compute: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.states} states, ${ATLAS_STATS.operationalGw} GW operational and ~${ATLAS_STATS.plannedGw} GW planned — data centers, crypto mining, and the dedicated power generation built to feed them. Interactive MapLibre map, per-facility dossiers, open data plus a public JSON API, and an autonomous daily discovery pipeline that verifies its own sources. compute-atlas.com`,
+    ],
+    [
+      "Cast Desktop",
+      `native Tauri 2 + React 19 + Rust app; embedded Express 5 + SQLite backend, ${desktopStats.dashboardViews} dashboard views, real PTY terminal. Shipped ${desktopStats.version}.`,
+    ],
+    [
+      `Claude Code Dashboard ${TOOL_VERSIONS["claude-code-dashboard"]}`,
+      "React 19 + TypeScript + Express 5 + SSE observability UI; session cost tracking, per-agent scorecards, evals, reads ~/.claude directly, no telemetry.",
+    ],
+    [
+      "Agent-reliability tools (zero-LLM, deterministic)",
+      `misfire ${TOOL_VERSIONS.misfire}: trace-grounded CLAUDE.md adherence auditor; attest ${TOOL_VERSIONS.attest}: verifies a subagent's DONE against the real git delta; looptrip ${TOOL_VERSIONS.looptrip}: trips coordination loops at iteration 2, reproducing prevented duplicate-work spend from a committed fixture.`,
+    ],
+  ]
+    .map(
+      ([name, desc]) =>
+        `    <div class="project"><span class="project-name">${esc(name)}</span><span class="project-desc"> &mdash; ${esc(desc)}</span></div>`
+    )
+    .join("\n");
+
+  const sep = '<span class="sep">/</span>';
+  const metaLine = [
+    esc(identity.contact.location),
+    esc(identity.contact.email),
+    esc(identity.contact.site),
+    esc(identity.contact.github),
+    esc(identity.contact.linkedin),
+  ].join(sep);
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CAST Portfolio &mdash; Edward Kubiak</title>
+  <title>CAST Portfolio One-Pager</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+${baseCss({ bodyPt: 9, lineHeight: 1.3 })}
+    @page { margin: ${paperContract.margin}; size: ${paperContract.size}; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 8.5pt;
-      line-height: 1.45;
-      color: #0f172a;
-      background: #ffffff;
-      padding: 0.45in 0.5in;
-    }
-
-    /* Header */
-    .header { text-align: center; margin-bottom: 10px; }
-    .header h1 {
-      font-size: 20pt;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      color: #0f172a;
-    }
-    .header .subtitle {
-      font-size: 9.5pt;
-      color: #1e40af;
-      font-weight: 600;
-      margin-top: 2px;
-    }
-    .header .contact {
-      font-size: 7.5pt;
-      color: #475569;
-      margin-top: 3px;
-    }
-
-    /* Divider */
-    .divider { border: none; border-top: 1.5px solid #1e40af; margin: 8px 0; }
-    .divider-light { border: none; border-top: 1px solid #e2e8f0; margin: 6px 0; }
-
-    /* Section header */
-    .section-title {
-      font-size: 9pt;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #1e40af;
-      margin-bottom: 2px;
-    }
-    .section-tagline {
-      font-style: italic;
-      color: #475569;
-      font-size: 7.5pt;
-      margin-bottom: 6px;
-    }
-
-    /* Stat band */
+    /* One-pager-only additions on top of the shared system. */
+    .name { font-size: 20pt; }
     .stat-band {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 8px;
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 0;
+      border: 0.5pt solid ${PALETTE.rule};
+      margin: 6px 0 9px;
     }
     .stat-cell {
-      flex: 1;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 4px;
-      padding: 4px 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 2px;
+      border-right: 0.5pt solid ${PALETTE.ruleSoft};
       text-align: center;
     }
+    .stat-cell:last-child { border-right: none; }
     .stat-value {
-      display: block;
-      font-size: 9.5pt;
-      font-weight: 700;
-      color: #1e40af;
+      font-family: ${MONO};
+      font-size: 11pt;
+      font-weight: 400;
+      color: ${PALETTE.accent};
+      line-height: 1.1;
     }
     .stat-label {
-      display: block;
-      font-size: 6pt;
-      color: #64748b;
-      margin-top: 1px;
+      font-family: ${MONO};
+      font-size: 6.2pt;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: ${PALETTE.mutedSoft};
+      margin-top: 2px;
     }
-
-    /* What I build */
-    .projects { margin-bottom: 8px; }
-    .project { margin-bottom: 5px; }
-    .project-name { font-weight: 700; color: #0f172a; }
-    .project-desc { color: #334155; }
-
-    /* Two-column bottom sections */
+    .section-tagline { color: ${PALETTE.muted}; margin-bottom: 2px; }
+    .project { margin: 3px 0; }
+    .project-name { font-weight: 600; color: ${PALETTE.ink}; }
+    .project-desc { color: ${PALETTE.body}; }
     .two-col {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 16px;
-      margin-bottom: 6px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 4px;
     }
-    .col-section p { color: #334155; }
-
-    /* Footer */
     .footer {
+      font-family: ${MONO};
+      font-size: 6.8pt;
+      color: ${PALETTE.mutedSoft};
       text-align: center;
-      font-size: 7pt;
-      color: #94a3b8;
-      border-top: 1px solid #e2e8f0;
+      border-top: 0.5pt solid ${PALETTE.ruleSoft};
+      margin-top: 10px;
       padding-top: 5px;
-      margin-top: 6px;
     }
-
-    @page { margin: 0; size: Letter; }
-    @media print { body { padding: 0.45in 0.5in; } }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>EDWARD KUBIAK</h1>
-    <div class="subtitle">Full Stack Developer &amp; AI Systems Engineer &middot; Creator of CAST</div>
-    <div class="contact">edward.kubiak.dev@gmail.com &middot; Columbus, Ohio &middot; github.com/ek33450505 &middot; edwardkubiak.com</div>
-  </div>
+  <div class="name">Edward Kubiak</div>
+  <div class="tagline">${esc(identity.tagline)} &middot; Creator of CAST</div>
+  <div class="meta">${metaLine}</div>
+  <div class="masthead-rule"></div>
 
-  <hr class="divider" />
-
-  <div class="section-title">Portfolio &mdash; The CAST Ecosystem</div>
+  <div class="section-head">Portfolio &mdash; The CAST Ecosystem</div>
   <div class="section-tagline">An open-source, local-first multi-agent control plane for Claude Code &mdash; built, shipped, and maintained in public.</div>
 
   <div class="stat-band">
-    ${statBandHtml}
+${statBandHtml}
   </div>
 
-  <div class="section-title">What I Build</div>
+  <div class="section-head">What I Build</div>
   <div class="projects">
-    <div class="project">
-      <span class="project-name">CAST (Claude Agent Specialist Team)</span><span class="project-desc"> &mdash; ${stats.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and per-agent persistent memory. ${stats.version} &ldquo;Make the Gates Tell the Truth&rdquo;: the ${stats.tables}-table SQLite execution record is searchable (cast ask), signed (cast ledger --verify), and predictive (cast predict), and every quality gate is mutation-tested against the defect it guards. Zero cloud dependencies.</span>
-    </div>
-    <div class="project">
-      <span class="project-name">Compute Atlas ${ATLAS_STATS.version}</span><span class="project-desc"> &mdash; an open, source-cited census of U.S. grid-scale compute: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.states} states, ${ATLAS_STATS.operationalGw} GW operational and ~${ATLAS_STATS.plannedGw} GW planned &mdash; data centers, crypto mining, and the dedicated power generation built to feed them. Interactive MapLibre map, per-facility dossiers, open data + public JSON API, and an autonomous daily discovery pipeline that verifies its own sources. compute-atlas.com</span>
-    </div>
-    <div class="project">
-      <span class="project-name">Cast Desktop</span><span class="project-desc"> &mdash; native Tauri 2 + React 19 + Rust app; embedded Express 5 + SQLite backend, ${desktopStats.dashboardViews} dashboard views, real PTY terminal. Shipped ${desktopStats.version}.</span>
-    </div>
-    <div class="project">
-      <span class="project-name">Claude Code Dashboard ${TOOL_VERSIONS["claude-code-dashboard"]}</span><span class="project-desc"> &mdash; React 19 + TypeScript + Express 5 + SSE observability UI; session cost tracking, per-agent scorecards, evals, reads ~/.claude directly, no telemetry.</span>
-    </div>
-    <div class="project">
-      <span class="project-name">Agent-reliability tools (zero-LLM, deterministic)</span><span class="project-desc"> &mdash; misfire ${TOOL_VERSIONS.misfire}: trace-grounded CLAUDE.md adherence auditor; attest ${TOOL_VERSIONS.attest}: verifies a subagent&rsquo;s DONE against the real git delta; looptrip ${TOOL_VERSIONS.looptrip}: trips coordination loops at iteration 2 &mdash; reproduces prevented duplicate-work spend from a committed fixture.</span>
-    </div>
+${projects}
   </div>
-
-  <hr class="divider-light" />
 
   <div class="two-col">
-    <div class="col-section">
-      <div class="section-title">Writing &amp; Building in Public</div>
-      <p>github.com/ek33450505 &mdash; open-source agent infrastructure, shipped in public.</p>
+    <div>
+      <div class="section-head">Building in Public</div>
+      <p>${esc(identity.contact.github)} &mdash; open-source agent infrastructure, shipped in public under MIT.</p>
     </div>
-    <div class="col-section">
-      <div class="section-title">Day Job &mdash; Production Track Record</div>
-      <p>Applications Developer, META Solutions (2022&ndash;present). Led CrossCheck&rsquo;s AngularJS&rarr;React migration &mdash; an EMIS validation platform serving Ohio school districts &mdash; and more production apps (React, Flask, Express, PostgreSQL, MS SQL Server).</p>
+    <div>
+      <div class="section-head">Day Job &mdash; Production Track Record</div>
+      <p>Applications Developer, META Solutions (2022&ndash;present). Hired out of a full-stack certificate to rebuild <strong>CrossCheck</strong> &mdash; the EMIS validation platform Ohio school districts use &mdash; replacing an end-of-life AngularJS 1.x application, and sole author of 1,706 of its 1,728 commits since. Also ship SES-Wiki, the public PowerSchool catalog, and the E-Rate dashboard front end across React, Flask, Express, PostgreSQL and MS SQL Server.</p>
     </div>
   </div>
 
-  <div class="footer">github.com/ek33450505 &middot; edward.kubiak.dev@gmail.com</div>
+  <div class="footer">${esc(identity.contact.github)} &middot; ${esc(identity.contact.email)} &middot; ${esc(identity.contact.site)}</div>
 
 </body>
 </html>`;
 }
-
 
 // ---------------------------------------------------------------------------
 // Page-count gate.
@@ -547,22 +446,16 @@ async function main() {
     browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
-    // Resume PDF — classic paper template (opt-in; see REGENERATE_RESUME)
-    if (!REGENERATE_RESUME) {
-      console.log(
-        "Skipping resume PDF — public/Edward_Kubiak_Resume.pdf is a hand-designed\n" +
-          "artifact and would be overwritten. Set RESUME_PDF_REGENERATE=1 to rebuild it\n" +
-          "from src/data/resume.js instead."
-      );
-    } else {
-      console.log("Rendering resume PDF ...");
+    // Resume PDF — rendered in the shared print design
+    console.log("Rendering resume PDF ...");
       const resumeHtml = renderResumeHtml(
         summary,
         skills,
         experience,
         education,
         earlierCareer,
-        aiPractice
+        aiPractice,
+        { tagline, contact }
       );
       await page.setContent(resumeHtml, { waitUntil: "domcontentloaded" });
       var resumeBuffer = await page.pdf({
@@ -576,13 +469,15 @@ async function main() {
           left: paperContract.margin,
         },
       });
-      console.log("Resume PDF written: " + RESUME_PDF);
-      assertPageBudget(resumeBuffer, "Resume", paperContract.maxPages);
-    }
+    console.log("Resume PDF written: " + RESUME_PDF);
+    assertPageBudget(resumeBuffer, "Resume", paperContract.maxPages);
 
     // One-pager PDF
     console.log("Rendering one-pager PDF ...");
-    const onePagerHtml = renderOnePagerHtml(CAST_STATS, CAST_DESKTOP_STATS);
+    const onePagerHtml = renderOnePagerHtml(CAST_STATS, CAST_DESKTOP_STATS, {
+      tagline,
+      contact,
+    });
     await page.setContent(onePagerHtml, { waitUntil: "domcontentloaded" });
     const onePagerBuffer = await page.pdf({
       path: ONEPAGER_PDF,
@@ -603,11 +498,9 @@ async function main() {
     fs.copyFileSync(ONEPAGER_PDF, desktopOnePager);
     console.log("\nCopied to ~/Desktop:");
     console.log("  " + desktopOnePager);
-    if (REGENERATE_RESUME) {
-      const desktopResume = path.join(DESKTOP, "Desktop", "Edward_Kubiak_Resume.pdf");
-      fs.copyFileSync(RESUME_PDF, desktopResume);
-      console.log("  " + desktopResume);
-    }
+    const desktopResume = path.join(DESKTOP, "Desktop", "Edward_Kubiak_Resume.pdf");
+    fs.copyFileSync(RESUME_PDF, desktopResume);
+    console.log("  " + desktopResume);
 
     console.log("\nDone.");
   } finally {

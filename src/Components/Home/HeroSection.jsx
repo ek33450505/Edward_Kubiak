@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import HeroStats from "../HeroStats";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
+import { coordinateOverline } from "../../data/place";
 import { fadeUp, slideInLeft } from "../../utils/motion";
 
 // Frontispiece coordinate — Columbus, OH. Rendered as a survey overline.
-const COORDINATE = "39.96°N 82.99°W · COLUMBUS, OHIO · EDITION 2026";
+const COORDINATE = coordinateOverline(2026);
 
 // Fade the graticule plate at every edge so it reads as a reference grid
 // beneath the type, never as a hard-edged box.

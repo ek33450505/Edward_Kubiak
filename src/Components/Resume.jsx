@@ -8,6 +8,7 @@ import {
   education,
   earlierCareer,
   aiPractice,
+  contact,
   printStyles,
   summary,
 } from "../data/resume";
@@ -40,21 +41,21 @@ const Resume = () => {
             </h1>
             <div className="mt-4 h-px w-full bg-border" />
             <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-foreground">
-              <a href="mailto:edward.kubiak.dev@gmail.com" className={contactLinkClass}>
-                <Mail size={14} aria-hidden="true" /> edward.kubiak.dev@gmail.com
+              <a href={`mailto:${contact.email}`} className={contactLinkClass}>
+                <Mail size={14} aria-hidden="true" /> {contact.email}
               </a>
               <span className="inline-flex items-center gap-1.5">
-                <MapPin size={14} aria-hidden="true" /> Columbus, Ohio
+                <MapPin size={14} aria-hidden="true" /> {contact.location}
               </span>
               <a
-                href="https://www.linkedin.com/in/edward-kubiak/"
+                href={`https://${contact.linkedin}/`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={contactLinkClass}
                 aria-label="LinkedIn profile (opens in new tab)"
               >
                 <LinkedinIcon size={14} aria-hidden="true" />
-                linkedin.com/in/edward-kubiak
+                {contact.linkedin}
               </a>
             </div>
           </div>

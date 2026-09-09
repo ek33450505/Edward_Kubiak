@@ -6,6 +6,9 @@ on:
       - main
   schedule:
     - cron: '0 8 * * *'
+  # Manual redeploy. Needed on 2026-09-09: the repo briefly went private, which
+  # tore down the Pages site, and there was no way to republish without pushing.
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -448,3 +451,31 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # On 2026-09-09 this workflow reported success for three consecutive runs
+      # while edwardkubiak.com served GitHub's "Site not found" page: the repo had
+      # gone private, Pages was disabled, and deploy-pages created a deployment
+      # that went nowhere. A green check that proves nothing.
+      #
+      # What a PASSING check looks like while that bug is present: the site returns
+      # 404 and does not contain the marker, so this step fails. That is the whole
+      # point — it asserts the served result, not the API call.
+      - name: Verify the deployment is actually serving
+        run: |
+          set -uo pipefail
+          URL="https://edwardkubiak.com/"
+          MARKER="Edward Kubiak"
+          for attempt in $(seq 1 10); do
+            # Capture status the instant curl returns; never let a pipe be last.
+            body="$(curl -sSL --max-time 20 -w '\n%{http_code}' "$URL" 2>/dev/null)"; rc=$?
+            code="$(printf '%s' "$body" | tail -n1)"
+            if [ "$rc" -eq 0 ] && [ "$code" = "200" ] && printf '%s' "$body" | grep -qF "$MARKER"; then
+              echo "Serving: HTTP $code and the marker is present (attempt $attempt)."
+              exit 0
+            fi
+            echo "Attempt $attempt: curl rc=$rc, status=${code:-none}, marker=$(printf '%s' "$body" | grep -cF "$MARKER") — retrying in 20s"
+            sleep 20
+          done
+          echo "::error::Deployment did not become live. $URL never returned 200 with the expected content."
+          echo "Check that the repository is public and GitHub Pages is enabled (build_type=workflow)."
+          exit 1

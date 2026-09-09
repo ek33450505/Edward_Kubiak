@@ -8,6 +8,7 @@ import {
   education,
   earlierCareer,
   aiPractice,
+  contact,
   summary,
 } from '../data/resume';
 import practice from '../data/practice.js';
@@ -180,5 +181,28 @@ describe('Resume — see also nav', () => {
       ).toBeInTheDocument();
     });
     expect(nav).toBeInTheDocument();
+  });
+});
+
+describe("Resume — contact comes from the shared data", () => {
+  it("renders the email, location and LinkedIn from `contact`", () => {
+    renderResume();
+    expect(screen.getByRole("link", { name: new RegExp(contact.email, "i") })).toHaveAttribute(
+      "href",
+      `mailto:${contact.email}`
+    );
+    expect(screen.getByText(contact.location)).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /linkedin profile/i })
+    ).toHaveAttribute("href", `https://${contact.linkedin}/`);
+  });
+
+  it("keeps the page and the PDFs on one contact record", () => {
+    // The designed PDF export had dropped LinkedIn while this page still showed
+    // it. Both now read this object, so the fields cannot disagree.
+    expect(Object.keys(contact).sort()).toEqual(
+      ["email", "github", "linkedin", "location", "site"].sort()
+    );
+    Object.values(contact).forEach((v) => expect(v).toBeTruthy());
   });
 });

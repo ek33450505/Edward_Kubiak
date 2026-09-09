@@ -62,6 +62,23 @@ export const skills = {
   ],
 };
 
+/**
+ * Masthead identity. Ed's designed PDF introduced the tagline; both the /resume
+ * page and the PDFs read these so the two can never disagree on a contact
+ * detail — the designed export had silently dropped LinkedIn while the page
+ * still showed it.
+ */
+export const tagline =
+  "Full Stack Software Engineer · Agent Systems & Developer Tooling";
+
+export const contact = {
+  location: "Columbus, Ohio",
+  email: "edward.kubiak.dev@gmail.com",
+  site: "edwardkubiak.com",
+  github: "github.com/ek33450505",
+  linkedin: "linkedin.com/in/edward-kubiak",
+};
+
 export const summary = `Full stack developer, four years building and owning production React applications across Ohio's K-12 education ecosystem. Agents write most of my code now; that moved the work rather than removing it — the judgment, the verification and the consequences stay put, and building the tooling that enforces that is what my open-source work is about. Hired two weeks out of a full-stack certificate in August 2022 to replace an end-of-life AngularJS platform with React, I shipped that rewrite, opened it to districts in September 2024, and remain its sole architect. Creator of CAST ${CAST_STATS.version}, a local-first multi-agent control plane for Claude Code whose ${CAST_STATS.tables}-table execution record is searchable, signed and predictive, shipped as ${CAST_STATS.packages} Homebrew packages backed by ${CAST_STATS.tests.toLocaleString("en-US")} tests; and of Compute Atlas (compute-atlas.com), an open, source-cited census of the U.S. grid-scale compute buildout — ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.states} states, released as open data with a public API.`;
 
 export const experience = [
@@ -191,8 +208,8 @@ export const education = [
 export const paperContract = {
   size: "Letter",
   margin: "0.5in",
-  bodyPt: 10,
-  lineHeight: 1.20,
+  bodyPt: 9.2,
+  lineHeight: 1.22,
   maxPages: 2,
 };
 
