@@ -30,13 +30,20 @@ const navLinks = [
   { to: "/now", label: "Now" },
 ];
 
-function NavBar() {
+export function NavBar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const { toggle } = useCommandPalette();
 
-  // Close menu on route change (back/forward nav)
-  useEffect(() => { setOpen(false); }, [location.pathname]);
+  // Close the menu on route change — this covers back/forward navigation, where
+  // no nav-link onClick fires. Adjusting state during render on a changed value
+  // is React's documented alternative to an effect here; an effect calling
+  // setState in its body costs an extra render pass every navigation.
+  const [renderedPath, setRenderedPath] = useState(location.pathname);
+  if (renderedPath !== location.pathname) {
+    setRenderedPath(location.pathname);
+    setOpen(false);
+  }
 
   // Close menu on Escape key
   useEffect(() => {

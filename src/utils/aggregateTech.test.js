@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 
 // Mock the projects data to isolate unit under test
 vi.mock("../data/projects.js", () => ({
@@ -27,6 +27,11 @@ vi.mock("../data/projects.js", () => ({
 }));
 
 import { aggregateTech } from "./aggregateTech.js";
+
+afterEach(() => {
+  vi.doUnmock("../data/projects.js");
+  vi.resetModules();
+});
 
 describe("aggregateTech", () => {
   it("returns results sorted by count descending", () => {
@@ -63,13 +68,32 @@ describe("aggregateTech", () => {
     expect(result.length).toBeLessThanOrEqual(10);
   });
 
-  it("returns empty array when no projects are provided", async () => {
-    // Dynamically re-mock with empty list
-    const { aggregateTech: aggregateEmpty } = await vi.importActual(
-      "./aggregateTech.js"
-    ).catch(() => ({ aggregateTech: () => [] }));
-    // The existing mock has projects, so this just validates the empty guard path
-    const result = aggregateTech();
-    expect(Array.isArray(result)).toBe(true);
+  // The previous version of this test imported an unused binding, then called the
+  // MOCKED aggregateTech (which has projects) and asserted only Array.isArray —
+  // true whatever the guard does. It named coverage it did not have. These
+  // re-mock the module with genuinely empty inputs and assert the return value.
+  it("returns an empty array when there are no projects at all", async () => {
+    vi.resetModules();
+    vi.doMock("../data/projects.js", () => ({ default: [] }));
+    const { aggregateTech: fromNoProjects } = await import("./aggregateTech.js");
+    expect(fromNoProjects()).toEqual([]);
+  });
+
+  it("returns an empty array when every project is archived", async () => {
+    vi.resetModules();
+    vi.doMock("../data/projects.js", () => ({
+      default: [{ slug: "old", tech: ["React", "Vite"], archived: true }],
+    }));
+    const { aggregateTech: fromArchivedOnly } = await import("./aggregateTech.js");
+    expect(fromArchivedOnly()).toEqual([]);
+  });
+
+  it("returns an empty array when projects carry no tech tags", async () => {
+    vi.resetModules();
+    vi.doMock("../data/projects.js", () => ({
+      default: [{ slug: "a", archived: false }, { slug: "b", tech: [], archived: false }],
+    }));
+    const { aggregateTech: fromNoTags } = await import("./aggregateTech.js");
+    expect(fromNoTags()).toEqual([]);
   });
 });
