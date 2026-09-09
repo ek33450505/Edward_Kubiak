@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { COORDINATES } from "../data/place";
 import { Link } from "react-router-dom";
 import now from "../data/now";
 import { fadeUp, fadeIn } from "../utils/motion";
@@ -21,7 +22,7 @@ const Now = () => {
         >
           {/* Coordinate overline — survey date stamp */}
           <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-primary">
-            As of {now.updated} · 39.96°N 82.99°W
+            As of {now.updated} · {COORDINATES}
           </p>
 
           {/* Engraved serif H1 */}

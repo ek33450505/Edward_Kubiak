@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { COORDINATES } from "../data/place";
 import { Link } from "react-router-dom";
 import practice from "../data/practice";
 import { fadeUp, fadeIn } from "../utils/motion";
@@ -18,7 +19,7 @@ const Practice = () => {
         <motion.div variants={fadeUp} initial="hidden" animate="show">
           {/* Coordinate overline — survey date stamp */}
           <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-primary">
-            As of {practice.updated} · 39.96°N 82.99°W
+            As of {practice.updated} · {COORDINATES}
           </p>
 
           {/* Engraved serif H1 */}

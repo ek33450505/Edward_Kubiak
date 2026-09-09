@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
+import { coordinateOverline } from "../data/place";
 import { fadeUp, slideInLeft, staggerItem } from "../utils/motion";
 import { MapPin, Briefcase, Heart, Mountain, GitBranch } from "lucide-react";
 import GetInTouch from "./ui/GetInTouch";
@@ -13,7 +14,7 @@ import { CAST_STATS, CAST_DESKTOP_STATS } from "../data/castStats";
 const TECH_DATA = aggregateTech();
 
 // Coordinate overline — survey marker for the about page frontispiece
-const OVERLINE = "39.96°N 82.99°W · COLUMBUS, OHIO · EDITION 2026";
+const OVERLINE = coordinateOverline(2026);
 
 const About = () => {
   const reducedMotion = useReducedMotion();

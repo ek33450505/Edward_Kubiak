@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from "react";
+import { COORDINATES } from "./data/place";
 import { useDocumentMeta } from "./hooks/useDocumentMeta";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
@@ -252,7 +253,7 @@ function App() {
             <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-muted-foreground text-sm">
               <p className="font-mono text-xs tracking-wider uppercase flex items-center gap-2">
                 <span aria-hidden="true" className="text-primary">⌖</span>
-                &copy; {new Date().getFullYear()} Edward Kubiak · 39.96°N 82.99°W
+                &copy; {new Date().getFullYear()} Edward Kubiak · {COORDINATES}
               </p>
               <div className="flex items-center gap-4">
                 <a
