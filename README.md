@@ -37,8 +37,9 @@ Console" design system.
 - **Systems Console design system** — a single dark graphite theme with semantic
   Tailwind v4 tokens, Geist + Geist Mono type, one amber signal color, and panel/hairline
   utilities. No toggles, no light mode. Accessibility target: WCAG 2.2 AA.
-- **Typographic console hero** — no 3D; a fixed slot is reserved for a planned Compute
-  Atlas facility visualization.
+- **Facility-field hero** — a canvas map of every Compute Atlas facility, colored by status,
+  that sweeps into place and settles within seconds (static under reduced motion), plus a
+  scroll-driven "How it's built" section. No 3D.
 - **Command palette (⌘K)** — navigation and search via `cmdk`.
 - **Self-healing stats** — every figure in the UI is interpolated from a feed that
   re-syncs at build and deploy time, or it is removed. No hardcoded counts or versions,
@@ -72,7 +73,7 @@ npm run preview    # preview production build
 
 ### Build & deploy
 ```bash
-npm run build      # production build (auto-runs prebuild: sync-cast-stats + sync-atlas-stats + sync-tool-versions + sitemap)
+npm run build      # production build (auto-runs prebuild: sync-cast-stats + sync-atlas-stats + sync-atlas-points + sync-tool-versions + sitemap + RSS)
 npm run deploy     # build + push to gh-pages branch
 ```
 
@@ -102,7 +103,8 @@ Single dark graphite theme — **no light mode, no toggle**. Restraint is the ba
 - `npm run sync-stats` fetches canonical CAST stats **over HTTPS** from `claude-agent-team/cast-stats.json` (with timeout + graceful fallback to `public/cast-stats.json`). No local clone required.
 - `npm run sync-atlas` fetches Compute Atlas figures from `compute-atlas.com/api/stats` with graceful fallback to `public/atlas-stats.json`.
 - `npm run sync-versions` resolves ecosystem tool versions from GitHub tags/releases with graceful fallback to `public/tool-versions.json`.
-- `prebuild` hook runs all three feeds automatically before every `npm run build`.
+- `npm run sync-points` fetches Compute Atlas facility points for the hero map (`public/atlas-points.json` + `src/data/atlasPoints.js`) with graceful fallback.
+- `prebuild` hook runs all four feeds automatically before every `npm run build`.
 - `deploy.yml` re-fetches all stats at deploy time, so the live site self-heals stats drifts.
 - CI gate (`cast-stats-check.yml`) blocks commits if stats drift from canonical.
 
@@ -116,18 +118,19 @@ Single dark graphite theme — **no light mode, no toggle**. Restraint is the ba
 - All hero parallax and scroll animations respect `prefers-reduced-motion` globally via `<MotionConfig reducedMotion="user">` in `src/App.jsx`.
 
 **Hero**
-- The hero is a typographic **frontispiece** (`src/Components/Home/HeroSection.jsx`), not a 3D scene.
+- The hero is a typographic console header (`src/Components/Home/HeroSection.jsx`) beside a lazy canvas-2D facility map (`FacilityField.jsx`), not a 3D scene.
 - The old Three.js celestial starfield, `src/Components/Celestial/`, the `three`/`@react-three`/`postprocessing` dependencies, and the orphaned StravaStats widget were **removed entirely** in this session (recoverable via the `era/celestial-revival` tag).
 
 ## Routes
 
-- `/` — Home (frontispiece hero + featured projects)
+- `/` — Home (facility-field hero, featured work, How it's built)
 - `/about` — Bio, skills, and philosophy
 - `/projects` — Portfolio index
 - `/projects/:slug` — Project detail (case studies, stats, open-source info)
 - `/resume` — Downloadable resume + skills breakdown
 - `/now` — What I'm working on this week
 - `/practice` — How I work with agents: the loop, the review budget, dated case studies
+- `/contact` — How to reach me (LinkedIn, GitHub)
 - `/*` — 404 page
 
 ## Contact

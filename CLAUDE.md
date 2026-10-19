@@ -16,7 +16,7 @@ npm run preview   # preview production build locally
 
 ## Build
 ```bash
-npm run build     # prebuild (sync-cast-stats + sync-atlas-stats + sync-tool-versions + generate-sitemap) then vite build
+npm run build     # prebuild (sync-cast-stats + sync-atlas-stats + sync-atlas-points + sync-tool-versions + generate-sitemap + generate-rss) then vite build
 npm run deploy    # build + push to gh-pages branch
 ```
 
@@ -49,11 +49,12 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
 
 ## Non-obvious
 
-- `prebuild` runs `sync-cast-stats`, `sync-atlas-stats`, `sync-tool-versions`, and `generate-sitemap` before every `npm run build`.
+- `prebuild` runs `sync-cast-stats`, `sync-atlas-stats`, `sync-atlas-points`, `sync-tool-versions`, `generate-sitemap` and `generate-rss` before every `npm run build`.
   - `sync-cast-stats.mjs` fetches canonical CAST stats from the flagship repo over https (with a timeout + graceful fallback to `public/cast-stats.json`). Does NOT require a local `~/Projects/personal/claude-agent-team` clone.
   - `sync-atlas-stats.mjs` fetches Compute Atlas figures from `compute-atlas.com/api/stats`, producing `src/data/atlasStats.js` (`ATLAS_STATS`) and `public/atlas-stats.json` with graceful fallback.
+  - `sync-atlas-points.mjs` fetches `www.compute-atlas.com/data/hero-points.json` (cache-busted; the Atlas edge has served stale copies), projects it onto a fixed AlbersUsa-style composite and writes `public/atlas-points.json` (fetched at runtime by the hero canvas) plus `src/data/atlasPoints.js` (`ATLAS_POINTS` summary: count, per-status counts, w/h — the hero legend renders from it on first paint). A drift test keeps the two in step.
   - `sync-tool-versions.mjs` resolves ecosystem tool versions from GitHub API, producing `src/data/toolStats.js` (`TOOL_VERSIONS`) and `public/tool-versions.json` with graceful fallback.
-  All three are best-effort with graceful fallback and re-run at deploy time for self-healing.
+  All four are best-effort with graceful fallback, share the hardened `scripts/lib/fetch-json.mjs` (single settle, deadline, byte cap — a truncated body must never fail the build), and re-run at deploy time for self-healing.
 - PDFs: `npm run build-pdfs` (`build-resume-pdf.mjs`, puppeteer) regenerates
   `public/Edward_Kubiak_Resume.pdf` (2 pages) and `public/CAST_Portfolio_OnePager.pdf`
   (1 page) from `src/data/resume.js` + the stat feeds, and copies both to `~/Desktop`.
@@ -95,9 +96,13 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
   panel 02 ("Development architecture"). `src/data/projects.js` mirrors that order in the flagship group.
   Both the panel number (`idx(n)`) and the motion `delay` are per-block literals — swapping
   the blocks means swapping those too.
-- The hero is a typographic **console header** (`src/Components/Home/HeroSection.jsx`) with a
-  fixed-size, aria-hidden slot (`data-slot="facility-field"`, `aspect-[4/3]`) reserved for
-  the planned Compute Atlas facility-field canvas — it is not a 3D scene. The old Celestial WebGL starfield (`src/Components/Celestial/`), the shared
+- The hero is a typographic **console header** (`src/Components/Home/HeroSection.jsx`) beside
+  the **facility field**: a lazy canvas-2D map (`FacilityField.jsx`, helpers in
+  `src/lib/facilityField.js`) of every Compute Atlas facility in an aria-hidden slot
+  (`data-slot="facility-field"`, aspect from `ATLAS_POINTS.w/h`). All motion ends by
+  `PULSE_END_MS` (WCAG 2.2.2) and reduced motion gets one static frame; the visible legend
+  is the text equivalent. Home section 02 is the scroll-driven `ArchitectureFlow.jsx`
+  (`motion.div` fills — React drops `scaleX` on a plain div). Neither is a 3D scene. The old Celestial WebGL starfield (`src/Components/Celestial/`), the shared
   `src/lib/three/` utilities, the `three`/`@react-three`/`postprocessing` dependencies,
   and the orphaned StravaStats widget were **removed entirely** in this session (recoverable
   via the `era/celestial-revival` tag).
