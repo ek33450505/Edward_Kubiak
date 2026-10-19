@@ -16,3 +16,6 @@ docs/meta-work-dossier-2026-09-04.md
 
 # Local Worker secrets
 .dev.vars
+
+# Generated per build by scripts/sync-github-activity.mjs (last-known-commits.json stays tracked)
+public/github-activity.json

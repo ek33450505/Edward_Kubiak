@@ -25,6 +25,7 @@ import { pathToFileURL } from "node:url";
 
 import { fetchJson } from "./lib/fetch-json.mjs";
 import { githubHeaders } from "./lib/github.mjs";
+import { writeAtomic } from "./lib/write-atomic.mjs";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const defaultSnapshotPath = path.join(root, "public", "repo-facts.json");
@@ -79,15 +80,21 @@ export function hasClaudeTrailer(message) {
 
 // Walks pages until a short page. fetchPage(n) resolves an array or null.
 // Any failed page, or hitting the page cap, returns null (never a partial count).
+// Commits are deduped by sha across pages: a commit landing mid-pagination shifts a page
+// boundary and repeats an item. An item without a 40-hex sha is not a commit object.
 export async function countCommits(fetchPage, maxPages = MAX_PAGES) {
   let commits = 0;
   let claudeCoauthored = 0;
+  const seen = new Set();
   for (let page = 1; page <= maxPages; page++) {
     const items = await fetchPage(page);
     if (!Array.isArray(items)) return null;
     if (page === 1 && items.length === 0) return null; // an empty history is not a measurement
     for (const item of items) {
       if (typeof item?.commit?.message !== "string") return null; // not a commit object
+      if (typeof item.sha !== "string" || !/^[0-9a-f]{40}$/.test(item.sha)) return null;
+      if (seen.has(item.sha)) continue;
+      seen.add(item.sha);
       commits += 1;
       if (hasClaudeTrailer(item.commit.message)) claudeCoauthored += 1;
     }
@@ -177,18 +184,6 @@ export function checkOutput(group, facts, today) {
   if (!isRealDate(asOf)) reasons.push(`${GROUPS[group].date} is not a real YYYY-MM-DD date (got ${asOf})`);
   else if (today && asOf > today) reasons.push(`${GROUPS[group].date} ${asOf} is in the future`);
   return reasons;
-}
-
-// Writes via a same-directory temp file + rename, so a target is never half-written.
-function writeAtomic(target, content) {
-  const tmp = `${target}.tmp-${process.pid}`;
-  try {
-    fs.writeFileSync(tmp, content);
-    fs.renameSync(tmp, target);
-  } catch (err) {
-    fs.rmSync(tmp, { force: true });
-    throw err;
-  }
 }
 
 export async function main({

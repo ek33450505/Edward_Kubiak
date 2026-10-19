@@ -66,9 +66,14 @@ describe("hasClaudeTrailer", () => {
   });
 });
 
+// Unique 40-hex sha per generated commit.
+let shaSeq = 0;
+const nextSha = () => (++shaSeq).toString(16).padStart(40, "0");
+
 describe("countCommits", () => {
   const mk = (n, claudeEvery) =>
     Array.from({ length: n }, (_, i) => ({
+      sha: nextSha(),
       commit: { message: i % claudeEvery === 0 ? "m\n\nCo-Authored-By: Claude <noreply@anthropic.com>" : "m" },
     }));
 
@@ -88,6 +93,18 @@ describe("countCommits", () => {
   it("returns null when a page contains a non-commit item", async () => {
     expect(await countCommits(async () => [null, null])).toBeNull();
     expect(await countCommits(async () => [{ commit: {} }])).toBeNull();
+  });
+
+  it("returns null when a commit has no 40-hex sha", async () => {
+    expect(await countCommits(async () => [{ commit: { message: "m" } }])).toBeNull();
+    expect(await countCommits(async () => [{ sha: "abc", commit: { message: "m" } }])).toBeNull();
+  });
+
+  it("counts a sha repeated across pages once", async () => {
+    const dup = { sha: nextSha(), commit: { message: "m\n\nCo-Authored-By: Claude <noreply@anthropic.com>" } };
+    const p1 = [...mk(99, 1), dup];
+    const p2 = [dup, ...mk(4, 1)];
+    expect(await countCommits(async (n) => [p1, p2][n - 1])).toEqual({ commits: 104, claudeCoauthored: 104 });
   });
 
   it("returns null when page 1 is empty", async () => {
@@ -210,7 +227,7 @@ describe("main", () => {
   const TREE_URL = "/git/trees/main";
   const goodTree = { truncated: false, tree: [blob("app/api/a/route.ts"), blob("a.test.ts"), blob(".github/workflows/ci.yml")] };
   const page = (n, claude = n) =>
-    Array.from({ length: n }, (_, i) => ({ commit: { message: i < claude ? "m\n\nCo-Authored-By: Claude <noreply@anthropic.com>" : "m" } }));
+    Array.from({ length: n }, (_, i) => ({ sha: nextSha(), commit: { message: i < claude ? "m\n\nCo-Authored-By: Claude <noreply@anthropic.com>" : "m" } }));
   const snapshot = {
     routeHandlers: 1, testFiles: 1, workflows: 1, commits: 3, claudeCoauthored: 1,
     treeAsOf: "2026-01-01", commitsAsOf: "2026-02-02",
