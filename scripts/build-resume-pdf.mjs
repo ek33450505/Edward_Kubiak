@@ -249,7 +249,7 @@ function renderOnePagerHtml(stats, desktopStats, identity) {
   const projects = [
     [
       "CAST (Claude Agent Specialist Team)",
-      `${stats.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and per-agent persistent memory. ${stats.version} "Make the Gates Tell the Truth": the ${stats.tables}-table SQLite execution record is searchable (cast ask), signed (cast ledger --verify), and predictive (cast predict), and every quality gate is mutation-tested against the defect it guards. ${stats.tests.toLocaleString("en-US")} tests, zero cloud dependencies.`,
+      `${stats.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and per-agent persistent memory. ${stats.version}: the ${stats.tables}-table SQLite execution record is searchable (cast ask), signed (cast ledger --verify), and predictive (cast predict), and every quality gate is mutation-tested against the defect it guards. ${stats.tests.toLocaleString("en-US")} tests, zero cloud dependencies.`,
     ],
     [
       `Compute Atlas ${ATLAS_STATS.version}`,
@@ -373,7 +373,7 @@ ${projects}
     </div>
     <div>
       <div class="section-head">Day Job &mdash; Production Track Record</div>
-      <p>Applications Developer, META Solutions (2022&ndash;present). Hired out of a full-stack certificate to rebuild <strong>CrossCheck</strong> &mdash; the EMIS validation platform Ohio school districts use &mdash; replacing an end-of-life AngularJS 1.x application, and sole author of 1,706 of its 1,728 commits since. Also ship SES-Wiki, the public PowerSchool catalog, and the E-Rate dashboard front end across React, Flask, Express, PostgreSQL and MS SQL Server.</p>
+      <p>Applications Developer, META Solutions (2022&ndash;present). Hired out of a full-stack certificate to rebuild <strong>CrossCheck</strong> &mdash; the EMIS validation platform Ohio school districts use &mdash; replacing an end-of-life AngularJS 1.x application, and sole author of 1,706 of its 1,728 commits as of September 2026. Also ship SES-Wiki, the public PowerSchool catalog, and the E-Rate dashboard front end across React, Flask, Express, PostgreSQL and MS SQL Server.</p>
     </div>
   </div>
 
