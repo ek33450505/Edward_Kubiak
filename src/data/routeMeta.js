@@ -35,7 +35,7 @@ export const ROUTE_META = {
   "/contact": {
     title: "Contact — Edward Kubiak",
     description:
-      "Contact Edward Kubiak, full stack developer and AI systems engineer, about work, projects or collaboration. Send a message through the form.",
+      "How to reach Edward Kubiak, full stack developer and AI systems engineer: LinkedIn and GitHub.",
     canonical: "/contact/",
   },
   "/practice": {

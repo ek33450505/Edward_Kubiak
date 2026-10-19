@@ -22,7 +22,7 @@ const contactLinkClass =
 
 const Resume = () => {
   return (
-    <div id="resume-print" className="min-h-[calc(100vh-80px)] py-20">
+    <div id="resume-print" className="min-h-page py-20">
       <style>{printStyles}</style>
       <PageWrapper>
         {/* Frontispiece header */}
@@ -52,10 +52,10 @@ const Resume = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={contactLinkClass}
-                aria-label="LinkedIn profile (opens in new tab)"
               >
                 <LinkedinIcon size={14} aria-hidden="true" />
                 {contact.linkedin}
+                <span className="sr-only"> (opens in new tab)</span>
               </a>
             </div>
           </div>
@@ -63,8 +63,7 @@ const Resume = () => {
             <a
               href="/Edward_Kubiak_Resume.pdf"
               download="Edward_Kubiak_Resume.pdf"
-              aria-label="Download resume PDF"
-              className="inline-flex items-center gap-2 rounded border border-primary px-4 py-2 font-mono text-xs uppercase tracking-wider text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+              className="inline-flex min-h-11 items-center gap-2 rounded border border-primary px-4 py-2 font-mono text-xs uppercase tracking-wider text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
             >
               <Download size={14} aria-hidden="true" />
               Download PDF
@@ -72,8 +71,7 @@ const Resume = () => {
             <a
               href="/CAST_Portfolio_OnePager.pdf"
               download="CAST_Portfolio_OnePager.pdf"
-              aria-label="Download CAST one-pager PDF"
-              className="inline-flex items-center gap-1.5 px-2 py-1.5 font-mono text-xs text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+              className="inline-flex min-h-11 items-center gap-1.5 px-2 py-1.5 font-mono text-xs text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
             >
               <FileText size={12} aria-hidden="true" />
               CAST one-pager

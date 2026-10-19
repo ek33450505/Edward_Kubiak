@@ -1,5 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { COORDINATES } from "./data/place";
+import { CAST_STATS } from "./data/castStats";
+import { ATLAS_STATS } from "./data/atlasStats";
 import { useDocumentMeta } from "./hooks/useDocumentMeta";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
@@ -25,11 +26,11 @@ const Practice = lazy(() => import("./Components/Practice"));
 const Contact = lazy(() => import("./Components/Contact"));
 const CommandPalette = lazy(() => import("./Components/CommandPalette"));
 const navLinks = [
-  { to: "/about", label: "About" },
-  { to: "/projects", label: "Projects" },
+  { to: "/projects", label: "Work" },
   { to: "/practice", label: "Practice" },
+  { to: "/about", label: "About" },
   { to: "/resume", label: "Resume" },
-  { to: "/now", label: "Now" },
+  { to: "/contact", label: "Contact" },
 ];
 
 export function NavBar() {
@@ -55,18 +56,18 @@ export function NavBar() {
   }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/85 backdrop-blur-xl">
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-20">
-        {/* Masthead — survey crosshair + engraved wordmark + edition line */}
+    <nav aria-label="Primary" className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur">
+      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-(--spacing-nav)">
+        {/* Masthead — mono monogram + name */}
         <Link to="/" className="flex items-center gap-3 group" onClick={() => setOpen(false)}>
-          <span aria-hidden="true" className="text-primary text-2xl leading-none select-none">⌖</span>
-          <span className="flex flex-col leading-none">
-            <span className="font-display text-lg sm:text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
-              Edward Kubiak
-            </span>
-            <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.28em] uppercase text-muted-foreground mt-1 md:hidden lg:block">
-              Full Stack Developer · Columbus OH
-            </span>
+          <span
+            aria-hidden="true"
+            className="inline-flex h-7 w-7 items-center justify-center border border-border-strong font-mono text-[11px] font-semibold tracking-tight text-foreground group-hover:text-primary group-hover:border-primary transition-colors"
+          >
+            EK
+          </span>
+          <span className="font-display font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
+            Edward Kubiak
           </span>
         </Link>
 
@@ -77,7 +78,7 @@ export function NavBar() {
               key={to}
               to={to}
               aria-current={location.pathname === to ? "page" : undefined}
-              className={`relative px-4 py-2 font-mono text-xs tracking-widest uppercase transition-colors duration-300 ${
+              className={`relative px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-300 ${
                 location.pathname === to
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
@@ -87,7 +88,7 @@ export function NavBar() {
               {location.pathname === to && (
                 <motion.div
                   layoutId="nav-underline"
-                  className="absolute -bottom-px left-3 right-3 h-px bg-primary"
+                  className="absolute -bottom-px left-2 right-2 h-px bg-primary"
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
               )}
@@ -100,7 +101,7 @@ export function NavBar() {
             onClick={toggle}
             className="ml-2"
           >
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md border border-border text-[10px] font-mono tracking-wider text-muted-foreground hover:border-primary/50 hover:text-primary transition-all">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded border border-border-strong text-[10px] font-mono tracking-wider text-muted-foreground hover:border-primary hover:text-primary transition-colors">
               ⌘K
             </span>
           </IconButton>
@@ -121,7 +122,7 @@ export function NavBar() {
           label="Toggle menu"
           onClick={() => setOpen(!open)}
           aria-expanded={open}
-          aria-controls="mobile-menu"
+          aria-controls={open ? "mobile-menu" : undefined}
           className="md:hidden"
         >
           {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
@@ -137,7 +138,7 @@ export function NavBar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden overflow-hidden border-t border-border/60 bg-background/95 backdrop-blur-xl"
+            className="md:hidden overflow-hidden border-t border-border bg-background/95 backdrop-blur"
           >
             <div className="px-6 py-4 flex flex-col gap-2">
               {navLinks.map(({ to, label }) => (
@@ -146,7 +147,7 @@ export function NavBar() {
                   to={to}
                   onClick={() => setOpen(false)}
                   aria-current={location.pathname === to ? "page" : undefined}
-                  className={`font-mono text-sm tracking-widest uppercase py-3 border-b border-border/40 transition-colors rounded-md ${
+                  className={`font-mono text-xs tracking-[0.18em] uppercase py-3 min-h-11 border-b border-border transition-colors ${
                     location.pathname === to
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
@@ -158,16 +159,16 @@ export function NavBar() {
               {/* Search / ⌘K row */}
               <button
                 onClick={() => { setOpen(false); toggle(); }}
-                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-sm tracking-widest uppercase transition-colors border-b border-border/40 text-left"
+                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-xs tracking-[0.18em] uppercase transition-colors border-b border-border text-left min-h-11"
               >
-                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-border text-[10px] text-muted-foreground">⌘K</span>
+                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-border-strong text-[10px] text-muted-foreground">⌘K</span>
               </button>
               <a
                 href="https://github.com/ek33450505"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub profile (opens in new tab)"
-                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-sm tracking-widest uppercase transition-colors"
+                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-xs tracking-[0.18em] uppercase transition-colors min-h-11"
               >
                 <GithubIcon size={18} aria-hidden="true" /> GITHUB
               </a>
@@ -226,43 +227,50 @@ function AnimatedRoutes() {
   );
 }
 
-function App() {
+// Everything except the palette goes inert while the modal palette is open,
+// so the background is out of the tab order and the accessibility tree.
+export function AppShell() {
+  const { open } = useCommandPalette();
   return (
-    <Router>
-      <CommandPaletteProvider>
-        <MotionConfig reducedMotion="user">
-        <div className="min-h-screen bg-background">
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-background">
+        <div inert={open}>
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-background focus:rounded-md focus:font-mono focus:text-sm focus:font-bold focus:tracking-widest focus:uppercase"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-background focus:rounded focus:font-mono focus:text-sm focus:font-bold focus:tracking-widest focus:uppercase"
           >
             Skip to main content
           </a>
           <ScrollToTop />
           <ScrollProgress />
           <NavBar />
-          <Suspense fallback={null}>
-            <CommandPalette />
-          </Suspense>
-          <main id="main-content" className="pt-20">
+          <main id="main-content" className="pt-(--spacing-nav)">
             <ErrorBoundary>
               <AnimatedRoutes />
             </ErrorBoundary>
           </main>
 
-          {/* Footer — colophon */}
-          <footer className="border-t border-border py-8 px-6">
-            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-muted-foreground text-sm">
-              <p className="font-mono text-xs tracking-wider uppercase flex items-center gap-2">
-                <span aria-hidden="true" className="text-primary">⌖</span>
-                &copy; {new Date().getFullYear()} Edward Kubiak · {COORDINATES}
-              </p>
-              <div className="flex items-center gap-4">
+          {/* Footer — colophon strip */}
+          <footer className="border-t border-border py-8">
+            <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-muted-foreground">
+              <div className="flex flex-col gap-1">
+                <p className="text-sm">&copy; {new Date().getFullYear()} Edward Kubiak</p>
+                <p className="font-mono text-[11px] tracking-wide text-muted-foreground">
+                  CAST {CAST_STATS.version} · Compute Atlas {ATLAS_STATS.version} · stats synced {CAST_STATS.updated}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
                 <Link
                   to="/contact"
-                  className="font-mono text-xs tracking-wider uppercase hover:text-primary transition-colors"
+                  className="inline-flex items-center min-h-11 px-2 font-mono text-[11px] uppercase tracking-[0.18em] hover:text-primary transition-colors"
                 >
                   Contact
+                </Link>
+                <Link
+                  to="/now"
+                  className="inline-flex items-center min-h-11 px-2 font-mono text-[11px] uppercase tracking-[0.18em] hover:text-primary transition-colors"
+                >
+                  Now
                 </Link>
                 <IconButton
                   href="https://github.com/ek33450505"
@@ -282,18 +290,26 @@ function App() {
                 >
                   <LinkedinIcon size={16} aria-hidden="true" />
                 </IconButton>
-                <IconButton
-                  href="/rss.xml"
-                  label="RSS feed"
-                  title="RSS Feed"
-                >
+                <IconButton href="/rss.xml" label="RSS feed" title="RSS Feed">
                   <Rss size={16} aria-hidden="true" />
                 </IconButton>
               </div>
             </div>
           </footer>
         </div>
-        </MotionConfig>
+        <Suspense fallback={null}>
+          <CommandPalette />
+        </Suspense>
+      </div>
+    </MotionConfig>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <CommandPaletteProvider>
+        <AppShell />
       </CommandPaletteProvider>
     </Router>
   );

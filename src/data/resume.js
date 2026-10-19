@@ -230,8 +230,7 @@ export const printStyles = `
       min-height: unset !important;
     }
     #resume-print .card,
-    #resume-print .card-interactive,
-    #resume-print .neatline {
+    #resume-print .card-interactive {
       background: white !important;
       border: 1px solid #d4d4d4 !important;
       box-shadow: none !important;

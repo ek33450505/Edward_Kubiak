@@ -19,14 +19,15 @@ function renderNotFound(props = {}) {
 describe('NotFound — default props', () => {
   it('renders the default "404" heading display text', () => {
     renderNotFound();
-    expect(screen.getByText('404')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /^404/ })).toBeInTheDocument();
   });
 
-  it('renders the default page-not-found h1 message', () => {
+  it('renders "404 — Page not found" as the h1 and the explanation as a paragraph', () => {
     renderNotFound();
     expect(
-      screen.getByRole('heading', { level: 1, name: /doesn't exist/i })
+      screen.getByRole('heading', { level: 1, name: /404.*page not found/i })
     ).toBeInTheDocument();
+    expect(screen.getByText(/doesn't exist/i)).toBeInTheDocument();
   });
 
   it('renders a "Back to Home" link pointing to "/"', () => {
@@ -41,14 +42,16 @@ describe('NotFound — custom props', () => {
   it('renders custom heading, message and link label/href', () => {
     renderNotFound({
       heading: '404',
-      message: 'Project not found',
+      title: 'Project not found',
+      message: "The project you're looking for doesn't exist.",
       linkLabel: 'Back to Projects',
       linkHref: '/projects',
     });
-    expect(screen.getByText('404')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /^404/ })).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { level: 1, name: /project not found/i })
+      screen.getByRole('heading', { level: 1, name: /404.*project not found/i })
     ).toBeInTheDocument();
+    expect(screen.getByText(/project you're looking for doesn't exist/i)).toBeInTheDocument();
     const link = screen.getByRole('link', { name: /back to projects/i });
     expect(link.getAttribute('href')).toBe('/projects');
   });

@@ -13,18 +13,20 @@ import PageWrapper from "./PageWrapper";
  *
  * Props:
  *   heading    string   Large display text, default "404"
- *   message    string   Sub-heading below the display text
+ *   title      string   Heading text after the code, default "Page not found"
+ *   message    string   Helpful paragraph below the heading
  *   linkLabel  string   CTA link text, default "Back to Home"
  *   linkHref   string   CTA link destination, default "/"
  */
 export default function NotFound({
   heading = "404",
+  title = "Page not found",
   message = "The page you're looking for doesn't exist.",
   linkLabel = "Back to Home",
   linkHref = "/",
 }) {
   return (
-    <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="min-h-page py-20">
       <PageWrapper>
         <motion.div
           variants={fadeUp}
@@ -34,17 +36,15 @@ export default function NotFound({
           className="py-20 text-center"
         >
           <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-primary">
-            Off the map · No such coordinate
+            Error · Not found
           </p>
-          <p className="mb-4 font-mono text-6xl font-semibold tabular-nums text-foreground">
-            {heading}
-          </p>
-          <h1 className="mb-8 font-display text-2xl font-semibold tracking-tight text-muted-foreground">
-            {message}
+          <h1 className="mb-4 font-mono text-4xl font-semibold tabular-nums text-foreground sm:text-5xl">
+            {heading} — {title}
           </h1>
+          <p className="mx-auto mb-8 max-w-md text-muted-foreground">{message}</p>
           <Link
             to={linkHref}
-            className="inline-flex items-center gap-2 rounded border border-primary px-6 py-3 font-mono text-xs uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+            className="inline-flex min-h-11 items-center gap-2 rounded border border-primary px-6 py-3 font-mono text-xs uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <ArrowLeft size={14} aria-hidden="true" />
             {linkLabel}

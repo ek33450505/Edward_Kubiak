@@ -1,85 +1,81 @@
 import { motion } from "motion/react";
-import { COORDINATES } from "../data/place";
 import { Link } from "react-router-dom";
 import practice from "../data/practice";
 import { fadeUp, fadeIn } from "../utils/motion";
 import PageWrapper from "./ui/PageWrapper";
 import Reveal from "./ui/Reveal";
-import Label from "./ui/Label";
+import SectionHead from "./ui/SectionHead";
 
-// Mono plate index — survey card numbering
+// Mono panel index
 const idx = (n) => String(n).padStart(2, "0");
 
 const Practice = () => {
   return (
-    <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="min-h-page py-20">
       <PageWrapper>
 
-        {/* ── Frontispiece header ─────────────────────────────────────────── */}
+        {/* ── Page header ─────────────────────────────────────────────────── */}
         <motion.div variants={fadeUp} initial="hidden" animate="show">
-          {/* Coordinate overline — survey date stamp */}
-          <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-primary">
-            As of {practice.updated} · {COORDINATES}
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-primary">
+            Practice · Updated <span className="tabular-nums">{practice.updated}</span>
           </p>
 
-          {/* Engraved serif H1 */}
-          <h1 className="font-display text-4xl font-semibold leading-[1.06] tracking-tight text-foreground sm:text-5xl">
+          <h1 className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl">
             How I Work With Agents
           </h1>
 
-          {/* Lede */}
-          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-3 max-w-3xl leading-relaxed text-muted-foreground">
             {practice.lede}
           </p>
 
-          {/* Hairline rule */}
-          <div className="mt-5 h-px w-full bg-border" />
+          <div className="hairline mt-6" />
         </motion.div>
 
         {/* ── The loop ────────────────────────────────────────────────────── */}
         <div className="mt-10 space-y-4">
-          {practice.loop.map((step, i) => (
-            <Reveal
-              key={step.id}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="neatline group bg-card p-6 transition-colors duration-300 hover:border-primary/50"
-            >
-              {/* Mono plate index */}
-              <span
-                aria-hidden="true"
-                className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums"
+          {practice.loop.map((step, i) => {
+            const headingId = `loop-${step.id}`;
+            return (
+              <Reveal
+                as="section"
+                key={step.id}
+                aria-labelledby={headingId}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="panel"
               >
-                {idx(i + 1)}
-              </span>
-
-              {/* Step title — engraved serif */}
-              <h2 className="font-display mt-2 text-xl font-semibold tracking-tight text-foreground">
-                {step.title}
-              </h2>
-
-              {/* Hairline between title and body */}
-              <div className="mt-4 mb-4 h-px w-full bg-border" />
-
-              <p className="text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-
-              {/* Artifact footnote — mono, visually distinct from body prose */}
-              <p className="mt-4 border-t border-border pt-3 font-mono text-[11px] leading-relaxed tracking-wide text-muted-foreground">
-                {step.artifact}
-              </p>
-            </Reveal>
-          ))}
+                <div className="panel-head">
+                  <span aria-hidden="true" className="tabular-nums">{idx(i + 1)} /</span>
+                </div>
+                <div className="p-6">
+                  <h2 id={headingId} className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground">
+                    {step.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+                  <p className="mt-4 border-t border-border pt-3 font-mono text-[11px] leading-relaxed tracking-wide text-muted-foreground">
+                    {step.artifact}
+                  </p>
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
 
         {/* ── Review budget ───────────────────────────────────────────────── */}
         <Reveal
+          as="section"
+          aria-labelledby="review-budget"
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-6 neatline bg-card p-8"
+          className="panel mt-6"
         >
-          <Label as="h2" className="mb-4">Review Budget</Label>
-          <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
+          <div className="panel-head">
+            <h2 id="review-budget" className="font-mono text-[11px] font-normal uppercase tracking-[0.18em]">
+              Review Budget
+            </h2>
+          </div>
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-5 p-6 sm:grid-cols-4">
             {practice.reviewBudget.map((stat, i) => (
               <div key={stat.label} className="border-t border-border pt-3">
-                <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                <dt className="mb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                   <span className="mr-2 text-primary">{idx(i + 1)}</span>{stat.label}
                 </dt>
                 <dd className="font-mono text-2xl tabular-nums text-foreground">{stat.value}</dd>
@@ -89,89 +85,75 @@ const Practice = () => {
         </Reveal>
 
         {/* ── Plausible is not correct — case studies ─────────────────────── */}
-        <div className="mt-14">
-          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-            Plausible Is Not Correct
-          </h2>
-          <div className="mt-4 mb-8 h-px w-full bg-border" />
+        <section aria-labelledby="plausible" className="mt-14">
+          <SectionHead index="01" id="plausible" title="Plausible Is Not Correct" />
 
-          <div className="space-y-10">
+          <div className="space-y-8">
             {practice.cases.map((c, i) => (
               <Reveal
+                as="article"
                 key={c.id}
+                aria-labelledby={`case-${c.id}`}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="card p-8"
+                className="panel"
               >
-                <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
-                  Plate {idx(i + 1)}
-                </p>
-                <h3 className="mb-4 font-display text-2xl font-semibold tracking-tight text-foreground">
-                  {c.title}
-                </h3>
+                <div className="panel-head">
+                  <span className="tabular-nums">Case {i + 1} of {practice.cases.length}</span>
+                </div>
+                <div className="p-6 sm:p-8">
+                  <h3 id={`case-${c.id}`} className="mb-4 font-display text-2xl font-semibold tracking-[-0.02em] text-foreground">
+                    {c.title}
+                  </h3>
 
-                <dl className="space-y-4">
-                  <div>
-                    <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                      Symptom
-                    </dt>
-                    <dd className="text-sm leading-relaxed text-foreground">{c.symptom}</dd>
-                  </div>
-                  <div>
-                    <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                      Looked right
-                    </dt>
-                    <dd className="text-sm leading-relaxed text-foreground">{c.lookedRight}</dd>
-                  </div>
-                  <div>
-                    <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                      Actually was
-                    </dt>
-                    <dd className="text-sm leading-relaxed text-foreground">{c.actuallyWas}</dd>
-                  </div>
-                  <div>
-                    <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                      Caught by
-                    </dt>
-                    <dd className="text-sm leading-relaxed text-foreground">{c.caughtBy}</dd>
-                  </div>
-                </dl>
+                  <dl className="space-y-4">
+                    {[
+                      ["Symptom", c.symptom],
+                      ["Looked right", c.lookedRight],
+                      ["Actually was", c.actuallyWas],
+                      ["Caught by", c.caughtBy],
+                    ].map(([label, text]) => (
+                      <div key={label}>
+                        <dt className="mb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                          {label}
+                        </dt>
+                        <dd className="text-sm leading-relaxed text-foreground">{text}</dd>
+                      </div>
+                    ))}
+                  </dl>
 
-                <div className="mt-4 mb-4 h-px w-full bg-border" />
+                  <div className="hairline mt-4 mb-4" />
 
-                <p className="text-sm leading-relaxed text-muted-foreground">{c.fix}</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{c.fix}</p>
 
-                {/* Lesson — the payload of each case, visually emphasized */}
-                <p className="mt-5 border-l-2 border-primary pl-4 font-display text-lg leading-relaxed text-foreground">
-                  {c.lesson}
-                </p>
+                  {/* Lesson — the payload of each case, visually emphasized */}
+                  <p className="mt-5 border-l-2 border-primary pl-4 text-lg leading-relaxed text-foreground">
+                    {c.lesson}
+                  </p>
 
-                {/* Provenance footnote */}
-                <p className="mt-5 font-mono text-[11px] tracking-wide text-muted-foreground">
-                  {c.provenance}
-                </p>
+                  <p className="mt-5 font-mono text-[11px] tracking-wide text-muted-foreground">
+                    {c.provenance}
+                  </p>
+                </div>
               </Reveal>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* ── Principles ──────────────────────────────────────────────────── */}
-        <div className="mt-14">
-          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-            Principles
-          </h2>
-          <div className="mt-4 h-px w-full bg-border" />
+        <section aria-labelledby="principles" className="mt-14">
+          <SectionHead index="02" id="principles" title="Principles" />
 
-          <ul className="divide-y divide-border">
+          <ul className="panel divide-y divide-border">
             {practice.principles.map((p) => (
-              <li key={p.title} className="py-5">
-                <h3 className="font-display text-lg font-semibold tracking-tight text-foreground">
+              <li key={p.title} className="px-6 py-5">
+                <h3 className="font-display text-lg font-semibold tracking-[-0.02em] text-foreground">
                   {p.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
               </li>
             ))}
           </ul>
-        </div>
+        </section>
 
         {/* ── See also ────────────────────────────────────────────────────── */}
         <Reveal
@@ -179,24 +161,24 @@ const Practice = () => {
           aria-label="See also"
           variants={fadeIn}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs tracking-wider text-muted-foreground"
+          className="mt-10 flex flex-wrap items-center gap-x-5 font-mono text-xs tracking-wider text-muted-foreground"
         >
           <span className="uppercase tracking-[0.28em]">See also</span>
           <Link
             to="/projects"
-            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+            className="inline-flex min-h-11 items-center underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
           >
             Projects
           </Link>
           <Link
             to="/resume"
-            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+            className="inline-flex min-h-11 items-center underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
           >
             Resume
           </Link>
           <Link
             to="/about"
-            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+            className="inline-flex min-h-11 items-center underline decoration-border underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
           >
             About
           </Link>

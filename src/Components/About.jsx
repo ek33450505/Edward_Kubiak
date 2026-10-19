@@ -1,57 +1,45 @@
-import { motion, useReducedMotion } from "motion/react";
-import { coordinateOverline } from "../data/place";
-import { fadeUp, slideInLeft, staggerItem } from "../utils/motion";
+import { motion } from "motion/react";
+import { fadeUp, staggerItem } from "../utils/motion";
 import { Compass, Briefcase, GitBranch } from "lucide-react";
 import GetInTouch from "./ui/GetInTouch";
 import PageWrapper from "./ui/PageWrapper";
 import Reveal from "./ui/Reveal";
-import RadarChart from "./ui/RadarChart";
 import { aggregateTech } from "../utils/aggregateTech";
 import { Link } from "react-router-dom";
+import projects from "../data/projects";
 import { CAST_STATS, CAST_DESKTOP_STATS } from "../data/castStats";
 
 // Static — computed once at module load, never changes at runtime
 const TECH_DATA = aggregateTech();
-
-// Coordinate overline — survey marker for the about page frontispiece
-const OVERLINE = coordinateOverline(2026);
+const PROJECT_COUNT = projects.filter((p) => !p.archived).length;
 
 const About = () => {
-  const reducedMotion = useReducedMotion();
   return (
-    <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="min-h-page py-20">
       <PageWrapper>
-        {/* Frontispiece header — coord overline + engraved display h1 + hairline */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-        >
-          <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-muted-foreground">
-            {OVERLINE}
+        {/* Page header — mono eyebrow + Geist h1 + hairline */}
+        <motion.div variants={fadeUp} initial="hidden" animate="show">
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-primary">
+            About
           </p>
-          <h1 className="font-display text-4xl font-semibold leading-[1.06] tracking-tight text-foreground sm:text-5xl">
+          <h1 className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl">
             About <span className="text-primary">Me</span>
           </h1>
-          <div className="mt-4 h-px w-full bg-border" />
+          <div className="hairline mt-6" />
         </motion.div>
 
         {/* Bio cards — scroll-triggered */}
         <div className="mt-12 space-y-6">
-          <Reveal
-            as="div"
-            variants={slideInLeft}
-            margin="-60px"
-            transition={{ delay: 0.1 }}
-            whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
-            className="neatline bg-card p-6 sm:p-8 hover:border-primary/50 transition-colors duration-300"
-          >
-            <div className="flex items-start gap-4">
+          <Reveal as="section" aria-labelledby="about-developer" className="panel">
+            <div className="panel-head">
+              <span aria-hidden="true" className="tabular-nums">01 / Profile</span>
+            </div>
+            <div className="flex items-start gap-4 p-6 sm:p-8">
               <div className="p-2 rounded bg-primary/10 text-primary shrink-0 mt-1">
                 <Briefcase size={20} aria-hidden="true" />
               </div>
               <div>
-                <h2 className="font-display text-xl font-semibold text-foreground mb-3">
+                <h2 id="about-developer" className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground mb-3">
                   The Developer
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
@@ -89,6 +77,7 @@ const About = () => {
                     href="https://www.metasolutions.net/"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="META Solutions (opens in new tab)"
                     className="text-primary hover:text-foreground underline underline-offset-4 decoration-border hover:decoration-primary transition-colors"
                   >
                     META Solutions
@@ -104,20 +93,16 @@ const About = () => {
             </div>
           </Reveal>
 
-          <Reveal
-            as="div"
-            variants={slideInLeft}
-            margin="-60px"
-            transition={{ delay: 0.15 }}
-            whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
-            className="neatline bg-card p-6 sm:p-8 hover:border-primary/50 transition-colors duration-300"
-          >
-            <div className="flex items-start gap-4">
+          <Reveal as="section" aria-labelledby="about-how-i-work" className="panel">
+            <div className="panel-head">
+              <span aria-hidden="true" className="tabular-nums">02 / Approach</span>
+            </div>
+            <div className="flex items-start gap-4 p-6 sm:p-8">
               <div className="p-2 rounded bg-water/10 text-water shrink-0 mt-1">
                 <Compass size={20} aria-hidden="true" />
               </div>
               <div>
-                <h2 className="font-display text-xl font-semibold text-foreground mb-3">
+                <h2 id="about-how-i-work" className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground mb-3">
                   How I Work
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
@@ -130,20 +115,16 @@ const About = () => {
             </div>
           </Reveal>
 
-          <Reveal
-            as="div"
-            variants={slideInLeft}
-            margin="-60px"
-            transition={{ delay: 0.15 }}
-            whileHover={reducedMotion ? {} : { x: 4, transition: { duration: 0.2 } }}
-            className="neatline bg-card p-6 sm:p-8 hover:border-primary/50 transition-colors duration-300"
-          >
-            <div className="flex items-start gap-4">
+          <Reveal as="section" aria-labelledby="about-open-source" className="panel">
+            <div className="panel-head">
+              <span aria-hidden="true" className="tabular-nums">03 / Open source</span>
+            </div>
+            <div className="flex items-start gap-4 p-6 sm:p-8">
               <div className="p-2 rounded bg-primary/10 text-primary shrink-0 mt-1">
                 <GitBranch size={20} aria-hidden="true" />
               </div>
               <div>
-                <h2 className="font-display text-xl font-semibold text-foreground mb-3">
+                <h2 id="about-open-source" className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground mb-3">
                   Open Source Builder
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
@@ -175,17 +156,37 @@ const About = () => {
             </div>
           </Reveal>
 
-          {/* Tech Radar */}
+          {/* Stack — ranked list of the most-used project tech tags */}
           {TECH_DATA.length > 0 && (
             <Reveal
+              as="section"
+              aria-labelledby="about-stack"
               variants={staggerItem}
               transition={{ duration: 0.5 }}
-              className="card p-6 sm:p-8"
+              className="panel"
             >
-              <h2 className="font-display text-xl font-semibold text-foreground mb-6">
-                Tech Radar
-              </h2>
-              <RadarChart data={TECH_DATA} />
+              <div className="panel-head">
+                <span aria-hidden="true" className="tabular-nums">04 / Stack</span>
+              </div>
+              <div className="p-6 sm:p-8">
+                <h2 id="about-stack" className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground">
+                  Stack
+                </h2>
+                <p className="mt-1 mb-6 text-sm text-muted-foreground">
+                  Top <span className="tabular-nums">{TECH_DATA.length}</span> tags across <span className="tabular-nums">{PROJECT_COUNT}</span> projects, ranked by how many carry each one.
+                </p>
+                <ol className="space-y-3">
+                  {TECH_DATA.map((t) => (
+                    <li key={t.name} className="grid grid-cols-[8rem_1fr_2rem] items-center gap-4 sm:grid-cols-[12rem_1fr_2.5rem]">
+                      <span className="font-mono text-sm text-foreground">{t.name}</span>
+                      <span aria-hidden="true" className="h-1.5 bg-muted">
+                        <span className="block h-full bg-primary" style={{ width: `${(t.count / t.fullMark) * 100}%` }} />
+                      </span>
+                      <span className="text-right font-mono text-sm tabular-nums text-muted-foreground">{t.count}<span className="sr-only"> projects</span></span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </Reveal>
           )}
 

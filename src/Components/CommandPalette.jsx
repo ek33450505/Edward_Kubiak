@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +46,9 @@ const CommandPalette = () => {
   const inputRef = useRef(null);
   const dialogRef = useRef(null);
   const previousActiveElementRef = useRef(null);
+  const [search, setSearch] = useState("");
+  const [resultCount, setResultCount] = useState(0);
+  const [announcement, setAnnouncement] = useState("");
 
   // Capture focus target before opening; restore it on close
   useEffect(() => {
@@ -64,6 +67,28 @@ const CommandPalette = () => {
       return () => cancelAnimationFrame(id);
     }
   }, [open]);
+
+  // Mirror cmdk's filtered item count into a persistent live region.
+  useEffect(() => {
+    const root = dialogRef.current;
+    if (!open || !root) return undefined;
+    const count = () => setResultCount(root.querySelectorAll("[cmdk-item]").length);
+    count();
+    const observer = new MutationObserver(count);
+    observer.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ["hidden"] });
+    return () => {
+      observer.disconnect();
+      setSearch("");
+    };
+  }, [open]);
+
+  // Debounce the announcement so screen readers hear the settled count, not every keystroke.
+  useEffect(() => {
+    if (!open || !search) return undefined;
+    const text = resultCount === 0 ? "No results" : `${resultCount} ${resultCount === 1 ? "result" : "results"}`;
+    const timer = setTimeout(() => setAnnouncement(text), 400);
+    return () => clearTimeout(timer);
+  }, [open, search, resultCount]);
 
   // Focus trap: cycle Tab/Shift+Tab within the dialog
   useEffect(() => {
@@ -134,7 +159,7 @@ const CommandPalette = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="fixed inset-0 z-[70] bg-foreground/40 backdrop-blur-sm"
+            className="fixed inset-0 z-[70] bg-background/80 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
           <motion.div
@@ -152,30 +177,34 @@ const CommandPalette = () => {
               className="w-full max-w-lg pointer-events-auto"
             >
               <Command
-                className="rounded border border-border bg-card shadow-xl overflow-hidden"
-                label="Command palette"
+                className="rounded border border-border-strong bg-card shadow-xl overflow-hidden"
+                label="Search commands"
               >
                 <Command.Input
                   ref={inputRef}
                   placeholder="Type a command or search..."
-                  aria-label="Search commands"
-                  className="w-full px-4 py-3.5 bg-transparent border-b border-border text-foreground placeholder-muted-foreground text-sm outline-none font-mono tracking-wide"
+                  value={search}
+                  onValueChange={setSearch}
+                  className="w-full px-4 py-3.5 bg-transparent min-h-11 border-b border-border-strong text-foreground placeholder-muted-foreground text-sm outline-none focus-visible:border-primary font-mono tracking-wide"
                 />
-                <Command.List className="max-h-80 overflow-y-auto p-2">
+                <div role="status" aria-live="polite" className="sr-only">
+                  {search ? announcement : ""}
+                </div>
+                <Command.List label="Commands" className="max-h-80 overflow-y-auto p-2">
                   <Command.Empty className="py-6 text-center text-sm text-muted-foreground font-mono tracking-wider">
                     No results found.
                   </Command.Empty>
 
                   <Command.Group
                     heading="Navigate"
-                    className="[&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:tracking-[0.18em] [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {navigateCommands.map(({ id, label, icon: Icon, to }) => (
                       <Command.Item
                         key={id}
                         value={label}
                         onSelect={() => handleNavigate(to)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-muted-foreground cursor-pointer data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-muted-foreground cursor-pointer min-h-11 data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground transition-colors"
                       >
                         <Icon size={14} aria-hidden="true" />
                         {label}
@@ -187,14 +216,14 @@ const CommandPalette = () => {
 
                   <Command.Group
                     heading="Jump to Section"
-                    className="[&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:tracking-[0.18em] [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {jumpCommands.map(({ id, label, hash }) => (
                       <Command.Item
                         key={id}
                         value={label}
                         onSelect={() => handleJump(hash)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-muted-foreground cursor-pointer data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-muted-foreground cursor-pointer min-h-11 data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground transition-colors"
                       >
                         <Hash size={14} aria-hidden="true" />
                         {label}
@@ -206,17 +235,18 @@ const CommandPalette = () => {
 
                   <Command.Group
                     heading="External"
-                    className="[&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.3em] [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
+                    className="[&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:tracking-[0.18em] [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5"
                   >
                     {externalCommands.map(({ id, label, href, icon: Icon }) => (
                       <Command.Item
                         key={id}
                         value={label}
                         onSelect={() => handleExternal(href)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-muted-foreground cursor-pointer data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-muted-foreground cursor-pointer min-h-11 data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground transition-colors"
                       >
                         <Icon size={14} aria-hidden="true" />
                         {label}
+                        <span className="sr-only">(opens in new tab)</span>
                         <ExternalLink size={11} aria-hidden="true" className="ml-auto opacity-40" />
                       </Command.Item>
                     ))}

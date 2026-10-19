@@ -1,4 +1,4 @@
 /* Page transition wrapper */
 .page-content {
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - var(--spacing-nav));
 }

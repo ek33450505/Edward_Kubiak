@@ -15,7 +15,7 @@ describe("HeroStats — labels", () => {
   it("renders all four expected labels", () => {
     render(<HeroStats />);
     expect(screen.getByText("Tests")).toBeInTheDocument();
-    expect(screen.getByText("Facilities")).toBeInTheDocument();
+    expect(screen.getByText("GW operational")).toBeInTheDocument();
     expect(screen.getByText("Packages")).toBeInTheDocument();
     expect(screen.getByText("CAST")).toBeInTheDocument();
   });
@@ -39,11 +39,9 @@ describe("HeroStats — values", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders the Facilities value from ATLAS_STATS.facilities", () => {
+  it("renders the GW operational value from ATLAS_STATS.operationalGw", () => {
     render(<HeroStats />);
-    expect(
-      screen.getByText(ATLAS_STATS.facilities.toLocaleString("en-US"))
-    ).toBeInTheDocument();
+    expect(screen.getByText(`${ATLAS_STATS.operationalGw}`)).toBeInTheDocument();
   });
 
   it("renders the Packages value from CAST_STATS.packages", () => {

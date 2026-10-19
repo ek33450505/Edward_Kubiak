@@ -1,17 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// Display: Fraunces (variable — opsz/SOFT/WONK axes via `full`). Self-hosted to
-// satisfy the strict `font-src 'self'` CSP.
-import "@fontsource-variable/fraunces/full.css";
-import "@fontsource-variable/fraunces/full-italic.css";
-// Survey mono: labels, coordinates, tabular figures.
-import "@fontsource-variable/jetbrains-mono/wght.css";
-// Body grotesque.
-import "@fontsource/dm-sans/300.css";
-import "@fontsource/dm-sans/400.css";
-import "@fontsource/dm-sans/400-italic.css";
-import "@fontsource/dm-sans/500.css";
-import "@fontsource/dm-sans/700.css";
+// Geist (UI/body/display) + Geist Mono (labels, figures). Self-hosted to satisfy
+// the strict `font-src 'self'` CSP.
+import "@fontsource-variable/geist/index.css";
+import "@fontsource-variable/geist-mono/index.css";
 import "./index.css";
 import App from "./App";
 

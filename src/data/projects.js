@@ -28,9 +28,11 @@ import { TOOL_VERSIONS } from "./toolStats.js";
  * @property {string}   [github]          - URL to the GitHub repository
  * @property {GitHubRepo} [githubRepo]    - Structured owner/repo for the GitHub Stars API
  * @property {string[]} [stats]           - Short stat labels shown on the card
+ * @property {string}   [heroImage]       - Showcase hero image path (PNG/JPEG fallback)
+ * @property {string}   [heroImageWebp]   - Optional WebP variant of heroImage, served via <picture>
  * @property {string}   [dateAdded]       - ISO date the project was first added; feeds RSS pubDate + sitemap lastmod
  * @property {{label: string, value: string}[]} [highlights] - Hairline stat strip (mono figure + tracked label); showcase-only
- * @property {{title: string, body: string}[]}  [sections]   - Long-form case-study plates (Fraunces title + body); showcase-only
+ * @property {{title: string, body: string}[]}  [sections]   - Long-form case-study sections (title + body); showcase-only
  * @property {{name: string, url: string, detail: string}[]} [citedBy] - External projects that cite this one; showcase-only
  */
 
@@ -54,6 +56,7 @@ const projects = [
     githubRepo: { owner: "ek33450505", repo: "compute-atlas" },
     link: "https://www.compute-atlas.com",
     heroImage: "/media/compute-atlas.png",
+    heroImageWebp: "/media/compute-atlas.webp",
     stats: [
       ATLAS_STATS.version,
       `${ATLAS_STATS.facilities.toLocaleString("en-US")} Facilities`,

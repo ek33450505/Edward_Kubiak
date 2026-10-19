@@ -1,41 +1,55 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CARTOGRAPHIC SURVEY ATLAS — design foundation
-   Single dark "Night Survey" theme (nocturnal survey plate). No light mode,
-   no toggle, no prefers-color-scheme. Character comes from typography
-   (engraved serif + survey mono) and cartographic detail (graticule grid,
-   neatline frames, luminous hairlines on a warm dark field), never decoration.
+   SYSTEMS CONSOLE — design foundation
+   Single dark theme: graphite base, one amber signal accent, Geist + Geist Mono.
+   Structure comes from panels and hairlines, not fills or decoration. Dark is
+   not neon: no glow, no gradients. No light mode, no toggle, no
+   prefers-color-scheme. Mirror: src/lib/tokens.js (tokens.test.js enforces it).
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* ── Semantic palette (target API — new/migrated components use these) ──────
-     Contrast verified on --background #181410:
-       foreground 14.7:1 · muted-foreground 7.6:1 · primary 8.3:1              */
-  --color-background: #181410;        /* warm near-black survey field          */
-  --color-foreground: #EDE6D6;        /* parchment ink (luminous)              */
-  --color-card: #211C16;              /* raised leaf (warmer/lighter)          */
-  --color-card-foreground: #EDE6D6;
-  --color-muted: #241E17;             /* recessed panel fill                   */
-  --color-muted-foreground: #B3A68C;  /* secondary / caption ink               */
-  --color-primary: #8FB98A;           /* contour green → luminous sage         */
-  --color-primary-foreground: #181410;
-  --color-border: #4A4030;            /* brass/sepia hairline / graticule      */
-  --color-ring: #8FB98A;
+  /* Fixed nav height; drives nav h, main top padding and min-h-page. */
+  --spacing-nav: 4rem;
 
-  /* ── Cartographic accents (index marks, categories, status) ────────────────
-     Each verified ≥ 4.5:1 on #181410.                                         */
-  --color-terra: #D98A6A;             /* index contour / warm marker  (~6.8:1) */
-  --color-water: #7FA9C9;             /* hydrography blue             (~7.4:1) */
-  --color-sepia: #B79A5E;             /* secondary annotation         (~6.8:1) */
+  /* ── Semantic palette ──────────────────────────────────────────────────────
+     Measured on --background #111214 (card #17181B in parentheses):
+       foreground 15.2:1 (14.4) · muted-foreground 7.1:1 (6.8) ·
+       primary 9.4:1 (8.9) · terra 7.1 · water 8.3 · sepia 7.9 ·
+       primary-foreground on primary 9.4:1                                     */
+  --color-background: #111214;        /* graphite                              */
+  --color-foreground: #E6E7EA;
+  --color-card: #17181B;              /* raised panel                          */
+  --color-card-foreground: #E6E7EA;
+  --color-muted: #1C1E22;             /* recessed fill                         */
+  --color-muted-foreground: #9AA0AA;  /* secondary / caption ink               */
+  --color-primary: #F2A93B;           /* amber signal                          */
+  --color-primary-foreground: #111214;
+  --color-border: #2A2D33;            /* decorative hairline (dividers, panels) */
+  --color-border-strong: #646B76;     /* interactive control outline, ≥ 3:1    */
+  --color-ring: #F2A93B;
+
+  /* ── Legacy accents (remapped, names kept) ─────────────────────────────────
+     Each ≥ 4.5:1 on background and card.                                      */
+  --color-terra: #F07F5E;
+  --color-water: #6FB3E8;
+  --color-sepia: #B9A77C;
+
+  /* ── Facility status (graphics, ≥ 3:1 on background) ───────────────────────
+     operational 8.3 · construction 9.4 · permitted 10.5 · proposed 7.4 ·
+     cancelled 3.9
+     border-strong (control outline, WCAG 1.4.11) 3.4 on background           */
+  --color-status-operational: #6FB3E8;
+  --color-status-construction: #F2A93B;
+  --color-status-permitted: #7DD3A8;
+  --color-status-proposed: #C08BF5;
+  --color-status-cancelled: #6B7280;
 
   /* ── Type ──────────────────────────────────────────────────────────────────
-     display = engraved variable serif (opsz/SOFT/WONK)
-     mono    = survey labels, coordinates, tabular figures
-     body    = clean grotesque reading copy                                    */
-  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', monospace;
-  --font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+     Geist for display + body, Geist Mono for labels and tabular figures.     */
+  --font-display: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', monospace;
 
   --radius: 0.25rem;                  /* crisp corners — no pill shapes        */
 }
@@ -54,20 +68,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Engraved display serif — optical sizing on, terminals kept sharp & serious
-   (SOFT 0 / WONK 0 — refined reference-atlas, not playful).                   */
+/* Display sans — tightened tracking for headlines. */
 .font-display {
-  font-optical-sizing: auto;
-  font-variation-settings: "SOFT" 0, "WONK" 0;
-  letter-spacing: -0.011em;
+  letter-spacing: -0.02em;
 }
 
-/* Tabular figures for every mono surface (coordinates, stats, indices align). */
+/* Tabular figures for every mono surface (stats, indices, readouts align). */
 .font-mono {
   font-variant-numeric: tabular-nums;
 }
 
-/* Hairline sepia scrollbar */
+/* Hairline scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -82,40 +93,43 @@ body {
   background: var(--color-primary);
 }
 
-/* Selection = contour green */
+/* Selection = amber signal */
 ::selection {
   background: var(--color-primary);
   color: var(--color-primary-foreground);
 }
 
-/* Global focus-visible ring — a crisp contour-green outline haloed by the
-   parchment field so it reads on any surface. */
+/* Global focus-visible ring — a crisp amber outline that reads on any surface. */
 *:focus-visible {
   outline: 2px solid var(--color-ring);
   outline-offset: 2px;
   border-radius: 1px;
 }
 
-/* ── Cartographic utilities ──────────────────────────────────────────────── */
-
-/* Graticule — the surveyor's reference grid. Faint sepia hairlines at a 44px
-   pitch. Layer behind content and mask at the edges where used. */
-@utility graticule {
-  background-image:
-    repeating-linear-gradient(to right, color-mix(in oklab, var(--color-border) 45%, transparent) 0 1px, transparent 1px 44px),
-    repeating-linear-gradient(to bottom, color-mix(in oklab, var(--color-border) 45%, transparent) 0 1px, transparent 1px 44px);
+/* ── Layout utilities ───────────────────────────────────────────────────── */
+@utility min-h-page {
+  min-height: calc(100vh - var(--spacing-nav));
 }
 
-/* Neatline — the engraved double border that frames a plate. */
-@utility neatline {
-  border: 1px solid var(--color-border);
-  box-shadow:
-    inset 0 0 0 3px var(--color-background),
-    inset 0 0 0 4px color-mix(in oklab, var(--color-border) 60%, transparent);
+/* ── Console panels ──────────────────────────────────────────────────────── */
+@utility panel {
+  @apply rounded border border-border bg-card;
+}
+
+@utility panel-head {
+  @apply flex items-center justify-between border-b border-border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground;
+}
+
+@utility hairline {
+  @apply h-px w-full bg-border;
+}
+
+@utility status-dot {
+  @apply inline-block size-2 rounded-full bg-current;
 }
 
 /* ── Card surfaces (migrated to semantic tokens; crisp corners) ───────────────
-   card            — static plate (hairline border + leaf fill)
+   card            — static panel (hairline border + card fill)
    card-interactive — same, border warms to primary on hover                   */
 @utility card {
   @apply rounded border border-border bg-card;

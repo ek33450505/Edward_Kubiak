@@ -2,7 +2,7 @@ import projects from "../data/projects.js";
 
 /**
  * Aggregates tech tags from all non-archived projects.
- * Returns top 10 by frequency, formatted for the SVG RadarChart (src/Components/ui/RadarChart.jsx).
+ * Returns top 10 by frequency, rendered as the ranked Stack list on the About page (src/Components/About.jsx).
  *
  * @returns {{ name: string, count: number, fullMark: number }[]}
  */

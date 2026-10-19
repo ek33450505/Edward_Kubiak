@@ -25,20 +25,20 @@ it, because the judgment, the verification and the consequences all stayed put.
   wasn't.
 
 Résumé: [edwardkubiak.com/resume](https://edwardkubiak.com/resume) ·
-Reach me through the contact form at https://edwardkubiak.com/contact or on [LinkedIn](https://www.linkedin.com/in/edward-kubiak/)
+Reach me via https://edwardkubiak.com/contact (which points to LinkedIn) or on [LinkedIn](https://www.linkedin.com/in/edward-kubiak/)
 
 ---
 
 ## About this repository
 
-This repo is the source of that site: React 19, Vite 8, and a custom dark "Night
-Survey" cartographic design system.
+This repo is the source of that site: React 19, Vite 8, and a custom dark "Systems
+Console" design system.
 
-- **Cartographic design system** — a single dark reference-atlas theme with semantic
-  Tailwind v4 tokens, Fraunces display type, JetBrains Mono overlines, and cartographic
-  utilities (graticule grid, neatline frames). No toggles, no light mode.
-- **Typographic frontispiece hero** — no 3D; the legacy Three.js starfield was retired
-  in PR #18.
+- **Systems Console design system** — a single dark graphite theme with semantic
+  Tailwind v4 tokens, Geist + Geist Mono type, one amber signal color, and panel/hairline
+  utilities. No toggles, no light mode. Accessibility target: WCAG 2.2 AA.
+- **Typographic console hero** — no 3D; a fixed slot is reserved for a planned Compute
+  Atlas facility visualization.
 - **Command palette (⌘K)** — navigation and search via `cmdk`.
 - **Self-healing stats** — every figure in the UI is interpolated from a feed that
   re-syncs at build and deploy time, or it is removed. No hardcoded counts or versions,
@@ -86,14 +86,15 @@ npm run build-resume    # legacy: docx→PDF (superseded by build-pdfs)
 npm test                # run Vitest suite
 ```
 
-## Design System — Night Survey
+## Design System — Systems Console
 
-Single dark "Night Survey" reference-atlas theme (nocturnal survey plate) — **no light mode, no toggle**. Character comes from typography and cartographic detail, never decoration or neon glow.
+Single dark graphite theme — **no light mode, no toggle**. Restraint is the bar: hairlines over fills, mono for labels and figures, one amber signal, dark ≠ neon. The previous identity is preserved at git tag `era/night-survey`.
 
-- **Tokens:** Semantic Tailwind v4 `@theme` in `src/index.css` — `background` (#181410), `foreground`, `card`, `muted`, `primary` (contour green), `border` (brass hairline), accents `terra`/`water`/`sepia`. Every text/bg pair ≥ 4.5:1 WCAG AA. JS/SVG consumers mirror tokens from `src/lib/tokens.js` — keep in sync.
-- **Typography:** Fraunces (variable serif — headlines only) · JetBrains Mono (overlines, labels, coordinates, tabular figures) · DM Sans (body). All self-hosted via `@fontsource` (CSP: `font-src 'self'`; **no CDN fonts**).
-- **Utilities:** `.graticule` (reference grid) · `.neatline` (engraved double frame) · crisp `card` / `card-interactive` · crisp corners only (0.25rem radius, no pills).
-- **Signature patterns:** Mono eyebrow overlines + Fraunces titles + hairline rules · neatline "plate" cards with mono labels · hairline stat strips (mono tabular figures over tracked labels).
+- **Tokens:** Semantic Tailwind v4 `@theme` in `src/index.css` — `background` (#111214), `foreground`, `card`, `muted`, `primary` (amber #F2A93B), `border` (decorative hairline), `border-strong` (control outline, ≥ 3:1), accents `terra`/`water`/`sepia`, and a `status-*` palette. Text pairs ≥ 4.5:1, enforced by `src/lib/tokens.test.js`, which also keeps the `src/lib/tokens.js` mirror in sync.
+- **Typography:** Geist (display + body) · Geist Mono (labels, indices, tabular figures). Self-hosted via `@fontsource-variable` (CSP: `font-src 'self'`; **no CDN fonts**).
+- **Utilities:** `panel` / `panel-head` · `hairline` · `status-dot` · `min-h-page` · crisp `card` / `card-interactive` · crisp corners only (0.25rem radius, no pills).
+- **Signature patterns:** mono eyebrow + Geist page titles + hairline rules · "01 /" indexed section heads · panel cards with mono header strips · readout grids (mono tabular figures over tracked labels).
+- **Accessibility:** WCAG 2.2 AA is the target; every UI change gets an accessibility review, and reduced motion is honored site-wide.
 
 ## Build Notes
 
@@ -132,7 +133,9 @@ Single dark "Night Survey" reference-atlas theme (nocturnal survey plate) — **
 ## Contact
 
 - **GitHub:** [ek33450505](https://github.com/ek33450505)
-- **Contact:** https://edwardkubiak.com/contact
+- **Contact:** https://edwardkubiak.com/contact (points to LinkedIn)
 - **LinkedIn:** [edward-kubiak](https://www.linkedin.com/in/edward-kubiak/)
+
+`workers/contact/` holds a deployed-but-unused Cloudflare Worker backend, kept for a future contact form.
 
 &copy; 2024–2026 Edward Kubiak

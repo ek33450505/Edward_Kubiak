@@ -1,6 +1,6 @@
 import { CAST_STATS } from "../data/castStats";
 import { useStaticJson } from "../hooks/useStaticJson";
-import SectionHeader from "./ui/SectionHeader";
+import SectionHead from "./ui/SectionHead";
 import PageWrapper from "./ui/PageWrapper";
 import Reveal from "./ui/Reveal";
 
@@ -18,36 +18,31 @@ function CastStats() {
 
   // Guard: if JSON parsed to a non-object type, fall back to bundled stats.
   const displayStats = data && typeof data === "object" ? data : CAST_STATS;
+  const cells = PILLS.filter(({ key }) => displayStats[key] !== undefined && displayStats[key] !== null);
 
   return (
-    <Reveal as="section" className="w-full relative z-[2]">
-      <PageWrapper width="6xl" className="pb-20">
-        <div className="mb-6">
-          <SectionHeader title="CAST Ecosystem — Live Stats">
-            {displayStats.updated && (
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Rev. {new Date(displayStats.updated).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-              </span>
-            )}
-          </SectionHeader>
-        </div>
+    <Reveal as="section" aria-labelledby="cast-stats-heading" className="w-full">
+      <PageWrapper width="6xl" className="pb-20 md:pb-24">
+        <SectionHead index="04" title="CAST ecosystem — live stats" id="cast-stats-heading">
+          {displayStats.updated && (
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              Updated {new Date(displayStats.updated).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}
+            </span>
+          )}
+        </SectionHead>
 
-        {/* Survey strip — mono tabular figures over tracked labels, sepia hairlines */}
-        <div className="flex w-fit flex-wrap items-stretch divide-x divide-border border-y border-border">
-          {PILLS.map(({ key, label }) => {
-            const value = displayStats[key];
-            if (value === undefined || value === null) return null;
-            return (
-              <div key={key} className="flex flex-col gap-1 px-6 py-3">
-                <span className="font-mono text-xl font-semibold tabular-nums leading-none text-foreground">
-                  {value}
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                  {label}
-                </span>
-              </div>
-            );
-          })}
+        {/* Console readout — mono tabular figures over tiny tracked labels */}
+        <div className="flex flex-wrap gap-px overflow-hidden rounded border border-border bg-border">
+          {cells.map(({ key, label }) => (
+            <div key={key} className="flex min-w-[8rem] flex-1 flex-col gap-2 bg-card px-5 py-4">
+              <span className="font-mono text-2xl font-medium tabular-nums leading-none text-foreground">
+                {typeof displayStats[key] === "number" ? displayStats[key].toLocaleString("en-US") : displayStats[key]}
+              </span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                {label}
+              </span>
+            </div>
+          ))}
         </div>
       </PageWrapper>
     </Reveal>

@@ -6,12 +6,42 @@ import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 import PageWrapper from "./ui/PageWrapper";
 import NotFound from "./ui/NotFound";
-import Label from "./ui/Label";
+import SectionHead from "./ui/SectionHead";
 import StarBadge from "./ui/StarBadge";
 import { useDocumentMeta } from "../hooks/useDocumentMeta";
 
 const backLinkClass =
-  "inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary";
+  "inline-flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-primary";
+
+const outLinkClass =
+  "inline-flex min-h-11 items-center gap-2 rounded border border-border-strong px-4 font-mono text-xs uppercase tracking-[0.14em] text-foreground transition-colors hover:border-primary hover:text-primary";
+
+const GROUP_LABELS = {
+  flagship: "Flagship",
+  tools: "AI & Claude Code Tools",
+  ecosystem: "CAST Ecosystem",
+  professional: "Professional",
+};
+
+// A titled console panel: mono head strip carrying the section h2, body below.
+function Panel({ title, delay = 0, children }) {
+  const headingId = `panel-${title.toLowerCase().replace(/\s+/g, "-")}`;
+  return (
+    <motion.section
+      variants={fadeUp}
+      initial="hidden"
+      animate="show"
+      transition={{ delay }}
+      aria-labelledby={headingId}
+      className="panel mt-6"
+    >
+      <div className="panel-head">
+        <h2 id={headingId} className="font-mono text-[11px] font-normal uppercase tracking-[0.18em]">{title}</h2>
+      </div>
+      <div className="p-6">{children}</div>
+    </motion.section>
+  );
+}
 
 // Professional work is internal by default: private source, no shareable URL. Without
 // this, such a project renders a detail page with no out-links and no explanation for
@@ -39,74 +69,96 @@ function ProjectDetail() {
     return (
       <NotFound
         heading="404"
-        message="Project not found"
+        title="Project not found"
+        message="The project you're looking for doesn't exist."
         linkLabel="Back to Projects"
         linkHref="/projects"
       />
     );
   }
 
-  const categoryLabel = `${project.category}${
-    project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""
-  }`;
-
+  const groupLabel = GROUP_LABELS[project.group] ?? project.category;
   const hasOutLinks = Boolean(project.github || project.link);
+  // Hero assets are 1600x1000 (compute-atlas is the only one today); revisit if another is added.
+  const heroAlt = `${project.title} interface — interactive map view`;
 
   return (
-    <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="min-h-page py-20">
       <PageWrapper>
-        {/* Top back link */}
-        <motion.div variants={fadeIn} initial="hidden" animate="show" className="mb-6">
+        <motion.div variants={fadeIn} initial="hidden" animate="show" className="mb-4">
           <Link to="/projects" className={backLinkClass}>
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Projects
           </Link>
         </motion.div>
 
-        {/* Hero plate */}
-        <motion.div variants={fadeUp} initial="hidden" animate="show">
-          <div className="neatline bg-card p-8">
-            <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
-              {categoryLabel}
-            </p>
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0 flex-1">
-                <div className="mb-1 flex flex-wrap items-center gap-3">
-                  <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                    {project.title}
-                  </h1>
-                  {project.featured && (
-                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary">Featured</span>
-                  )}
-                  {project.castEcosystem && (
-                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-sepia">CAST Ecosystem</span>
-                  )}
-                  {project.aiEngineering && !project.castEcosystem && (
-                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-water">AI Engineering</span>
-                  )}
-                  {project.githubRepo && (
-                    <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />
-                  )}
-                </div>
-              </div>
+        {/* Header panel */}
+        <motion.header variants={fadeUp} initial="hidden" animate="show" className="panel">
+          <div className="panel-head">
+            <span>{groupLabel}</span>
+            <span className="inline-flex items-center gap-2">
+              {hasOutLinks ? (
+                <>
+                  <span aria-hidden="true" className="status-dot text-primary" />
+                  Public
+                </>
+              ) : (
+                <>
+                  <Lock size={12} aria-hidden="true" />
+                  Internal — no public repo
+                </>
+              )}
+            </span>
+          </div>
+          <div className="p-6 md:p-8">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <h1 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
+                {project.title}
+              </h1>
+              {project.githubRepo && (
+                <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />
+              )}
+            </div>
+            {project.summary && (
+              <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">{project.summary}</p>
+            )}
 
-              {/* Out-links — or, for internal work, why there are none */}
-              <div className="flex shrink-0 gap-2">
-                {!hasOutLinks && (
-                  <span className="inline-flex items-center gap-2 rounded border border-border px-2.5 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                    <Lock size={13} aria-hidden="true" />
-                    Internal — no public repo
-                  </span>
-                )}
+            {project.tech && project.tech.length > 0 && (
+              <ul aria-label="Tech stack" className="mt-5 flex flex-wrap gap-2">
+                {project.tech.map((t) => (
+                  <li
+                    key={t}
+                    className="rounded border border-border px-2 py-0.5 font-mono text-[11px] text-muted-foreground"
+                  >
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {project.stats && project.stats.length > 0 && (
+              <ul
+                aria-label="Stats"
+                className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.12em] tabular-nums text-primary"
+              >
+                {project.stats.map((stat) => (
+                  <li key={stat}>{stat}</li>
+                ))}
+              </ul>
+            )}
+
+            {hasOutLinks && (
+              <div className="mt-6 flex flex-wrap gap-3">
                 {project.github && (
                   <a
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="View source code on GitHub (opens in new tab)"
-                    className="rounded border border-border p-2 text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                    aria-label="Source on GitHub (opens in new tab)"
+                    className={outLinkClass}
                   >
-                    <GithubIcon size={18} aria-hidden="true" />
+                    <GithubIcon size={14} aria-hidden="true" />
+                    Source
                   </a>
                 )}
                 {project.link && (
@@ -114,65 +166,66 @@ function ProjectDetail() {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="View live site (opens in new tab)"
-                    className="rounded border border-border p-2 text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                    aria-label="Live site (opens in new tab)"
+                    className={outLinkClass}
                   >
-                    <ExternalLink size={18} aria-hidden="true" />
+                    <ExternalLink size={14} aria-hidden="true" />
+                    Live site
                   </a>
                 )}
               </div>
-            </div>
+            )}
           </div>
-        </motion.div>
+        </motion.header>
 
         {/* Hero image — showcase-only */}
         {project.heroImage && (
           <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.05 }} className="mt-6">
-            <figure className="neatline overflow-hidden bg-card">
-              <img
-                src={project.heroImage}
-                alt={`${project.title} interface — interactive map view`}
-                className="block w-full"
-                loading="lazy"
-                width="1200"
-                height="707"
-              />
+            <figure className="overflow-hidden rounded border border-border bg-card">
+              <picture>
+                {project.heroImageWebp && <source srcSet={project.heroImageWebp} type="image/webp" />}
+                <img
+                  src={project.heroImage}
+                  alt={heroAlt}
+                  className="block h-auto w-full"
+                  loading="lazy"
+                  decoding="async"
+                  width="1600"
+                  height="1000"
+                />
+              </picture>
             </figure>
           </motion.div>
         )}
 
-        {/* Highlights — hairline survey readout (showcase-only) */}
+        {/* Highlights — console readout (showcase-only) */}
         {project.highlights && project.highlights.length > 0 && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.1 }} className="mt-6 neatline bg-card p-8">
-            <Label as="h2" className="mb-4">Survey Readout</Label>
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3">
-              {project.highlights.map((h, i) => (
-                <div key={h.label} className="border-t border-border pt-3">
-                  <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    <span className="mr-2 text-primary">{String(i + 1).padStart(2, "0")}</span>{h.label}
+          <Panel title="Readout" delay={0.1}>
+            <dl className="grid grid-cols-2 gap-px overflow-hidden rounded border border-border bg-border sm:grid-cols-3">
+              {project.highlights.map((h) => (
+                // dt-first DOM order (valid <dl> semantics); flex-col-reverse keeps the value on top visually
+                <div key={h.label} className="flex flex-col-reverse justify-end bg-card p-4">
+                  <dt className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                    {h.label}
                   </dt>
                   <dd className="font-mono text-2xl tabular-nums text-foreground">{h.value}</dd>
                 </div>
               ))}
             </dl>
-          </motion.div>
+          </Panel>
         )}
 
-        {/* Description */}
-        <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.1 }} className="mt-6 p-8 card">
-          <Label as="h2" className="mb-4">About</Label>
+        <Panel title="About" delay={0.1}>
           <p className="leading-relaxed text-foreground">{project.description}</p>
-        </motion.div>
+        </Panel>
 
-        {/* Case study — long-form plates (showcase-only) */}
+        {/* Case study — numbered sections (showcase-only) */}
         {project.sections && project.sections.length > 0 && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.2 }} className="mt-6 space-y-6">
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.2 }} className="mt-12">
             {project.sections.map((s, i) => (
-              <section key={s.title} className="card p-8">
-                <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Plate {String(i + 1).padStart(2, "0")}</p>
-                <h2 className="mb-3 font-display text-2xl font-semibold tracking-tight text-foreground">{s.title}</h2>
-                <div className="mb-4 h-px w-full bg-border" />
-                <p className="leading-relaxed text-foreground">{s.body}</p>
+              <section key={s.title} aria-labelledby={`case-${i + 1}`} className="mb-10">
+                <SectionHead index={String(i + 1).padStart(2, "0")} id={`case-${i + 1}`} title={s.title} />
+                <p className="max-w-3xl leading-relaxed text-foreground">{s.body}</p>
               </section>
             ))}
           </motion.div>
@@ -180,106 +233,38 @@ function ProjectDetail() {
 
         {/* Cited by — external projects that use this one's data (showcase-only) */}
         {project.citedBy && project.citedBy.length > 0 && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.2 }} className="mt-6 p-8 card">
-            <Label as="h2" className="mb-4">Cited by</Label>
+          <Panel title="Cited by" delay={0.2}>
             <ul className="space-y-5">
               {project.citedBy.map((c) => (
-                <li key={c.url} className="border-t border-border pt-3">
+                <li key={c.url} className="border-t border-border pt-3 first:border-t-0 first:pt-0">
                   <a
                     href={c.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${c.name} (opens in new tab)`}
-                    className="inline-flex items-center gap-2 font-display text-lg font-semibold text-foreground transition-colors hover:text-primary"
+                    className="inline-flex min-h-11 items-center gap-2 font-display text-lg font-semibold text-foreground transition-colors hover:text-primary"
                   >
                     {c.name}
                     <ExternalLink size={14} aria-hidden="true" />
                   </a>
-                  <p className="mt-1 leading-relaxed text-muted-foreground">{c.detail}</p>
+                  <p className="leading-relaxed text-muted-foreground">{c.detail}</p>
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </Panel>
         )}
 
-        {/* Tech stack */}
-        {project.tech && project.tech.length > 0 && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.25 }} className="mt-6 p-8 card">
-            <Label as="h2" className="mb-4">Tech Stack</Label>
-            <div className="flex flex-wrap gap-2">
-              {project.tech.map((t) => (
-                <span
-                  key={t}
-                  className="rounded border border-border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-muted-foreground"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* Stats */}
-        {project.stats && project.stats.length > 0 && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.3 }} className="mt-6 p-8 card">
-            <Label as="h2" className="mb-4">Stats</Label>
-            <div className="flex flex-wrap gap-2">
-              {project.stats.map((stat) => (
-                <span
-                  key={stat}
-                  className="rounded border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-primary"
-                >
-                  {stat}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* Access plate — stands in for the Links panel on internal work */}
+        {/* Access — stands in for the Links panel on internal work */}
         {!hasOutLinks && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.35 }} className="mt-6 p-8 card">
-            <Label as="h2" className="mb-4">Access</Label>
+          <Panel title="Access" delay={0.3}>
             <p className="flex items-start gap-3 leading-relaxed text-muted-foreground">
               <Lock size={16} aria-hidden="true" className="mt-1 shrink-0 text-primary" />
               <span>{project.accessNote ?? DEFAULT_ACCESS_NOTE}</span>
             </p>
-          </motion.div>
+          </Panel>
         )}
 
-        {/* Links panel */}
-        {hasOutLinks && (
-          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.35 }} className="mt-6 p-8 card">
-            <Label as="h2" className="mb-4">Links</Label>
-            <div className="flex flex-wrap gap-3">
-              {project.github && (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded border border-primary px-4 py-2 font-mono text-xs uppercase tracking-wider text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-                >
-                  <GithubIcon size={14} aria-hidden="true" />
-                  GitHub
-                </a>
-              )}
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded border border-primary px-4 py-2 font-mono text-xs uppercase tracking-wider text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-                >
-                  <ExternalLink size={14} aria-hidden="true" />
-                  Live Site
-                </a>
-              )}
-            </div>
-          </motion.div>
-        )}
-
-        {/* Back link */}
-        <motion.div variants={fadeIn} initial="hidden" animate="show" transition={{ delay: 0.4 }} className="mt-10">
+        <motion.div variants={fadeIn} initial="hidden" animate="show" transition={{ delay: 0.4 }} className="mt-8">
           <Link to="/projects" className={backLinkClass}>
             <ArrowLeft size={14} aria-hidden="true" />
             Back to Projects

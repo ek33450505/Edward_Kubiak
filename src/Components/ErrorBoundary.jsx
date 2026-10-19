@@ -45,60 +45,36 @@ class ErrorBoundary extends Component {
   render() {
     if (!this.state.hasError) return this.props.children;
 
-    if (this.state.isStaleChunk) {
-      return (
-        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center py-20">
-          <PageWrapper>
-            <div className="text-center py-20">
-              <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground uppercase mb-4">
-                Update available
-              </p>
-              <h1 className="font-mono text-2xl font-bold text-primary mb-4">
-                A new version is available
-              </h1>
-              <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                This page couldn&apos;t load because a newer version of the site was
-                deployed. Reload to get the latest version.
-              </p>
-              <button
-                onClick={() => window.location.reload()}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-background font-mono text-xs tracking-widest uppercase hover:bg-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
-              >
-                Reload
-              </button>
-            </div>
-          </PageWrapper>
-        </div>
-      );
-    }
+    const stale = this.state.isStaleChunk;
+    const reloadClass =
+      "inline-flex items-center gap-2 min-h-11 px-6 py-3 rounded bg-primary text-primary-foreground font-mono text-xs font-semibold tracking-widest uppercase hover:bg-primary/90 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+    const homeClass =
+      "inline-flex items-center gap-2 min-h-11 px-5 py-2.5 rounded border border-border-strong text-foreground font-mono text-xs tracking-widest uppercase hover:border-primary hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
     return (
-      <div className="min-h-[calc(100vh-80px)] flex items-center justify-center py-20">
+      <div className="min-h-page flex items-center justify-center py-20">
         <PageWrapper>
-          <div className="text-center py-20">
-            <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground uppercase mb-4">
-              Something went wrong
-            </p>
-            <h1 className="font-mono text-2xl font-bold text-primary mb-4">
-              Unexpected error
-            </h1>
-            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              Something went wrong loading this page. Try reloading or return
-              home.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <button
-                onClick={() => window.location.reload()}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-background font-mono text-xs tracking-widest uppercase hover:bg-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
-              >
-                Reload
-              </button>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border text-foreground font-mono text-xs tracking-widest uppercase hover:border-primary hover:text-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
-              >
-                Back to Home
-              </Link>
+          <div role="alert" className="panel mx-auto max-w-xl text-center">
+            <div className="panel-head">
+              <span>{stale ? "Update available" : "Error"}</span>
+            </div>
+            <div className="px-6 py-12">
+              <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground mb-4">
+                {stale ? "A new version is available" : "Unexpected error"}
+              </h1>
+              <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                {stale
+                  ? "This page couldn\u2019t load because a newer version of the site was deployed. Reload to get the latest version."
+                  : "Something went wrong loading this page. Try reloading or return home."}
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <button onClick={() => window.location.reload()} className={reloadClass}>
+                  Reload
+                </button>
+                <Link to="/" className={homeClass}>
+                  Back to Home
+                </Link>
+              </div>
             </div>
           </div>
         </PageWrapper>

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Practice from './Practice';
 import practice from '../data/practice';
@@ -30,9 +30,13 @@ describe('Practice — the loop', () => {
     });
   });
 
-  it('renders plate numbering zero-padded starting at 01', () => {
+  it('renders panel indices from 01', () => {
     renderPractice();
-    expect(screen.getAllByText('01').length).toBeGreaterThanOrEqual(1);
+    // Scoped to each loop panel so the SectionHead "01 /" can't satisfy it.
+    practice.loop.forEach((step, i) => {
+      const panel = screen.getByRole('region', { name: step.title });
+      expect(within(panel).getByText(`${String(i + 1).padStart(2, '0')} /`)).toBeInTheDocument();
+    });
   });
 });
 
@@ -41,6 +45,13 @@ describe('Practice — case studies', () => {
     renderPractice();
     practice.cases.forEach((c) => {
       expect(screen.getByRole('heading', { level: 3, name: c.title })).toBeInTheDocument();
+    });
+  });
+
+  it('labels each case article by its h3', () => {
+    renderPractice();
+    practice.cases.forEach((c) => {
+      expect(screen.getByRole('article', { name: c.title })).toBeInTheDocument();
     });
   });
 
