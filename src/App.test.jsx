@@ -16,6 +16,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 import { NavBar, AppShell } from "./App";
 import { CommandPaletteProvider } from "./Components/CommandPaletteContext";
+import { ROUTE_META } from "./data/routeMeta.js";
 import { CAST_STATS } from "./data/castStats";
 import { ATLAS_STATS } from "./data/atlasStats";
 
@@ -190,5 +191,58 @@ describe("AppShell — modal command palette", () => {
 
     await user.keyboard("{Escape}");
     await waitFor(() => expect(nav.closest("[inert]")).toBeNull());
+  });
+});
+
+describe("trailing-slash paths (GitHub Pages 301s /about to /about/)", () => {
+  function renderAt(path) {
+    return render(
+      <MemoryRouter initialEntries={[path]}>
+        <CommandPaletteProvider>
+          <AppShell />
+        </CommandPaletteProvider>
+      </MemoryRouter>
+    );
+  }
+  const nav = () => screen.getByRole("navigation", { name: "Primary" });
+
+  it.each(["/about", "/about/"])("%s sets the About title and marks About current", async (path) => {
+    renderAt(path);
+    await waitFor(() => expect(document.title).toBe(ROUTE_META["/about"].title));
+    expect(within(nav()).getByRole("link", { name: "About" })).toHaveAttribute("aria-current", "page");
+    expect(within(nav()).getByRole("link", { name: "Work" })).not.toHaveAttribute("aria-current");
+  });
+
+  it("/projects/ is the index: Projects title, Work current", async () => {
+    renderAt("/projects/");
+    await waitFor(() => expect(document.title).toBe(ROUTE_META["/projects"].title));
+    expect(within(nav()).getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "page");
+  });
+
+  it.each(Object.keys(ROUTE_META))("%s/ applies that route's title", async (route) => {
+    renderAt(route === "/" ? "/" : `${route}/`);
+    await waitFor(() => expect(document.title).toBe(ROUTE_META[route].title));
+  });
+
+  it("mobile menu marks exactly one link current on /about/", async () => {
+    const user = userEvent.setup();
+    renderAt("/about/");
+    await user.click(toggle());
+    const menu = document.getElementById("mobile-menu");
+    const links = within(menu).getAllByRole("link");
+    expect(within(menu).getByRole("link", { name: "About" })).toHaveAttribute("aria-current", "page");
+    expect(links.filter((l) => l.getAttribute("aria-current") === "page")).toHaveLength(1);
+  });
+
+  it("/projects/compute-atlas/ renders the detail page and keeps its own title", async () => {
+    renderAt("/projects/compute-atlas/");
+    expect(await screen.findByRole("heading", { level: 1, name: /Compute Atlas/ })).toBeInTheDocument();
+    await waitFor(() => expect(document.title).toBe("Compute Atlas — Edward Kubiak"));
+  });
+
+  it("an unknown trailing-slash path shows not-found with the fallback title", async () => {
+    renderAt("/no-such-page/");
+    expect(await screen.findByRole("heading", { level: 1 })).toBeInTheDocument();
+    await waitFor(() => expect(document.title).toBe("Edward Kubiak"));
   });
 });

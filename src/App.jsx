@@ -13,6 +13,7 @@ import RouteLoader from "./Components/ui/RouteLoader";
 import NotFound from "./Components/ui/NotFound";
 import ScrollToTop from "./Components/ScrollToTop";
 import { ROUTE_META } from "./data/routeMeta.js";
+import { normalizePath } from "./lib/paths.js";
 import Home from "./Components/Home";
 import { CommandPaletteProvider, useCommandPalette } from "./Components/CommandPaletteContext";
 import "./App.css";
@@ -37,15 +38,16 @@ const navLinks = [
 export function NavBar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const path = normalizePath(location.pathname);
   const { toggle } = useCommandPalette();
 
   // Close the menu on route change — this covers back/forward navigation, where
   // no nav-link onClick fires. Adjusting state during render on a changed value
   // is React's documented alternative to an effect here; an effect calling
   // setState in its body costs an extra render pass every navigation.
-  const [renderedPath, setRenderedPath] = useState(location.pathname);
-  if (renderedPath !== location.pathname) {
-    setRenderedPath(location.pathname);
+  const [renderedPath, setRenderedPath] = useState(path);
+  if (renderedPath !== path) {
+    setRenderedPath(path);
     setOpen(false);
   }
 
@@ -78,15 +80,15 @@ export function NavBar() {
             <Link
               key={to}
               to={to}
-              aria-current={location.pathname === to ? "page" : undefined}
+              aria-current={path === to ? "page" : undefined}
               className={`relative px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-300 ${
-                location.pathname === to
+                path === to
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {label}
-              {location.pathname === to && (
+              {path === to && (
                 <motion.div
                   layoutId="nav-underline"
                   className="absolute -bottom-px left-2 right-2 h-px bg-primary"
@@ -147,9 +149,9 @@ export function NavBar() {
                   key={to}
                   to={to}
                   onClick={() => setOpen(false)}
-                  aria-current={location.pathname === to ? "page" : undefined}
+                  aria-current={path === to ? "page" : undefined}
                   className={`font-mono text-xs tracking-[0.18em] uppercase py-3 min-h-11 border-b border-border transition-colors ${
-                    location.pathname === to
+                    path === to
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
@@ -183,13 +185,14 @@ export function NavBar() {
 
 function AnimatedRoutes() {
   const location = useLocation();
+  const path = normalizePath(location.pathname);
 
   // Project detail routes manage their own meta via useDocumentMeta —
   // pass an empty object here so we do not fight them.
-  const isProjectDetail = location.pathname.startsWith("/projects/");
+  const isProjectDetail = path.startsWith("/projects/");
   const routeMeta = isProjectDetail
     ? {}
-    : (ROUTE_META[location.pathname] ?? { title: "Edward Kubiak" });
+    : (ROUTE_META[path] ?? { title: "Edward Kubiak" });
 
   useDocumentMeta(routeMeta);
 
@@ -198,12 +201,12 @@ function AnimatedRoutes() {
   // the rest. Guard for undefined to be safe in local dev without the script.
   useEffect(() => {
     window.plausible?.("pageview");
-  }, [location.pathname]);
+  }, [path]);
 
   return (
     <AnimatePresence>
       <motion.div
-        key={location.pathname}
+        key={path}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
