@@ -112,6 +112,7 @@ describe("footer contact link", () => {
     render(<App />);
     const footer = await screen.findByRole("contentinfo");
     expect(within(footer).getByRole("link", { name: "Contact" })).toHaveAttribute("href", "/contact");
+    expect(within(footer).getByRole("link", { name: "Accessibility" })).toHaveAttribute("href", "/accessibility");
     expect(footer.textContent).not.toContain("@");
     expect(footer.innerHTML).not.toContain("mail" + "to:");
   });

@@ -38,6 +38,12 @@ export const ROUTE_META = {
       "How to reach Edward Kubiak, full stack developer and AI systems engineer: LinkedIn and GitHub.",
     canonical: "/contact/",
   },
+  "/accessibility": {
+    title: "Accessibility — Edward Kubiak",
+    description:
+      "How edwardkubiak.com is built and tested for accessibility: a WCAG 2.2 AA target, automated and keyboard checks on every change, and known limitations.",
+    canonical: "/accessibility/",
+  },
   "/practice": {
     title: "How I Work With Agents — Edward Kubiak",
     description:

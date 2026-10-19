@@ -41,3 +41,22 @@ jobs:
       - name: Test (advisory)
         run: npm test -- --run
         continue-on-error: true
+
+      # Explicit so the gate does not depend on puppeteer's postinstall having
+      # run (npm may skip unapproved install scripts).
+      - name: Install Chrome for the accessibility scan
+        run: npx puppeteer browsers install chrome
+
+      # Scans every route at desktop and phone widths with axe, reflow and
+      # keyboard checks. BLOCKING: fails the job on any violation. Runs after
+      # the advisory tests so their output is always printed.
+      - name: Accessibility gate (WCAG 2.2 AA)
+        run: node scripts/a11y-scan.mjs --dir /tmp/vite-verify --concurrency 2 --json /tmp/a11y-report.json
+
+      - name: Upload accessibility report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: /tmp/a11y-report.json
+          if-no-files-found: ignore

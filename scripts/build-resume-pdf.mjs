@@ -460,6 +460,7 @@ async function main() {
       await page.setContent(resumeHtml, { waitUntil: "domcontentloaded" });
       var resumeBuffer = await page.pdf({
         path: RESUME_PDF,
+        tagged: true,
         format: paperContract.size,
         printBackground: true,
         margin: {
@@ -481,6 +482,7 @@ async function main() {
     await page.setContent(onePagerHtml, { waitUntil: "domcontentloaded" });
     const onePagerBuffer = await page.pdf({
       path: ONEPAGER_PDF,
+      tagged: true,
       format: paperContract.size,
       printBackground: true,
     });
