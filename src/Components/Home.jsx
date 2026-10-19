@@ -1,6 +1,7 @@
 import HeroSection from "./Home/HeroSection";
 import Competencies from "./Home/Competencies";
 import FeaturedWork from "./Home/FeaturedWork";
+import ArchitectureFlow from "./Home/ArchitectureFlow";
 import CurrentlyBuilding from "./Home/CurrentlyBuilding";
 import CastStats from "./CastStats";
 import GetInTouch from "./ui/GetInTouch";
@@ -11,6 +12,7 @@ const Home = () => {
     <div className="min-h-page flex flex-col">
       <HeroSection />
       <FeaturedWork />
+      <ArchitectureFlow />
       <CurrentlyBuilding />
       <Competencies />
       <CastStats />
