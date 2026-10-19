@@ -116,7 +116,7 @@ export default function ArchitectureFlow() {
             />
           </div>
 
-          {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+          {/* eslint-disable-next-line jsx-a11y/no-redundant-roles -- list semantics are kept when list-style is none (Safari/VoiceOver) */}
           <ol role="list" className="grid grid-cols-1 gap-8 lg:grid-cols-4 lg:gap-6">
             <Stage lit={isLit(0)} eyebrow="Engineer">
               <h3 className={h3}>Edward Kubiak</h3>
@@ -155,7 +155,7 @@ export default function ArchitectureFlow() {
 
             <Stage lit={isLit(3)} eyebrow="Cited by">
               <h3 className={h3}>Independent projects</h3>
-              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles -- list semantics are kept when list-style is none (Safari/VoiceOver) */}
               <ul role="list" className="mt-3 flex flex-col">
                 {citedBy.map((c) => (
                   <li key={c.url}>

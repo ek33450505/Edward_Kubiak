@@ -143,3 +143,26 @@ describe("ArchitectureFlow feed swap", () => {
     }
   });
 });
+
+describe("ArchitectureFlow without the CAST and Compute Atlas projects", () => {
+  it("falls back to plain-text h3s with no link", async () => {
+    vi.resetModules();
+    vi.doMock("../../data/projects", () => ({
+      default: [{ slug: "other", citedBy: [] }],
+    }));
+    try {
+      const { default: Bare } = await import("./ArchitectureFlow");
+      render(
+        <MemoryRouter>
+          <Bare />
+        </MemoryRouter>,
+      );
+      for (const name of ["CAST", "Compute Atlas"]) {
+        const h3 = screen.getByRole("heading", { level: 3, name });
+        expect(within(h3).queryByRole("link")).toBeNull();
+      }
+    } finally {
+      vi.doUnmock("../../data/projects");
+    }
+  });
+});

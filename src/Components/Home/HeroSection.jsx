@@ -71,7 +71,7 @@ function FacilityFieldSlot() {
         Map of {count} Compute Atlas facilities, colored by status as listed below.
       </p>
       {/* role="list" restores list semantics that Safari/VoiceOver drops for list-none. */}
-      {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+      {/* eslint-disable-next-line jsx-a11y/no-redundant-roles -- list semantics are kept when list-style is none (Safari/VoiceOver) */}
       <ul role="list" aria-label="Facility status legend" className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 border-t border-border px-4 py-3 font-mono text-[11px] text-muted-foreground">
         {STATUSES.map((name) => (
           <li key={name} className="inline-flex items-center gap-1.5">

@@ -15,13 +15,16 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import https from "node:https";
+
+import { fetchJson } from "./lib/fetch-json.mjs";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const statsPath = path.join(root, "public", "cast-stats.json");
 const outPath = path.join(root, "src", "data", "castStats.js");
 
+// CAST_STATS_URL overrides the source (used by the truncated-body test).
 const CANONICAL_URL =
+  process.env.CAST_STATS_URL ||
   "https://raw.githubusercontent.com/ek33450505/claude-agent-team/main/cast-stats.json";
 
 // Offline/first-run fallback. Bump alongside canonical when convenient.
@@ -39,31 +42,6 @@ const FALLBACK = {
 // Fields baked into the JS bundle (curated — keeps castStats.js clean).
 const CORE_FIELDS = ["version", "agents", "tests", "packages", "commands", "skills", "tables", "updated"];
 
-function fetchJson(url, timeoutMs = 4000) {
-  return new Promise((resolve) => {
-    const req = https.get(url, { headers: { "User-Agent": "sync-cast-stats" } }, (res) => {
-      if (res.statusCode !== 200) {
-        res.resume();
-        return resolve(null);
-      }
-      let data = "";
-      res.on("data", (c) => (data += c));
-      res.on("end", () => {
-        try {
-          resolve(JSON.parse(data));
-        } catch {
-          resolve(null);
-        }
-      });
-    });
-    req.on("error", () => resolve(null));
-    req.setTimeout(timeoutMs, () => {
-      req.destroy();
-      resolve(null);
-    });
-  });
-}
-
 // 1. Base — committed / deploy-written public/cast-stats.json (may be missing).
 let base = {};
 try {
@@ -74,7 +52,11 @@ try {
 
 // 2. Canonical — authoritative, best-effort. Normalise the version v-prefix
 //    (canonical publishes bare semver, the app expects "v9.2.0").
-const canonical = await fetchJson(CANONICAL_URL);
+const canonical = await fetchJson(CANONICAL_URL, {
+  idleMs: 4000,
+  deadlineMs: 15000,
+  headers: { "User-Agent": "sync-cast-stats" },
+});
 if (canonical) {
   if (canonical.version && !String(canonical.version).startsWith("v")) {
     canonical.version = `v${canonical.version}`;

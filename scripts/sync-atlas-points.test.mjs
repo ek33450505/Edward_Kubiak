@@ -315,7 +315,7 @@ describe("committed generated files", () => {
   it("src/data/atlasPoints.js matches buildSummary(public/atlas-points.json)", async () => {
     const fs = await import("node:fs");
     const { ATLAS_POINTS } = await import("../src/data/atlasPoints.js");
-    const json = JSON.parse(fs.readFileSync(`${process.cwd()}/public/atlas-points.json`, "utf8"));
+    const json = JSON.parse(fs.readFileSync(`${import.meta.dirname}/../public/atlas-points.json`, "utf8"));
     expect(ATLAS_POINTS).toEqual(buildSummary(json));
   });
 });

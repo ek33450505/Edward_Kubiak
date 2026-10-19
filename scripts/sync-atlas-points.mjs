@@ -296,7 +296,8 @@ async function main() {
     headers: { "User-Agent": "sync-atlas-points" },
   });
   if (!raw) {
-    console.warn("[sync-atlas-points] feed unreachable — keeping existing file");
+    // fetchJson resolves null for every failure AND for a literal `null` body, so the two can't be told apart here.
+    console.warn("[sync-atlas-points] feed unreachable or returned no data — keeping existing file");
     return;
   }
   if (!isValidRaw(raw, prev?.count ?? 0)) {

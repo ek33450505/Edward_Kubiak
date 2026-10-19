@@ -13,14 +13,16 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import https from "node:https";
 import { pathToFileURL } from "node:url";
+
+import { fetchJson } from "./lib/fetch-json.mjs";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const statsPath = path.join(root, "public", "atlas-stats.json");
 const outPath = path.join(root, "src", "data", "atlasStats.js");
 
-const CANONICAL_URL = "https://www.compute-atlas.com/api/stats";
+// ATLAS_STATS_URL overrides the source (used by the truncated-body test).
+const CANONICAL_URL = process.env.ATLAS_STATS_URL || "https://www.compute-atlas.com/api/stats";
 
 // Offline/first-run fallback. Bump alongside canonical when convenient.
 export const FALLBACK = {
@@ -41,31 +43,6 @@ export const FALLBACK = {
 const VERSION = "v1.34.1";
 const STACK = "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel";
 const LICENSE = "MIT + CC BY 4.0";
-
-function fetchJson(url, timeoutMs = 4000) {
-  return new Promise((resolve) => {
-    const req = https.get(url, { headers: { "User-Agent": "sync-atlas-stats" } }, (res) => {
-      if (res.statusCode !== 200) {
-        res.resume();
-        return resolve(null);
-      }
-      let data = "";
-      res.on("data", (c) => (data += c));
-      res.on("end", () => {
-        try {
-          resolve(JSON.parse(data));
-        } catch {
-          resolve(null);
-        }
-      });
-    });
-    req.on("error", () => resolve(null));
-    req.setTimeout(timeoutMs, () => {
-      req.destroy();
-      resolve(null);
-    });
-  });
-}
 
 function round1(n) {
   return Math.round(n * 10) / 10;
@@ -187,7 +164,11 @@ async function main() {
   }
 
   // 2. Canonical — authoritative, best-effort.
-  const canonical = await fetchJson(CANONICAL_URL);
+  const canonical = await fetchJson(CANONICAL_URL, {
+    idleMs: 4000,
+    deadlineMs: 15000,
+    headers: { "User-Agent": "sync-atlas-stats" },
+  });
   // 3. Select one whole valid source (canonical > base > fallback).
   const { source, raw: merged } = selectSource(canonical, base, FALLBACK);
   if (canonical && source !== "canonical") {
