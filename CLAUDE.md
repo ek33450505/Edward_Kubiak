@@ -80,6 +80,11 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
     designed export had silently dropped LinkedIn while the page still showed it.
   - The legacy `npm run build-resume` (docx → LibreOffice headless) still exists but is
     superseded.
+- OG card: the live `/og-image.png` is the COMMITTED `public/og-image.png`; regenerate with
+  `node scripts/generate-og-image.mjs --outDir public` (the default outDir `public/og/` is
+  where deploy.yml writes per-project cards, which nothing references yet). Colors come from
+  `src/lib/tokens.js`. sharp/librsvg can't load the Geist woff2, so text renders in the
+  Helvetica/Menlo fallbacks locally (DejaVu on the CI runner).
 - Animation package is `motion` (npm) not `framer-motion` — `import { motion } from "motion/react"`.
 - Deploy target is GitHub Pages (`gh-pages -d dist`); no Vercel or Netlify config.
 - Deploys are AUTOMATIC: `deploy.yml` publishes to gh-pages on every push to `main` and on a

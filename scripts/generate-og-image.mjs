@@ -1,123 +1,124 @@
 import sharp from "sharp";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import { basename, dirname, join } from "path";
-import { mkdirSync } from "fs";
+import {
+  ACCENT,
+  BACKGROUND,
+  CARD,
+  FOREGROUND,
+  MUTED_FOREGROUND,
+  SLATE_700,
+} from "../src/lib/tokens.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const WIDTH = 1200;
-const HEIGHT = 630;
+export const WIDTH = 1200;
+export const HEIGHT = 630;
 
-// Parse CLI arguments
-const args = process.argv.slice(2);
-let slug = null;
-let title = null;
-let outDir = join(__dirname, "../public/og");
+const DEFAULT_SUBTITLE = "Full Stack Developer & AI Systems Engineer · Columbus, OH";
 
-for (let i = 0; i < args.length; i++) {
-  if (args[i] === "--slug" && i + 1 < args.length) {
-    slug = args[i + 1];
-    i++;
-  } else if (args[i] === "--title" && i + 1 < args.length) {
-    title = args[i + 1];
-    i++;
-  } else if (args[i] === "--outDir" && i + 1 < args.length) {
-    outDir = args[i + 1];
-    i++;
-  }
+// librsvg does not load the bundled Geist faces, so every stack ends in a generic.
+const SANS = "Geist, 'Helvetica Neue', Helvetica, Arial, 'DejaVu Sans', sans-serif";
+const MONO = "'Geist Mono', Menlo, 'DejaVu Sans Mono', monospace";
+
+const PANEL = { x: 60, y: 60, w: 1080, h: 510 };
+const HEAD_H = 56;
+const MAX_HEADLINE_PX = 88;
+const HEADLINE_BUDGET = 1700;
+
+export function escapeXml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
-function generateOgSvg(mainText, subtitle = "Full Stack Developer &amp; AI Systems Engineer · Columbus, OH") {
+export function headlineSize(text) {
+  return Math.min(MAX_HEADLINE_PX, Math.floor(HEADLINE_BUDGET / Math.max(1, text.length)));
+}
+
+export function generateOgSvg(mainText, subtitle = DEFAULT_SUBTITLE, kind = "PROFILE") {
+  const { x, y, w, h } = PANEL;
+  const headY = y + HEAD_H;
+  const bodyMid = headY + (y + h - headY) / 2;
+  const size = headlineSize(mainText);
+
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}">
-  <!-- Background -->
-  <rect width="${WIDTH}" height="${HEIGHT}" fill="#181410"/>
+  <rect width="${WIDTH}" height="${HEIGHT}" fill="${BACKGROUND}"/>
 
-  <!-- Subtle grid lines -->
-  <line x1="0" y1="200" x2="${WIDTH}" y2="200" stroke="#4A4030" stroke-width="1"/>
-  <line x1="0" y1="400" x2="${WIDTH}" y2="400" stroke="#4A4030" stroke-width="1"/>
-  <line x1="400" y1="0" x2="400" y2="${HEIGHT}" stroke="#4A4030" stroke-width="1"/>
-  <line x1="800" y1="0" x2="800" y2="${HEIGHT}" stroke="#4A4030" stroke-width="1"/>
+  <!-- Panel -->
+  <rect x="${x + 0.5}" y="${y + 0.5}" width="${w - 1}" height="${h - 1}" rx="4" fill="${CARD}" stroke="${SLATE_700}" stroke-width="1"/>
 
-  <!-- Sage accent rule -->
-  <rect x="100" y="200" width="160" height="6" fill="#8FB98A" rx="3"/>
-
-  <!-- Survey marker — upper-right quadrant (recolored from PR #10 celestial mark) -->
-  <!-- Dark halo -->
-  <circle cx="1100" cy="80" r="40" fill="#211C16"/>
-  <!-- Sage core -->
-  <circle cx="1100" cy="80" r="8" fill="#8FB98A"/>
-  <!-- 4 satellite dots at r=4 on 24px radius orbit (0/90/180/270 degrees) -->
-  <circle cx="1124" cy="80" r="4" fill="#8FB98A" opacity="0.7"/>
-  <circle cx="1100" cy="104" r="4" fill="#8FB98A" opacity="0.7"/>
-  <circle cx="1076" cy="80" r="4" fill="#8FB98A" opacity="0.7"/>
-  <circle cx="1100" cy="56" r="4" fill="#8FB98A" opacity="0.7"/>
+  <!-- Panel head -->
+  <line x1="${x}" y1="${headY + 0.5}" x2="${x + w}" y2="${headY + 0.5}" stroke="${SLATE_700}" stroke-width="1"/>
+  <circle cx="${x + 36}" cy="${y + HEAD_H / 2}" r="5" fill="${ACCENT}"/>
+  <text x="${x + 58}" y="${y + HEAD_H / 2 + 7}" font-family="${MONO}" font-size="20" fill="${MUTED_FOREGROUND}" letter-spacing="2">EDWARDKUBIAK.COM</text>
+  <text x="${x + w - 36}" y="${y + HEAD_H / 2 + 7}" text-anchor="end" font-family="${MONO}" font-size="20" fill="${MUTED_FOREGROUND}" letter-spacing="2">${escapeXml(kind)}</text>
 
   <!-- Headline -->
-  <text
-    x="100"
-    y="310"
-    font-family="'Courier New', Courier, monospace"
-    font-size="96"
-    font-weight="700"
-    fill="#EDE6D6"
-    letter-spacing="-2"
-  >${mainText}</text>
+  <text x="${x + 40}" y="${bodyMid}" font-family="${SANS}" font-size="${size}" font-weight="600" fill="${FOREGROUND}" letter-spacing="-1.5">${escapeXml(mainText)}</text>
 
   <!-- Subtitle -->
-  <text
-    x="100"
-    y="390"
-    font-family="'Courier New', Courier, monospace"
-    font-size="34"
-    font-weight="400"
-    fill="#B3A68C"
-    letter-spacing="1"
-  >${subtitle}</text>
-
-  <!-- Footer domain -->
-  <text
-    x="100"
-    y="560"
-    font-family="'Courier New', Courier, monospace"
-    font-size="26"
-    font-weight="400"
-    fill="#B3A68C"
-    letter-spacing="2"
-  >edwardkubiak.com</text>
+  <text x="${x + 40}" y="${bodyMid + 64}" font-family="${SANS}" font-size="32" font-weight="400" fill="${MUTED_FOREGROUND}">${escapeXml(subtitle)}</text>
 </svg>`;
 }
 
-async function generateImage(filename, svgContent) {
-  const svgBuffer = Buffer.from(svgContent);
+async function generateImage(outDir, filename, svgContent) {
   const outPath = join(outDir, filename);
-
-  // Ensure output directory exists
-  mkdirSync(outDir, { recursive: true });
-
-  await sharp(svgBuffer)
-    .png()
-    .toFile(outPath);
-
+  fs.mkdirSync(outDir, { recursive: true });
+  await sharp(Buffer.from(svgContent)).png().toFile(outPath);
   return outPath;
 }
 
-// Sanitize slug to prevent path traversal
-if (slug) {
-  slug = basename(slug).replace(/[^a-zA-Z0-9_-]/g, '');
-  if (!slug) {
-    console.error('Invalid slug');
-    process.exit(1);
+function parseArgs(args) {
+  const opts = { slug: null, title: null, outDir: join(__dirname, "../public/og") };
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--slug" && i + 1 < args.length) {
+      opts.slug = args[++i];
+    } else if (args[i] === "--title" && i + 1 < args.length) {
+      opts.title = args[++i];
+    } else if (args[i] === "--outDir" && i + 1 < args.length) {
+      opts.outDir = args[++i];
+    }
+  }
+  return opts;
+}
+
+export async function main(args = process.argv.slice(2)) {
+  const opts = parseArgs(args);
+  let { slug } = opts;
+
+  // Sanitize slug to prevent path traversal
+  if (slug) {
+    slug = basename(slug).replace(/[^a-zA-Z0-9_-]/g, "");
+    if (!slug) throw new Error("Invalid slug");
+  }
+
+  if (slug && opts.title) {
+    const svg = generateOgSvg(opts.title, "Project", "PROJECT");
+    const outPath = await generateImage(opts.outDir, `${slug}.png`, svg);
+    console.log(`Wrote project OG image to ${outPath}`);
+  } else {
+    const svg = generateOgSvg("Edward Kubiak");
+    const outPath = await generateImage(opts.outDir, "og-image.png", svg);
+    console.log(`Wrote og-image.png to ${outPath}`);
   }
 }
 
-// If specific project requested
-if (slug && title) {
-  const svg = generateOgSvg(title, "Project");
-  const outPath = await generateImage(`${slug}.png`, svg);
-  console.log(`Wrote project OG image to ${outPath}`);
-} else {
-  // Generate main og-image.png
-  const svg = generateOgSvg("EDWARD KUBIAK", "Full Stack Developer &amp; AI Systems Engineer · Columbus, OH");
-  const outPath = await generateImage("og-image.png", svg);
-  console.log(`Wrote og-image.png to ${outPath}`);
+export function isDirectInvocation(argv1, moduleUrl) {
+  try {
+    return fs.realpathSync(argv1) === fs.realpathSync(fileURLToPath(moduleUrl));
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectInvocation(process.argv[1], import.meta.url)) {
+  main().catch((err) => {
+    console.error(err.message);
+    process.exitCode = 1;
+  });
 }
