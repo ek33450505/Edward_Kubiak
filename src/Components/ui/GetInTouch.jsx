@@ -18,7 +18,7 @@ export default function GetInTouch() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <Link
             to="/contact"
-            aria-label="Contact: send Edward a message"
+            aria-label="Contact: ways to reach Edward"
             className="group flex flex-col items-center gap-2 p-4 card-interactive min-h-11 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             <Mail size={20} className="text-primary group-hover:scale-110 transition-transform" aria-hidden="true" />
@@ -72,7 +72,7 @@ export default function GetInTouch() {
             to="/contact"
             className="inline-flex items-center gap-2 min-h-11 font-mono text-sm sm:text-base text-primary hover:underline underline-offset-4 transition-colors group"
           >
-            Send a message
+            Get in touch
             <ArrowUpRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" aria-hidden="true" />
           </Link>
         </div>

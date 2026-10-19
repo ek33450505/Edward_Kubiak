@@ -55,7 +55,7 @@ export const STATIC_ROUTES = [
   { path: '/now',      priority: '0.5', changefreq: 'weekly',
     sources: ['src/Components/Now.jsx', 'src/data/now.js'] },
   { path: '/contact',  priority: '0.4', changefreq: 'yearly',
-    sources: ['src/Components/Contact.jsx', 'src/Components/ui/ContactForm.jsx'] },
+    sources: ['src/Components/Contact.jsx'] },
 ];
 
 // Build <url> entries

@@ -25,7 +25,7 @@ it, because the judgment, the verification and the consequences all stayed put.
   wasn't.
 
 Résumé: [edwardkubiak.com/resume](https://edwardkubiak.com/resume) ·
-Reach me through the contact form at https://edwardkubiak.com/contact or on [LinkedIn](https://www.linkedin.com/in/edward-kubiak/)
+Reach me via https://edwardkubiak.com/contact (which points to LinkedIn) or on [LinkedIn](https://www.linkedin.com/in/edward-kubiak/)
 
 ---
 
@@ -133,7 +133,9 @@ Single dark graphite theme — **no light mode, no toggle**. Restraint is the ba
 ## Contact
 
 - **GitHub:** [ek33450505](https://github.com/ek33450505)
-- **Contact:** https://edwardkubiak.com/contact
+- **Contact:** https://edwardkubiak.com/contact (points to LinkedIn)
 - **LinkedIn:** [edward-kubiak](https://www.linkedin.com/in/edward-kubiak/)
+
+`workers/contact/` holds a deployed-but-unused Cloudflare Worker backend, kept for a future contact form.
 
 &copy; 2024–2026 Edward Kubiak
