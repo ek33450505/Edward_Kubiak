@@ -47,7 +47,7 @@ class ErrorBoundary extends Component {
 
     if (this.state.isStaleChunk) {
       return (
-        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center py-20">
+        <div className="min-h-page flex items-center justify-center py-20">
           <PageWrapper>
             <div className="text-center py-20">
               <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground uppercase mb-4">
@@ -73,7 +73,7 @@ class ErrorBoundary extends Component {
     }
 
     return (
-      <div className="min-h-[calc(100vh-80px)] flex items-center justify-center py-20">
+      <div className="min-h-page flex items-center justify-center py-20">
         <PageWrapper>
           <div className="text-center py-20">
             <p className="font-mono text-xs tracking-[0.3em] text-muted-foreground uppercase mb-4">

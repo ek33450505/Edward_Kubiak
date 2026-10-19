@@ -120,7 +120,7 @@ function Portfolio() {
   }, [location.hash]);
 
   return (
-    <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="min-h-page py-20">
       <PageWrapper width="6xl">
         {/* Frontispiece header */}
         <motion.div variants={fadeUp} initial="hidden" animate="show">

@@ -53,7 +53,7 @@ function ProjectDetail() {
   const hasOutLinks = Boolean(project.github || project.link);
 
   return (
-    <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="min-h-page py-20">
       <PageWrapper>
         {/* Top back link */}
         <motion.div variants={fadeIn} initial="hidden" animate="show" className="mb-6">

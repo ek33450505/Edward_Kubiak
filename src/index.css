@@ -9,6 +9,9 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
+  /* Fixed nav height; drives nav h, main top padding and min-h-page. */
+  --spacing-nav: 4rem;
+
   /* ── Semantic palette ──────────────────────────────────────────────────────
      Measured on --background #111214 (card #17181B in parentheses):
        foreground 15.2:1 (14.4) · muted-foreground 7.1:1 (6.8) ·
@@ -107,6 +110,10 @@ body {
 
 /* Graticule — the surveyor's reference grid. Faint sepia hairlines at a 44px
    pitch. Layer behind content and mask at the edges where used. */
+@utility min-h-page {
+  min-height: calc(100vh - var(--spacing-nav));
+}
+
 @utility graticule {
   background-image:
     repeating-linear-gradient(to right, color-mix(in oklab, var(--color-border) 45%, transparent) 0 1px, transparent 1px 44px),

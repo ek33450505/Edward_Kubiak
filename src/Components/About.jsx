@@ -19,7 +19,7 @@ const OVERLINE = coordinateOverline(2026);
 const About = () => {
   const reducedMotion = useReducedMotion();
   return (
-    <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="min-h-page py-20">
       <PageWrapper>
         {/* Frontispiece header — coord overline + engraved display h1 + hairline */}
         <motion.div

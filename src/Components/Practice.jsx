@@ -12,7 +12,7 @@ const idx = (n) => String(n).padStart(2, "0");
 
 const Practice = () => {
   return (
-    <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="min-h-page py-20">
       <PageWrapper>
 
         {/* ── Frontispiece header ─────────────────────────────────────────── */}

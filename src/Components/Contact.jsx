@@ -5,7 +5,7 @@ import PageWrapper from "./ui/PageWrapper";
 import ContactForm from "./ui/ContactForm";
 
 const Contact = () => (
-  <div className="min-h-[calc(100vh-80px)] py-20">
+  <div className="min-h-page py-20">
     <PageWrapper>
       <motion.div variants={fadeUp} initial="hidden" animate="show">
         <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-primary">

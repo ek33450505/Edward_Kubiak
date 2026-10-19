@@ -24,7 +24,7 @@ export default function NotFound({
   linkHref = "/",
 }) {
   return (
-    <div className="min-h-[calc(100vh-80px)] py-20">
+    <div className="min-h-page py-20">
       <PageWrapper>
         <motion.div
           variants={fadeUp}

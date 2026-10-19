@@ -8,7 +8,7 @@ import PageWrapper from "./ui/PageWrapper";
 
 const Home = () => {
   return (
-    <div className="min-h-[calc(100vh-80px)] flex flex-col justify-center relative overflow-hidden">
+    <div className="min-h-page flex flex-col justify-center relative overflow-hidden">
       <HeroSection />
       <Competencies />
       <FeaturedWork />
