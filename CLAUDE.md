@@ -1,7 +1,7 @@
 # Edward_Kubiak
 
 Personal portfolio site — React 19 + Vite 8 + JSX + Tailwind CSS v4, deployed to GitHub Pages.
-Visual identity: **Cartographic Survey Atlas** (see Design system below).
+Visual identity: **Systems Console** (see Design system below).
 
 ## Install
 ```bash
@@ -25,26 +25,27 @@ npm run deploy    # build + push to gh-pages branch
 npm test          # vitest
 ```
 
-## Design system — Cartographic Survey Atlas
-Single dark "Night Survey" reference-atlas theme (nocturnal survey plate), **no light mode / no toggle**. Character comes from
-typography + cartographic detail, never decoration or textures. Restraint is the bar:
-hairlines over fills, mono over decoration, space over clutter. Dark ≠ neon: luminous
-hairlines over glow, warm near-black over cold blue-black.
+## Design system — Systems Console
+Single dark graphite theme, **no light mode / no toggle**. Restraint is the bar: hairlines
+over fills, mono for labels and figures, one amber signal, space over clutter. Dark ≠ neon.
+The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
 
-- **Tokens:** semantic Tailwind v4 `@theme` vars in `src/index.css` —
-  `background`/`foreground`/`card`/`muted`/`muted-foreground`/`primary` (contour green)/
-  `border` (brass/sepia hairline) + accents `terra`/`water`/`sepia`. Every text/bg pair ≥ 4.5:1 on the dark field `#181410`.
-  JS/SVG/WebGL consumers read the mirror `src/lib/tokens.js` — keep it in sync.
-- **Type:** `font-display` = Fraunces (variable serif — headlines/plate titles only) ·
-  `font-mono` = JetBrains Mono (overlines, labels, coordinates, tabular figures) ·
-  body = DM Sans. All self-hosted via `@fontsource` — the CSP is `font-src 'self'`, so do
-  NOT load Google Fonts from a CDN.
-- **Utilities:** `.graticule` (surveyor reference grid), `.neatline` (engraved double frame),
-  crisp `card` / `card-interactive`. Crisp corners only (`rounded`, radius 0.25rem) — no pills.
-- **Signature patterns:** frontispiece page headers (mono coordinate/eyebrow overline +
-  Fraunces H1 + hairline rule), neatline "plate" cards with mono plate-numbers, hairline
-  stat strips (mono tabular figures over tracked labels). No legacy token bridge — every
-  component uses the semantic tokens directly.
+- **Tokens:** semantic Tailwind v4 `@theme` vars in `src/index.css` — `background` `#111214`,
+  `card`, `muted`, `foreground`, `muted-foreground`, `primary` amber `#F2A93B` +
+  `primary-foreground`, `border` (decorative hairline), `border-strong` (control outline,
+  ≥ 3:1), accents `terra`/`water`/`sepia`, the `status-*` palette for the facility
+  visualization, and `--spacing-nav`. Mirrored in `src/lib/tokens.js` and enforced by
+  `src/lib/tokens.test.js` (WCAG contrast + two-way mirror).
+- **Type:** Geist (`font-display` / body) + Geist Mono (`font-mono`, tabular-nums),
+  self-hosted via `@fontsource-variable`. The CSP is `font-src 'self'` — never load fonts
+  from a CDN.
+- **Utilities:** `panel` / `panel-head` / `hairline` / `status-dot` / `min-h-page` /
+  `card` / `card-interactive`. Crisp `rounded` corners only — no pills.
+- **Patterns:** page header (mono eyebrow + Geist h1 + intro + hairline); `SectionHead`
+  (mono "01 /" index + h2 + hairline); panel cards with `panel-head` strips; readout grids
+  (dt-first, `flex-col-reverse`); label-in-name links; targets ≥ 44px.
+- **Accessibility:** WCAG 2.2 AA target; every UI unit gets a `frontend-qa` review; global
+  `MotionConfig reducedMotion="user"`; sections use `aria-labelledby`.
 
 ## Non-obvious
 
@@ -89,19 +90,21 @@ hairlines over glow, warm near-black over cold blue-black.
   `public/cast-stats.json` + `src/data/castStats.js`.
 - During agent work, never `npm run build` (prebuild churns `src/data/castStats.js` and
   `public/sitemap.xml`) — verify with `npx vite build --outDir /tmp/vite-verify`.
-- Home → Featured Work plate order is deliberate and hardcoded in
-  `src/Components/Home/FeaturedWork.jsx`: Compute Atlas is plate 001 ("Live Atlas"), CAST is
-  plate 002 ("Flagship"). `src/data/projects.js` mirrors that order in the flagship group.
-  Both the plate number (`idx(n)`) and the motion `delay` are per-block literals — swapping
+- Home → Featured Work panel order is deliberate and hardcoded in
+  `src/Components/Home/FeaturedWork.jsx`: Compute Atlas is panel 01 ("Live product"), CAST is
+  panel 02 ("Development architecture"). `src/data/projects.js` mirrors that order in the flagship group.
+  Both the panel number (`idx(n)`) and the motion `delay` are per-block literals — swapping
   the blocks means swapping those too.
-- The hero is a typographic **frontispiece** (`src/Components/Home/HeroSection.jsx`), not a
-  3D scene. The old Celestial WebGL starfield (`src/Components/Celestial/`), the shared
+- The hero is a typographic **console header** (`src/Components/Home/HeroSection.jsx`) with a
+  fixed-size, aria-hidden slot (`data-slot="facility-field"`, `aspect-[4/3]`) reserved for
+  the planned Compute Atlas facility-field canvas — it is not a 3D scene. The old Celestial WebGL starfield (`src/Components/Celestial/`), the shared
   `src/lib/three/` utilities, the `three`/`@react-three`/`postprocessing` dependencies,
   and the orphaned StravaStats widget were **removed entirely** in this session (recoverable
   via the `era/celestial-revival` tag).
 - Theme-era git tags (all pushed): `era/celestial-v1` (b7c9ff5), `era/nature-trailterrain`
-  (4f11685), `era/celestial-revival` (pre-squash PR #10 head). Current era: **Cartographic
-  Survey Atlas** (PR #18).
+  (4f11685), `era/celestial-revival` (pre-squash PR #10 head), `era/atlas-parchment`
+  (light Cartographic Survey Atlas), `era/night-survey` (bd24406, dark Cartographic Survey
+  Atlas). Current era: **Systems Console** (2026-10).
 
 ## Data-Point Discipline
 

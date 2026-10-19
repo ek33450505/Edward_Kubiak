@@ -13,8 +13,6 @@ export const SLATE_700 = "#2A2D33";        // hairline (border)
 export const BORDER_STRONG = "#646B76";    // interactive control outline (>= 3:1)
 
 export const ACCENT = "#F2A93B";           // amber signal (primary)
-export const ACCENT_500 = "#D98F1F";       // deeper amber
-export const ACCENT_300 = "#F7C873";       // lighter amber
 export const PRIMARY_FOREGROUND = "#111214";
 
 export const TERRA = "#F07F5E";
