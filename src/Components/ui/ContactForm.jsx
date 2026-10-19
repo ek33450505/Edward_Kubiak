@@ -13,6 +13,7 @@ const EMAIL_RE =
   /^(?!\.)(?!.*\.\.)(?!.*\.@)[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/;
 
 const MAX_BODY_BYTES = 16384;
+const TOKEN_POLL_MS = 500;
 
 const len = (s) => [...s].length;
 
@@ -102,6 +103,7 @@ export default function ContactForm() {
   const widgetEl = useRef(null);
   const honeypotEl = useRef(null);
   const widgetId = useRef(null);
+  const spentToken = useRef("");
   const confirmationEl = useRef(null);
 
   useEffect(() => {
@@ -124,6 +126,24 @@ export default function ContactForm() {
       widgetId.current = null;
     };
   }, []);
+
+  // Resync workaround for a lost or stale-cleared token callback (root cause
+  // unconfirmed). While idle with no token, adopt the widget's response, except
+  // the token already submitted: tokens are single-use and getResponse may still
+  // report it right after reset.
+  useEffect(() => {
+    if (phase !== "idle" || token) return undefined;
+    const timer = setInterval(() => {
+      if (widgetId.current === null) return;
+      try {
+        const live = window.turnstile?.getResponse?.(widgetId.current);
+        if (live && live !== spentToken.current) setToken(live);
+      } catch {
+        // widget gone mid-poll; the next tick or remount recovers
+      }
+    }, TOKEN_POLL_MS);
+    return () => clearInterval(timer);
+  }, [token, phase]);
 
   useEffect(() => {
     if (phase === "success") confirmationEl.current?.focus();
@@ -195,6 +215,7 @@ export default function ContactForm() {
       setStatus("Please fix the highlighted fields.");
       return;
     }
+    spentToken.current = token;
     setPhase("sending");
     setStatus("Sending…");
     let message = GENERIC_FAILURE;
