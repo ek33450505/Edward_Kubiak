@@ -2,6 +2,12 @@ import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, D
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 import { ATLAS_STATS } from "./atlasStats.js";
 import { TOOL_VERSIONS } from "./toolStats.js";
+import { REPO_FACTS } from "./repoFacts.js";
+
+// "as of" renderers for the feed dates (YYYY-MM-DD, parsed as UTC so the month can't shift by timezone).
+const asOfDate = (iso, opts) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", { ...opts, timeZone: "UTC" });
+const ATLAS_TREE_AS_OF = asOfDate(REPO_FACTS.computeAtlas.treeAsOf, { month: "long", year: "numeric" });
+const ATLAS_COMMITS_AS_OF = asOfDate(REPO_FACTS.computeAtlas.commitsAsOf, { month: "long", day: "numeric", year: "numeric" });
 
 /**
  * @typedef {Object} GitHubRepo
@@ -81,7 +87,7 @@ const projects = [
       { title: "The problem",
         body: `There is no national registry of grid-scale compute. The buildout is one of the largest infrastructure expansions in a generation, yet the records describing it sit scattered across county permit portals, utility interconnection queues, SEC filings, water-authority applications, and tax-abatement agreements — opaque, non-standardized, and almost never connected to a map. Compute Atlas pulls those primary records into one source-cited survey: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, ${ATLAS_STATS.operationalGw} GW operational today, ${ATLAS_STATS.underConstructionGw} GW under construction, and roughly ${ATLAS_STATS.plannedGw} GW more in the planned pipeline.` },
       { title: "The full stack",
-        body: "I designed every layer and shipped it solo, with Claude Code agents writing much of the code. Front end: a Next.js 16 App Router site on React 19 and TypeScript, with a MapLibre GL map. Data and API: Neon Postgres behind a Drizzle schema with migrations, and a public JSON API (20 route handlers as of October 2026). Email and intake: Resend sends double-opt-in subscribe confirmations, contact notifications, and per-state digests from a cron route; the contact endpoint is rate-limited by IP-hash buckets, uses a honeypot field, and stores submissions in Neon. Quality and CI: 334 test files and 9 GitHub Actions workflows as of October 2026. CI covers typecheck, lint, Vitest, Playwright and BATS; CodeQL, Neon sync and drift alerts run as separate workflows. Ops: deployed on Vercel. The daily discovery run executes locally under launchd, and a GitHub Actions watchdog alerts when its heartbeat goes stale or reports a failed run." },
+        body: `I designed every layer and shipped it solo, with Claude Code agents writing much of the code. Front end: a Next.js 16 App Router site on React 19 and TypeScript, with a MapLibre GL map. Data and API: Neon Postgres behind a Drizzle schema with migrations, and a public JSON API (${REPO_FACTS.computeAtlas.routeHandlers} route handlers as of ${ATLAS_TREE_AS_OF}). Email and intake: Resend sends double-opt-in subscribe confirmations, contact notifications, and per-state digests from a cron route; the contact endpoint is rate-limited by IP-hash buckets, uses a honeypot field, and stores submissions in Neon. Quality and CI: ${REPO_FACTS.computeAtlas.testFiles} test files and ${REPO_FACTS.computeAtlas.workflows} GitHub Actions workflows as of ${ATLAS_TREE_AS_OF}. CI covers typecheck, lint, Vitest, Playwright and BATS; CodeQL, Neon sync and drift alerts run as separate workflows. Ops: deployed on Vercel. The daily discovery run executes locally under launchd, and a GitHub Actions watchdog alerts when its heartbeat goes stale or reports a failed run.` },
       { title: "Three facility types, one dataset",
         body: "The atlas deliberately refuses the narrow definition. It tracks traditional and hyperscale data centers, AI/ML-specific campuses, crypto-mining operations, and — increasingly the decisive constraint — the dedicated power generation built or contracted to supply them, including gas, nuclear, small modular reactors, solar, wind, and fusion. Classifying a crypto site as a crypto site rather than quietly folding it into an 'AI' total is part of the honesty of the record." },
       { title: "The interactive product",
@@ -97,7 +103,7 @@ const projects = [
       { title: "Who builds on it",
         body: "Other people's work now builds on the registry. The Data Center Reporting map at brockovichdatacenter.com states that its data center locations are compiled from Compute Atlas and Epoch AI, both CC BY 4.0, and links to the Compute Atlas repository. The site itself is titled \"Brockovich Data Center Reporting\"; press coverage (Texas Standard, Newsweek) identifies it as Erin Brockovich's. Power To The People (powertothepeopleproject.com) credits the Compute Atlas open facility registry as the data source on its county and project pages. Both citations were checked on the sites themselves on October 19, 2026." },
       { title: "Built with CAST",
-        body: "Compute Atlas is developed through CAST, my Claude Code agent architecture: specialist agents, hook-driven dispatch, and review gates around the work. Its agent instructions live in a tracked CLAUDE.md. As of October 19, 2026, 494 of its 643 commits carry a Claude co-author trailer." },
+        body: `Compute Atlas is developed through CAST, my Claude Code agent architecture: specialist agents, hook-driven dispatch, and review gates around the work. Its agent instructions live in a tracked CLAUDE.md. As of ${ATLAS_COMMITS_AS_OF}, ${REPO_FACTS.computeAtlas.claudeCoauthored} of its ${REPO_FACTS.computeAtlas.commits} commits carry a Claude co-author trailer.` },
     ],
   },
 
