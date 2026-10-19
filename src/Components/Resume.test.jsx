@@ -32,10 +32,10 @@ describe('Resume — page heading and contact', () => {
   it('offers both PDF downloads with accessible labels', () => {
     renderResume();
     expect(
-      screen.getByRole('link', { name: /download resume pdf/i })
+      screen.getByRole('link', { name: /^download pdf$/i })
     ).toHaveAttribute('href', '/Edward_Kubiak_Resume.pdf');
     expect(
-      screen.getByRole('link', { name: /download cast one-pager pdf/i })
+      screen.getByRole('link', { name: /^cast one-pager$/i })
     ).toHaveAttribute('href', '/CAST_Portfolio_OnePager.pdf');
   });
 });
@@ -193,7 +193,7 @@ describe("Resume — contact comes from the shared data", () => {
     );
     expect(screen.getByText(contact.location)).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /linkedin profile/i })
+      screen.getByRole("link", { name: new RegExp(`${contact.linkedin}.*opens in new tab`, "i") })
     ).toHaveAttribute("href", `https://${contact.linkedin}/`);
   });
 
@@ -204,5 +204,13 @@ describe("Resume — contact comes from the shared data", () => {
       ["email", "github", "linkedin", "location", "site"].sort()
     );
     Object.values(contact).forEach((v) => expect(v).toBeTruthy());
+  });
+});
+
+describe("Resume — link names contain their visible text (2.5.3)", () => {
+  it("names the download links by their visible text", () => {
+    renderResume();
+    expect(screen.getByRole("link", { name: "Download PDF" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "CAST one-pager" })).toBeInTheDocument();
   });
 });

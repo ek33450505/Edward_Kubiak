@@ -227,24 +227,23 @@ function AnimatedRoutes() {
   );
 }
 
-function App() {
+// Everything except the palette goes inert while the modal palette is open,
+// so the background is out of the tab order and the accessibility tree.
+export function AppShell() {
+  const { open } = useCommandPalette();
   return (
-    <Router>
-      <CommandPaletteProvider>
-        <MotionConfig reducedMotion="user">
-        <div className="min-h-screen bg-background">
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-background">
+        <div inert={open}>
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-background focus:rounded-md focus:font-mono focus:text-sm focus:font-bold focus:tracking-widest focus:uppercase"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-background focus:rounded focus:font-mono focus:text-sm focus:font-bold focus:tracking-widest focus:uppercase"
           >
             Skip to main content
           </a>
           <ScrollToTop />
           <ScrollProgress />
           <NavBar />
-          <Suspense fallback={null}>
-            <CommandPalette />
-          </Suspense>
           <main id="main-content" className="pt-(--spacing-nav)">
             <ErrorBoundary>
               <AnimatedRoutes />
@@ -298,7 +297,19 @@ function App() {
             </div>
           </footer>
         </div>
-        </MotionConfig>
+        <Suspense fallback={null}>
+          <CommandPalette />
+        </Suspense>
+      </div>
+    </MotionConfig>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <CommandPaletteProvider>
+        <AppShell />
       </CommandPaletteProvider>
     </Router>
   );

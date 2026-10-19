@@ -11,7 +11,7 @@ describe("GetInTouch", () => {
       </MemoryRouter>,
     );
     expect(
-      screen.getByRole("link", { name: "Send Edward a message via the contact form" }),
+      screen.getByRole("link", { name: "Contact: send Edward a message" }),
     ).toHaveAttribute("href", "/contact");
     expect(screen.getByRole("link", { name: /send a message/i })).toHaveAttribute("href", "/contact");
     expect(container.textContent).not.toContain("@");

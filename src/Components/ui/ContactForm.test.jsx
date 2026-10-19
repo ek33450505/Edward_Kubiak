@@ -69,7 +69,7 @@ describe("ContactForm", () => {
   it("keeps submit disabled until Turnstile yields a token", () => {
     installTurnstile({ autoToken: false });
     render(<ContactForm />);
-    expect(submit()).toBeDisabled();
+    expect(submit()).toHaveAttribute("aria-disabled", "true");
   });
 
   it("enables submit once the widget callback delivers a token", () => {
@@ -109,7 +109,7 @@ describe("ContactForm", () => {
 
     const confirmation = await screen.findByText("Message sent");
     expect(screen.queryByLabelText("Name")).not.toBeInTheDocument();
-    await waitFor(() => expect(confirmation.parentElement).toHaveFocus());
+    await waitFor(() => expect(confirmation.closest('[tabindex="-1"]')).toHaveFocus());
     expect(ts).toBeDefined();
   });
 
@@ -192,7 +192,7 @@ describe("ContactForm", () => {
     const { unmount } = render(<ContactForm />);
     expect(submit()).toBeEnabled();
     ts.opts["expired-callback"]();
-    return waitFor(() => expect(submit()).toBeDisabled()).then(() => {
+    return waitFor(() => expect(submit()).toHaveAttribute("aria-disabled", "true")).then(() => {
       unmount();
       expect(ts.remove).toHaveBeenCalledWith("widget-1");
     });
@@ -333,7 +333,7 @@ describe("ContactForm widget/token desync", () => {
     const api = installTurnstile({ autoToken: false });
     api.getResponse = vi.fn(() => "tok");
     render(<ContactForm />);
-    expect(submit()).toBeDisabled();
+    expect(submit()).toHaveAttribute("aria-disabled", "true");
     act(() => vi.advanceTimersByTime(1000));
     expect(submit()).toBeEnabled();
     expect(api.getResponse).toHaveBeenCalledWith("widget-1");
@@ -346,7 +346,7 @@ describe("ContactForm widget/token desync", () => {
     render(<ContactForm />);
     expect(submit()).toBeEnabled();
     act(() => api.opts["error-callback"]());
-    expect(submit()).toBeDisabled();
+    expect(submit()).toHaveAttribute("aria-disabled", "true");
     act(() => vi.advanceTimersByTime(1000));
     expect(submit()).toBeEnabled();
   });
@@ -363,7 +363,7 @@ describe("ContactForm widget/token desync", () => {
     await user.click(submit());
     await waitFor(() => expect(api.reset).toHaveBeenCalled());
     act(() => vi.advanceTimersByTime(2000));
-    expect(submit()).toBeDisabled();
+    expect(submit()).toHaveAttribute("aria-disabled", "true");
     live = "tok-2";
     act(() => vi.advanceTimersByTime(1000));
     expect(submit()).toBeEnabled();
@@ -397,7 +397,7 @@ describe("ContactForm widget/token desync", () => {
     window.turnstile = { getResponse: vi.fn(() => "tok"), render: vi.fn(), remove: vi.fn(), reset: vi.fn() };
     act(() => vi.advanceTimersByTime(3000));
     expect(window.turnstile.getResponse).not.toHaveBeenCalled();
-    expect(submit()).toBeDisabled();
+    expect(submit()).toHaveAttribute("aria-disabled", "true");
   });
 
   it("does not poll after a successful send", async () => {
@@ -420,7 +420,7 @@ describe("ContactForm widget/token desync", () => {
     api.getResponse = vi.fn(() => undefined);
     render(<ContactForm />);
     act(() => vi.advanceTimersByTime(2000));
-    expect(submit()).toBeDisabled();
+    expect(submit()).toHaveAttribute("aria-disabled", "true");
   });
 });
 
@@ -436,5 +436,98 @@ describe("index.html CSP", () => {
 
   it("keeps fonts self-hosted", () => {
     expect(directive("font-src")).toBe("font-src 'self'");
+  });
+});
+
+describe("ContactForm — accessibility behaviours", () => {
+  it("states up front that all fields are required", () => {
+    installTurnstile();
+    render(<ContactForm />);
+    expect(screen.getByText(/all fields are required/i)).toBeInTheDocument();
+  });
+
+  it("moves focus to the first invalid field on a failed submit", async () => {
+    installTurnstile();
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await user.type(screen.getByLabelText("Name"), "Ada");
+    await user.click(submit());
+    expect(screen.getByLabelText("Email")).toHaveFocus();
+  });
+
+  it("clears a field's error and aria-invalid when it is edited", async () => {
+    installTurnstile();
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await user.click(submit());
+    const name = screen.getByLabelText("Name");
+    expect(name).toHaveAttribute("aria-invalid", "true");
+    await user.type(name, "A");
+    expect(name).toHaveAttribute("aria-invalid", "false");
+    expect(name).not.toHaveAccessibleDescription(/enter your name/i);
+    expect(screen.getByLabelText("Email")).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("keeps submit focusable and sends nothing when clicked without a token", async () => {
+    installTurnstile({ autoToken: false });
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await fill(user);
+    submit().focus();
+    expect(submit()).toHaveFocus();
+    expect(submit()).not.toBeDisabled();
+    expect(submit()).toHaveAccessibleDescription(/complete the verification/i);
+    await user.click(submit());
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("keeps focus on submit while sending and ignores a second activation", async () => {
+    installTurnstile();
+    let resolve;
+    fetch.mockReturnValue(new Promise((r) => { resolve = r; }));
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await fill(user);
+    await user.click(submit());
+    const sendingBtn = screen.getByRole("button", { name: /sending/i });
+    expect(sendingBtn).toHaveFocus();
+    await user.click(sendingBtn);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    await act(async () => { resolve({ ok: true, status: 200, json: () => Promise.resolve({ ok: true }) }); });
+  });
+});
+
+describe("ContactForm — validate before verification", () => {
+  it("shows field errors and focuses the first invalid field even with no token", async () => {
+    installTurnstile({ autoToken: false });
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await user.click(submit());
+    expect(screen.getByLabelText("Name")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByLabelText("Name")).toHaveFocus();
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("announces the verification hint and focuses it when fields are valid but no token", async () => {
+    installTurnstile({ autoToken: false });
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await fill(user);
+    await user.click(submit());
+    expect(screen.getByRole("status")).toHaveTextContent("Complete the verification above to send.");
+    expect(document.getElementById("contact-token-hint")).toHaveFocus();
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("focuses the first invalid field after a server validation_failed", async () => {
+    installTurnstile();
+    fetch.mockReturnValue(
+      jsonResponse(400, { error: "validation_failed", fields: { email: "invalid" } }),
+    );
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await fill(user);
+    await user.click(submit());
+    await waitFor(() => expect(screen.getByLabelText("Email")).toHaveFocus());
   });
 });

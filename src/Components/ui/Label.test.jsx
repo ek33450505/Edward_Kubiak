@@ -60,3 +60,24 @@ describe('Label — forwarded props', () => {
     expect(screen.getByLabelText('Skills section')).toBeInTheDocument();
   });
 });
+
+describe('Label — variant', () => {
+  it('applies panel-head sizing for variant="panel"', () => {
+    const { container } = render(<Label variant="panel">Get in Touch</Label>);
+    const el = container.querySelector('span');
+    expect(el.className).toContain('text-[11px]');
+    expect(el.className).not.toContain('text-xs');
+  });
+});
+
+describe('Label — unknown variant', () => {
+  it('ignores inherited Object properties such as "toString"', () => {
+    const { container } = render(<Label variant="toString">X</Label>);
+    expect(container.querySelector('span').className).toContain('text-xs');
+  });
+
+  it('falls back to the default styles', () => {
+    const { container } = render(<Label variant="nope">X</Label>);
+    expect(container.querySelector('span').className).toContain('text-xs');
+  });
+});

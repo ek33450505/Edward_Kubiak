@@ -10,14 +10,25 @@
  * NavBar never sees a click of its own.
  */
 
-import { describe, it, expect } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { render, screen, within, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, useNavigate } from "react-router-dom";
-import { NavBar } from "./App";
+import { NavBar, AppShell } from "./App";
 import { CommandPaletteProvider } from "./Components/CommandPaletteContext";
 import { CAST_STATS } from "./data/castStats";
 import { ATLAS_STATS } from "./data/atlasStats";
+
+const originalResizeObserver = globalThis.ResizeObserver;
+const originalScrollIntoView = Element.prototype.scrollIntoView;
+beforeAll(() => {
+  globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
+  Element.prototype.scrollIntoView = () => {};
+});
+afterAll(() => {
+  globalThis.ResizeObserver = originalResizeObserver;
+  Element.prototype.scrollIntoView = originalScrollIntoView;
+});
 
 function NavProbe({ to }) {
   const navigate = useNavigate();
@@ -155,5 +166,28 @@ describe("app shell", () => {
       expect(text).not.toContain("Columbus");
       expect(text).not.toContain("\u00b0N");
     }
+  });
+});
+
+describe("AppShell — modal command palette", () => {
+  it("makes the page behind the palette inert only while it is open", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <CommandPaletteProvider>
+          <AppShell />
+        </CommandPaletteProvider>
+      </MemoryRouter>
+    );
+    const nav = screen.getByRole("navigation", { name: "Primary" });
+    expect(nav.closest("[inert]")).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: /open command palette/i }));
+    const dialog = await screen.findByRole("dialog", { name: /command menu/i });
+    expect(nav.closest("[inert]")).not.toBeNull();
+    expect(dialog.closest("[inert]")).toBeNull();
+
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(nav.closest("[inert]")).toBeNull());
   });
 });

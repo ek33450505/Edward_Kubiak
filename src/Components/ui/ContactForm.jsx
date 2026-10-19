@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AlertCircle } from "lucide-react";
 import { CONTACT_ENDPOINT, TURNSTILE_SITEKEY } from "../../lib/contactConfig";
 import { contact } from "../../data/resume";
 
@@ -70,10 +71,10 @@ function loadTurnstile(onReady, onError) {
 }
 
 const inputClass =
-  "mt-2 block w-full rounded border border-border bg-card px-3 py-2 text-foreground";
+  "mt-2 block min-h-11 w-full rounded border border-border-strong bg-background px-3 py-2 text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 const labelClass =
   "font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground";
-const errorClass = "mt-1 text-sm text-terra";
+const errorClass = "mt-1 flex items-start gap-1.5 text-sm text-terra";
 
 function Field({ id, label, error, children }) {
   return (
@@ -85,7 +86,8 @@ function Field({ id, label, error, children }) {
       {children}
       {error && (
         <p id={`${id}-error`} className={errorClass}>
-          {error}
+          <AlertCircle size={14} className="mt-0.5 shrink-0" aria-hidden="true" />
+          <span>{error}</span>
         </p>
       )}
     </div>
@@ -105,6 +107,8 @@ export default function ContactForm() {
   const widgetId = useRef(null);
   const spentToken = useRef("");
   const confirmationEl = useRef(null);
+  const formEl = useRef(null);
+  const hintEl = useRef(null);
 
   useEffect(() => {
     if (!TURNSTILE_SITEKEY) return undefined;
@@ -158,7 +162,7 @@ export default function ContactForm() {
 
   if (!TURNSTILE_SITEKEY || scriptFailed) {
     return (
-      <p className="card bg-card p-6 text-foreground">
+      <p className="panel p-6 text-foreground">
         {scriptFailed
           ? "Verification couldn't load — reach me on"
           : "The contact form isn't live yet — reach me on"}{" "}
@@ -177,30 +181,57 @@ export default function ContactForm() {
 
   if (phase === "success") {
     return (
-      <div
-        ref={confirmationEl}
-        tabIndex={-1}
-        className="card bg-card p-6 text-foreground"
-      >
-        <h2 className="font-display text-xl font-semibold">Message sent</h2>
-        <p className="mt-2 text-muted-foreground">
-          Thanks for reaching out. I&apos;ll reply to the address you gave.
-        </p>
+      <div className="panel text-foreground">
+        <div className="panel-head">
+          <span className="inline-flex items-center gap-2 text-primary">
+            <span className="status-dot" aria-hidden="true" />
+            Sent
+          </span>
+        </div>
+        <div
+          ref={confirmationEl}
+          tabIndex={-1}
+          className="p-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          <h2 className="font-display text-xl font-semibold">Message sent</h2>
+          <p className="mt-2 text-muted-foreground">
+            Thanks for reaching out. I&apos;ll reply to the address you gave.
+          </p>
+        </div>
       </div>
     );
   }
 
-  const onChange = (e) =>
-    setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setValues((v) => ({ ...v, [name]: value }));
+    setErrors((errs) => {
+      if (!errs[name]) return errs;
+      const rest = { ...errs };
+      delete rest[name];
+      return rest;
+    });
+  };
+
+  const focusFirstInvalid = (errs) => {
+    const first = ["name", "email", "message"].find((k) => errs[k]);
+    if (first) formEl.current?.elements.namedItem(first)?.focus();
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (phase === "sending" || !token) return;
+    if (phase === "sending") return;
     const clientErrors = validate(values);
     setErrors(clientErrors);
     setFailed(false);
     if (Object.keys(clientErrors).length > 0) {
       setStatus("Please fix the highlighted fields.");
+      focusFirstInvalid(clientErrors);
+      return;
+    }
+    if (!token) {
+      setStatus("Complete the verification above to send.");
+      hintEl.current?.focus();
       return;
     }
     const payload = {
@@ -213,6 +244,7 @@ export default function ContactForm() {
     if (new TextEncoder().encode(JSON.stringify(payload)).length > MAX_BODY_BYTES) {
       setErrors({ message: "Message is too long." });
       setStatus("Please fix the highlighted fields.");
+      focusFirstInvalid({ message: true });
       return;
     }
     spentToken.current = token;
@@ -239,6 +271,7 @@ export default function ContactForm() {
           if (data.fields[key]) serverErrors[key] = SERVER_FIELD_ERRORS[key];
         }
         setErrors(serverErrors);
+        focusFirstInvalid(serverErrors);
         message = "Please fix the highlighted fields.";
         fallback = false;
       } else if (res.status === 403) {
@@ -264,7 +297,8 @@ export default function ContactForm() {
   const sending = phase === "sending";
 
   return (
-    <form onSubmit={onSubmit} noValidate className="card space-y-5 bg-card p-6">
+    <form ref={formEl} onSubmit={onSubmit} noValidate className="panel space-y-5 p-6">
+      <p className="text-sm text-muted-foreground">All fields are required.</p>
       <Field id="contact-name" label="Name" error={errors.name}>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label -- labelled via htmlFor */}
         <input
@@ -336,15 +370,20 @@ export default function ContactForm() {
 
       <button
         type="submit"
-        disabled={!token || sending}
+        aria-disabled={!token || sending}
         aria-describedby={token ? undefined : "contact-token-hint"}
-        className="rounded border border-primary px-5 py-2 font-mono text-xs uppercase tracking-[0.2em] text-primary disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex min-h-11 items-center rounded bg-primary px-5 py-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
       >
         {sending ? "Sending…" : "Send message"}
       </button>
 
       {!token && (
-        <p id="contact-token-hint" className="text-sm text-muted-foreground">
+        <p
+          id="contact-token-hint"
+          ref={hintEl}
+          tabIndex={-1}
+          className="text-sm text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
           Complete the verification above to send.
         </p>
       )}

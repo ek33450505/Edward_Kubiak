@@ -69,7 +69,8 @@ function ProjectDetail() {
     return (
       <NotFound
         heading="404"
-        message="Project not found"
+        title="Project not found"
+        message="The project you're looking for doesn't exist."
         linkLabel="Back to Projects"
         linkHref="/projects"
       />
