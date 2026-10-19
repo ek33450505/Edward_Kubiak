@@ -373,7 +373,7 @@ ${projects}
     </div>
     <div>
       <div class="section-head">Day Job &mdash; Production Track Record</div>
-      <p>Applications Developer, META Solutions (2022&ndash;present). Hired out of a full-stack certificate to rebuild <strong>CrossCheck</strong> &mdash; the EMIS validation platform Ohio school districts use &mdash; replacing an end-of-life AngularJS 1.x application, and sole author of 1,706 of its 1,728 commits as of September 2026. Also ship SES-Wiki, the public PowerSchool catalog, and the E-Rate dashboard front end across React, Flask, Express, PostgreSQL and MS SQL Server.</p>
+      <p>Applications Developer, META Solutions (2022&ndash;present). Hired out of a full-stack certificate to rebuild <strong>CrossCheck</strong> &mdash; the EMIS validation platform Ohio school districts use &mdash; replacing an end-of-life AngularJS 1.x application, and sole author of 1,706 of its 1,728 commits as of September 2026. Also build SES-Wiki (in QA as a page of CrossCheck), the public PowerSchool catalog, and the E-Rate dashboard front end across React, Flask, PostgreSQL and MS SQL Server.</p>
     </div>
   </div>
 
