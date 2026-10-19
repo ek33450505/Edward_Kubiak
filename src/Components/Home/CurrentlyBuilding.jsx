@@ -89,7 +89,7 @@ export default function CurrentlyBuilding() {
   return (
     <PageWrapper width="6xl" className="w-full pb-20 md:pb-24">
       <Reveal as="section" aria-labelledby="currently-building-heading">
-        <SectionHead index="02" title="Currently building" id="currently-building-heading">
+        <SectionHead index="03" title="Currently building" id="currently-building-heading">
           {!loading && events.length > 0 && (
             <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
               <span aria-hidden="true" className="status-dot" />

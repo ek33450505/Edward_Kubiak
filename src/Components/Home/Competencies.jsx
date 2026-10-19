@@ -32,7 +32,7 @@ export default function Competencies() {
     <PageWrapper width="6xl" className="w-full pb-20 md:pb-24">
       <section id="core-competencies" aria-labelledby="core-competencies-heading">
         <Reveal margin="-60px">
-          <SectionHead index="03" title="Core competencies" id="core-competencies-heading" />
+          <SectionHead index="04" title="Core competencies" id="core-competencies-heading" />
         </Reveal>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

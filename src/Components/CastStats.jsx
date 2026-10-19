@@ -23,7 +23,7 @@ function CastStats() {
   return (
     <Reveal as="section" aria-labelledby="cast-stats-heading" className="w-full">
       <PageWrapper width="6xl" className="pb-20 md:pb-24">
-        <SectionHead index="04" title="CAST ecosystem — live stats" id="cast-stats-heading">
+        <SectionHead index="05" title="CAST ecosystem — live stats" id="cast-stats-heading">
           {displayStats.updated && (
             <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
               Updated {new Date(displayStats.updated).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}
