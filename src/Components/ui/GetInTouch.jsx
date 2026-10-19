@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Mail, Heart, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "../BrandIcons";
 import Label from "./Label";
@@ -14,16 +15,16 @@ export default function GetInTouch() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <a
-          href="mailto:edward.kubiak.dev@gmail.com"
-          aria-label="Email Edward at edward.kubiak.dev@gmail.com"
+        <Link
+          to="/contact"
+          aria-label="Send Edward a message via the contact form"
           className="group flex flex-col items-center gap-2 p-4 rounded-lg border border-border/60 bg-card/40 hover:border-primary/40 hover:bg-border/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-all"
         >
           <Mail size={20} className="text-primary group-hover:scale-110 transition-transform" aria-hidden="true" />
           <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground group-hover:text-foreground uppercase">
-            Email
+            Contact
           </span>
-        </a>
+        </Link>
 
         <a
           href="https://www.linkedin.com/in/edward-kubiak/"
@@ -66,13 +67,13 @@ export default function GetInTouch() {
       </div>
 
       <div className="mt-6 pt-6 border-t border-border/60 text-center">
-        <a
-          href="mailto:edward.kubiak.dev@gmail.com"
+        <Link
+          to="/contact"
           className="inline-flex items-center gap-2 font-mono text-sm sm:text-base text-primary hover:text-primary transition-colors group"
         >
-          edward.kubiak.dev@gmail.com
+          Send a message
           <ArrowUpRight size={14} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" aria-hidden="true" />
-        </a>
+        </Link>
       </div>
     </Reveal>
   );

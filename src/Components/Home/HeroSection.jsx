@@ -129,12 +129,12 @@ export default function HeroSection() {
           >
             How I work with agents
           </Link>
-          <a
-            href="mailto:edward.kubiak.dev@gmail.com"
+          <Link
+            to="/contact"
             className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary"
           >
             Get in touch
-          </a>
+          </Link>
         </motion.div>
 
         {/* Availability — survey marker, no pulse */}

@@ -258,12 +258,12 @@ function App() {
                 &copy; {new Date().getFullYear()} Edward Kubiak · {COORDINATES}
               </p>
               <div className="flex items-center gap-4">
-                <a
-                  href="mailto:edward.kubiak.dev@gmail.com"
+                <Link
+                  to="/contact"
                   className="font-mono text-xs tracking-wider uppercase hover:text-primary transition-colors"
                 >
-                  edward.kubiak.dev@gmail.com
-                </a>
+                  Contact
+                </Link>
                 <IconButton
                   href="https://github.com/ek33450505"
                   target="_blank"

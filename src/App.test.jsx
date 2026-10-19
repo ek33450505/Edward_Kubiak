@@ -11,7 +11,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 import { NavBar } from "./App";
@@ -90,5 +90,16 @@ describe("NavBar — mobile menu", () => {
     expect(toggle()).toHaveAttribute("aria-expanded", "true");
     await user.keyboard("{Escape}");
     expect(toggle()).toHaveAttribute("aria-expanded", "false");
+  });
+});
+
+describe("footer contact link", () => {
+  it("links to /contact and shows no email address", async () => {
+    const { default: App } = await import("./App");
+    render(<App />);
+    const footer = await screen.findByRole("contentinfo");
+    expect(within(footer).getByRole("link", { name: "Contact" })).toHaveAttribute("href", "/contact");
+    expect(footer.textContent).not.toContain("@");
+    expect(footer.innerHTML).not.toContain("mail" + "to:");
   });
 });
