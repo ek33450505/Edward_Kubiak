@@ -1,6 +1,6 @@
 import { CAST_STATS } from "../data/castStats";
 import { useStaticJson } from "../hooks/useStaticJson";
-import SectionHead from "./Home/SectionHead";
+import SectionHead from "./ui/SectionHead";
 import PageWrapper from "./ui/PageWrapper";
 import Reveal from "./ui/Reveal";
 

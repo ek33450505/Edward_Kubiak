@@ -3,8 +3,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Link, useLocation } from "react-router-dom";
 import { ExternalLink } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
-import SectionHeader from "./ui/SectionHeader";
-import IconButton from "./ui/IconButton";
+import SectionHead from "./ui/SectionHead";
 import PageWrapper from "./ui/PageWrapper";
 import Reveal from "./ui/Reveal";
 import StarBadge from "./ui/StarBadge";
@@ -18,89 +17,108 @@ const SECTIONS = [
   { key: "professional", title: "Professional" },
 ];
 
-// Continuous plate number across all rendered sections.
+// Continuous mono index across all rendered sections.
 const ORDERED = SECTIONS.flatMap(({ key }) => projects.filter((p) => p.group === key));
-const plateOf = (slug) => String(ORDERED.findIndex((p) => p.slug === slug) + 1).padStart(3, "0");
+const indexOf = (slug) => String(ORDERED.findIndex((p) => p.slug === slug) + 1).padStart(3, "0");
 
-function ProjectCard({ project }) {
+const monoLink =
+  "inline-flex min-h-11 items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors";
+
+const MAX_TECH = 6;
+
+function ProjectCard({ project, groupLabel }) {
   const reducedMotion = useReducedMotion();
-  const categoryLabel = `${project.category}${
-    project.castEcosystem ? " · CAST Ecosystem" : project.aiEngineering ? " · AI Engineering" : ""
-  }`;
+  const tech = project.tech || [];
+  const techChips = tech.slice(0, MAX_TECH);
+  const hiddenTech = tech.length - techChips.length;
 
   return (
     <motion.article
       variants={staggerItem}
-      whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-      className="neatline group flex h-full flex-col bg-card p-6 transition-colors duration-300 hover:border-primary/50"
+      whileHover={reducedMotion ? {} : { y: -3, transition: { duration: 0.2 } }}
+      className="card-interactive group flex h-full flex-col"
     >
-      {/* Plate number + status marks + out-links */}
-      <div className="flex items-start justify-between gap-3">
-        <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground tabular-nums">
-          {plateOf(project.slug)}
-        </span>
-        <div className="flex items-center gap-3">
-          {project.featured && (
-            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary">Featured</span>
-          )}
-          {project.castEcosystem && (
-            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-sepia">CAST</span>
-          )}
-          <div className="flex gap-1 opacity-60 transition-opacity group-hover:opacity-100">
-            {project.github && (
-              <IconButton
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                label="View source code on GitHub (opens in new tab)"
-              >
-                <GithubIcon size={16} aria-hidden="true" />
-              </IconButton>
-            )}
-            {project.link && (
-              <IconButton
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                label="View live site (opens in new tab)"
-              >
-                <ExternalLink size={16} aria-hidden="true" />
-              </IconButton>
-            )}
-          </div>
-        </div>
+      <div className="panel-head">
+        <span className="tabular-nums">{indexOf(project.slug)} · {groupLabel}</span>
+        {project.featured && <span className="text-primary">Featured</span>}
       </div>
 
-      {/* Title + star badge */}
-      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
-        <Link
-          to={`/projects/${project.slug}`}
-          className="font-display text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary"
-        >
-          {project.title}
-        </Link>
-        {project.githubRepo && <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />}
-      </div>
-      <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-        {categoryLabel}
-      </span>
-
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-        {project.description}
-      </p>
-
-      {/* Metric stats — mono figures */}
-      {project.stats && project.stats.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.15em] text-primary">
-          {project.stats.map((stat) => (
-            <span key={stat}>{stat}</span>
-          ))}
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <h3 className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground transition-colors group-hover:text-primary">
+            {project.title}
+          </h3>
+          {project.githubRepo && <StarBadge owner={project.githubRepo.owner} repo={project.githubRepo.repo} />}
         </div>
-      )}
 
-      {/* Tech — mono legend */}
-      <div className="mt-4 border-t border-border pt-4 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-        {project.tech.join(" · ")}
+        <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+          {project.summary ?? project.description}
+        </p>
+
+        {techChips.length > 0 && (
+          <ul aria-label={`${project.title} tech`} className="mt-4 flex flex-wrap gap-2">
+            {techChips.map((tag) => (
+              <li
+                key={tag}
+                className="rounded border border-border px-2 py-0.5 font-mono text-[11px] text-muted-foreground"
+              >
+                {tag}
+              </li>
+            ))}
+            {hiddenTech > 0 && (
+              <li className="rounded border border-border px-2 py-0.5 font-mono text-[11px] text-muted-foreground">
+                <span aria-hidden="true">+{hiddenTech}</span>
+                <span className="sr-only">{hiddenTech} more technologies</span>
+              </li>
+            )}
+          </ul>
+        )}
+
+        {project.stats && project.stats.length > 0 && (
+          <ul
+            aria-label={`${project.title} stats`}
+            className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.12em] tabular-nums text-primary"
+          >
+            {project.stats.map((stat) => (
+              <li key={stat}>{stat}</li>
+            ))}
+          </ul>
+        )}
+
+        <div className="hairline mt-4" />
+        <div className="mt-2 flex flex-wrap items-center gap-x-5">
+          <Link
+            to={`/projects/${project.slug}`}
+            aria-label={`View project: ${project.title}`}
+            className={`${monoLink} text-primary hover:text-foreground`}
+          >
+            View project →
+          </Link>
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`GitHub: ${project.title} (opens in new tab)`}
+              className={`${monoLink} text-muted-foreground hover:text-foreground`}
+            >
+              <GithubIcon size={12} aria-hidden="true" />
+              GitHub
+            </a>
+          )}
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Live: ${project.title} site (opens in new tab)`}
+              className={`${monoLink} text-muted-foreground hover:text-foreground`}
+            >
+              Live
+              <ExternalLink size={10} aria-hidden="true" />
+            </a>
+          )}
+        </div>
       </div>
     </motion.article>
   );
@@ -108,6 +126,7 @@ function ProjectCard({ project }) {
 
 function Portfolio() {
   const location = useLocation();
+  const reducedMotion = useReducedMotion();
 
   // Scroll to hashed section when the hash changes (e.g. /projects#section-flagship)
   useEffect(() => {
@@ -115,27 +134,30 @@ function Portfolio() {
     const id = location.hash.slice(1);
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      el.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
     }
-  }, [location.hash]);
+  }, [location.hash, reducedMotion]);
 
   return (
     <div className="min-h-page py-20">
       <PageWrapper width="6xl">
-        {/* Frontispiece header */}
+        {/* Page header */}
         <motion.div variants={fadeUp} initial="hidden" animate="show">
-          <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-primary">
-            Project Index · {ORDERED.length} Entries
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-primary">
+            Work · <span className="tabular-nums">{ORDERED.length}</span> entries
           </p>
-          <h1 className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+          <h1 className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl">
             Projects
           </h1>
-          <div className="mt-4 h-px w-full bg-border" />
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Shipped products, tooling, and professional work, grouped by kind.
+          </p>
+          <div className="hairline mt-6" />
         </motion.div>
 
         {/* Grouped sections */}
         <div className="mt-10 space-y-16">
-          {SECTIONS.map(({ key, title }) => {
+          {SECTIONS.map(({ key, title }, sectionIdx) => {
             const sectionProjects = projects.filter((p) => p.group === key);
             if (sectionProjects.length === 0) return null;
             const sectionId = `section-${key}`;
@@ -144,8 +166,8 @@ function Portfolio() {
 
             return (
               <section id={sectionId} key={key} aria-labelledby={headingId} className="scroll-mt-24">
-                <Reveal className="mb-6">
-                  <SectionHeader id={headingId} as="h2" title={title} />
+                <Reveal>
+                  <SectionHead index={String(sectionIdx + 1).padStart(2, "0")} id={headingId} title={title} />
                 </Reveal>
 
                 <motion.div
@@ -156,7 +178,7 @@ function Portfolio() {
                   viewport={{ once: true, margin: "-60px" }}
                 >
                   {sectionProjects.map((project) => (
-                    <ProjectCard key={project.title} project={project} />
+                    <ProjectCard key={project.title} project={project} groupLabel={title} />
                   ))}
                 </motion.div>
               </section>

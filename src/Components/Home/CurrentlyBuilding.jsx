@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { ExternalLink, GitCommit } from "lucide-react";
 import { timeAgo } from "../../utils/timeAgo";
-import SectionHead from "./SectionHead";
+import SectionHead from "../ui/SectionHead";
 import PageWrapper from "../ui/PageWrapper";
 import Reveal from "../ui/Reveal";
 import { useGitHubActivity } from "../../hooks/useGitHubActivity";

@@ -62,6 +62,34 @@ describe('Portfolio — grouped sections', () => {
   });
 });
 
+describe('Portfolio — card links and indices', () => {
+  it('gives every project card a label-in-name "View project: …" link', () => {
+    renderPortfolio();
+    const links = screen.getAllByRole('link', { name: /^View project: .+/ });
+    expect(links.length).toBeGreaterThanOrEqual(1);
+    links.forEach((l) => {
+      expect(l.getAttribute('href')).toMatch(/^\/projects\/.+/);
+      expect(l).toHaveTextContent(/view project/i);
+    });
+  });
+
+  it('numbers section headings with mono "01 /" indices and no Plate wording', () => {
+    const { container } = renderPortfolio();
+    expect(screen.getByText('01 /')).toBeInTheDocument();
+    expect(container.textContent).not.toMatch(/plate/i);
+  });
+});
+
+describe('Portfolio — tech chips', () => {
+  it('labels the overflow chip so truncated tech is not silently dropped', () => {
+    renderPortfolio();
+    const more = screen.getAllByText(/^\d+ more technologies$/);
+    expect(more.length).toBeGreaterThanOrEqual(1);
+    expect(more[0].previousElementSibling).toHaveTextContent(/^\+\d+$/);
+    expect(more[0].previousElementSibling).toHaveAttribute('aria-hidden', 'true');
+  });
+});
+
 describe('Portfolio — external link safety', () => {
   it('all target="_blank" links carry rel="noopener noreferrer"', () => {
     const { container } = renderPortfolio();

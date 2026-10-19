@@ -4,7 +4,7 @@ import { ExternalLink } from "lucide-react";
 import projects from "../../data/projects";
 import { CAST_STATS } from "../../data/castStats";
 import { staggerItem } from "../../utils/motion";
-import SectionHead from "./SectionHead";
+import SectionHead from "../ui/SectionHead";
 import PageWrapper from "../ui/PageWrapper";
 import Reveal from "../ui/Reveal";
 

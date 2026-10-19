@@ -1,6 +1,6 @@
 import { staggerItem } from "../../utils/motion";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
-import SectionHead from "./SectionHead";
+import SectionHead from "../ui/SectionHead";
 import PageWrapper from "../ui/PageWrapper";
 import Reveal from "../ui/Reveal";
 
