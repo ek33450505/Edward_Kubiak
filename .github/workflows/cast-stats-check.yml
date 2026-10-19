@@ -19,6 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ek33450505/claude-agent-team/.github/actions/cast-stats-drift-check@main
+      - uses: ek33450505/claude-agent-team/.github/actions/cast-stats-drift-check@ee8b15585dd415438d11b55bbc4a3fd722c2ddd5 # v10.6.1
         with:
           json: public/cast-stats.json

@@ -483,7 +483,16 @@ async function main() {
   return summary.exitCode;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+/** True when argv1 and moduleUrl resolve to the same real file (symlink-safe); a missing argv1 is "not direct". */
+export function isDirectInvocation(argv1, moduleUrl) {
+  try {
+    return fs.realpathSync(argv1) === fs.realpathSync(fileURLToPath(moduleUrl));
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectInvocation(process.argv[1], import.meta.url)) {
   main()
     .then((code) => {
       process.exitCode = code;
