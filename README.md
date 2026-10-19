@@ -25,7 +25,7 @@ it, because the judgment, the verification and the consequences all stayed put.
   wasn't.
 
 Résumé: [edwardkubiak.com/resume](https://edwardkubiak.com/resume) ·
-Reach me at [edward.kubiak.dev@gmail.com](mailto:edward.kubiak.dev@gmail.com)
+Reach me through the contact form at https://edwardkubiak.com/contact or on [LinkedIn](https://www.linkedin.com/in/edward-kubiak/)
 
 ---
 
@@ -132,7 +132,7 @@ Single dark "Night Survey" reference-atlas theme (nocturnal survey plate) — **
 ## Contact
 
 - **GitHub:** [ek33450505](https://github.com/ek33450505)
-- **Email:** edward.kubiak.dev@gmail.com
+- **Contact:** https://edwardkubiak.com/contact
 - **LinkedIn:** [edward-kubiak](https://www.linkedin.com/in/edward-kubiak/)
 
 &copy; 2024–2026 Edward Kubiak

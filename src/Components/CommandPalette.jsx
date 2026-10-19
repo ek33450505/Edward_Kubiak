@@ -24,6 +24,7 @@ const navigateCommands = [
   { id: "practice", label: "Practice", icon: Workflow, to: "/practice" },
   { id: "resume", label: "Resume", icon: FileText, to: "/resume" },
   { id: "now", label: "Now", icon: Clock, to: "/now" },
+  { id: "contact", label: "Contact", icon: Mail, to: "/contact" },
 ];
 
 // Jump-to-section commands — navigate to /projects with a hash anchor
@@ -37,7 +38,6 @@ const jumpCommands = [
 
 const externalCommands = [
   { id: "github", label: "GitHub", href: "https://github.com/ek33450505", icon: GithubIcon },
-  { id: "email", label: "Email", href: "mailto:edward.kubiak.dev@gmail.com", icon: Mail },
 ];
 
 const CommandPalette = () => {

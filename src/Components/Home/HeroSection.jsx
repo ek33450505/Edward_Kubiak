@@ -3,7 +3,6 @@ import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } fr
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import HeroStats from "../HeroStats";
-import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
 import { coordinateOverline } from "../../data/place";
 import { fadeUp, slideInLeft } from "../../utils/motion";
 
@@ -92,7 +91,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-5 max-w-2xl font-display text-xl leading-snug text-muted-foreground sm:text-2xl"
         >
-          Software engineer — developer tooling and production applications.
+          Full-stack engineer. I build data products, and the agent architecture that ships them.
         </motion.p>
 
         {/* Body intro */}
@@ -103,10 +102,10 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground"
         >
-          I build production education technology for Ohio school districts at
-          META Solutions, and open-source infrastructure for AI-native
-          development — including CAST, a {CAST_STATS.agents}-agent framework
-          for Claude Code distributed as {CAST_ECOSYSTEM.tapsPlusUmbrella}.
+          Compute Atlas is a full-stack data product I designed and shipped solo,
+          cited by Erin Brockovich&apos;s data center reporting map. I build it with CAST, my Claude Code
+          agent architecture, and ship production education software at META
+          Solutions.
         </motion.p>
 
         {/* CTAs — primary neatline button + underlined secondary */}
@@ -130,12 +129,12 @@ export default function HeroSection() {
           >
             How I work with agents
           </Link>
-          <a
-            href="mailto:edward.kubiak.dev@gmail.com"
+          <Link
+            to="/contact"
             className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-primary"
           >
             Get in touch
-          </a>
+          </Link>
         </motion.div>
 
         {/* Availability — survey marker, no pulse */}

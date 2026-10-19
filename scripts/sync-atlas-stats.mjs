@@ -23,19 +23,22 @@ const outPath = path.join(root, "src", "data", "atlasStats.js");
 const CANONICAL_URL = "https://www.compute-atlas.com/api/stats";
 
 // Offline/first-run fallback. Bump alongside canonical when convenient.
-const FALLBACK = {
-  count: 1231,
-  states: 50,
-  operationalMw: 26519,
-  plannedMw: 313508,
-  underConstructionMw: 107471,
+export const FALLBACK = {
+  count: 2693,
+  states: 55,
+  operationalMw: 61063.7,
+  plannedMw: 491451.3,
+  underConstructionMw: 129514.9,
+  stateCodes: [
+    "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"
+  ],
 };
 
 // VERSION is now a fallback only — the live API returns edition.version,
 // which deriveAtlasStats() prefers when present. STACK/LICENSE are still
 // not returned by the API, so they stay hand-bumped constants (mirrors the
 // cast-desktop version default in sync-cast-stats.mjs).
-const VERSION = "v1.29.0";
+const VERSION = "v1.34.1";
 const STACK = "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel";
 const LICENSE = "MIT + CC BY 4.0";
 
@@ -82,13 +85,86 @@ function normalizeVersion(v) {
   return /^v/i.test(trimmed) ? `v${trimmed.slice(1)}` : `v${trimmed}`;
 }
 
+const US_STATES = new Set(
+  (
+    "AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT " +
+    "NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY"
+  ).split(" "),
+);
+const TERRITORIES = new Set(["AS", "GU", "MP", "PR", "VI", "UM"]);
+
+// The API's `states` is a jurisdiction count (50 states + DC + territories), so
+// "N states" is only true when derived from stateCodes. Without stateCodes we
+// take the conservative path (no state count, jurisdiction wording).
+function conservativeCoverage(raw) {
+  return {
+    states: null,
+    hasDc: false,
+    territories: 0,
+    jurisdictions: raw.states,
+    coverage: `${raw.states} U.S. jurisdictions`,
+  };
+}
+
+function deriveCoverage(raw) {
+  // Only trust stateCodes when it agrees with the reported count; the
+  // fallback < base < canonical merge can pair stale codes with a newer count.
+  if (!Array.isArray(raw.stateCodes) || raw.stateCodes.length !== raw.states) {
+    return conservativeCoverage(raw);
+  }
+  const codes = raw.stateCodes;
+  const states = codes.filter((c) => US_STATES.has(c)).length;
+  const hasDc = codes.includes("DC");
+  const territories = codes.filter((c) => TERRITORIES.has(c)).length;
+  const parts = [];
+  if (states > 0) parts.push(`${states} states`);
+  if (hasDc) parts.push("DC");
+  if (territories > 0) parts.push(`${territories} ${territories === 1 ? "territory" : "territories"}`);
+  if (parts.length === 0) return conservativeCoverage(raw);
+  const coverage =
+    parts.length <= 1 ? (parts[0] ?? "") : `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+  return { states, hasDc, territories, jurisdictions: codes.length, coverage };
+}
+
+const isNonNegNumber = (n) => typeof n === "number" && Number.isFinite(n) && n >= 0;
+
+// Pure — true when a raw stats object is safe to derive from. Whole-source
+// validation (rather than per-key merging) keeps stale stateCodes from pairing
+// with a newer count.
+export function isValidRaw(raw) {
+  if (raw === null || typeof raw !== "object" || Array.isArray(raw)) return false;
+  if (!Number.isInteger(raw.count) || raw.count <= 0) return false;
+  if (!Number.isInteger(raw.states) || raw.states <= 0) return false;
+  if (!["operationalMw", "plannedMw", "underConstructionMw"].every((k) => isNonNegNumber(raw[k]))) {
+    return false;
+  }
+  if (raw.stateCodes !== undefined) {
+    if (!Array.isArray(raw.stateCodes)) return false;
+    const codes = raw.stateCodes;
+    if (codes.length !== raw.states) return false;
+    if (!codes.every((c) => typeof c === "string" && (US_STATES.has(c) || c === "DC" || TERRITORIES.has(c)))) {
+      return false;
+    }
+    if (new Set(codes).size !== codes.length) return false;
+  }
+  return true;
+}
+
+// Pure — the first of canonical, base, fallback that passes isValidRaw.
+// Returns { source, raw }; fallback is the last resort and always wins by default.
+export function selectSource(canonical, base, fallback) {
+  if (isValidRaw(canonical)) return { source: "canonical", raw: canonical };
+  if (isValidRaw(base)) return { source: "base", raw: base };
+  return { source: "fallback", raw: fallback };
+}
+
 // Pure — derives the curated bundle baked into src/data/atlasStats.js from the
 // raw API shape (count/states/*Mw[/edition.version]). No side effects; safe to
 // import for tests.
 export function deriveAtlasStats(raw) {
   return {
     facilities: raw.count,
-    states: raw.states,
+    ...deriveCoverage(raw),
     operationalMw: Math.round(raw.operationalMw),
     operationalGw: round1(raw.operationalMw / 1000),
     underConstructionMw: Math.round(raw.underConstructionMw),
@@ -112,14 +188,14 @@ async function main() {
 
   // 2. Canonical — authoritative, best-effort.
   const canonical = await fetchJson(CANONICAL_URL);
-  if (canonical) {
-    console.log("[sync-atlas-stats] pulled canonical: count", canonical.count, "· states", canonical.states);
-  } else {
-    console.warn("[sync-atlas-stats] canonical unreachable — using existing public/atlas-stats.json");
+  // 3. Select one whole valid source (canonical > base > fallback).
+  const { source, raw: merged } = selectSource(canonical, base, FALLBACK);
+  if (canonical && source !== "canonical") {
+    console.warn("[sync-atlas-stats] canonical fetched but failed validation — rejected");
+  } else if (!canonical) {
+    console.warn("[sync-atlas-stats] canonical unreachable");
   }
-
-  // 3. Merge (fallback < base < canonical).
-  const merged = { ...FALLBACK, ...base, ...(canonical || {}) };
+  console.log("[sync-atlas-stats] using source:", source, "· count", merged.count, "· states", merged.states);
 
   // Refresh the runtime file so dev + the committed snapshot track canonical.
   fs.writeFileSync(statsPath, JSON.stringify(merged, null, 2) + "\n");

@@ -1,0 +1,8 @@
+# Copy to .dev.vars (gitignored) for `npx wrangler dev`.
+RESEND_API_KEY=re_placeholder
+CONTACT_TO_EMAIL=you@example.com
+# Cloudflare's always-pass test secret
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+ALLOWED_ORIGINS=https://edwardkubiak.com,http://localhost:5173
+# Lets the Worker run without the rate-limit binding locally. Never set in production.
+DEV=true

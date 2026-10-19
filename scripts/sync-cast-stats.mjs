@@ -26,14 +26,14 @@ const CANONICAL_URL =
 
 // Offline/first-run fallback. Bump alongside canonical when convenient.
 const FALLBACK = {
-  version: "v10.0.0",
+  version: "v10.6.1",
   agents: 27,
-  tests: 3323,
+  tests: 4767,
   packages: 9,
   commands: 21,
-  skills: 18,
-  tables: 42,
-  updated: "2026-08-27",
+  skills: 19,
+  tables: 46,
+  updated: "2026-10-15",
 };
 
 // Fields baked into the JS bundle (curated — keeps castStats.js clean).

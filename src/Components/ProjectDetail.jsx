@@ -178,6 +178,30 @@ function ProjectDetail() {
           </motion.div>
         )}
 
+        {/* Cited by — external projects that use this one's data (showcase-only) */}
+        {project.citedBy && project.citedBy.length > 0 && (
+          <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.2 }} className="mt-6 p-8 card">
+            <Label as="h2" className="mb-4">Cited by</Label>
+            <ul className="space-y-5">
+              {project.citedBy.map((c) => (
+                <li key={c.url} className="border-t border-border pt-3">
+                  <a
+                    href={c.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${c.name} (opens in new tab)`}
+                    className="inline-flex items-center gap-2 font-display text-lg font-semibold text-foreground transition-colors hover:text-primary"
+                  >
+                    {c.name}
+                    <ExternalLink size={14} aria-hidden="true" />
+                  </a>
+                  <p className="mt-1 leading-relaxed text-muted-foreground">{c.detail}</p>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
         {/* Tech stack */}
         {project.tech && project.tech.length > 0 && (
           <motion.div variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.25 }} className="mt-6 p-8 card">

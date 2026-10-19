@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { coordinateOverline } from "../data/place";
 import { fadeUp, slideInLeft, staggerItem } from "../utils/motion";
-import { MapPin, Briefcase, Heart, Mountain, GitBranch } from "lucide-react";
+import { Compass, Briefcase, GitBranch } from "lucide-react";
 import GetInTouch from "./ui/GetInTouch";
 import PageWrapper from "./ui/PageWrapper";
 import Reveal from "./ui/Reveal";
@@ -114,14 +114,14 @@ const About = () => {
           >
             <div className="flex items-start gap-4">
               <div className="p-2 rounded bg-water/10 text-water shrink-0 mt-1">
-                <MapPin size={20} aria-hidden="true" />
+                <Compass size={20} aria-hidden="true" />
               </div>
               <div>
                 <h2 className="font-display text-xl font-semibold text-foreground mb-3">
-                  Columbus, Ohio
+                  How I Work
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Based in Columbus, I gravitate toward teams that value craft,
+                  I gravitate toward teams that value craft,
                   ship iteratively, and never stop learning. I believe the best
                   software emerges from understanding the humans who depend on
                   it — not just the stack behind it.
@@ -188,56 +188,6 @@ const About = () => {
               <RadarChart data={TECH_DATA} />
             </Reveal>
           )}
-
-          <div className="grid sm:grid-cols-2 gap-6">
-            <Reveal
-              variants={staggerItem}
-              transition={{ duration: 0.5 }}
-              whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-              className="neatline bg-card p-6 sm:p-8 hover:border-primary/50 transition-colors duration-300"
-            >
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded bg-terra/10 text-terra shrink-0 mt-1">
-                  <Heart size={20} aria-hidden="true" />
-                </div>
-                <div>
-                  <h2 className="font-display text-xl font-semibold text-foreground mb-3">
-                    Family
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-sm">
-                    Proud father of two. I met my wife Jayne at Ohio University
-                    in 2006 — twenty years later, we&apos;re still exploring
-                    together.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal
-              variants={staggerItem}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              whileHover={reducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-              className="neatline bg-card p-6 sm:p-8 hover:border-primary/50 transition-colors duration-300"
-            >
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded bg-primary/10 text-primary shrink-0 mt-1">
-                  <Mountain size={20} aria-hidden="true" />
-                </div>
-                <div>
-                  <h2 className="font-display text-xl font-semibold text-foreground mb-3">
-                    Trail Runner
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-sm">
-                    I&apos;ve finished five 100-mile ultramarathons along with a
-                    handful of 50K to 100K races over the years. Long days on
-                    singletrack are where I think best. Mohican 100 ended in a
-                    DNF this year. Next up: Rim to River 100 in October —
-                    deep in training now.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-          </div>
 
           {/* Get in touch */}
           <GetInTouch />

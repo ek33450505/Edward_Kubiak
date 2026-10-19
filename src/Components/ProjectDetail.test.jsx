@@ -104,3 +104,33 @@ describe('CWS — the one shareable work URL', () => {
     });
   });
 });
+
+describe('ProjectDetail — citedBy', () => {
+  it('renders each citation as an external link on compute-atlas', () => {
+    renderProject('compute-atlas');
+    expect(
+      screen.getByRole('heading', { name: /^cited by$/i })
+    ).toBeInTheDocument();
+    const expected = {
+      'https://brockovichdatacenter.com': [/brockovich/i, 'compiled from Compute Atlas and Epoch AI'],
+      'https://powertothepeopleproject.com': [/power to the people/i, 'Compute Atlas open facility registry'],
+    };
+    Object.entries(expected).forEach(([href, [name, detail]]) => {
+      const link = screen.getByRole('link', {
+        name: new RegExp(`${name.source}.*\\(opens in new tab\\)`, 'i'),
+      });
+      expect(link).toHaveAttribute('href', href);
+      expect(link.closest('li')).toHaveTextContent(detail);
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
+    });
+  });
+
+  it('renders no Cited by block for a project without the field', () => {
+    const without = projects.find((p) => !p.citedBy);
+    renderProject(without.slug);
+    expect(
+      screen.queryByRole('heading', { name: /^cited by$/i })
+    ).not.toBeInTheDocument();
+  });
+});
