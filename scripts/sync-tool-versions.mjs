@@ -13,14 +13,18 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import https from "node:https";
 import { pathToFileURL } from "node:url";
+
+import { fetchJson } from "./lib/fetch-json.mjs";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const versionsPath = path.join(root, "public", "tool-versions.json");
 const outPath = path.join(root, "src", "data", "toolStats.js");
 
 const OWNER = "ek33450505";
+
+// TOOL_VERSIONS_API_BASE overrides the GitHub API origin (used by the truncated-body test).
+const API_BASE = process.env.TOOL_VERSIONS_API_BASE || "https://api.github.com";
 
 // Portfolio slug -> GitHub repo name.
 const REPOS = {
@@ -52,38 +56,6 @@ const FALLBACK = {
   "claude-code-dashboard": "v3.0.0",
 };
 
-function fetchJson(url, timeoutMs = 4000) {
-  return new Promise((resolve) => {
-    const headers = {
-      "User-Agent": "sync-tool-versions",
-      Accept: "application/vnd.github+json",
-    };
-    if (process.env.GITHUB_TOKEN) {
-      headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-    }
-    const req = https.get(url, { headers }, (res) => {
-      if (res.statusCode !== 200) {
-        res.resume();
-        return resolve(null);
-      }
-      let data = "";
-      res.on("data", (c) => (data += c));
-      res.on("end", () => {
-        try {
-          resolve(JSON.parse(data));
-        } catch {
-          resolve(null);
-        }
-      });
-    });
-    req.on("error", () => resolve(null));
-    req.setTimeout(timeoutMs, () => {
-      req.destroy();
-      resolve(null);
-    });
-  });
-}
-
 // Pure, testable — filters to semver-ish tag names (optionally "v"-prefixed)
 // and returns the numerically-highest, normalized to a "v" prefix. GitHub's
 // /tags array is NOT semver-sorted, so callers must not trust its order.
@@ -109,16 +81,37 @@ export function pickLatestSemver(tagNames) {
   return `v${top.major}.${top.minor}.${top.patch}`;
 }
 
+// Pure — the token is sent only to the real GitHub API origin, never to an
+// env-overridden TOOL_VERSIONS_API_BASE (which may be plain http or a foreign host).
+export function githubHeaders(url, token) {
+  const headers = {
+    "User-Agent": "sync-tool-versions",
+    Accept: "application/vnd.github+json",
+  };
+  let origin = null;
+  try {
+    origin = new URL(url).origin;
+  } catch { /* invalid URL: no token */ }
+  if (token && origin === "https://api.github.com") {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  return headers;
+}
+
+function fetchGithub(url) {
+  return fetchJson(url, { idleMs: 4000, deadlineMs: 15000, headers: githubHeaders(url, process.env.GITHUB_TOKEN) });
+}
+
 // Best-effort per-repo resolution — never throws. Tries releases/latest
 // first, falls back to /tags, then null (caller falls back to snapshot/FALLBACK).
 async function resolveVersion(repo) {
-  const latest = await fetchJson(`https://api.github.com/repos/${OWNER}/${repo}/releases/latest`);
+  const latest = await fetchGithub(`${API_BASE}/repos/${OWNER}/${repo}/releases/latest`);
   if (latest && typeof latest.tag_name === "string") {
     const normalized = pickLatestSemver([latest.tag_name]);
     if (normalized) return normalized;
   }
 
-  const tags = await fetchJson(`https://api.github.com/repos/${OWNER}/${repo}/tags`);
+  const tags = await fetchGithub(`${API_BASE}/repos/${OWNER}/${repo}/tags`);
   if (Array.isArray(tags)) {
     const names = tags.map((t) => t && t.name).filter(Boolean);
     const picked = pickLatestSemver(names);

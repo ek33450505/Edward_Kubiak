@@ -17,8 +17,9 @@ export function fetchJson(url, { idleMs = 8000, deadlineMs = 15000, maxBytes = 5
       resolve(value);
     };
     deadline = setTimeout(() => finish(null), deadlineMs);
-    const get = url.startsWith("http:") ? http.get : https.get;
     try {
+      const { protocol } = new URL(url);
+      const get = protocol.toLowerCase() === "http:" ? http.get : https.get;
       req = get(url, { headers }, (res) => {
         if (res.statusCode !== 200) {
           res.resume();
