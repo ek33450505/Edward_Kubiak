@@ -131,6 +131,7 @@ Single dark graphite theme — **no light mode, no toggle**. Restraint is the ba
 - `/now` — What I'm working on this week
 - `/practice` — How I work with agents: the loop, the review budget, dated case studies
 - `/contact` — How to reach me (LinkedIn, GitHub)
+- `/accessibility` — Accessibility statement and how it's tested
 - `/*` — 404 page
 
 ## Contact

@@ -9,6 +9,10 @@ describe("generate-sitemap STATIC_ROUTES / ROUTE_META parity", () => {
     expect(sitemapPaths).toEqual(routeMetaPaths);
   });
 
+  it("includes /accessibility", () => {
+    expect(STATIC_ROUTES.map((r) => r.path)).toContain("/accessibility");
+  });
+
   it("gives every route a non-empty sources array", () => {
     for (const route of STATIC_ROUTES) {
       expect(Array.isArray(route.sources)).toBe(true);

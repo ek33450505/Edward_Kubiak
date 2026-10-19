@@ -33,6 +33,22 @@ describe("CommandPalette", () => {
     await user.click(await screen.findByText("Contact"));
     expect(screen.getByTestId("where")).toHaveTextContent("/contact");
   });
+
+  it("has an Accessibility entry that navigates to /accessibility", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <CommandPaletteProvider>
+          <Opener />
+          <Where />
+          <CommandPalette />
+        </CommandPaletteProvider>
+      </MemoryRouter>,
+    );
+    await user.click(screen.getByRole("button", { name: "open" }));
+    await user.click(await screen.findByText("Accessibility"));
+    expect(screen.getByTestId("where")).toHaveTextContent("/accessibility");
+  });
 });
 
 function renderPalette() {

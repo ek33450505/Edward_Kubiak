@@ -24,6 +24,7 @@ const Resume = lazy(() => import("./Components/Resume"));
 const Now = lazy(() => import("./Components/Now"));
 const Practice = lazy(() => import("./Components/Practice"));
 const Contact = lazy(() => import("./Components/Contact"));
+const Accessibility = lazy(() => import("./Components/Accessibility"));
 const CommandPalette = lazy(() => import("./Components/CommandPalette"));
 const navLinks = [
   { to: "/projects", label: "Work" },
@@ -219,6 +220,7 @@ function AnimatedRoutes() {
             <Route path="/now" element={<Now />} />
             <Route path="/practice" element={<Practice />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/accessibility" element={<Accessibility />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
@@ -252,14 +254,14 @@ export function AppShell() {
 
           {/* Footer — colophon strip */}
           <footer className="border-t border-border py-8">
-            <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-muted-foreground">
+            <div className="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-muted-foreground">
               <div className="flex flex-col gap-1">
                 <p className="text-sm">&copy; {new Date().getFullYear()} Edward Kubiak</p>
                 <p className="font-mono text-[11px] tracking-wide text-muted-foreground">
                   CAST {CAST_STATS.version} · Compute Atlas {ATLAS_STATS.version} · stats synced {CAST_STATS.updated}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Link
                   to="/contact"
                   className="inline-flex items-center min-h-11 px-2 font-mono text-[11px] uppercase tracking-[0.18em] hover:text-primary transition-colors"
@@ -271,6 +273,12 @@ export function AppShell() {
                   className="inline-flex items-center min-h-11 px-2 font-mono text-[11px] uppercase tracking-[0.18em] hover:text-primary transition-colors"
                 >
                   Now
+                </Link>
+                <Link
+                  to="/accessibility"
+                  className="inline-flex items-center min-h-11 px-2 font-mono text-[11px] uppercase tracking-[0.18em] hover:text-primary transition-colors"
+                >
+                  Accessibility
                 </Link>
                 <IconButton
                   href="https://github.com/ek33450505"

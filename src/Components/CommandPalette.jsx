@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Hash, Workflow } from "lucide-react";
+import { Home, User, FolderOpen, FileText, Mail, Clock, ExternalLink, Hash, Workflow, PersonStanding } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import { useCommandPalette } from "./CommandPaletteContext";
 
@@ -25,6 +25,7 @@ const navigateCommands = [
   { id: "resume", label: "Resume", icon: FileText, to: "/resume" },
   { id: "now", label: "Now", icon: Clock, to: "/now" },
   { id: "contact", label: "Contact", icon: Mail, to: "/contact" },
+  { id: "accessibility", label: "Accessibility", icon: PersonStanding, to: "/accessibility" },
 ];
 
 // Jump-to-section commands — navigate to /projects with a hash anchor
