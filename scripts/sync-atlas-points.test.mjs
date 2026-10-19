@@ -16,6 +16,8 @@ import {
   withCacheBust,
   CONUS_ANCHORS,
   isValidPayload,
+  buildSummary,
+  summaryModule,
 } from "./sync-atlas-points.mjs";
 
 const pt = (id, lat, lon, status = "operational") => ({ id, lat, lon, status });
@@ -286,5 +288,34 @@ describe("inset rectangles vs CONUS anchors", () => {
         expect(p[0] >= r.x0 && p[0] <= r.x1 && p[1] >= r.y0 && p[1] <= r.y1).toBe(false);
       }
     }
+  });
+});
+
+describe("buildSummary", () => {
+  it("counts every status, sums to count, and keeps zero-count keys", () => {
+    const payload = buildPayload(
+      [pt(1, 39, -98), pt(2, 40, -99, "under_construction"), pt(3, 41, -97, "operational")],
+      { asOf: "2026-01-01" },
+    );
+    const sum = buildSummary(payload);
+    expect(Object.keys(sum.byStatus)).toEqual(STATUSES);
+    expect(sum.byStatus).toMatchObject({ operational: 2, under_construction: 1, permitted: 0, proposed: 0, cancelled: 0 });
+    expect(Object.values(sum.byStatus).reduce((a, b) => a + b, 0)).toBe(sum.count);
+    expect(sum).toMatchObject({ asOf: "2026-01-01", count: 3, w: W, h: H });
+  });
+
+  it("emits an importable-looking module with the ATLAS_POINTS export", () => {
+    const text = summaryModule(buildSummary(buildPayload([pt(1, 39, -98)], { asOf: "2026-01-01" })));
+    expect(text).toContain("AUTO-GENERATED");
+    expect(text).toContain("export const ATLAS_POINTS = {");
+  });
+});
+
+describe("committed generated files", () => {
+  it("src/data/atlasPoints.js matches buildSummary(public/atlas-points.json)", async () => {
+    const fs = await import("node:fs");
+    const { ATLAS_POINTS } = await import("../src/data/atlasPoints.js");
+    const json = JSON.parse(fs.readFileSync(`${process.cwd()}/public/atlas-points.json`, "utf8"));
+    expect(ATLAS_POINTS).toEqual(buildSummary(json));
   });
 });
