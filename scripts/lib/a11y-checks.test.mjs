@@ -9,6 +9,8 @@ import {
   isFocusObscured,
   resolveRoutes,
   summarize,
+  trailingSlashFailures,
+  trailingSlashRoutes,
 } from "./a11y-checks.mjs";
 
 describe("buildRoutes", () => {
@@ -233,5 +235,62 @@ describe("summarize", () => {
   });
   it("exits 2 on a harness error", () => {
     expect(summarize({ harnessError: "boom", routes: [] }).exitCode).toBe(2);
+  });
+});
+
+describe("trailingSlashFailures", () => {
+  const ok = { h1Found: true, title: "About", navLinkCount: 5, currentLinks: ["/about"], navHasRoute: true };
+
+  it("passes a correct snapshot", () => {
+    expect(trailingSlashFailures(ok, "/about", "About")).toEqual([]);
+  });
+
+  it("names the route on a wrong title", () => {
+    const out = trailingSlashFailures({ ...ok, title: "Edward Kubiak" }, "/about", "About");
+    expect(out).toHaveLength(1);
+    expect(out[0]).toContain("/about/");
+    expect(out[0]).toContain("title");
+  });
+
+  it("fails when the nav route is missing aria-current", () => {
+    expect(trailingSlashFailures({ ...ok, currentLinks: [] }, "/about", "About")).toHaveLength(1);
+  });
+
+  it("fails when two links are current", () => {
+    expect(trailingSlashFailures({ ...ok, currentLinks: ["/about", "/"] }, "/about", "About")).toHaveLength(1);
+  });
+
+  it("fails when the wrong link is current", () => {
+    expect(trailingSlashFailures({ ...ok, currentLinks: ["/"] }, "/about", "About")).toHaveLength(1);
+  });
+
+  it("fails when the nav selector matched no links, even for a route outside the nav", () => {
+    const none = { h1Found: true, title: "About", navLinkCount: 0, currentLinks: [], navHasRoute: false };
+    const out = trailingSlashFailures(none, "/about", "About");
+    expect(out).toHaveLength(1);
+    expect(out[0]).toContain("matched nothing");
+    expect(trailingSlashFailures({ ...none, navLinkCount: undefined }, "/about", "About")).toHaveLength(1);
+  });
+
+  it("reports a render failure instead of a title mismatch", () => {
+    const out = trailingSlashFailures({ ...ok, h1Found: false, title: "" }, "/about", "About");
+    expect(out).toEqual(["/about/: page did not render (no h1)"]);
+  });
+
+  it("accepts a route outside the nav with no current link, rejects one with a current link", () => {
+    const off = { h1Found: true, title: "A11y", navLinkCount: 5, currentLinks: [], navHasRoute: false };
+    expect(trailingSlashFailures(off, "/accessibility", "A11y")).toEqual([]);
+    expect(trailingSlashFailures({ ...off, currentLinks: ["/"] }, "/accessibility", "A11y")).toHaveLength(1);
+  });
+});
+
+describe("trailingSlashRoutes", () => {
+  it("excludes the root", () => {
+    expect(trailingSlashRoutes({ "/": {}, "/about": {} })).toEqual({ routes: ["/about"], failures: [] });
+  });
+
+  it("treats an empty list as a failure", () => {
+    expect(trailingSlashRoutes({ "/": {} }).failures).toHaveLength(1);
+    expect(trailingSlashRoutes({}).failures).toHaveLength(1);
   });
 });

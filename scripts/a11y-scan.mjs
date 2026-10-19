@@ -26,6 +26,8 @@ import {
   isFocusObscured,
   resolveRoutes,
   summarize,
+  trailingSlashFailures,
+  trailingSlashRoutes,
 } from "./lib/a11y-checks.mjs";
 
 const require = createRequire(import.meta.url);
@@ -309,6 +311,26 @@ async function probeCommandPalette(page, base) {
   return failures;
 }
 
+// Pages serves /about as /about/ after a 301, so the slashed form is what visitors see.
+async function probeTrailingSlash(page, base, routeMeta) {
+  const { routes, failures } = trailingSlashRoutes(routeMeta);
+  for (const route of routes) {
+    const { h1Found } = await load(page, base, `${route}/`, DESKTOP);
+    const snapshot = await page.evaluate((r) => {
+      const links = [...document.querySelectorAll('nav[aria-label="Primary"] a')];
+      const path = (a) => new URL(a.href).pathname;
+      return {
+        title: document.title,
+        navLinkCount: links.length,
+        currentLinks: links.filter((a) => a.getAttribute("aria-current") === "page").map(path),
+        navHasRoute: links.some((a) => path(a) === r),
+      };
+    }, route);
+    failures.push(...trailingSlashFailures({ ...snapshot, h1Found }, route, routeMeta[route].title));
+  }
+  return failures;
+}
+
 async function probeMobileMenu(page, base) {
   const failures = [];
   await load(page, base, "/", MOBILE);
@@ -461,6 +483,7 @@ async function main() {
         await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
         results.probes.push({ name: "command-palette", failures: await probeCommandPalette(page, base) });
         results.probes.push({ name: "mobile-menu", failures: await probeMobileMenu(page, base) });
+        results.probes.push({ name: "trailing-slash", failures: await probeTrailingSlash(page, base, ROUTE_META) });
       } finally {
         await page.close();
       }

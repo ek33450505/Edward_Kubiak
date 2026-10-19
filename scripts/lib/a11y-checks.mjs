@@ -255,3 +255,39 @@ export function summarize(results) {
   }
   return { failures, exitCode: failures.length > 0 ? 1 : 0 };
 }
+
+/**
+ * Trailing-slash probe verdict for one route. GitHub Pages 301s `/about` to `/about/`, so
+ * visitors land on the slashed URL; title and nav state must match the unslashed page.
+ * snapshot: { h1Found, title, navLinkCount (links the Primary-nav selector matched),
+ * currentLinks: string[] (hrefs of Primary-nav links with aria-current="page"),
+ * navHasRoute: boolean (the Primary nav links to this route) }.
+ * A route absent from the nav must have NO current link; one present must have exactly itself.
+ */
+export function trailingSlashFailures(snapshot, route, expectedTitle) {
+  if (!snapshot.h1Found) return [`${route}/: page did not render (no h1)`];
+  const out = [];
+  if (snapshot.title !== expectedTitle) {
+    out.push(`${route}/: title "${snapshot.title}" !== "${expectedTitle}"`);
+  }
+  // Zero matched links would make navHasRoute false everywhere and silently disable the nav check.
+  if (!(snapshot.navLinkCount > 0)) {
+    out.push(`${route}/: Primary nav has no links, selector nav[aria-label="Primary"] a matched nothing`);
+    return out;
+  }
+  const current = snapshot.currentLinks ?? [];
+  if (snapshot.navHasRoute) {
+    if (current.length !== 1 || current[0] !== route) {
+      out.push(`${route}/: nav aria-current should be exactly [${route}], got [${current.join(", ")}]`);
+    }
+  } else if (current.length > 0) {
+    out.push(`${route}/: nav has no ${route} link but marks [${current.join(", ")}] current`);
+  }
+  return out;
+}
+
+/** Routes to probe with a trailing slash: every meta route except "/". Empty is a failure, not a pass. */
+export function trailingSlashRoutes(routeMeta) {
+  const routes = Object.keys(routeMeta).filter((r) => r !== "/");
+  return routes.length > 0 ? { routes, failures: [] } : { routes, failures: ["no routes to probe: empty route list would pass vacuously"] };
+}
