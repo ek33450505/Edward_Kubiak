@@ -1,5 +1,5 @@
 {
-  "count": 2693,
+  "count": 2724,
   "states": 55,
   "includesDc": true,
   "stateCodes": [
@@ -59,12 +59,12 @@
     "WV",
     "WY"
   ],
-  "operationalMw": 61063.7,
-  "plannedMw": 491451.3,
+  "operationalMw": 61081.4,
+  "plannedMw": 491889.3,
   "underConstructionMw": 129514.9,
-  "activeCount": 2542,
-  "operationalMwReportingCount": 580,
-  "plannedMwReportingCount": 878,
+  "activeCount": 2571,
+  "operationalMwReportingCount": 584,
+  "plannedMwReportingCount": 886,
   "underConstructionCount": 327,
   "underConstructionMwReportingCount": 230,
   "edition": {
