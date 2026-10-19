@@ -1,6 +1,6 @@
 import { staggerItem } from "../../utils/motion";
 import { CAST_STATS, CAST_ECOSYSTEM } from "../../data/castStats";
-import SectionHeader from "../ui/SectionHeader";
+import SectionHead from "./SectionHead";
 import PageWrapper from "../ui/PageWrapper";
 import Reveal from "../ui/Reveal";
 
@@ -13,12 +13,12 @@ const competencies = [
   {
     title: "React Specialist",
     description:
-      "Production React apps, from greenfield React 19 builds to AngularJS-to-React migrations",
+      "Production React apps, from greenfield React 19 builds to replacing end-of-life AngularJS",
   },
   {
-    title: "Legacy Modernization",
+    title: "Legacy Rewrites",
     description:
-      "Migrated CrossCheck from AngularJS to React for Ohio's school districts",
+      "Rebuilt CrossCheck as a React app, replacing an end-of-life AngularJS 1.x system used by Ohio school districts",
   },
   {
     title: "AI / LLM Integration",
@@ -29,33 +29,30 @@ const competencies = [
 
 export default function Competencies() {
   return (
-    <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
-    <section
-      id="core-competencies"
-      aria-labelledby="core-competencies-heading"
-    >
-      <Reveal margin="-60px" className="mb-8">
-        <SectionHeader id="core-competencies-heading" title="Core Competencies" />
-      </Reveal>
+    <PageWrapper width="6xl" className="w-full pb-20 md:pb-24">
+      <section id="core-competencies" aria-labelledby="core-competencies-heading">
+        <Reveal margin="-60px">
+          <SectionHead index="03" title="Core competencies" id="core-competencies-heading" />
+        </Reveal>
 
-      <div className="flex flex-col sm:flex-row sm:divide-x sm:divide-border/40 gap-6 sm:gap-0">
-        {competencies.map((item, i) => (
-          <Reveal
-            key={item.title}
-            variants={staggerItem}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="sm:px-6 first:sm:pl-0 last:sm:pr-0 flex-1"
-          >
-            <h3 className="font-mono text-xs tracking-[0.2em] uppercase text-primary mb-1">
-              {item.title}
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {item.description}
-            </p>
-          </Reveal>
-        ))}
-      </div>
-    </section>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {competencies.map((item, i) => (
+            <Reveal
+              key={item.title}
+              variants={staggerItem}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="card p-5"
+            >
+              <h3 className="font-mono text-xs uppercase tracking-[0.15em] text-primary">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {item.description}
+              </p>
+            </Reveal>
+          ))}
+        </div>
+      </section>
     </PageWrapper>
   );
 }

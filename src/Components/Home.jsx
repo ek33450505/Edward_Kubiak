@@ -8,13 +8,13 @@ import PageWrapper from "./ui/PageWrapper";
 
 const Home = () => {
   return (
-    <div className="min-h-page flex flex-col justify-center relative overflow-hidden">
+    <div className="min-h-page flex flex-col">
       <HeroSection />
-      <Competencies />
       <FeaturedWork />
       <CurrentlyBuilding />
+      <Competencies />
       <CastStats />
-      <PageWrapper width="6xl" className="pb-20 w-full relative z-[2]">
+      <PageWrapper width="6xl" className="w-full pb-20 md:pb-24">
         <GetInTouch />
       </PageWrapper>
     </div>

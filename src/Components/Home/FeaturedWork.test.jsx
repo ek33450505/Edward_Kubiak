@@ -22,7 +22,7 @@ function renderFeaturedWork() {
 describe('FeaturedWork — section structure', () => {
   it('renders a "Featured Work" section heading', () => {
     renderFeaturedWork();
-    // SectionHeader renders <h2>Featured Work</h2> inside the section
+    // SectionHead renders <h2>Featured Work</h2> inside the section
     expect(screen.getByText(/featured work/i)).toBeInTheDocument();
   });
 
@@ -33,13 +33,47 @@ describe('FeaturedWork — section structure', () => {
   });
 });
 
-describe('FeaturedWork — plate order', () => {
+describe('FeaturedWork — card order', () => {
   // Order is a deliberate editorial decision, not incidental: Compute Atlas is the
-  // lead plate (001) and CAST is second (002). Both the plate number and the motion
-  // delay are per-block literals in the component, so a careless block swap silently
-  // produces two plates numbered 001. This is the one place order is pinned on
-  // purpose — see CLAUDE.md "Featured Work plate order".
-  it('renders Compute Atlas as the lead plate, ahead of CAST', () => {
+  // lead card (01) and CAST is second (02). Both the index and the motion delay are
+  // per-block literals in the component, so a careless block swap silently produces
+  // two cards numbered 01. This is the one place order is pinned on purpose.
+  it('renders no cartographic wording', () => {
+    const { container } = renderFeaturedWork();
+    expect(container.textContent).not.toMatch(/plate/i);
+  });
+
+  it('labels the lead card 01 and the CAST card 02, in that order', () => {
+    const { container } = renderFeaturedWork();
+    const heads = Array.from(container.querySelectorAll('.panel-head')).map((h) => h.textContent);
+    expect(heads[0]).toMatch(/^01 · Live product/i);
+    expect(heads[1]).toMatch(/^02 · Development architecture/i);
+  });
+
+  it('links the Compute Atlas "Cited by" sources as safe external links', () => {
+    renderFeaturedWork();
+    const cited = screen
+      .getAllByRole('link')
+      .filter((l) => /opens in new tab/i.test(l.getAttribute('aria-label') ?? ''))
+      .filter((l) => /brockovichdatacenter\.com|powertothepeopleproject\.com/.test(l.href));
+    expect(cited).toHaveLength(2);
+    cited.forEach((l) => {
+      expect(l).toHaveAttribute('target', '_blank');
+      expect(l.rel).toContain('noopener');
+      expect(l.rel).toContain('noreferrer');
+    });
+  });
+
+  it('serves the Compute Atlas screenshot with webp source, png fallback, and alt text', () => {
+    const { container } = renderFeaturedWork();
+    const img = screen.getByRole('img', { name: /map of U\.S\. data centers/i });
+    expect(img).toHaveAttribute('src', '/media/compute-atlas.png');
+    expect(img).toHaveAttribute('width', '1600');
+    expect(img).toHaveAttribute('height', '1000');
+    expect(container.querySelector('source[srcset="/media/compute-atlas.webp"]')).toBeInTheDocument();
+  });
+
+  it('renders Compute Atlas as the lead card, ahead of CAST', () => {
     renderFeaturedWork();
     const slugs = screen
       .getAllByRole('link')
