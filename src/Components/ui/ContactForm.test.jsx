@@ -325,6 +325,105 @@ describe("ContactForm hardening", () => {
   });
 });
 
+describe("ContactForm widget/token desync", () => {
+  afterEach(() => vi.useRealTimers());
+
+  it("adopts the widget's response when its callback never reaches the form", () => {
+    vi.useFakeTimers();
+    const api = installTurnstile({ autoToken: false });
+    api.getResponse = vi.fn(() => "tok");
+    render(<ContactForm />);
+    expect(submit()).toBeDisabled();
+    act(() => vi.advanceTimersByTime(1000));
+    expect(submit()).toBeEnabled();
+    expect(api.getResponse).toHaveBeenCalledWith("widget-1");
+  });
+
+  it("recovers when a stale error callback clears the token of a passed widget", () => {
+    vi.useFakeTimers();
+    const api = installTurnstile();
+    api.getResponse = vi.fn(() => "tok");
+    render(<ContactForm />);
+    expect(submit()).toBeEnabled();
+    act(() => api.opts["error-callback"]());
+    expect(submit()).toBeDisabled();
+    act(() => vi.advanceTimersByTime(1000));
+    expect(submit()).toBeEnabled();
+  });
+
+  it("does not re-adopt the spent token after a submit and reset", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const api = installTurnstile();
+    let live = "tok";
+    api.getResponse = vi.fn(() => live);
+    globalThis.fetch.mockReturnValue(jsonResponse(500, {}));
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    render(<ContactForm />);
+    await fill(user);
+    await user.click(submit());
+    await waitFor(() => expect(api.reset).toHaveBeenCalled());
+    act(() => vi.advanceTimersByTime(2000));
+    expect(submit()).toBeDisabled();
+    live = "tok-2";
+    act(() => vi.advanceTimersByTime(1000));
+    expect(submit()).toBeEnabled();
+  });
+
+  it("stops polling once a token is adopted", () => {
+    vi.useFakeTimers();
+    const api = installTurnstile({ autoToken: false });
+    api.getResponse = vi.fn(() => "tok");
+    render(<ContactForm />);
+    act(() => vi.advanceTimersByTime(1000));
+    const calls = api.getResponse.mock.calls.length;
+    expect(calls).toBeGreaterThan(0);
+    act(() => vi.advanceTimersByTime(5000));
+    expect(api.getResponse.mock.calls.length).toBe(calls);
+  });
+
+  it("clears its timer on unmount", () => {
+    vi.useFakeTimers();
+    const api = installTurnstile({ autoToken: false });
+    api.getResponse = vi.fn(() => undefined);
+    const { unmount } = render(<ContactForm />);
+    expect(vi.getTimerCount()).toBeGreaterThan(0);
+    unmount();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("does not read the widget before one has been rendered", () => {
+    vi.useFakeTimers();
+    render(<ContactForm />); // script injected, never loads: no widget id
+    window.turnstile = { getResponse: vi.fn(() => "tok"), render: vi.fn(), remove: vi.fn(), reset: vi.fn() };
+    act(() => vi.advanceTimersByTime(3000));
+    expect(window.turnstile.getResponse).not.toHaveBeenCalled();
+    expect(submit()).toBeDisabled();
+  });
+
+  it("does not poll after a successful send", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const api = installTurnstile();
+    api.getResponse = vi.fn(() => "tok-2");
+    globalThis.fetch.mockReturnValue(jsonResponse(200, { ok: true }));
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    render(<ContactForm />);
+    await fill(user);
+    await user.click(submit());
+    await screen.findByText("Message sent");
+    act(() => vi.advanceTimersByTime(3000));
+    expect(api.getResponse).not.toHaveBeenCalled();
+  });
+
+  it("stays disabled while the widget has no response", () => {
+    vi.useFakeTimers();
+    const api = installTurnstile({ autoToken: false });
+    api.getResponse = vi.fn(() => undefined);
+    render(<ContactForm />);
+    act(() => vi.advanceTimersByTime(2000));
+    expect(submit()).toBeDisabled();
+  });
+});
+
 describe("index.html CSP", () => {
   const csp = html.match(/Content-Security-Policy"\s+content="([^"]+)"/)[1];
   const directive = (name) => csp.split(";").map((d) => d.trim()).find((d) => d.startsWith(`${name} `));
