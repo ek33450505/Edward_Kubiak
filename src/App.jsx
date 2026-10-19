@@ -22,6 +22,7 @@ const ProjectDetail = lazy(() => import("./Components/ProjectDetail"));
 const Resume = lazy(() => import("./Components/Resume"));
 const Now = lazy(() => import("./Components/Now"));
 const Practice = lazy(() => import("./Components/Practice"));
+const Contact = lazy(() => import("./Components/Contact"));
 const CommandPalette = lazy(() => import("./Components/CommandPalette"));
 const navLinks = [
   { to: "/about", label: "About" },
@@ -216,6 +217,7 @@ function AnimatedRoutes() {
             <Route path="/resume" element={<Resume />} />
             <Route path="/now" element={<Now />} />
             <Route path="/practice" element={<Practice />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

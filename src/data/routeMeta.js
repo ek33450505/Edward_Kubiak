@@ -32,6 +32,12 @@ export const ROUTE_META = {
       "What Edward Kubiak is building, learning, and running right now — CAST, Compute Atlas, and AI agent-reliability tooling. Updated regularly.",
     canonical: "/now/",
   },
+  "/contact": {
+    title: "Contact — Edward Kubiak",
+    description:
+      "Contact Edward Kubiak, full stack developer and AI systems engineer, about work, projects or collaboration. Send a message through the form.",
+    canonical: "/contact/",
+  },
   "/practice": {
     title: "How I Work With Agents — Edward Kubiak",
     description:
