@@ -20,6 +20,7 @@ export default [
     ignores: [
       "dist/**",
       "node_modules/**",
+      "workers/**/node_modules/**",
       "public/**",
       "tmp/**",
       ".vite/**",
@@ -103,6 +104,22 @@ export default [
         ecmaVersion: "latest",
         sourceType: "module",
       },
+    },
+  },
+
+  // Cloudflare Worker source — worker runtime globals; its tests/config get Node globals
+  {
+    files: ["workers/**/src/**/*.js"],
+    languageOptions: {
+      globals: { ...globals.worker },
+      parserOptions: { ecmaVersion: "latest", sourceType: "module" },
+    },
+  },
+  {
+    files: ["workers/**/test/**/*.js", "workers/**/*.config.js"],
+    languageOptions: {
+      globals: { ...globals.node },
+      parserOptions: { ecmaVersion: "latest", sourceType: "module" },
     },
   },
 

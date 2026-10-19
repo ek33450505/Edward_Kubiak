@@ -1,0 +1,15 @@
+{
+  "name": "ek-contact",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "test": "vitest run",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "vitest": "5.0.5",
+    "wrangler": "4.151.2"
+  }
+}
