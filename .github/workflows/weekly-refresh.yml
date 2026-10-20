@@ -1,0 +1,490 @@
+name: Weekly data refresh
+
+# Refreshes the committed data feeds once a week and, when a fail-closed script
+# gate (scripts/refresh-gate.mjs) says the diff is data-only and within bounds,
+# fast-forwards main. Two jobs split privilege: `build` runs npm dependencies
+# with a read-only token; `publish` holds the write token and runs only trusted
+# code from this commit (no npm install). PDFs are NOT refreshed here: their
+# bytes cannot be validated safely, so deploy.yml renders them fresh instead.
+#
+# Modes (workflow_dispatch `mode`; schedule = live):
+#   dry-run  sync + gates + gate verdict, nothing pushed (default for manual runs)
+#   live     push chore/weekly-refresh, open/update ONE PR, label needs-ed or merge
+#   probe-*  plant a known change after the syncs and assert the expected verdict;
+#            never pushes
+# Auto-merge is armed only when repo variable WEEKLY_REFRESH_AUTOMERGE == 'on'.
+
+on:
+  schedule:
+    - cron: '17 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'dry-run, live, or a probe'
+        type: choice
+        default: dry-run
+        options:
+          - dry-run
+          - live
+          - probe-quiet
+          - probe-feed-only
+          - probe-feed-plus-prose
+          - probe-facilities-drop
+
+permissions: {}
+
+# Live runs get their own group so a queued probe can never cancel a pending
+# scheduled run (GitHub drops the older PENDING run in a group).
+concurrency:
+  group: weekly-refresh-${{ github.event_name == 'schedule' && 'live' || inputs.mode }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    env:
+      MODE: ${{ github.event_name == 'schedule' && 'live' || inputs.mode }}
+    outputs:
+      material: ${{ steps.material.outputs.material }}
+    steps:
+      - name: Validate mode
+        run: |
+          case "$MODE" in
+            dry-run|live|probe-quiet|probe-feed-only|probe-feed-plus-prose|probe-facilities-drop)
+              echo "mode=$MODE" ;;
+            *) echo "::error::unknown mode '$MODE'"; exit 1 ;;
+          esac
+          # publish runs this ref's gate code beside a write token, and live
+          # pushes a branch based on it: every mode runs from main only.
+          if [[ "$GITHUB_REF" != refs/heads/main ]]; then
+            echo "::error::weekly-refresh runs from main only (got $GITHUB_REF)"; exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chrome (accessibility scan)
+        run: npx puppeteer browsers install chrome
+
+      # By path, never `npm run build`: prebuild also rewrites the tracked
+      # sitemap.xml / rss.xml, which are not data feeds. sync-github-activity is
+      # deliberately absent: its free-text commit messages never ride an
+      # unattended merge (deploy.yml refreshes the live activity feed itself).
+      - name: Sync feeds
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/sync-cast-stats.mjs
+          node scripts/sync-atlas-stats.mjs
+          node scripts/sync-atlas-points.mjs
+          node scripts/sync-tool-versions.mjs
+          node scripts/sync-repo-facts.mjs
+
+      - name: Plant probe data
+        if: startsWith(env.MODE, 'probe-')
+        run: |
+          node scripts/refresh-plant.mjs "${MODE#probe-}" --repo .
+
+      - name: Material check
+        id: material
+        run: |
+          node scripts/refresh-gate.mjs material --repo . > "$RUNNER_TEMP/material.txt"
+          cat "$RUNNER_TEMP/material.txt"
+          m=$(grep -xE 'material=(true|false)' "$RUNNER_TEMP/material.txt" || true)
+          if [[ $(wc -l < "$RUNNER_TEMP/material.txt") -ne 1 || -z "$m" ]]; then
+            echo "::error::material check did not print exactly one material= line"; exit 1
+          fi
+          echo "$m" >> "$GITHUB_OUTPUT"
+
+      - name: Probe assertion (planted change must reach the gate)
+        if: startsWith(env.MODE, 'probe-') && env.MODE != 'probe-quiet'
+        env:
+          MATERIAL: ${{ steps.material.outputs.material }}
+        run: |
+          if [[ "$MATERIAL" != "true" ]]; then
+            echo "::error::$MODE: material=$MATERIAL, so the gate would never run"; exit 1
+          fi
+
+      - name: Probe assertion (quiet week)
+        if: env.MODE == 'probe-quiet'
+        env:
+          MATERIAL: ${{ steps.material.outputs.material }}
+        run: |
+          if [[ "$MATERIAL" != "false" ]]; then
+            echo "::error::probe-quiet expected material=false, got '$MATERIAL'"; exit 1
+          fi
+          echo "probe-quiet: PASS (no material diff; publish is skipped)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Nothing material
+        if: steps.material.outputs.material == 'false' && env.MODE != 'probe-quiet'
+        run: echo "No material data change this week; nothing to do." >> "$GITHUB_STEP_SUMMARY"
+
+      # Snapshot the candidate NOW, before lint/tests/a11y run, so their output
+      # stays out of the normal path, while a stray file from a sync or the
+      # plant IS carried and the gate flags it. Not a security boundary: code
+      # in this job can still rewrite the index; only the publish gate counts.
+      - name: Stage candidate
+        if: steps.material.outputs.material == 'true'
+        run: |
+          git add -A
+          git diff --cached --stat HEAD
+
+      - name: Lint
+        if: steps.material.outputs.material == 'true'
+        run: npm run lint
+
+      - name: Test
+        if: steps.material.outputs.material == 'true'
+        run: npx vitest run
+
+      - name: Build verification
+        if: steps.material.outputs.material == 'true'
+        run: npx vite build --outDir "$RUNNER_TEMP/vite-verify" --emptyOutDir
+
+      - name: Accessibility gate (WCAG 2.2 AA)
+        if: steps.material.outputs.material == 'true'
+        run: node scripts/a11y-scan.mjs --dir "$RUNNER_TEMP/vite-verify" --concurrency 2
+
+      # In build, not publish: action code never runs beside the write token.
+      # Same pin as cast-stats-check.yml.
+      - name: CAST stats drift check
+        if: steps.material.outputs.material == 'true'
+        uses: ek33450505/claude-agent-team/.github/actions/cast-stats-drift-check@ee8b15585dd415438d11b55bbc4a3fd722c2ddd5 # v10.6.1
+        with:
+          json: public/cast-stats.json
+
+      - name: Drift report and patch
+        if: steps.material.outputs.material == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/out"
+          node scripts/repo-drift-report.mjs > "$RUNNER_TEMP/out/drift-report.md"
+          # The index staged before the gates; no `git add` here.
+          git diff --cached --binary HEAD > "$RUNNER_TEMP/out/refresh.patch"
+          git status --porcelain
+
+      - name: Upload patch
+        if: steps.material.outputs.material == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: refresh
+          path: |
+            ${{ runner.temp }}/out/refresh.patch
+            ${{ runner.temp }}/out/drift-report.md
+          retention-days: 7
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: needs.build.outputs.material == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write # labels go through the issues endpoint; the needs-ed hold depends on it
+      actions: write
+    env:
+      MODE: ${{ github.event_name == 'schedule' && 'live' || inputs.mode }}
+      ARMED: ${{ vars.WEEKLY_REFRESH_AUTOMERGE == 'on' }}
+      BRANCH: chore/weekly-refresh
+      BASE_SHA: ${{ github.sha }}
+      # Reasons carry attacker-influenced text; the gate strips backticks, so a
+      # code span cannot be escaped and nothing in it renders as a link/mention.
+      REASONS_JQ: '.reasons[] | "- `" + .code + "`" + (if (.path // "") != "" then " `" + .path + "`" else "" end) + (if (.detail // "") != "" then " `" + .detail + "`" else "" end)'
+    steps:
+      # The gate runs from `trusted/`, a pristine checkout of this commit. The
+      # patch from `build` is applied only to `work/`. Never take a SHA from build.
+      # Neither checkout keeps the token on disk; only the two push steps get it.
+      - name: Checkout (trusted gate code)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          persist-credentials: false
+
+      - name: Checkout (work tree)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.sha }}
+          path: work
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+
+      - name: Download patch
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: refresh
+          path: ${{ runner.temp }}/in
+
+      # build runs npm code that can upload any artifact content: treat it as
+      # hostile. Exactly two regular, single-link files and nothing else, checked
+      # before anything reads them.
+      - name: Check artifact
+        run: |
+          found=$(cd "$RUNNER_TEMP/in" && find . -mindepth 1 -printf '%y %n %p\n' | sort)
+          want=$'f 1 ./drift-report.md\nf 1 ./refresh.patch'
+          if [[ "$found" != "$want" ]]; then
+            echo "::error::unexpected artifact contents"; printf '%s\n' "$found"; exit 1
+          fi
+          test -s "$RUNNER_TEMP/in/refresh.patch"
+
+      - name: Apply patch
+        run: |
+          git -C work apply --index --binary "$RUNNER_TEMP/in/refresh.patch"
+
+      - name: Gate
+        id: gate
+        run: |
+          rc=0
+          node trusted/scripts/refresh-gate.mjs gate --repo work --verdict "$RUNNER_TEMP/verdict.json" || rc=$?
+          echo "gate rc=$rc"
+          if [[ "$rc" -ne 0 && "$rc" -ne 3 ]]; then echo "::error::gate errored (rc=$rc)"; exit 1; fi
+          test -s "$RUNNER_TEMP/verdict.json" || { echo "::error::gate wrote no verdict"; exit 1; }
+          verdict=$(jq -r .verdict "$RUNNER_TEMP/verdict.json")
+          case "$rc:$verdict" in
+            0:eligible|3:needs-ed) ;;
+            *) echo "::error::gate exit $rc disagrees with verdict '$verdict'"; exit 1 ;;
+          esac
+          echo "verdict=$verdict" >> "$GITHUB_OUTPUT"
+          jq -r "$REASONS_JQ" "$RUNNER_TEMP/verdict.json"
+
+      # Structural reasons (unexpected paths or entries, non-canonical files)
+      # mean the tree itself is suspect: nothing is pushed for a human to merge
+      # by mistake. Only data-bound reasons open a needs-ed PR. A code not listed
+      # here counts as structural.
+      - name: Classify verdict
+        id: classify
+        run: |
+          data='["BOUND_FACILITIES","BOUND_TESTS","BOUND_MONOTONIC","BOUND_NUMBER","VERSION","DATE","STRING_CHANGED","SCHEMA","POINTS"]'
+          structural=$(jq -c --argjson data "$data" '[.reasons[].code] - $data | unique' "$RUNNER_TEMP/verdict.json")
+          # A capped reason list may hide a structural code: treat any drop as structural.
+          dropped=$(jq -r '.dropped' "$RUNNER_TEMP/verdict.json")
+          if [[ "$dropped" != 0 ]]; then structural="$structural+dropped=$dropped"; fi
+          if [[ "$structural" == "[]" ]]; then echo "publishable=true" >> "$GITHUB_OUTPUT"
+          else echo "publishable=false" >> "$GITHUB_OUTPUT"; echo "structural codes: $structural"; fi
+
+      - name: Report (dry-run / probe)
+        if: env.MODE != 'live'
+        env:
+          VERDICT: ${{ steps.gate.outputs.verdict }}
+        run: |
+          {
+            echo "### Weekly refresh: $MODE"
+            echo "Verdict: **$VERDICT** (armed: $ARMED; nothing is pushed in this mode)"
+            jq -r "$REASONS_JQ" "$RUNNER_TEMP/verdict.json"
+          } >> "$GITHUB_STEP_SUMMARY"
+          # Probes reset every feed to HEAD before planting, so the reason codes
+          # must be EXACTLY the planted one; anything extra is a failed probe.
+          codes=$(jq -c '[.reasons[].code] | unique' "$RUNNER_TEMP/verdict.json")
+          case "$MODE" in
+            dry-run)               want="$codes";               want_verdict="$VERDICT" ;;
+            probe-feed-only)       want='[]';                   want_verdict=eligible ;;
+            probe-feed-plus-prose) want='["PATH_NOT_ALLOWED"]'; want_verdict=needs-ed ;;
+            probe-facilities-drop) want='["BOUND_FACILITIES"]'; want_verdict=needs-ed ;;
+            *) echo "::error::no expectation for mode $MODE"; exit 1 ;;
+          esac
+          if [[ "$VERDICT" != "$want_verdict" || "$codes" != "$want" ]]; then
+            echo "::error::$MODE: expected $want_verdict $want, got $VERDICT $codes"; exit 1
+          fi
+          echo "$MODE: PASS" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Structural anomaly (nothing pushed)
+        if: env.MODE == 'live' && steps.classify.outputs.publishable != 'true'
+        run: |
+          {
+            echo "### Weekly refresh: structural anomaly, nothing pushed"
+            echo "The gate found something other than an out-of-bounds data change. Inspect this run (the patch artifact is kept 7 days); do not re-run blindly."
+            jq -r "$REASONS_JQ" "$RUNNER_TEMP/verdict.json"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "::error::Structural gate failure; nothing was pushed. See the run summary."
+          exit 1
+
+      # Hold rule: never overwrite a PR or branch someone else is handling.
+      - name: Hold check
+        id: hold
+        if: env.MODE == 'live' && steps.classify.outputs.publishable == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bot='41898282+github-actions[bot]@users.noreply.github.com'
+          # Plain assignments: under -e a failed gh call fails the step (closed),
+          # where a gh inside an `if` pipeline would fall through to "no hold".
+          pr=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          hold=""
+          if [[ -n "$pr" ]]; then
+            labels=$(gh pr view "$pr" --repo "$GITHUB_REPOSITORY" --json labels --jq '.labels[].name')
+            foreign=$(gh pr view "$pr" --repo "$GITHUB_REPOSITORY" --json commits \
+              --jq "[.commits[].authors[].email | select(. != \"$bot\")] | length")
+            if grep -qx 'needs-ed' <<< "$labels"; then hold="needs-ed label"
+            elif [[ "$foreign" != 0 ]]; then hold="PR has commits not made by the bot"; fi
+          fi
+          # The branch can outlive its PR (closed, not merged): never force over
+          # someone else's commits on it either.
+          remote_branch=$(git -C work ls-remote origin "refs/heads/$BRANCH" | cut -f1)
+          if [[ -z "$hold" && -n "$remote_branch" ]]; then
+            git -C work fetch -q origin "refs/heads/$BRANCH"
+            authors=$(git -C work log --format=%ae "$BASE_SHA..FETCH_HEAD")
+            n=$(grep -cvxF "$bot" <<< "$authors" || true)
+            if [[ -n "$authors" && "$n" != 0 ]]; then hold="branch $BRANCH has commits not made by the bot"; fi
+          fi
+          {
+            echo "pr=$pr"
+            echo "hold=$hold"
+            echo "branch_sha=$remote_branch"
+          } >> "$GITHUB_OUTPUT"
+          if [[ -n "$hold" ]]; then
+            echo "::error::PR #$pr is on hold ($hold). Resolve or close it to resume the weekly refresh."
+            exit 1
+          fi
+
+      - name: Commit and push branch
+        id: push
+        if: env.MODE == 'live' && steps.classify.outputs.publishable == 'true'
+        working-directory: work
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERDICT: ${{ steps.gate.outputs.verdict }}
+          BRANCH_SHA: ${{ steps.hold.outputs.branch_sha }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "chore(data): weekly refresh $(date -u +%F)" -m "Gate verdict: $VERDICT (weekly-refresh run $GITHUB_RUN_ID)."
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          basic=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          echo "::add-mask::$basic"
+          auth=(-c "http.https://github.com/.extraheader=AUTHORIZATION: basic $basic")
+          if [[ -n "$BRANCH_SHA" ]]; then
+            # Lease on the exact commit the hold check vetted: a push that
+            # lands in between makes this fail instead of being overwritten.
+            git "${auth[@]}" push --force-with-lease="refs/heads/$BRANCH:$BRANCH_SHA" origin "HEAD:refs/heads/$BRANCH"
+          else
+            git "${auth[@]}" push origin "HEAD:refs/heads/$BRANCH"
+          fi
+
+      # Composed WITHOUT the token in env: this is the only step that reads the
+      # artifact's drift report. Rendered as a literal fenced block (backticks
+      # stripped), so nothing in it can become a link, mention or closing keyword.
+      - name: Compose PR body
+        if: env.MODE == 'live' && steps.classify.outputs.publishable == 'true'
+        env:
+          VERDICT: ${{ steps.gate.outputs.verdict }}
+        run: |
+          {
+            echo "Automated weekly data refresh (\`weekly-refresh.yml\`, run $GITHUB_RUN_ID)."
+            echo
+            echo "**Gate verdict:** $VERDICT"
+            jq -r "$REASONS_JQ" "$RUNNER_TEMP/verdict.json"
+            echo
+            echo '```'
+            git -C work show --stat --format= HEAD
+            echo '```'
+            echo
+            echo "<details><summary>Repo drift report (generated from GitHub API data; shown as plain text)</summary>"
+            echo
+            echo '```text'
+            # `#` spaced so no "#123" can become an issue reference (cosmetic cost).
+            head -c 40000 "$RUNNER_TEMP/in/drift-report.md" | tr -d '`' | sed 's/#/# /g'
+            echo
+            echo '```'
+            echo "</details>"
+          } > "$RUNNER_TEMP/pr-body.md"
+
+      - name: Open or update PR
+        id: pr
+        if: env.MODE == 'live' && steps.classify.outputs.publishable == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ steps.hold.outputs.pr }}
+        run: |
+          body="$RUNNER_TEMP/pr-body.md"
+          if [[ -n "$PR" ]]; then
+            gh pr edit "$PR" --repo "$GITHUB_REPOSITORY" --body-file "$body"
+          else
+            gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$BRANCH" \
+              --title "chore(data): weekly refresh $(date -u +%F)" --body-file "$body"
+            PR=$(gh pr view "$BRANCH" --repo "$GITHUB_REPOSITORY" --json number --jq .number)
+          fi
+          echo "pr=$PR" >> "$GITHUB_OUTPUT"
+
+      - name: Flag for Ed (needs-ed)
+        if: env.MODE == 'live' && steps.classify.outputs.publishable == 'true' && steps.gate.outputs.verdict == 'needs-ed'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ steps.pr.outputs.pr }}
+        run: |
+          gh api -X POST "repos/$GITHUB_REPOSITORY/issues/$PR/labels" -f "labels[]=needs-ed" > /dev/null
+          {
+            echo "The weekly refresh gate did not approve this diff (data out of bounds; review before merging):"
+            jq -r "$REASONS_JQ" "$RUNNER_TEMP/verdict.json"
+          } > "$RUNNER_TEMP/comment.md"
+          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/comment.md"
+          echo "::error::Gate verdict needs-ed; PR #$PR left open with the needs-ed label."
+          exit 1
+
+      - name: Disarmed
+        if: env.MODE == 'live' && steps.classify.outputs.publishable == 'true' && steps.gate.outputs.verdict == 'eligible' && env.ARMED != 'true'
+        env:
+          PR: ${{ steps.pr.outputs.pr }}
+        run: |
+          echo "::notice::Eligible, but auto-merge is disarmed (WEEKLY_REFRESH_AUTOMERGE is not 'on'). PR #$PR waits for Ed."
+
+      # Fast-forward only: a non-force push succeeds only if main is still the
+      # commit every gate ran on. GitHub then marks the PR merged.
+      - name: Merge (fast-forward) and deploy
+        if: env.MODE == 'live' && steps.classify.outputs.publishable == 'true' && steps.gate.outputs.verdict == 'eligible' && env.ARMED == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ steps.pr.outputs.pr }}
+          SHA: ${{ steps.push.outputs.sha }}
+        run: |
+          # An empty SHA would turn the push below into a delete of main.
+          [[ "$SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "::error::no valid commit sha to merge ('$SHA')"; exit 1; }
+          remote_main=$(git -C work ls-remote origin refs/heads/main | cut -f1)
+          if [[ "$remote_main" != "$BASE_SHA" ]]; then
+            echo "::warning::main moved ($remote_main, gates ran on $BASE_SHA). PR #$PR stays open; next run rebuilds on the new main."
+            exit 0
+          fi
+          basic=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          echo "::add-mask::$basic"
+          auth=(-c "http.https://github.com/.extraheader=AUTHORIZATION: basic $basic")
+          git "${auth[@]}" -C work push origin "$SHA:refs/heads/main"
+          # Deploy first: once main has moved, nothing below may stop it.
+          gh workflow run deploy.yml --repo "$GITHUB_REPOSITORY" --ref main
+          echo "Fast-forwarded main to $SHA (PR #$PR) and dispatched deploy.yml." >> "$GITHUB_STEP_SUMMARY"
+          # Best-effort tidy-up: GitHub normally marks the PR merged by itself.
+          state=""
+          for _ in $(seq 1 12); do
+            state=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state --jq .state || true)
+            [[ "$state" == MERGED ]] && break
+            sleep 5
+          done
+          if [[ "$state" != MERGED ]]; then
+            gh pr close "$PR" --repo "$GITHUB_REPOSITORY" --comment "Fast-forwarded to main as $SHA by run $GITHUB_RUN_ID." \
+              || echo "::warning::could not close PR #$PR; close it by hand"
+          fi
