@@ -24,3 +24,16 @@ if (typeof globalThis.IntersectionObserver === 'undefined') {
     disconnect() {}
   };
 }
+
+// jsdom does not implement HTMLDialogElement.showModal/close; stub them so
+// modal dialogs can be opened and closed (close fires the native "close" event).
+if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.showModal) {
+  HTMLDialogElement.prototype.showModal = function showModal() {
+    this.open = true;
+  };
+  HTMLDialogElement.prototype.close = function close() {
+    if (!this.open) return;
+    this.open = false;
+    this.dispatchEvent(new Event('close'));
+  };
+}

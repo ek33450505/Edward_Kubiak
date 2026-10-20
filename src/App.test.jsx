@@ -117,6 +117,15 @@ describe("footer contact link", () => {
     expect(footer.textContent).not.toContain("@");
     expect(footer.innerHTML).not.toContain("mail" + "to:");
   });
+
+  it("has a Sponsor button that opens the sponsor chooser", async () => {
+    const user = userEvent.setup();
+    const { default: App } = await import("./App");
+    render(<App />);
+    const footer = await screen.findByRole("contentinfo");
+    await user.click(within(footer).getByRole("button", { name: /^sponsor/i }));
+    expect(await screen.findByRole("dialog", { name: "Support my work" })).toBeInTheDocument();
+  });
 });
 
 describe("app shell", () => {
