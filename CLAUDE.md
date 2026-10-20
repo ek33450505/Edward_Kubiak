@@ -118,6 +118,24 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
   (4f11685), `era/celestial-revival` (pre-squash PR #10 head), `era/atlas-parchment`
   (light Cartographic Survey Atlas), `era/night-survey` (bd24406, dark Cartographic Survey
   Atlas). Current era: **Systems Console** (2026-10).
+- `npm run work-facts` (`scripts/work-facts.mjs`) is **local-only**: it prints today's CrossCheck
+  numbers from Ed's clone so the dated claims on the resume/site can be refreshed by hand when the
+  weekly drift report flags them. `CROSSCHECK_DIR` (path to the local clone) is required; no path is
+  baked in. It is deliberately NOT in `prebuild` or any workflow: work-repo data never flows through
+  CI or automation. It runs read-only `git -C` commands only (`--ref` is validated and resolved once
+  to a sha), never fetches (numbers reflect the last fetch), writes nothing, and lists the claim
+  lines in `resume.js` / `projects.js` / `build-resume-pdf.mjs` to update.
+  - Definitions (ref `origin/QA`; `--as-of` = last commit at or before that date): commits are
+    `rev-list --count` (merges included); Ed's match is
+    `-E -i --author='(^|<)(edward[ _]|ed )kubiak'` (anchored to the start of the name or email; the
+    script also prints a names-only per-identity breakdown as a sanity check); source files =
+    `src/**/*.{js,jsx,ts,tsx}` incl. tests; lines use `wc -l` semantics and are published as a
+    split: application code (excluding `*.test.*`), tests, css; `ses/` (moved into the repo
+    2026-10-19) is reported separately, never folded into the src figures.
+  - "Tests passing" is NOT computed: the script's declared-test count is a static `it(`/`test(`
+    count. The real number is a read-only run: `git archive origin/QA | tar -x` into a temp dir,
+    symlink the clone's `node_modules`, `npx vitest run --cache=false --reporter=json` (see
+    `--help`).
 
 ## Data-Point Discipline
 
