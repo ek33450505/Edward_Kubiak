@@ -57,6 +57,14 @@
 /* ── Base ────────────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
+  /* Keep focused/anchored elements clear of the fixed nav, with room for the focus outline. */
+  scroll-padding-top: calc(var(--spacing-nav) + 0.5rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
