@@ -3,6 +3,7 @@ import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 import { ATLAS_STATS } from "./atlasStats.js";
 import { TOOL_VERSIONS } from "./toolStats.js";
 import { REPO_FACTS } from "./repoFacts.js";
+import { ATLAS_DATASET } from "./atlasDataset.js";
 
 // "as of" renderers for the feed dates (YYYY-MM-DD, parsed as UTC so the month can't shift by timezone).
 const asOfDate = (iso, opts) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", { ...opts, timeZone: "UTC" });
@@ -50,7 +51,7 @@ const projects = [
     dateAdded: "2026-07-08",
     title: "Compute Atlas",
     description:
-      `A full-stack data product I designed and shipped solo: an open, source-cited census of U.S. grid-scale compute — ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, spanning hyperscale and AI campuses, crypto-mining sites, and the dedicated power generation contracted to feed them. A public MapLibre GL map and per-facility dossiers sit on a Postgres-backed JSON API, with transactional email, a rate-limited intake form, a daily discovery pipeline, and CI. Every record cites a public source and carries an explicit confidence level. The open dataset is cited by Erin Brockovich's data center reporting map and by Power To The People. Built on ${ATLAS_STATS.stack}; dual-licensed ${ATLAS_STATS.license}. Live at compute-atlas.com.`,
+      `A full-stack data product I designed and shipped solo: an open, source-cited census of U.S. grid-scale compute — ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, spanning hyperscale and AI campuses, crypto-mining sites, and the dedicated power generation contracted to feed them. A public MapLibre GL map and per-facility dossiers sit on a Postgres-backed JSON API, with transactional email, a rate-limited intake form, a daily discovery pipeline, and CI. Every record cites a public source and carries an explicit confidence level. The open dataset is cited by Erin Brockovich's data center reporting map and by Power To The People. Built on ${ATLAS_STATS.stack}; dual-licensed ${ATLAS_STATS.license}. The dataset is archived on Zenodo with a citable DOI. Live at compute-atlas.com.`,
     summary: "Full-stack data product, designed and shipped solo: an open census of U.S. data centers and power, with a JSON API, cited by Erin Brockovich's map.",
     tech: ["Next.js 16", "React 19", "TypeScript", "MapLibre GL", "Neon Postgres", "Drizzle", "Resend", "Vitest", "Playwright", "GitHub Actions", "Vercel", "Open Data"],
     icon: Map,
@@ -59,6 +60,7 @@ const projects = [
     group: "flagship",
     featured: true,
     github: "https://github.com/ek33450505/compute-atlas",
+    dataset: ATLAS_DATASET,
     githubRepo: { owner: "ek33450505", repo: "compute-atlas" },
     link: "https://www.compute-atlas.com",
     heroImage: "/media/compute-atlas.png",

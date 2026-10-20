@@ -253,7 +253,7 @@ function renderOnePagerHtml(stats, desktopStats, identity) {
     ],
     [
       `Compute Atlas ${ATLAS_STATS.version}`,
-      `an open, source-cited census of U.S. grid-scale compute: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, ${ATLAS_STATS.operationalGw} GW operational and ~${ATLAS_STATS.plannedGw} GW planned — data centers, crypto mining, and the dedicated power generation built to feed them. Interactive MapLibre map, per-facility dossiers, open data plus a public JSON API, and an autonomous daily discovery pipeline that verifies its own sources. compute-atlas.com`,
+      `an open, source-cited census of U.S. grid-scale compute: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, ${ATLAS_STATS.operationalGw} GW operational and ~${ATLAS_STATS.plannedGw} GW planned — data centers, crypto mining, and the dedicated power generation built to feed them. Interactive MapLibre map, per-facility dossiers, open data archived on Zenodo with a DOI, plus a public JSON API, and an autonomous daily discovery pipeline that verifies its own sources. compute-atlas.com`,
     ],
     [
       "Cast Desktop",
