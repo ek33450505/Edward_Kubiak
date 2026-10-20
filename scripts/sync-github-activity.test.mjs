@@ -64,6 +64,14 @@ describe("selectPushEvents (privacy gate)", () => {
   it("tolerates a non-array", () => {
     expect(selectPushEvents(null)).toEqual([]);
   });
+
+  it("drops the profile README repo but keeps other repos, with no requests for it", async () => {
+    const events = [push("ek33450505/ek33450505"), push("ek33450505/compute-atlas")];
+    expect(selectPushEvents(events).map((e) => e.repo.name)).toEqual(["ek33450505/compute-atlas"]);
+    const f = fakeFetch([]);
+    await collectCommits([push("ek33450505/ek33450505")], f);
+    expect(f.calls).toEqual([]);
+  });
 });
 
 describe("toItem (sanitizer)", () => {
