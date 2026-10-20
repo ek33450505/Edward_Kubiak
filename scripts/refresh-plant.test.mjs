@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -12,6 +12,14 @@ const repo = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..")
 const script = path.join(repo, "scripts", "refresh-plant.mjs");
 const GIT_ENV = { ...process.env, GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1" };
 const cleanups = [];
+
+// `quiet` stamps the current date, so pin it far from whatever the fixture feeds carry: otherwise a
+// tree already synced (or planted) today makes the plant a no-op and the date assertions flake.
+const PINNED_DAY = "2030-06-15";
+
+beforeEach(() => {
+  vi.useFakeTimers({ now: new Date(`${PINNED_DAY}T12:00:00Z`), toFake: ["Date"] });
+});
 
 afterEach(() => {
   vi.useRealTimers();
@@ -47,8 +55,7 @@ describe("plant", () => {
     plant("quiet", dir);
     expect(git(dir, "status", "--porcelain")).not.toBe("");
     expect(materialCheck(dir)).toMatchObject({ material: false });
-    const today = new Date().toISOString().slice(0, 10);
-    expect(JSON.parse(read(dir, "public/atlas-points.json")).asOf).toBe(today);
+    expect(JSON.parse(read(dir, "public/atlas-points.json")).asOf).toBe(PINNED_DAY);
   });
 
   it("feed-only bumps the first tool patch in both mirrors", () => {
@@ -94,7 +101,6 @@ describe("plant", () => {
 
   it.each(KINDS)("%s is deterministic: planting twice gives byte-identical files", (kind) => {
     const dir = makeRepo();
-    vi.useFakeTimers({ toFake: ["Date"] }); // quiet stamps the current date
     const files = [...FEEDS.map((f) => f.path), "README.md"];
     plant(kind, dir);
     const once = files.map((f) => read(dir, f));
