@@ -7,6 +7,7 @@ import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "./Components/BrandIcons";
 import IconButton from "./Components/ui/IconButton";
+import { SponsorButton } from "./Components/ui/SponsorDialog";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
 import ErrorBoundary from "./Components/ErrorBoundary";
 import RouteLoader from "./Components/ui/RouteLoader";
@@ -283,6 +284,12 @@ export function AppShell() {
                 >
                   Accessibility
                 </Link>
+                <SponsorButton
+                  aria-label="Sponsor Edward's open source work: choose GitHub Sponsors or Ko-fi"
+                  className="inline-flex items-center min-h-11 px-2 font-mono text-[11px] uppercase tracking-[0.18em] hover:text-primary transition-colors"
+                >
+                  Sponsor
+                </SponsorButton>
                 <IconButton
                   href="https://github.com/ek33450505"
                   target="_blank"
