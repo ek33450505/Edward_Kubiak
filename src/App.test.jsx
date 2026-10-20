@@ -105,6 +105,24 @@ describe("NavBar — mobile menu", () => {
     await user.keyboard("{Escape}");
     expect(toggle()).toHaveAttribute("aria-expanded", "false");
   });
+
+  it("returns focus to the toggle when Escape closes the menu", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    await user.click(toggle());
+    within(document.getElementById("mobile-menu")).getAllByRole("link")[0].focus();
+    await user.keyboard("{Escape}");
+    expect(toggle()).toHaveAttribute("aria-expanded", "false");
+    expect(toggle()).toHaveFocus();
+  });
+
+  it("Escape with the menu closed does not move focus", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+    probe().focus();
+    await user.keyboard("{Escape}");
+    expect(probe()).toHaveFocus();
+  });
 });
 
 describe("footer contact link", () => {
@@ -224,6 +242,27 @@ describe("AppShell — modal command palette", () => {
   });
 });
 
+describe("NavBar — Escape inside a dialog", () => {
+  it("leaves the mobile menu open when Escape closes the command palette", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <CommandPaletteProvider>
+          <AppShell />
+        </CommandPaletteProvider>
+      </MemoryRouter>
+    );
+    await user.click(toggle());
+    expect(toggle()).toHaveAttribute("aria-expanded", "true");
+    await user.click(screen.getByRole("button", { name: /open command palette/i }));
+    await screen.findByRole("dialog", { name: /command menu/i });
+
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: /command menu/i })).toBeNull());
+    expect(toggle()).toHaveAttribute("aria-expanded", "true");
+  });
+});
+
 describe("trailing-slash paths (GitHub Pages 301s /about to /about/)", () => {
   function renderAt(path) {
     return render(
@@ -247,6 +286,19 @@ describe("trailing-slash paths (GitHub Pages 301s /about to /about/)", () => {
     renderAt("/projects/");
     await waitFor(() => expect(document.title).toBe(ROUTE_META["/projects"].title));
     expect(within(nav()).getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "page");
+  });
+
+  it("/projects/compute-atlas/ marks Work as the current section, not the current page", async () => {
+    const user = userEvent.setup();
+    renderAt("/projects/compute-atlas/");
+    expect(await screen.findByRole("heading", { level: 1, name: /Compute Atlas/ })).toBeInTheDocument();
+    expect(within(nav()).getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "true");
+    const current = within(nav()).getAllByRole("link").filter((l) => l.getAttribute("aria-current") === "page");
+    expect(current).toHaveLength(0);
+
+    await user.click(toggle());
+    const menu = document.getElementById("mobile-menu");
+    expect(within(menu).getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "true");
   });
 
   it.each(Object.keys(ROUTE_META))("%s/ applies that route's title", async (route) => {

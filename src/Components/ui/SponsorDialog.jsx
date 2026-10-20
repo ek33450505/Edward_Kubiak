@@ -19,12 +19,18 @@ const ICONS = {
 function SponsorDialog({ open, onClose }) {
   const ref = useRef(null);
   const pressTarget = useRef(null);
+  const firstLinkRef = useRef(null);
   const titleId = useId();
+  const descId = useId();
 
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
+    if (open && !dialog.open) {
+      dialog.showModal();
+      // Start on the first choice rather than the Close button.
+      firstLinkRef.current?.focus();
+    }
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
@@ -34,6 +40,7 @@ function SponsorDialog({ open, onClose }) {
     <dialog
       ref={ref}
       aria-labelledby={titleId}
+      aria-describedby={descId}
       onClose={() => {
         // Ignore a stale close from a previous cycle once the dialog is re-opened.
         if (!ref.current?.open) onClose();
@@ -64,10 +71,11 @@ function SponsorDialog({ open, onClose }) {
         </IconButton>
       </div>
       <div className="p-6 flex flex-col gap-3">
-        <p className="text-sm text-muted-foreground">Open source, built in the open.</p>
-        {SPONSOR_LINKS.map(({ id, label, href, note }) => (
+        <p id={descId} className="text-sm text-muted-foreground">Open source, built in the open.</p>
+        {SPONSOR_LINKS.map(({ id, label, href, note }, i) => (
           <a
             key={id}
+            ref={i === 0 ? firstLinkRef : undefined}
             href={href}
             target="_blank"
             rel="noopener noreferrer"

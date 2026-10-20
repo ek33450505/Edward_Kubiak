@@ -17,7 +17,9 @@ describe("SponsorDialog", () => {
     expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     await user.click(trigger);
-    expect(screen.getByRole("dialog", { name: "Support my work" })).toBeInTheDocument();
+    const dialog = screen.getByRole("dialog", { name: "Support my work" });
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveAccessibleDescription("Open source, built in the open.");
   });
 
   it("offers exactly two outbound links with safe attributes", async () => {
@@ -34,6 +36,15 @@ describe("SponsorDialog", () => {
       expect(link).toHaveAttribute("target", "_blank");
       expect(link.getAttribute("rel")).toContain("noopener");
     }
+  });
+
+  it("moves initial focus to the first sponsor link", async () => {
+    const user = userEvent.setup();
+    await user.click(setup());
+    const dialog = screen.getByRole("dialog", { name: "Support my work" });
+    const first = within(dialog).getAllByRole("link")[0];
+    expect(first).toHaveAccessibleName(/^GitHub Sponsors/);
+    expect(first).toHaveFocus();
   });
 
   it("closes via the close button and returns focus to the trigger", async () => {

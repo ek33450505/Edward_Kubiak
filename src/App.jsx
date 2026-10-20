@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { CAST_STATS } from "./data/castStats";
 import { ATLAS_STATS } from "./data/atlasStats";
 import { useDocumentMeta } from "./hooks/useDocumentMeta";
@@ -52,12 +52,29 @@ export function NavBar() {
     setOpen(false);
   }
 
-  // Close menu on Escape key
+  // Escape closes the open menu and returns focus to the toggle. Registered only
+  // while open, and ignores Escape pressed inside a dialog (command palette,
+  // sponsor chooser): those own that keypress and restore focus themselves.
+  const toggleRef = useRef(null);
   useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      if (e.target instanceof Element && e.target.closest('dialog, [role="dialog"]')) return;
+      setOpen(false);
+      toggleRef.current?.focus();
+    };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, []);
+  }, [open]);
+
+  // "page" on the exact route; "true" (current section) on a project detail page
+  // for Work. "true" keeps the a11y gate's aria-current="page" count valid.
+  const currentFor = (to) => {
+    if (path === to) return "page";
+    if (to === "/projects" && path.startsWith("/projects/")) return "true";
+    return undefined;
+  };
 
   return (
     <header>
@@ -83,27 +100,30 @@ export function NavBar() {
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
-            {navLinks.map(({ to, label }) => (
-              <Link
-                key={to}
-                to={to}
-                aria-current={path === to ? "page" : undefined}
-                className={`relative px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-300 ${
-                  path === to
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {label}
-                {path === to && (
-                  <motion.div
-                    layoutId="nav-underline"
-                    className="absolute -bottom-px left-2 right-2 h-px bg-primary"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </Link>
-            ))}
+            {navLinks.map(({ to, label }) => {
+              const current = currentFor(to);
+              return (
+                <Link
+                  key={to}
+                  to={to}
+                  aria-current={current}
+                  className={`relative px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-300 ${
+                    current
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                  {current && (
+                    <motion.div
+                      layoutId="nav-underline"
+                      className="absolute -bottom-px left-2 right-2 h-px bg-primary"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
             {/* ⌘K affordance */}
             <IconButton
               label="Open command palette"
@@ -129,6 +149,7 @@ export function NavBar() {
 
           {/* Mobile toggle */}
           <IconButton
+            ref={toggleRef}
             label="Toggle menu"
             onClick={() => setOpen(!open)}
             aria-expanded={open}
@@ -151,21 +172,24 @@ export function NavBar() {
               className="md:hidden overflow-hidden border-t border-border bg-background/95 backdrop-blur"
             >
               <div className="px-6 py-4 flex flex-col gap-2">
-                {navLinks.map(({ to, label }) => (
-                  <Link
-                    key={to}
-                    to={to}
-                    onClick={() => setOpen(false)}
-                    aria-current={path === to ? "page" : undefined}
-                    className={`font-mono text-xs tracking-[0.18em] uppercase py-3 min-h-11 border-b border-border transition-colors ${
-                      path === to
-                        ? "text-primary"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {label}
-                  </Link>
-                ))}
+                {navLinks.map(({ to, label }) => {
+                  const current = currentFor(to);
+                  return (
+                    <Link
+                      key={to}
+                      to={to}
+                      onClick={() => setOpen(false)}
+                      aria-current={current}
+                      className={`font-mono text-xs tracking-[0.18em] uppercase py-3 min-h-11 border-b border-border transition-colors ${
+                        current
+                          ? "text-primary"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {label}
+                    </Link>
+                  );
+                })}
                 {/* Search / ⌘K row */}
                 <button
                   onClick={() => { setOpen(false); toggle(); }}
