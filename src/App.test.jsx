@@ -270,6 +270,23 @@ describe("trailing-slash paths (GitHub Pages 301s /about to /about/)", () => {
     await waitFor(() => expect(document.title).toBe("Compute Atlas — Edward Kubiak"));
   });
 
+  it("a non-project route resets a leaked project og:image to the site card", async () => {
+    let og = document.head.querySelector('meta[property="og:image"]');
+    if (!og) {
+      og = document.createElement("meta");
+      og.setAttribute("property", "og:image");
+      document.head.appendChild(og);
+    }
+    og.setAttribute("content", "https://edwardkubiak.com/og/compute-atlas.png");
+    renderAt("/about/");
+    await waitFor(() =>
+      expect(document.head.querySelector('meta[property="og:image"]')).toHaveAttribute(
+        "content",
+        "https://edwardkubiak.com/og-image.png"
+      )
+    );
+  });
+
   it("an unknown trailing-slash path shows not-found with the fallback title", async () => {
     renderAt("/no-such-page/");
     expect(await screen.findByRole("heading", { level: 1 })).toBeInTheDocument();

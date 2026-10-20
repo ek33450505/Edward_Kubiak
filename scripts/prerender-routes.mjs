@@ -9,7 +9,7 @@ const routeMetaPath = join(__dirname, '../src/data/routeMeta.js');
 const projectsPath = join(__dirname, '../src/data/projects.js');
 const indexPath = join(distDir, 'index.html');
 
-const BASE_URL = 'https://edwardkubiak.com';
+export const BASE_URL = 'https://edwardkubiak.com';
 
 // ── Escaping / helpers ────────────────────────────────────────────────────────
 export function escapeHtml(str) {
@@ -69,6 +69,49 @@ function injectJsonLd(html, ...objects) {
 export function toAbsUrl(path) {
   if (path === '/') return `${BASE_URL}/`;
   return `${BASE_URL}${path}`;
+}
+
+// ── OG cards ─────────────────────────────────────────────────────────────────
+export const SITE_OG_IMAGE = '/og-image.png';
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+// Matches og:image:width/height in index.html.
+export const OG_WIDTH = 1200;
+export const OG_HEIGHT = 630;
+const PNG_IEND = Buffer.from([0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82]);
+
+// A card counts only if it is a regular PNG: signature, an IHDR chunk of exactly
+// OG_WIDTH x OG_HEIGHT, and a closing IEND chunk. A zero-byte, truncated or wrongly
+// sized file from a failed render is treated as missing. Never throws.
+export function isValidCard(file) {
+  let fd;
+  try {
+    const stat = fs.statSync(file);
+    if (!stat.isFile() || stat.size < 24 + PNG_IEND.length) return false;
+    fd = fs.openSync(file, 'r');
+    const head = Buffer.alloc(24);
+    if (fs.readSync(fd, head, 0, 24, 0) !== 24) return false;
+    if (!head.subarray(0, 8).equals(PNG_SIGNATURE)) return false;
+    if (head.toString('latin1', 12, 16) !== 'IHDR') return false;
+    if (head.readUInt32BE(16) !== OG_WIDTH || head.readUInt32BE(20) !== OG_HEIGHT) return false;
+    const tail = Buffer.alloc(PNG_IEND.length);
+    if (fs.readSync(fd, tail, 0, tail.length, stat.size - tail.length) !== tail.length) return false;
+    return tail.equals(PNG_IEND);
+  } catch {
+    return false;
+  } finally {
+    if (fd !== undefined) {
+      try { fs.closeSync(fd); } catch { /* ignore */ }
+    }
+  }
+}
+
+export function ogImageFor(route, dist) {
+  if (route.project) {
+    const slug = route.project.slug;
+    if (isValidCard(join(dist, 'og', `${slug}.png`))) return `/og/${slug}.png`;
+  }
+  return SITE_OG_IMAGE;
 }
 
 // ── JSON-LD builders ─────────────────────────────────────────────────────────
@@ -149,6 +192,8 @@ export function renderRoute(route, indexHtml) {
   html = setAttrContent(html, 'name="twitter:title"', route.title);
   html = setAttrContent(html, 'name="twitter:description"', route.description);
   html = setAttrContent(html, 'property="og:url"', toAbsUrl(route.canonical));
+  html = setAttrContent(html, 'property="og:image"', toAbsUrl(route.ogImage ?? SITE_OG_IMAGE));
+  html = setAttrContent(html, 'name="twitter:image"', toAbsUrl(route.ogImage ?? SITE_OG_IMAGE));
   html = setCanonical(html, toAbsUrl(route.canonical));
 
   const jsonLdBlocks = [websiteJsonLd()];
@@ -212,9 +257,12 @@ async function main() {
 
   // ── Write shells ──────────────────────────────────────────────────────────────
   let written = 0;
+  const fellBack = [];
   for (const route of ROUTES) {
     try {
-      const html = renderRoute(route, indexHtml);
+      const ogImage = ogImageFor(route, distDir);
+      if (route.project && ogImage === SITE_OG_IMAGE) fellBack.push(route.project.slug);
+      const html = renderRoute({ ...route, ogImage }, indexHtml);
       const outPath = route.path === '/'
         ? indexPath
         : join(distDir, route.path.replace(/^\//, ''), 'index.html');
@@ -229,6 +277,14 @@ async function main() {
 
   console.log(`Wrote ${written} prerendered head-only shells to ${distDir}`);
   console.log(`  ${STATIC_ROUTES.length} static routes + ${PROJECT_ROUTES.length} project routes = ${ROUTES.length} total`);
+
+  const wired = PROJECT_ROUTES.length - fellBack.length;
+  console.log(`  ${wired} of ${PROJECT_ROUTES.length} project pages wired to their OG card`);
+  if (fellBack.length > 0) {
+    const msg = `prerender-routes: no valid OG card for ${fellBack.length} of ${PROJECT_ROUTES.length} project page(s); using ${SITE_OG_IMAGE}: ${fellBack.join(', ')}`;
+    console.warn(msg);
+    if (process.env.GITHUB_ACTIONS === 'true') console.log(`::warning title=OG cards::${msg}`);
+  }
 }
 
 if (isDirectInvocation(process.argv[1], import.meta.url)) {

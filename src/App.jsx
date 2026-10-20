@@ -1,7 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { CAST_STATS } from "./data/castStats";
 import { ATLAS_STATS } from "./data/atlasStats";
-import { useDocumentMeta } from "./hooks/useDocumentMeta";
+import { useDocumentMeta, SITE_URL } from "./hooks/useDocumentMeta";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
@@ -198,9 +198,16 @@ function AnimatedRoutes() {
   // Project detail routes manage their own meta via useDocumentMeta —
   // pass an empty object here so we do not fight them.
   const isProjectDetail = path.startsWith("/projects/");
+  // Non-project routes reset og:image to the site card so a project card from the
+  // prerendered head cannot leak across SPA navigation. After any client-side
+  // navigation INTO a project page, og:image may be stale (the client cannot know
+  // whether a card exists); accepted, because crawlers read the prerendered head.
   const routeMeta = isProjectDetail
     ? {}
-    : (ROUTE_META[path] ?? { title: "Edward Kubiak" });
+    : {
+        ...(ROUTE_META[path] ?? { title: "Edward Kubiak" }),
+        ogImage: `${SITE_URL}/og-image.png`,
+      };
 
   useDocumentMeta(routeMeta);
 

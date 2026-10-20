@@ -88,10 +88,18 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
   - The legacy `npm run build-resume` (docx → LibreOffice headless) still exists but is
     superseded.
 - OG card: the live `/og-image.png` is the COMMITTED `public/og-image.png`; regenerate with
-  `node scripts/generate-og-image.mjs --outDir public` (the default outDir `public/og/` is
-  where deploy.yml writes per-project cards, which nothing references yet). Colors come from
+  `node scripts/generate-og-image.mjs --outDir public`. Colors come from
   `src/lib/tokens.js`. sharp/librsvg can't load the Geist woff2, so text renders in the
   Helvetica/Menlo fallbacks locally (DejaVu on the CI runner).
+- Per-project OG cards: deploy.yml renders `public/og/<slug>.png` before the build, and
+  `prerender-routes.mjs` points each project page's `og:image`/`twitter:image` at its card only
+  if `isValidCard` passes (PNG signature, IHDR exactly 1200×630, IEND trailer). Otherwise the
+  page falls back to `/og-image.png` with a warning (a `::warning` annotation in CI) and the
+  deploy continues (Ed, 2026-10-20). Locally no cards exist, so every project page falls back.
+  `verify-prerender` fails the build if a referenced image is missing or invalid, or if a valid
+  card exists but the page doesn't use it. A missing or non-1200×630 SITE card fails the build.
+  Client side, non-project routes reset `og:image` to the site card; project pages keep the
+  prerendered value.
 - Favicons: `npm run favicons` (`scripts/generate-favicons.mjs`) writes the six `public/` icons from
   token colors, mirroring the nav EK mark (paths only). Committed, NOT in prebuild; a drift test
   guards `favicon.svg`. Bump `?v=` in `index.html` and `public/manifest.json` when they change.

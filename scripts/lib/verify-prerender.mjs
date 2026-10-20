@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { escapeHtml, toAbsUrl } from '../prerender-routes.mjs';
+import { escapeHtml, toAbsUrl, BASE_URL, SITE_OG_IMAGE, isValidCard } from '../prerender-routes.mjs';
 
 const LD_JSON = /<script type="application\/ld\+json">/;
 
@@ -42,6 +42,31 @@ export function verifyPrerender(distDir, routes) {
     const ogUrl = metaContent(html, 'property="og:url"');
     if (ogUrl !== escapeHtml(toAbsUrl(route.canonical))) {
       failures.push(`${route.path}: og:url does not match ${toAbsUrl(route.canonical)}`);
+    }
+    const ogImage = metaContent(html, 'property="og:image"');
+    const twitterImage = metaContent(html, 'name="twitter:image"');
+    const siteCardUrl = escapeHtml(toAbsUrl(SITE_OG_IMAGE));
+    const projectCardPath = route.project ? `/og/${route.project.slug}.png` : null;
+    const allowed = [siteCardUrl];
+    if (projectCardPath) allowed.push(escapeHtml(toAbsUrl(projectCardPath)));
+    if (ogImage === null) {
+      failures.push(`${route.path}: missing og:image`);
+    } else {
+      if (twitterImage !== ogImage) {
+        failures.push(`${route.path}: twitter:image does not match og:image`);
+      }
+      if (!allowed.includes(ogImage)) {
+        failures.push(`${route.path}: og:image ${ogImage} is not an allowed card`);
+      } else if (!isValidCard(path.join(distDir, ogImage.slice(BASE_URL.length)))) {
+        failures.push(`${route.path}: og:image file missing or not a PNG: ${ogImage}`);
+      }
+      if (
+        projectCardPath &&
+        ogImage === siteCardUrl &&
+        isValidCard(path.join(distDir, projectCardPath))
+      ) {
+        failures.push(`${route.path}: card present but not wired (${projectCardPath})`);
+      }
     }
     if (route.project?.dataset && !html.includes('"@type":"Dataset"')) {
       failures.push(`${route.path}: missing Dataset JSON-LD`);
