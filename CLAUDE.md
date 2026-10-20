@@ -61,6 +61,10 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
 - PDFs: `npm run build-pdfs` (`build-resume-pdf.mjs`, puppeteer) regenerates
   `public/Edward_Kubiak_Resume.pdf` (2 pages) and `public/CAST_Portfolio_OnePager.pdf`
   (1 page) from `src/data/resume.js` + the stat feeds, and copies both to `~/Desktop`.
+  - **The LIVE PDFs are rendered at deploy time**: `deploy.yml`'s "Render PDFs (fresh,
+    best-effort)" step renders both from the deploy's freshly synced data into a temp dir and
+    copies them over `dist/` only if both succeed. On any failure or timeout it warns and ships
+    the committed `public/` PDFs (Ed, 2026-10-20). The committed copies are refreshed by hand.
   - **Design system: `scripts/lib/print-design.mjs`** — Ed's designed resume
     (2026-09-09) rebuilt as the template, shared by BOTH documents so they cannot drift
     apart visually. IBM Plex Sans/Mono inlined as base64 (devDependencies
@@ -99,7 +103,24 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
 - CI drift gate (`cast-stats-check.yml`): committed `public/cast-stats.json` must match
   canonical `claude-agent-team/main/cast-stats.json` (a moving target when that repo is
   active). Fix: `npm run sync-stats` (now pulls canonical), then commit the updated
-  `public/cast-stats.json` + `src/data/castStats.js`.
+  `public/cast-stats.json` + `src/data/castStats.js`. The weekly refresh (below) does this
+  automatically once armed.
+- **Weekly refresh** (`.github/workflows/weekly-refresh.yml`, Mon 09:17 UTC + `workflow_dispatch`)
+  keeps the 10 committed data feeds current (5 `src/data/*.js` + their `public/*.json` mirrors;
+  NOT the PDFs and NOT `last-known-commits.json`, so no binary or free-text content rides it).
+  - `build` (read-only token, runs npm) runs five syncs (not sync-github-activity), then
+    `node scripts/refresh-gate.mjs material`, then lint/vitest/vite build/a11y/CAST drift, and
+    uploads a patch. `publish` (write token, no npm install) applies the patch and runs
+    `refresh-gate.mjs gate` from a pristine checkout. That gate is the ONLY security boundary:
+    10-path allowlist, mode 100644 M-only, canonical bytes (js re-rendered from
+    HEAD's template, so no code can ride), unchanged key sets/strings, and bounds.
+  - Outcomes: eligible + repo variable `WEEKLY_REFRESH_AUTOMERGE=on` → fast-forward push to
+    `main` + `deploy.yml` dispatch (unset = disarmed: PR only). Data out of bounds → PR
+    `chore/weekly-refresh` labelled `needs-ed` (never overwritten while labelled or holding
+    non-bot commits). Structural anomaly → nothing pushed, red run.
+  - Modes: `dry-run` (default), `live`, `probe-quiet|feed-only|feed-plus-prose|facilities-drop`
+    (plant after the syncs, assert the EXACT reason codes, never push). All modes run from
+    `main` only.
 - During agent work, never `npm run build` (prebuild churns `src/data/castStats.js` and
   `public/sitemap.xml`) — verify with `npx vite build --outDir /tmp/vite-verify`.
 - Home → Featured Work panel order is deliberate and hardcoded in
