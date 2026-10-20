@@ -88,6 +88,9 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
   where deploy.yml writes per-project cards, which nothing references yet). Colors come from
   `src/lib/tokens.js`. sharp/librsvg can't load the Geist woff2, so text renders in the
   Helvetica/Menlo fallbacks locally (DejaVu on the CI runner).
+- Favicons: `npm run favicons` (`scripts/generate-favicons.mjs`) writes the six `public/` icons from
+  token colors, mirroring the nav EK mark (paths only). Committed, NOT in prebuild; a drift test
+  guards `favicon.svg`. Bump `?v=` in `index.html` and `public/manifest.json` when they change.
 - Animation package is `motion` (npm) not `framer-motion` — `import { motion } from "motion/react"`.
 - Deploy target is GitHub Pages (`gh-pages -d dist`); no Vercel or Netlify config.
 - Deploys are AUTOMATIC: `deploy.yml` publishes to gh-pages on every push to `main` and on a
