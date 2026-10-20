@@ -20,6 +20,7 @@
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
+import { isDirectInvocation } from "./lib/direct-invocation.mjs";
 import os from "node:os";
 
 import puppeteer from "puppeteer";
@@ -487,10 +488,7 @@ async function main() {
 // Only run when invoked as a script. Importing this module used to execute main()
 // as a side effect, which overwrote the tracked public/*.pdf and the ~/Desktop
 // copies of anything that imported it to reuse a renderer.
-const INVOKED_DIRECTLY =
-  process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-
-if (INVOKED_DIRECTLY) {
+if (isDirectInvocation(process.argv[1], import.meta.url)) {
   main().catch((err) => {
     console.error("Fatal:", err.message);
     process.exit(1);

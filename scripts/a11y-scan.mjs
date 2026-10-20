@@ -12,7 +12,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
+import { isDirectInvocation } from "./lib/direct-invocation.mjs";
 
 import puppeteer from "puppeteer";
 import { preview } from "vite";
@@ -504,15 +504,6 @@ async function main() {
   }
   if (!results.harnessError) report(results, summary);
   return summary.exitCode;
-}
-
-/** True when argv1 and moduleUrl resolve to the same real file (symlink-safe); a missing argv1 is "not direct". */
-export function isDirectInvocation(argv1, moduleUrl) {
-  try {
-    return fs.realpathSync(argv1) === fs.realpathSync(fileURLToPath(moduleUrl));
-  } catch {
-    return false;
-  }
 }
 
 if (isDirectInvocation(process.argv[1], import.meta.url)) {

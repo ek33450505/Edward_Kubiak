@@ -27,7 +27,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import zlib from "node:zlib";
-import { pathToFileURL } from "node:url";
+import { isDirectInvocation } from "./lib/direct-invocation.mjs";
 
 import { fetchJson } from "./lib/fetch-json.mjs";
 
@@ -323,8 +323,7 @@ async function main() {
   );
 }
 
-const isMain = import.meta.url === pathToFileURL(process.argv[1] || "").href;
-if (isMain) {
+if (isDirectInvocation(process.argv[1], import.meta.url)) {
   try {
     await main();
   } catch (err) {

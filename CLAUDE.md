@@ -17,8 +17,8 @@ npm run preview   # preview production build locally
 ## Build
 ```bash
 npm run build     # prebuild (sync-cast-stats + sync-atlas-stats + sync-atlas-points + sync-tool-versions + sync-repo-facts + sync-github-activity + generate-sitemap + generate-rss) then vite build
-npm run deploy    # build + push to gh-pages branch
 ```
+Deploys run in CI (`deploy.yml`); there is no local deploy script.
 
 ## Test
 ```bash
@@ -96,10 +96,12 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
   token colors, mirroring the nav EK mark (paths only). Committed, NOT in prebuild; a drift test
   guards `favicon.svg`. Bump `?v=` in `index.html` and `public/manifest.json` when they change.
 - Animation package is `motion` (npm) not `framer-motion` — `import { motion } from "motion/react"`.
-- Deploy target is GitHub Pages (`gh-pages -d dist`); no Vercel or Netlify config.
-- Deploys are AUTOMATIC: `deploy.yml` publishes to gh-pages on every push to `main` and on a
-  daily 08:00 UTC cron. It fetches canonical CAST stats fresh at deploy time, so the live
-  site self-heals stats; manual `npm run deploy` is rarely needed.
+- Deploy target is GitHub Pages, source "GitHub Actions" (`build_type: workflow`):
+  `deploy.yml` uploads `dist/` with `actions/upload-pages-artifact` and publishes it with
+  `actions/deploy-pages`. There is no `gh-pages` branch and no Vercel or Netlify config.
+- Deploys are AUTOMATIC: `deploy.yml` runs on every push to `main` and on a daily 08:00 UTC
+  cron (or `workflow_dispatch`). It fetches canonical CAST stats fresh at deploy time, so the
+  live site self-heals stats.
 - CI drift gate (`cast-stats-check.yml`): committed `public/cast-stats.json` must match
   canonical `claude-agent-team/main/cast-stats.json` (a moving target when that repo is
   active). Fix: `npm run sync-stats` (now pulls canonical), then commit the updated

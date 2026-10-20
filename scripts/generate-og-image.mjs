@@ -1,6 +1,7 @@
 import sharp from "sharp";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { isDirectInvocation } from "./lib/direct-invocation.mjs";
 import { basename, dirname, join } from "path";
 import {
   ACCENT,
@@ -105,14 +106,6 @@ export async function main(args = process.argv.slice(2)) {
     const svg = generateOgSvg("Edward Kubiak");
     const outPath = await generateImage(opts.outDir, "og-image.png", svg);
     console.log(`Wrote og-image.png to ${outPath}`);
-  }
-}
-
-export function isDirectInvocation(argv1, moduleUrl) {
-  try {
-    return fs.realpathSync(argv1) === fs.realpathSync(fileURLToPath(moduleUrl));
-  } catch {
-    return false;
   }
 }
 
