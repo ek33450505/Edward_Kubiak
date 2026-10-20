@@ -402,6 +402,34 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
 
+      # Both PDFs are rendered here from the data this deploy just synced, so the
+      # live PDFs are as fresh as the site. They render into a temp dir and are
+      # copied over dist/'s committed copies only if BOTH rendered (including the
+      # page-budget check); the copy itself is not atomic. Any failure or hang
+      # ships the committed PDFs with a warning; a PDF problem never blocks a
+      # deploy (Ed, 2026-10-20).
+      # Every command sits in the `if` list, so under `bash -e` none can abort.
+      # Chrome runs with --no-sandbox under CI, so the OIDC request vars (present
+      # because of id-token: write) are stripped from its environment.
+      # timeout-minutes + continue-on-error: even a hang the inner timeouts miss
+      # (a Chrome grandchild) ends this step without failing the deploy.
+      - name: Render PDFs (fresh, best-effort)
+        timeout-minutes: 20
+        continue-on-error: true
+        run: |
+          out="$RUNNER_TEMP/pdfs"
+          noid=(env -u ACTIONS_ID_TOKEN_REQUEST_TOKEN -u ACTIONS_ID_TOKEN_REQUEST_URL)
+          if timeout -k 30 600 "${noid[@]}" npx puppeteer browsers install chrome \
+             && RESUME_PDF_OUT_DIR="$out" timeout -k 30 300 "${noid[@]}" node scripts/build-resume-pdf.mjs \
+             && [[ -s "$out/Edward_Kubiak_Resume.pdf" && -s "$out/CAST_Portfolio_OnePager.pdf" ]] \
+             && cp "$out/Edward_Kubiak_Resume.pdf" "$out/CAST_Portfolio_OnePager.pdf" dist/; then
+            echo "Rendered both PDFs fresh into dist/."
+            echo "PDFs: rendered fresh from this deploy's data." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::warning title=PDFs::PDF rendering failed; deploying the committed PDFs (or, if the copy failed midway, one fresh and one committed)."
+            echo "PDFs: rendering FAILED, so committed (possibly stale) PDFs were deployed." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

@@ -12,9 +12,9 @@
  * Usage:
  *   npm run build-pdfs
  *
- * Runs locally (`npm run build-pdfs`) and in the weekly-refresh workflow
- * (.github/workflows/weekly-refresh.yml) with RESUME_PDF_OUT_DIR=public and CI set
- * (which adds --no-sandbox).
+ * Runs locally (`npm run build-pdfs`) and in deploy.yml, which renders both PDFs fresh into a
+ * temp dir (RESUME_PDF_OUT_DIR) on every deploy with CI set (which adds --no-sandbox); dist/ gets
+ * them only if both succeed.
  */
 
 import path from "node:path";
