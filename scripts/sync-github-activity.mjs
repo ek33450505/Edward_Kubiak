@@ -17,7 +17,7 @@
 // commit resolved. No new request is issued once BUDGET_MS has elapsed.
 
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { isDirectInvocation } from "./lib/direct-invocation.mjs";
 
 import { fetchJson } from "./lib/fetch-json.mjs";
 import { githubHeaders } from "./lib/github.mjs";
@@ -144,5 +144,4 @@ export async function main({ fetch = fetchGithub, outDir = defaultOutDir, now = 
   }
 }
 
-const isMain = import.meta.url === pathToFileURL(process.argv[1] || "").href;
-if (isMain) await main();
+if (isDirectInvocation(process.argv[1], import.meta.url)) await main();

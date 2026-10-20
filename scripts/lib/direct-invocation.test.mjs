@@ -40,3 +40,27 @@ describe('isDirectInvocation', () => {
     expect(isDirectInvocation(other, selfUrl)).toBe(false);
   });
 });
+
+describe('every script that inspects process.argv[1]', () => {
+  const scriptsDir = path.resolve(import.meta.dirname, '..');
+  const guarded = fs
+    .readdirSync(scriptsDir)
+    .filter((f) => f.endsWith('.mjs') && !f.endsWith('.test.mjs'))
+    .map((f) => ({ f, src: fs.readFileSync(path.join(scriptsDir, f), 'utf8') }))
+    // The helper import counts too, so a guard replaced by `if (true)` cannot drop out of the set.
+    .filter(({ src }) => src.includes('process.argv[1]') || src.includes('lib/direct-invocation.mjs'));
+
+  it('finds the guarded scripts (an empty glob must not pass vacuously)', () => {
+    expect(guarded.length).toBeGreaterThanOrEqual(10);
+  });
+
+  it('uses the shared symlink-safe helper and no inline comparison', () => {
+    for (const { f, src } of guarded) {
+      expect(src, `${f} imports the helper`).toMatch(/from ["']\.\/lib\/direct-invocation\.mjs["']/);
+      expect(src, `${f} calls the helper`).toContain('isDirectInvocation(process.argv[1], import.meta.url)');
+      expect(src, `${f} has no pathToFileURL guard`).not.toContain('pathToFileURL(process.argv[1]');
+      expect(src, `${f} has no path.resolve guard`).not.toContain('path.resolve(process.argv[1])');
+      expect(src, `${f} has no isMain const`).not.toContain('const isMain');
+    }
+  });
+});

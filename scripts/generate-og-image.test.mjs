@@ -6,7 +6,7 @@ import { spawnSync } from "child_process";
 import { pathToFileURL } from "url";
 import sharp from "sharp";
 import * as tokens from "../src/lib/tokens.js";
-import { escapeXml, generateOgSvg, headlineSize, isDirectInvocation } from "./generate-og-image.mjs";
+import { escapeXml, generateOgSvg, headlineSize } from "./generate-og-image.mjs";
 
 // import.meta.url is not a file: URL under the jsdom test environment, so resolve from the repo root.
 const GENERATOR = path.resolve(process.cwd(), "scripts/generate-og-image.mjs");
@@ -95,20 +95,6 @@ describe("generate-og-image", () => {
 
   it("shrinks the headline for long titles", () => {
     expect(headlineSize("CAST — Claude Agent Team")).toBeLessThan(headlineSize("Edward Kubiak"));
-  });
-
-  describe("isDirectInvocation", () => {
-    it("is false for a missing or unrelated argv[1]", () => {
-      expect(isDirectInvocation(undefined, GENERATOR_URL)).toBe(false);
-      expect(isDirectInvocation("/nonexistent/other.mjs", GENERATOR_URL)).toBe(false);
-    });
-
-    it("is true for the module's own path and for a symlink to it", () => {
-      expect(isDirectInvocation(GENERATOR, GENERATOR_URL)).toBe(true);
-      const link = path.join(makeTempDir(), "link.mjs");
-      fs.symlinkSync(GENERATOR, link);
-      expect(isDirectInvocation(link, GENERATOR_URL)).toBe(true);
-    });
   });
 
   describe("CLI (deploy.yml contract)", () => {

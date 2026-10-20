@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { execFileSync } from 'child_process';
-import { fileURLToPath, pathToFileURL } from 'url';
+import { fileURLToPath } from 'url';
+import { isDirectInvocation } from './lib/direct-invocation.mjs';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -142,5 +143,4 @@ ${entries.join('\n')}
   }
 }
 
-const isMain = import.meta.url === pathToFileURL(process.argv[1] || "").href;
-if (isMain) await main();
+if (isDirectInvocation(process.argv[1], import.meta.url)) await main();
