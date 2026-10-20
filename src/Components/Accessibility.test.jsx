@@ -46,8 +46,24 @@ describe("Accessibility", () => {
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
   });
 
+  it("records the VoiceOver spot check and no longer lists it as a limitation", () => {
+    renderPage();
+    expect(screen.getByText(/manual spot check with VoiceOver on macOS \(Safari\)/)).toBeInTheDocument();
+    expect(screen.getByText(/same pages were checked in Chrome, through its accessibility tree and by keyboard/)).toBeInTheDocument();
+    expect(screen.queryByText(/not yet complete/)).toBeNull();
+    expect(screen.queryByText(/current-page marker/)).toBeNull();
+  });
+
+  it("states the screen-reader checks as spot checks, not an unfinished audit", () => {
+    renderPage();
+    expect(screen.queryByText(/isn't finished/)).toBeNull();
+    expect(
+      screen.getByText(/spot checks rather than a full audit, so I don't claim full conformance\./),
+    ).toBeInTheDocument();
+  });
+
   it("shows the formatted updated date", () => {
     renderPage();
-    expect(screen.getByText("Statement last updated 19 October 2026.")).toBeInTheDocument();
+    expect(screen.getByText("Statement last updated 20 October 2026.")).toBeInTheDocument();
   });
 });

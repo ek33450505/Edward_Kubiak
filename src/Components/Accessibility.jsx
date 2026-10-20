@@ -6,7 +6,7 @@ import { fadeUp } from "../utils/motion";
 import PageWrapper from "./ui/PageWrapper";
 import SectionHead from "./ui/SectionHead";
 
-const UPDATED = "2026-10-19";
+const UPDATED = "2026-10-20";
 
 const linkClass =
   "text-primary underline underline-offset-4 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
@@ -52,8 +52,9 @@ const Accessibility = () => {
           <SectionHead index="01" id="target" title="Target" />
           <p className="max-w-prose text-foreground">
             The target is WCAG 2.2 Level AA. Every page passes the automated and keyboard checks
-            below. Automated tools catch only part of WCAG, and screen-reader testing isn&apos;t
-            finished, so I don&apos;t claim full conformance yet.
+            below. Automated tools catch only part of WCAG, and the screen-reader checks so far
+            (VoiceOver in Safari, and Chrome&apos;s accessibility tree) are spot checks rather
+            than a full audit, so I don&apos;t claim full conformance.
           </p>
         </section>
 
@@ -70,6 +71,14 @@ const Accessibility = () => {
           <p className="mt-4 max-w-prose text-foreground">
             Text and control colors are checked by unit tests: at least 4.5:1 for text and 3:1 for
             controls.
+          </p>
+          <p className="mt-4 max-w-prose text-foreground">
+            A manual spot check with VoiceOver on macOS (Safari), in October 2026, covered the home
+            page, a project page, this statement and the sponsor dialog, and the same pages were
+            checked in Chrome, through its accessibility tree and by keyboard. Headings, the
+            facility map&apos;s text alternative, new-tab link announcements and the dialog&apos;s
+            focus handling behaved as expected in both, and the Chrome check confirmed the
+            banner, navigation, main and footer landmarks.
           </p>
         </section>
 
@@ -100,7 +109,6 @@ const Accessibility = () => {
               </a>
               , which is a separate site.
             </li>
-            <li>Screen-reader testing (VoiceOver) is not yet complete.</li>
             <li>
               The résumé PDFs are generated with tagged structure from the same source as the
               résumé page. The{" "}

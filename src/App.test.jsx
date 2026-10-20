@@ -145,6 +145,27 @@ describe("app shell", () => {
     expect(within(nav).queryByRole("link", { name: "Now" })).toBeNull();
   });
 
+  it("exposes a banner landmark that contains the Primary navigation", () => {
+    render(<Harness />);
+    const banner = screen.getByRole("banner");
+    expect(within(banner).getByRole("navigation", { name: "Primary" })).toBeInTheDocument();
+  });
+
+  it("marks the masthead home link current on / only", () => {
+    const { unmount } = render(<Harness />);
+    expect(screen.getByRole("link", { name: /Edward Kubiak/ })).toHaveAttribute("aria-current", "page");
+    unmount();
+    render(
+      <MemoryRouter initialEntries={["/about"]}>
+        <CommandPaletteProvider>
+          <NavBar />
+        </CommandPaletteProvider>
+      </MemoryRouter>
+    );
+    expect(screen.getByRole("link", { name: /Edward Kubiak/ })).not.toHaveAttribute("aria-current");
+    expect(screen.getByRole("link", { name: "About" })).toHaveAttribute("aria-current", "page");
+  });
+
   it("mobile menu lists the five primary rows and not Now", async () => {
     const user = userEvent.setup();
     render(<Harness />);
