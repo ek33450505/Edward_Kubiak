@@ -4,7 +4,9 @@ import http from "node:http";
 // Resolves the parsed JSON body, or null on ANY failure; settles exactly once and
 // never hangs: idle timeout, overall deadline, byte cap, and every abnormal close
 // (truncated body, reset, error) all resolve null.
-export function fetchJson(url, { idleMs = 8000, deadlineMs = 15000, maxBytes = 5 * 1024 * 1024, headers = {} } = {}) {
+// Opt-in `withStatus`: resolves { status, body } instead (body = parsed JSON on a 200,
+// null on any other status); the whole result is still null on transport-level failure.
+export function fetchJson(url, { idleMs = 8000, deadlineMs = 15000, maxBytes = 5 * 1024 * 1024, headers = {}, withStatus = false } = {}) {
   return new Promise((resolve) => {
     let done = false;
     let req = null;
@@ -23,7 +25,7 @@ export function fetchJson(url, { idleMs = 8000, deadlineMs = 15000, maxBytes = 5
       req = get(url, { headers }, (res) => {
         if (res.statusCode !== 200) {
           res.resume();
-          return finish(null);
+          return finish(withStatus ? { status: res.statusCode, body: null } : null);
         }
         const chunks = [];
         let bytes = 0;
@@ -34,7 +36,8 @@ export function fetchJson(url, { idleMs = 8000, deadlineMs = 15000, maxBytes = 5
         });
         res.on("end", () => {
           try {
-            finish(JSON.parse(Buffer.concat(chunks).toString("utf8")));
+            const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+            finish(withStatus ? { status: 200, body } : body);
           } catch {
             finish(null);
           }

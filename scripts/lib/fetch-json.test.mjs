@@ -75,6 +75,33 @@ describe("fetchJson", () => {
     expect(seen).toBe("yes");
   });
 
+  it("withStatus: 200 resolves { status, body }", async () => {
+    const url = await serve((_, res) => res.end(JSON.stringify({ a: 1 })));
+    expect(await fetchJson(url, { withStatus: true })).toEqual({ status: 200, body: { a: 1 } });
+  });
+
+  it("withStatus: a 404 resolves { status: 404, body: null }", async () => {
+    const url = await serve((_, res) => {
+      res.statusCode = 404;
+      res.end("{}");
+    });
+    expect(await fetchJson(url, { withStatus: true })).toEqual({ status: 404, body: null });
+  });
+
+  it("withStatus: a truncated 200 body still resolves null", async () => {
+    const url = await serve((_, res) => {
+      res.writeHead(200, { "Content-Length": "100" });
+      res.write("[1,");
+      setTimeout(() => res.destroy(), 20);
+    });
+    expect(await fetchJson(url, { withStatus: true })).toBeNull();
+  });
+
+  it("withStatus: invalid JSON on a 200 resolves null", async () => {
+    const url = await serve((_, res) => res.end("not json"));
+    expect(await fetchJson(url, { withStatus: true })).toBeNull();
+  });
+
   it("resolves null when the connection is refused", async () => {
     expect(await fetchJson("http://127.0.0.1:1/")).toBeNull();
   });
