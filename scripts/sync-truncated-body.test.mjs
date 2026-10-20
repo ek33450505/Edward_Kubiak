@@ -42,7 +42,7 @@ function makeProject(script, snapshot) {
   fs.mkdirSync(path.join(dir, "public"));
   fs.mkdirSync(path.join(dir, "src", "data"), { recursive: true });
   fs.copyFileSync(path.join(repo, "scripts", script), path.join(dir, "scripts", script));
-  for (const lib of ["fetch-json.mjs", "github.mjs"]) {
+  for (const lib of ["fetch-json.mjs", "github.mjs", "data-module.mjs"]) {
     fs.copyFileSync(path.join(repo, "scripts", "lib", lib), path.join(dir, "scripts", "lib", lib));
   }
   fs.copyFileSync(path.join(repo, "public", snapshot), path.join(dir, "public", snapshot));

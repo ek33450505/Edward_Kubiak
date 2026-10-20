@@ -17,6 +17,7 @@ import os from "node:os";
 import path from "node:path";
 
 import { fetchJson } from "./lib/fetch-json.mjs";
+import { parseDataModule } from "./lib/data-module.mjs";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const statsPath = path.join(root, "public", "cast-stats.json");
@@ -78,11 +79,31 @@ fs.writeFileSync(statsPath, JSON.stringify(merged, null, 2) + "\n");
 const cast = {};
 for (const k of CORE_FIELDS) cast[k] = merged[k];
 
-// cast-desktop stats — from local clone if available (CI: last-committed defaults).
+// cast-desktop stats — seeded from the last-COMMITTED src/data/castStats.js (read before it is
+// rewritten below) so a runner without the clone does not roll the version back; a local clone
+// overrides when present. Hard-coded constants are the last resort.
 let desktop = {
   version: "v1.2.12",
   dashboardViews: 11,
 };
+try {
+  const committed = parseDataModule(fs.readFileSync(outPath, "utf8")).exports.find(
+    (e) => e.name === "CAST_DESKTOP_STATS",
+  )?.value;
+  if (
+    committed &&
+    typeof committed.version === "string" &&
+    /^v\d+\.\d+\.\d+(-[\w.]+)?$/.test(committed.version) &&
+    Number.isInteger(committed.dashboardViews) &&
+    committed.dashboardViews >= 0
+  ) {
+    desktop = { version: committed.version, dashboardViews: committed.dashboardViews };
+  } else {
+    console.warn("[sync-cast-stats] committed CAST_DESKTOP_STATS failed the shape check — using hard-coded constants");
+  }
+} catch (err) {
+  console.warn(`[sync-cast-stats] could not read committed desktop stats (${err.message}) — using hard-coded constants`);
+}
 const desktopRepo = path.join(os.homedir(), "Projects", "personal", "cast-desktop");
 try {
   const pkg = JSON.parse(fs.readFileSync(path.join(desktopRepo, "package.json"), "utf8"));
