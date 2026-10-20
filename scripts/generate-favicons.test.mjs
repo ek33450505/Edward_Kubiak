@@ -23,16 +23,15 @@ const snapshotIcons = () =>
     }),
   );
 
-const { GRID, ICO_SIZES, MASKABLE_SCALE, encodeIco, faviconSvg, glyphBounds, pathPoints, renderPng } = await import(
-  "./generate-favicons.mjs"
-);
+const { GRID, GRID_16, ICO_SIZES, MASKABLE_SCALE, encodeIco, favicon16Svg, faviconSvg, glyphBounds, pathPoints, renderPng } =
+  await import("./generate-favicons.mjs");
 
 const PNG_SIG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 const VARIANTS = ["tile", "fullbleed", "maskable"];
 
 // Bounding box (pixels) of amber glyph pixels in a rendered SVG.
-async function amberBox(svg, size) {
-  const { data, info } = await sharp(Buffer.from(svg), { density: (72 * size) / GRID })
+async function amberBox(svg, size, grid = GRID) {
+  const { data, info } = await sharp(Buffer.from(svg), { density: (72 * size) / grid })
     .resize(size, size)
     .ensureAlpha()
     .raw()
@@ -146,6 +145,90 @@ describe("faviconSvg", () => {
     const file = path.resolve(process.cwd(), "public/favicon.svg");
     const committed = fs.readFileSync(file, "utf8").replace(/\n+$/, "");
     expect(committed).toBe(faviconSvg({ variant: "tile" }).replace(/\n+$/, ""));
+  });
+});
+
+const hexRgb = (hex) => [1, 3, 5].map((k) => parseInt(hex.slice(k, k + 2), 16));
+const near = (data, i, rgb) => rgb.every((c, k) => Math.abs(data[i + k] - c) <= 2);
+
+// Raw RGBA pixels of a PNG buffer.
+const rawPixels = async (png) => {
+  const { data, info } = await sharp(png).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  return { data, width: info.width, height: info.height };
+};
+
+// Expected accent pixels (glyph rows 4-11, cols 2-13); frame not shown.
+const GLYPH_MAP_16 = [
+  "..#####.##..##..",
+  "..#####.##.##...",
+  "..##....####....",
+  "..####..###.....",
+  "..####..###.....",
+  "..##....####....",
+  "..#####.##.##...",
+  "..#####.##..##..",
+];
+
+describe("favicon16Svg", () => {
+  it("16px glyph is pixel-snapped", async () => {
+    const { data, width } = await rawPixels(await renderPng(favicon16Svg(), 16, GRID_16));
+    const bg = hexRgb(BACKGROUND);
+    const accent = hexRgb(ACCENT);
+    const rows = [];
+    // The frame's rounded corner (rx 1.5) antialiases into the four inner corner pixels; those are exempt.
+    const isCorner = (x, y) => (x === 1 || x === 14) && (y === 1 || y === 14);
+    for (let y = 1; y <= 14; y++) {
+      let row = "";
+      for (let x = 1; x <= 14; x++) {
+        const i = (y * width + x) * 4;
+        if (isCorner(x, y)) {
+          row += ".";
+          continue;
+        }
+        if (near(data, i, accent)) row += "#";
+        else if (near(data, i, bg)) row += ".";
+        else throw new Error(`pixel (${x},${y}) is neither background nor accent`);
+      }
+      rows.push(row);
+    }
+    // Compare the full 16-col map: rows 4-11 inside the frame, cols 2-13 (frame cols 0 and 15 are empty).
+    const accentSet = [];
+    for (let y = 1; y <= 14; y++) {
+      for (let x = 1; x <= 14; x++) if (rows[y - 1][x - 1] === "#") accentSet.push(`${x},${y}`);
+    }
+    const expected = [];
+    GLYPH_MAP_16.forEach((r, k) => {
+      [...r].forEach((ch, x) => {
+        if (ch === "#") expected.push(`${x},${k + 4}`);
+      });
+    });
+    expect(accentSet.sort()).toEqual(expected.sort());
+  });
+
+  it("16px glyph is centred", async () => {
+    const box = await amberBox(favicon16Svg(), 16, GRID_16);
+    expect(box).toEqual({ x0: 2, y0: 4, x1: 13, y1: 11 });
+  });
+});
+
+describe("committed public/favicon.ico", () => {
+  it("entries match fresh renders (16px from the dedicated design)", async () => {
+    const ico = fs.readFileSync(path.resolve(PUBLIC_DIR, "favicon.ico"));
+    const count = ico.readUInt16LE(4);
+    expect(count).toBe(ICO_SIZES.length);
+    const tile = faviconSvg({ variant: "tile" });
+    for (let k = 0; k < count; k++) {
+      const e = 6 + 16 * k;
+      const size = ico.readUInt32LE(e + 8);
+      const offset = ico.readUInt32LE(e + 12);
+      const n = ico[e] || 256;
+      expect(n).toBe(ICO_SIZES[k]);
+      const fresh = n === 16 ? await renderPng(favicon16Svg(), 16, GRID_16) : await renderPng(tile, n);
+      const a = await rawPixels(ico.subarray(offset, offset + size));
+      const b = await rawPixels(fresh);
+      expect([a.width, a.height]).toEqual([n, n]);
+      expect(a.data.equals(b.data), `ico ${n}px entry is stale; run npm run favicons`).toBe(true);
+    }
   });
 });
 

@@ -93,8 +93,11 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
   `src/lib/tokens.js`. sharp/librsvg can't load the Geist woff2, so text renders in the
   Helvetica/Menlo fallbacks locally (DejaVu on the CI runner).
 - Favicons: `npm run favicons` (`scripts/generate-favicons.mjs`) writes the six `public/` icons from
-  token colors, mirroring the nav EK mark (paths only). Committed, NOT in prebuild; a drift test
-  guards `favicon.svg`. Bump `?v=` in `index.html` and `public/manifest.json` when they change.
+  token colors, mirroring the nav EK mark (paths only). Committed, NOT in prebuild; drift tests
+  guard `favicon.svg` and every `favicon.ico` entry. The ICO's 16 px entry is a separate
+  pixel-snapped design (`favicon16Svg`, integer rects on a 16-unit grid), because the 32-unit mark
+  blurs at 16 px. Bump `?v=` (currently 3) in `index.html` and `public/manifest.json` when they
+  change.
 - Animation package is `motion` (npm) not `framer-motion` — `import { motion } from "motion/react"`.
 - Deploy target is GitHub Pages, source "GitHub Actions" (`build_type: workflow`):
   `deploy.yml` uploads `dist/` with `actions/upload-pages-artifact` and publishes it with
