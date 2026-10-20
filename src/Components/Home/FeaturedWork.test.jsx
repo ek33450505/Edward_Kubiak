@@ -7,7 +7,7 @@
  * that may change between deploys.
  */
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import FeaturedWork from './FeaturedWork';
 
@@ -98,16 +98,41 @@ describe('FeaturedWork — flagship card', () => {
   });
 });
 
-describe('FeaturedWork — trio cards', () => {
-  it('renders ≥3 /projects/:slug links (one per trio card at minimum)', () => {
+describe('FeaturedWork — tool cards', () => {
+  it('renders ≥3 /projects/:slug links (one per tool card at minimum)', () => {
     renderFeaturedWork();
     const allLinks = screen.getAllByRole('link');
     const projectLinks = allLinks.filter(
       (l) => /^\/projects\/.+/.test(l.getAttribute('href') ?? '')
     );
-    // flagship (1) + trio (3) = ≥4 total; require at least 3 so the test
+    // flagship (1) + tools (4) = ≥5 total; require at least 3 so the test
     // does not break if the flagship is temporarily absent from the data
     expect(projectLinks.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('renders the four tool cards in order, each linking to its project page', () => {
+    renderFeaturedWork();
+    const expected = [
+      ['looptrip', 'looptrip'],
+      ['misfire', 'misfire'],
+      ['Attest', 'attest'],
+      ['tin-can', 'tin-can'],
+    ];
+    const links = expected.map(([title]) =>
+      screen.getByRole('link', { name: new RegExp(`View project: ${title}`) })
+    );
+    links.forEach((link, i) => {
+      expect(link).toHaveAttribute('href', `/projects/${expected[i][1]}`);
+    });
+    const labels = ['03', '04', '05', '06'];
+    links.forEach((link, i) => {
+      const card = link.closest('article');
+      expect(card).not.toBeNull();
+      expect(within(card).getByText(labels[i])).toBeInTheDocument();
+    });
+    for (let i = 1; i < links.length; i++) {
+      expect(links[i - 1].compareDocumentPosition(links[i]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    }
   });
 });
 
@@ -124,7 +149,7 @@ describe('FeaturedWork — external link safety', () => {
   it('all target="_blank" links carry rel="noopener noreferrer"', () => {
     const { container } = renderFeaturedWork();
     const externalLinks = Array.from(container.querySelectorAll('a[target="_blank"]'));
-    // Trio cards may or may not have live-demo links; validate only those present
+    // Tool cards may or may not have live-demo links; validate only those present
     externalLinks.forEach((link) => {
       expect(link.rel).toContain('noopener');
       expect(link.rel).toContain('noreferrer');

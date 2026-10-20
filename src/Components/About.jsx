@@ -140,7 +140,9 @@ const About = () => {
                   misfire asks which of your rules agents actually ignore; attest
                   checks whether a claimed DONE actually landed on disk; looptrip
                   trips coordination loops at iteration 2, not on the invoice.
-                  Every component works standalone. Zero cloud, zero lock-in.
+                  tin-can hands a long session to a fresh terminal tab through
+                  a handoff file, without copy-paste. Every component works
+                  standalone. Zero cloud, zero lock-in.
                 </p>
                 <p className="mt-4 text-muted-foreground leading-relaxed">
                   I keep a running log of what I&apos;m building on the{" "}

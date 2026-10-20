@@ -8,7 +8,7 @@ import SectionHead from "../ui/SectionHead";
 import PageWrapper from "../ui/PageWrapper";
 import Reveal from "../ui/Reveal";
 
-const TRIO_SLUGS = ["looptrip", "misfire", "attest"];
+const TOOL_SLUGS = ["looptrip", "misfire", "attest", "tin-can"];
 
 // Mono index label on each work card.
 const idx = (n) => String(n).padStart(2, "0");
@@ -22,7 +22,7 @@ export default function FeaturedWork() {
   const hover = reducedMotion ? {} : { y: -3, transition: { duration: 0.2 } };
 
   const flagship = projects.find((p) => p.slug === "cast-claude-agent-team");
-  const trio = TRIO_SLUGS.map((s) => projects.find((p) => p.slug === s)).filter(Boolean);
+  const tools = TOOL_SLUGS.map((s) => projects.find((p) => p.slug === s)).filter(Boolean);
   const flagshipTech = flagship ? (flagship.tech || []).slice(0, 4) : [];
 
   const atlas = projects.find((p) => p.slug === "compute-atlas");
@@ -197,9 +197,9 @@ export default function FeaturedWork() {
           </motion.article>
         )}
 
-        {/* looptrip / misfire / attest — equal-height index cards */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {trio.map((project, i) => {
+        {/* looptrip / misfire / attest / tin-can — equal-height index cards, 2×2 from md */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {tools.map((project, i) => {
             const techChips = (project.tech || []).slice(0, 3);
 
             return (
