@@ -52,10 +52,17 @@ function ownRepoName(repoFull) {
 }
 
 // Pure — the privacy gate. Public PushEvents on the owner's own, well-formed repos only.
+// The profile README repo (named after the owner) is excluded: it carries automated
+// stats-refresh commits, not building work.
 export function selectPushEvents(events) {
   if (!Array.isArray(events)) return [];
   return events.filter(
-    (e) => e && e.type === "PushEvent" && e.public === true && ownRepoName(e.repo?.name) !== null
+    (e) =>
+      e &&
+      e.type === "PushEvent" &&
+      e.public === true &&
+      ownRepoName(e.repo?.name) !== null &&
+      ownRepoName(e.repo?.name) !== OWNER
   );
 }
 
