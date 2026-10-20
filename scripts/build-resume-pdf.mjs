@@ -116,7 +116,7 @@ function renderResumeHtml(
       .map((h) => {
         // Bold the product names the eye should catch when scanning.
         const body = esc(h).replace(
-          /\b(CrossCheck|SES-Wiki|Customization Web Store|E-Rate dashboard|misfire|attest|looptrip|Compute Atlas|CAST v[\d.]+)\b/g,
+          /\b(CrossCheck|SES-Wiki|Customization Web Store|E-Rate dashboard|misfire|attest|looptrip|tin-can|Compute Atlas|CAST v[\d.]+)\b/g,
           "<strong>$1</strong>"
         );
         return `      <li>${body}</li>`;
@@ -269,7 +269,7 @@ function renderOnePagerHtml(stats, desktopStats, identity) {
     ],
     [
       "Agent-reliability tools (zero-LLM, deterministic)",
-      `misfire ${TOOL_VERSIONS.misfire}: trace-grounded CLAUDE.md adherence auditor; attest ${TOOL_VERSIONS.attest}: verifies a subagent's DONE against the real git delta; looptrip ${TOOL_VERSIONS.looptrip}: trips coordination loops at iteration 2, reproducing prevented duplicate-work spend from a committed fixture.`,
+      `misfire ${TOOL_VERSIONS.misfire}: trace-grounded CLAUDE.md adherence auditor; attest ${TOOL_VERSIONS.attest}: verifies a subagent's DONE against the real git delta; looptrip ${TOOL_VERSIONS.looptrip}: trips coordination loops at iteration 2, reproducing prevented duplicate-work spend from a committed fixture. Plus tin-can ${TOOL_VERSIONS["tin-can"]}, a session-handoff CLI: hands a coding session to a fresh terminal tab through a handoff file.`,
     ],
   ]
     .map(

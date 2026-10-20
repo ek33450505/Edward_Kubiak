@@ -65,6 +65,7 @@ jobs:
             'misfire',
             'attest',
             'looptrip',
+            'tin-can',
             'cast-mcp',
             'cast-ledger',
             'cast-predict',

@@ -3,7 +3,7 @@ import { ATLAS_STATS } from "./atlasStats.js";
 import { TOOL_VERSIONS } from "./toolStats.js";
 
 const now = {
-  updated: "October 19, 2026",
+  updated: "October 20, 2026",
   sections: [
     {
       title: "Building",
@@ -12,6 +12,7 @@ const now = {
         `CAST ${CAST_STATS.version} — the development architecture behind my work, Compute Atlas included: a ${CAST_STATS.agents}-agent Claude Code framework with hook-driven dispatch and review gates, ${CAST_ECOSYSTEM.tapsPlusUmbrella}, ${CAST_STATS.tests.toLocaleString("en-US")} tests across ${CAST_STATS.tables} record tables. New tests are mutation-tested: reverted against the bug they guard and confirmed red first. The record still acts — search it with \`cast ask\`, sign it with \`cast ledger --verify\`, predict from it with \`cast predict\`. Public site live at castframework.dev.`,
         `Attest ${TOOL_VERSIONS.attest} — a deterministic, zero-LLM Claude Code hook that verifies a subagent's “DONE” against the real git diff and blocks proven false completions. Public on GitHub + Homebrew, CI green.`,
         `looptrip ${TOOL_VERSIONS.looptrip} — live on PyPI and Homebrew. Deterministic, framework-agnostic detection of multi-agent coordination pathologies: duplicate-work loops, ping-pong / livelock, deadlock, and non-termination — caught at iteration 2, not on the invoice. OSS library + OpenTelemetry SpanProcessor.`,
+        `tin-can ${TOOL_VERSIONS["tin-can"]} — hands an AI coding session off to a fresh terminal tab: the agent writes a handoff file, and one command starts the next session pointed at it. A small bash script plus an optional Claude Code plugin; CI runs ShellCheck and BATS on Ubuntu and macOS.`,
         "Beyond Attest and looptrip, prototyping a broader family of local-first, deterministic agent-reliability tools — gates that verify what agents actually do against ground truth, rather than trusting what they report.",
         "cast-doctor — a read-only health check that audits hook wiring, memory freshness, settings drift, and database integrity against any Claude Code install.",
         `cast-desktop — shipped ${CAST_DESKTOP_STATS.version}. Native Tauri 2 + React 19 app with ${CAST_DESKTOP_STATS.dashboardViews} dashboard views, real PTY terminal, Cmd+K palette, and multiple themes. Available via brew tap ek33450505/cast-desktop.`,

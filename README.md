@@ -20,6 +20,7 @@ it, because the judgment, the verification and the consequences all stayed put.
 - **Agent-reliability tools** — deterministic and zero-LLM: `misfire` asks which of
   your rules agents actually ignore, `attest` checks whether a claimed DONE landed on
   disk, `looptrip` trips coordination loops at iteration 2 rather than on the invoice.
+  Plus `tin-can`, which hands a long session to a fresh terminal tab through a handoff file.
 - **[How I work with agents](https://edwardkubiak.com/practice)** — the loop I actually
   run, where review time goes, and dated case studies of output that looked right and
   wasn't.

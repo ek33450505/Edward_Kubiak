@@ -1,4 +1,4 @@
-import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair, Map, Globe } from "lucide-react";
+import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair, Map, Globe, Cable } from "lucide-react";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 import { ATLAS_STATS } from "./atlasStats.js";
 import { TOOL_VERSIONS } from "./toolStats.js";
@@ -183,6 +183,24 @@ const projects = [
     github: "https://github.com/ek33450505/attest",
     githubRepo: { owner: "ek33450505", repo: "attest" },
     stats: ["Zero-LLM", "Plugin + Homebrew", TOOL_VERSIONS.attest],
+  },
+  {
+    slug: "tin-can",
+    dateAdded: "2026-10-20",
+    title: "tin-can",
+    description:
+      "Hand an AI coding session off to a fresh session in a new terminal tab, without copy-paste. When a long session fills its context, the agent writes a markdown handoff with a KICKOFF section; one command opens a new tab in cmux, tmux, Zellij, WezTerm or kitty (or prints the command for any other terminal), starts Claude Code or Codex there, and gives it a single prompt naming the file. tin-can never parses the handoff or puts its contents on a command line, and it refuses paths disguised with invisible characters. An optional Claude Code plugin bundles the handoff skill with hooks that surface the launch command and ask for a handoff at wrap-up. A small bash script, verified live in cmux with Claude Code; the other terminals and Codex are tested with stubs. CI runs ShellCheck and BATS on Ubuntu and macOS. MIT.",
+    summary: "One command hands an AI coding session to a fresh terminal tab: the agent writes a handoff file, and tin-can starts the next session pointed at it.",
+    tech: ["Bash", "Claude Code", "Hook Architecture", "BATS", "GitHub Actions"],
+    icon: Cable,
+    color: "violet",
+    category: "personal",
+    group: "tools",
+    featured: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/tin-can",
+    githubRepo: { owner: "ek33450505", repo: "tin-can" },
+    stats: ["Bash 3.2+", "Plugin + install.sh", TOOL_VERSIONS["tin-can"]],
   },
   {
     slug: "claude-code-dashboard",
