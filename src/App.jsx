@@ -60,127 +60,134 @@ export function NavBar() {
   }, []);
 
   return (
-    <nav aria-label="Primary" className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur">
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-(--spacing-nav)">
-        {/* Masthead — mono monogram + name */}
-        <Link to="/" className="flex items-center gap-3 group" onClick={() => setOpen(false)}>
-          <span
-            aria-hidden="true"
-            className="inline-flex h-7 w-7 items-center justify-center border border-border-strong font-mono text-[11px] font-semibold tracking-tight text-foreground group-hover:text-primary group-hover:border-primary transition-colors"
+    <header>
+      <nav aria-label="Primary" className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur">
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-(--spacing-nav)">
+          {/* Masthead — mono monogram + name */}
+          <Link
+            to="/"
+            aria-current={path === "/" ? "page" : undefined}
+            className="flex items-center gap-3 group"
+            onClick={() => setOpen(false)}
           >
-            EK
-          </span>
-          <span className="font-display font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
-            Edward Kubiak
-          </span>
-        </Link>
-
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-1">
-          {navLinks.map(({ to, label }) => (
-            <Link
-              key={to}
-              to={to}
-              aria-current={path === to ? "page" : undefined}
-              className={`relative px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-300 ${
-                path === to
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+            <span
+              aria-hidden="true"
+              className="inline-flex h-7 w-7 items-center justify-center border border-border-strong font-mono text-[11px] font-semibold tracking-tight text-foreground group-hover:text-primary group-hover:border-primary transition-colors"
             >
-              {label}
-              {path === to && (
-                <motion.div
-                  layoutId="nav-underline"
-                  className="absolute -bottom-px left-2 right-2 h-px bg-primary"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-              )}
-            </Link>
-          ))}
-          {/* ⌘K affordance */}
-          <IconButton
-            label="Open command palette"
-            title="Open command palette"
-            onClick={toggle}
-            className="ml-2"
-          >
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded border border-border-strong text-[10px] font-mono tracking-wider text-muted-foreground hover:border-primary hover:text-primary transition-colors">
-              ⌘K
+              EK
             </span>
-          </IconButton>
+            <span className="font-display font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
+              Edward Kubiak
+            </span>
+          </Link>
+
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map(({ to, label }) => (
+              <Link
+                key={to}
+                to={to}
+                aria-current={path === to ? "page" : undefined}
+                className={`relative px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-300 ${
+                  path === to
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {label}
+                {path === to && (
+                  <motion.div
+                    layoutId="nav-underline"
+                    className="absolute -bottom-px left-2 right-2 h-px bg-primary"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </Link>
+            ))}
+            {/* ⌘K affordance */}
+            <IconButton
+              label="Open command palette"
+              title="Open command palette"
+              onClick={toggle}
+              className="ml-2"
+            >
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded border border-border-strong text-[10px] font-mono tracking-wider text-muted-foreground hover:border-primary hover:text-primary transition-colors">
+                ⌘K
+              </span>
+            </IconButton>
+            <IconButton
+              href="https://github.com/ek33450505"
+              target="_blank"
+              rel="noopener noreferrer"
+              label="GitHub profile (opens in new tab)"
+              title="GitHub"
+              className="ml-2"
+            >
+              <GithubIcon size={20} aria-hidden="true" />
+            </IconButton>
+          </div>
+
+          {/* Mobile toggle */}
           <IconButton
-            href="https://github.com/ek33450505"
-            target="_blank"
-            rel="noopener noreferrer"
-            label="GitHub profile (opens in new tab)"
-            title="GitHub"
-            className="ml-2"
+            label="Toggle menu"
+            onClick={() => setOpen(!open)}
+            aria-expanded={open}
+            aria-controls={open ? "mobile-menu" : undefined}
+            className="md:hidden"
           >
-            <GithubIcon size={20} aria-hidden="true" />
+            {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
           </IconButton>
         </div>
 
-        {/* Mobile toggle */}
-        <IconButton
-          label="Toggle menu"
-          onClick={() => setOpen(!open)}
-          aria-expanded={open}
-          aria-controls={open ? "mobile-menu" : undefined}
-          className="md:hidden"
-        >
-          {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
-        </IconButton>
-      </div>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden overflow-hidden border-t border-border bg-background/95 backdrop-blur"
-          >
-            <div className="px-6 py-4 flex flex-col gap-2">
-              {navLinks.map(({ to, label }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  onClick={() => setOpen(false)}
-                  aria-current={path === to ? "page" : undefined}
-                  className={`font-mono text-xs tracking-[0.18em] uppercase py-3 min-h-11 border-b border-border transition-colors ${
-                    path === to
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              id="mobile-menu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden overflow-hidden border-t border-border bg-background/95 backdrop-blur"
+            >
+              <div className="px-6 py-4 flex flex-col gap-2">
+                {navLinks.map(({ to, label }) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    onClick={() => setOpen(false)}
+                    aria-current={path === to ? "page" : undefined}
+                    className={`font-mono text-xs tracking-[0.18em] uppercase py-3 min-h-11 border-b border-border transition-colors ${
+                      path === to
+                        ? "text-primary"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                ))}
+                {/* Search / ⌘K row */}
+                <button
+                  onClick={() => { setOpen(false); toggle(); }}
+                  className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-xs tracking-[0.18em] uppercase transition-colors border-b border-border text-left min-h-11"
                 >
-                  {label}
-                </Link>
-              ))}
-              {/* Search / ⌘K row */}
-              <button
-                onClick={() => { setOpen(false); toggle(); }}
-                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-xs tracking-[0.18em] uppercase transition-colors border-b border-border text-left min-h-11"
-              >
-                Search <span className="ml-1 px-1.5 py-0.5 rounded border border-border-strong text-[10px] text-muted-foreground">⌘K</span>
-              </button>
-              <a
-                href="https://github.com/ek33450505"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub profile (opens in new tab)"
-                className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-xs tracking-[0.18em] uppercase transition-colors min-h-11"
-              >
-                <GithubIcon size={18} aria-hidden="true" /> GITHUB
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+                  Search <span className="ml-1 px-1.5 py-0.5 rounded border border-border-strong text-[10px] text-muted-foreground">⌘K</span>
+                </button>
+                <a
+                  href="https://github.com/ek33450505"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub profile (opens in new tab)"
+                  className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary font-mono text-xs tracking-[0.18em] uppercase transition-colors min-h-11"
+                >
+                  <GithubIcon size={18} aria-hidden="true" /> GITHUB
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+    </header>
   );
 }
 
