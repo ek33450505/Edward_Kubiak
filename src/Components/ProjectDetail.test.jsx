@@ -197,3 +197,24 @@ describe('ProjectDetail — a11y structure (compute-atlas)', () => {
     ).toHaveTextContent('Source');
   });
 });
+
+describe('ProjectDetail — dataset DOI link', () => {
+  it('links the Zenodo DOI on compute-atlas with a label-in-name accessible name', () => {
+    renderProject('compute-atlas');
+    const { doiUrl } = projects.find((p) => p.slug === 'compute-atlas').dataset;
+    const link = screen.getByRole('link', {
+      name: 'Dataset DOI on Zenodo (opens in new tab)',
+    });
+    expect(link).toHaveAttribute('href', doiUrl);
+    expect(link.getAttribute('href')).toMatch(/^https:\/\/doi\.org\/10\./);
+    expect(link).toHaveTextContent('Dataset DOI');
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
+  });
+
+  it('renders no dataset link for a project without the field', () => {
+    const without = projects.find((p) => !p.dataset && p.github);
+    renderProject(without.slug);
+    expect(screen.queryByRole('link', { name: /^dataset doi/i })).not.toBeInTheDocument();
+  });
+});

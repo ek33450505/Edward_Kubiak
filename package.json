@@ -27,7 +27,7 @@
     "sync-activity": "node scripts/sync-github-activity.mjs",
     "prebuild": "node scripts/sync-cast-stats.mjs && node scripts/sync-atlas-stats.mjs && node scripts/sync-atlas-points.mjs && node scripts/sync-tool-versions.mjs && node scripts/sync-repo-facts.mjs && node scripts/sync-github-activity.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-rss.mjs",
     "build": "vite build",
-    "postbuild": "node scripts/prerender-routes.mjs",
+    "postbuild": "node scripts/prerender-routes.mjs && node scripts/verify-prerender.mjs",
     "prerender": "node scripts/prerender-routes.mjs",
     "preview": "vite preview",
     "lint": "eslint .",

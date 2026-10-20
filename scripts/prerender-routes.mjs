@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { isDirectInvocation } from './lib/direct-invocation.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = process.env.PRERENDER_DIST || join(__dirname, '../dist');
@@ -10,26 +11,8 @@ const indexPath = join(distDir, 'index.html');
 
 const BASE_URL = 'https://edwardkubiak.com';
 
-// ── Guard: dist must already be built ───────────────────────────────────────
-if (!fs.existsSync(indexPath)) {
-  console.error(`prerender-routes: ${indexPath} not found — run vite build first.`);
-  process.exit(1);
-}
-const indexHtml = fs.readFileSync(indexPath, 'utf8');
-
-// ── Load route model ─────────────────────────────────────────────────────────
-const { ROUTE_META } = await import(routeMetaPath);
-let projects = [];
-try {
-  const projectsModule = await import(projectsPath);
-  projects = (projectsModule.default || []).filter((p) => !p.archived);
-} catch (e) {
-  console.error('Failed to load projects:', e.message);
-  process.exit(1);
-}
-
 // ── Escaping / helpers ────────────────────────────────────────────────────────
-function escapeHtml(str) {
+export function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -72,7 +55,7 @@ function setCanonical(html, absUrl) {
 // embedded literally (e.g. a description containing the string "</script>").
 // Standard mitigation: escape "/" following "<" so "</script>" can never
 // appear verbatim inside the JSON payload.
-function escapeJsonForScriptTag(json) {
+export function escapeJsonForScriptTag(json) {
   return json.replace(/</g, '\\u003c');
 }
 
@@ -83,7 +66,7 @@ function injectJsonLd(html, ...objects) {
   return html.replace('</head>', () => `${scripts}\n  </head>`);
 }
 
-function toAbsUrl(path) {
+export function toAbsUrl(path) {
   if (path === '/') return `${BASE_URL}/`;
   return `${BASE_URL}${path}`;
 }
@@ -126,6 +109,24 @@ function softwareSourceCodeJsonLd(project) {
   };
 }
 
+export function datasetJsonLd(project) {
+  if (!project.dataset) return null;
+  const { title, description, doiUrl, licenseUrl, publisher } = project.dataset;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: title,
+    description,
+    identifier: doiUrl,
+    url: doiUrl,
+    license: licenseUrl,
+    isAccessibleForFree: true,
+    creator: { '@type': 'Person', name: 'Edward Kubiak', url: BASE_URL },
+    publisher: { '@type': 'Organization', name: publisher },
+    isBasedOn: project.github,
+  };
+}
+
 function softwareApplicationJsonLd(project) {
   return {
     '@context': 'https://schema.org',
@@ -138,26 +139,8 @@ function softwareApplicationJsonLd(project) {
   };
 }
 
-// ── Route list ────────────────────────────────────────────────────────────────
-const STATIC_ROUTES = Object.entries(ROUTE_META).map(([path, meta]) => ({
-  path,
-  title: meta.title,
-  description: meta.description,
-  canonical: meta.canonical,
-}));
-
-const PROJECT_ROUTES = projects.map((p) => ({
-  path: `/projects/${p.slug}`,
-  title: `${p.title} — Edward Kubiak`,
-  description: p.summary ?? p.description,
-  canonical: `/projects/${p.slug}/`,
-  project: p,
-}));
-
-const ROUTES = [...STATIC_ROUTES, ...PROJECT_ROUTES];
-
 // ── Render one route's head ─────────────────────────────────────────────────
-function renderRoute(route) {
+export function renderRoute(route, indexHtml) {
   let html = indexHtml;
   html = setTitle(html, route.title);
   html = setAttrContent(html, 'name="description"', route.description);
@@ -177,28 +160,77 @@ function renderRoute(route) {
     if (route.project.link) {
       jsonLdBlocks.push(softwareApplicationJsonLd(route.project));
     }
+    const dataset = datasetJsonLd(route.project);
+    if (dataset) jsonLdBlocks.push(dataset);
   }
   html = injectJsonLd(html, ...jsonLdBlocks);
 
   return html;
 }
 
-// ── Write shells ──────────────────────────────────────────────────────────────
-let written = 0;
-for (const route of ROUTES) {
-  try {
-    const html = renderRoute(route);
-    const outPath = route.path === '/'
-      ? indexPath
-      : join(distDir, route.path.replace(/^\//, ''), 'index.html');
-    fs.mkdirSync(dirname(outPath), { recursive: true });
-    fs.writeFileSync(outPath, html);
-    written += 1;
-  } catch (e) {
-    console.error(`prerender-routes: failed to write shell for ${route.path}: ${e.message}`);
-    process.exit(1);
-  }
+// The one definition of which routes get a prerendered shell; the post-build
+// verifier (scripts/verify-prerender.mjs) reuses it so the two cannot disagree.
+export async function loadRoutes() {
+  const { ROUTE_META } = await import(routeMetaPath);
+  const projectsModule = await import(projectsPath);
+  const projects = (projectsModule.default || []).filter((p) => !p.archived);
+
+  const STATIC_ROUTES = Object.entries(ROUTE_META).map(([path, meta]) => ({
+    path,
+    title: meta.title,
+    description: meta.description,
+    canonical: meta.canonical,
+  }));
+
+  const PROJECT_ROUTES = projects.map((p) => ({
+    path: `/projects/${p.slug}`,
+    title: `${p.title} — Edward Kubiak`,
+    description: p.summary ?? p.description,
+    canonical: `/projects/${p.slug}/`,
+    project: p,
+  }));
+
+  return { STATIC_ROUTES, PROJECT_ROUTES, ROUTES: [...STATIC_ROUTES, ...PROJECT_ROUTES] };
 }
 
-console.log(`Wrote ${written} prerendered head-only shells to ${distDir}`);
-console.log(`  ${STATIC_ROUTES.length} static routes + ${PROJECT_ROUTES.length} project routes = ${ROUTES.length} total`);
+async function main() {
+  // ── Guard: dist must already be built ─────────────────────────────────────
+  if (!fs.existsSync(indexPath)) {
+    console.error(`prerender-routes: ${indexPath} not found — run vite build first.`);
+    process.exit(1);
+  }
+  const indexHtml = fs.readFileSync(indexPath, 'utf8');
+
+  let routes;
+  try {
+    routes = await loadRoutes();
+  } catch (e) {
+    console.error('Failed to load routes:', e.message);
+    process.exit(1);
+  }
+  const { STATIC_ROUTES, PROJECT_ROUTES, ROUTES } = routes;
+
+  // ── Write shells ──────────────────────────────────────────────────────────────
+  let written = 0;
+  for (const route of ROUTES) {
+    try {
+      const html = renderRoute(route, indexHtml);
+      const outPath = route.path === '/'
+        ? indexPath
+        : join(distDir, route.path.replace(/^\//, ''), 'index.html');
+      fs.mkdirSync(dirname(outPath), { recursive: true });
+      fs.writeFileSync(outPath, html);
+      written += 1;
+    } catch (e) {
+      console.error(`prerender-routes: failed to write shell for ${route.path}: ${e.message}`);
+      process.exit(1);
+    }
+  }
+
+  console.log(`Wrote ${written} prerendered head-only shells to ${distDir}`);
+  console.log(`  ${STATIC_ROUTES.length} static routes + ${PROJECT_ROUTES.length} project routes = ${ROUTES.length} total`);
+}
+
+if (isDirectInvocation(process.argv[1], import.meta.url)) {
+  await main();
+}

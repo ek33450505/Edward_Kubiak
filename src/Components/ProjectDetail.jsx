@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { fadeUp, fadeIn } from "../utils/motion";
-import { ExternalLink, ArrowLeft, Lock } from "lucide-react";
+import { ExternalLink, ArrowLeft, Lock, BookOpen } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 import PageWrapper from "./ui/PageWrapper";
@@ -78,7 +78,7 @@ function ProjectDetail() {
   }
 
   const groupLabel = GROUP_LABELS[project.group] ?? project.category;
-  const hasOutLinks = Boolean(project.github || project.link);
+  const hasOutLinks = Boolean(project.github || project.link || project.dataset);
   // Hero assets are 1600x1000 (compute-atlas is the only one today); revisit if another is added.
   const heroAlt = `${project.title} interface — interactive map view`;
 
@@ -171,6 +171,18 @@ function ProjectDetail() {
                   >
                     <ExternalLink size={14} aria-hidden="true" />
                     Live site
+                  </a>
+                )}
+                {project.dataset && (
+                  <a
+                    href={project.dataset.doiUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Dataset DOI on Zenodo (opens in new tab)"
+                    className={outLinkClass}
+                  >
+                    <BookOpen size={14} aria-hidden="true" />
+                    Dataset DOI
                   </a>
                 )}
               </div>
