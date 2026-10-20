@@ -1,1 +1,37 @@
-{"commits":[],"cachedAt":""}
+{
+  "commits": [
+    {
+      "id": "448b38fb159bc8479b7025f4a6fb1fabd18ca28d",
+      "repo": "Edward_Kubiak",
+      "repoFull": "ek33450505/Edward_Kubiak",
+      "sha": "448b38fb159bc8479b7025f4a6fb1fabd18ca28d",
+      "message": "Fix route titles and nav state on trailing-slash URLs; gate it (#52)",
+      "time": "2026-10-19T23:21:38Z"
+    },
+    {
+      "id": "fc9a6f311cfbfb4dd4e1026dc7d4c7c4b6f91434",
+      "repo": "Edward_Kubiak",
+      "repoFull": "ek33450505/Edward_Kubiak",
+      "sha": "fc9a6f311cfbfb4dd4e1026dc7d4c7c4b6f91434",
+      "message": "Cleanup: npm audit, action pin, scanner symlink guard (#49)",
+      "time": "2026-10-19T21:32:51Z"
+    },
+    {
+      "id": "bffa71d3c28cc8b1048236ea2db2c9b8e4e8ab1c",
+      "repo": "compute-atlas",
+      "repoFull": "ek33450505/compute-atlas",
+      "sha": "bffa71d3c28cc8b1048236ea2db2c9b8e4e8ab1c",
+      "message": "Mark the September SEO soak as closed without a read (#452)",
+      "time": "2026-10-17T20:52:38Z"
+    },
+    {
+      "id": "627955d1d6aa4e3de968bd727a8e2cbf9e299793",
+      "repo": "Edward_Kubiak",
+      "repoFull": "ek33450505/Edward_Kubiak",
+      "sha": "627955d1d6aa4e3de968bd727a8e2cbf9e299793",
+      "message": "Harden the remaining sync scripts; P4 review follow-ups (#47)",
+      "time": "2026-10-19T20:30:35Z"
+    }
+  ],
+  "cachedAt": "2026-10-19T23:48:48.312Z"
+}

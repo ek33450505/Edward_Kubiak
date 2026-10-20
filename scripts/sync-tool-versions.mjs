@@ -16,6 +16,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { fetchJson } from "./lib/fetch-json.mjs";
+import { githubHeaders } from "./lib/github.mjs";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const versionsPath = path.join(root, "public", "tool-versions.json");
@@ -81,22 +82,7 @@ export function pickLatestSemver(tagNames) {
   return `v${top.major}.${top.minor}.${top.patch}`;
 }
 
-// Pure — the token is sent only to the real GitHub API origin, never to an
-// env-overridden TOOL_VERSIONS_API_BASE (which may be plain http or a foreign host).
-export function githubHeaders(url, token) {
-  const headers = {
-    "User-Agent": "sync-tool-versions",
-    Accept: "application/vnd.github+json",
-  };
-  let origin = null;
-  try {
-    origin = new URL(url).origin;
-  } catch { /* invalid URL: no token */ }
-  if (token && origin === "https://api.github.com") {
-    headers.Authorization = `Bearer ${token}`;
-  }
-  return headers;
-}
+export { githubHeaders };
 
 function fetchGithub(url) {
   return fetchJson(url, { idleMs: 4000, deadlineMs: 15000, headers: githubHeaders(url, process.env.GITHUB_TOKEN) });
