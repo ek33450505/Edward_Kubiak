@@ -28,7 +28,7 @@ function git(dir, ...args) {
 function makeRepo() {
   const dir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "refresh-plant-")));
   cleanups.push(() => fs.rmSync(dir, { recursive: true, force: true }));
-  for (const f of FEEDS.filter((x) => x.kind !== "pdf")) {
+  for (const f of FEEDS) {
     fs.mkdirSync(path.dirname(path.join(dir, f.path)), { recursive: true });
     fs.copyFileSync(path.join(repo, f.path), path.join(dir, f.path));
   }
@@ -46,16 +46,15 @@ describe("plant", () => {
     const dir = makeRepo();
     plant("quiet", dir);
     expect(git(dir, "status", "--porcelain")).not.toBe("");
-    expect(materialCheck(dir)).toMatchObject({ material: false, pdfs: false });
+    expect(materialCheck(dir)).toMatchObject({ material: false });
     const today = new Date().toISOString().slice(0, 10);
     expect(JSON.parse(read(dir, "public/atlas-points.json")).asOf).toBe(today);
-    expect(JSON.parse(read(dir, "public/last-known-commits.json")).cachedAt).toMatch(/^\d{4}-\d\d-\d\dT.*Z$/);
   });
 
   it("feed-only bumps the first tool patch in both mirrors", () => {
     const dir = makeRepo();
     plant("feed-only", dir);
-    expect(materialCheck(dir)).toMatchObject({ material: true, pdfs: true });
+    expect(materialCheck(dir)).toMatchObject({ material: true });
     const before = JSON.parse(git(dir, "show", "HEAD:public/tool-versions.json"));
     const after = JSON.parse(read(dir, "public/tool-versions.json"));
     const first = Object.keys(before)[0];
@@ -77,7 +76,7 @@ describe("plant", () => {
     const dir = makeRepo();
     const before = JSON.parse(read(dir, "public/atlas-stats.json")).count;
     plant("facilities-drop", dir);
-    expect(materialCheck(dir)).toMatchObject({ material: true, pdfs: true });
+    expect(materialCheck(dir)).toMatchObject({ material: true });
     expect(JSON.parse(read(dir, "public/atlas-stats.json")).count).toBe(Math.floor(before / 2));
     const m = parseDataModule(read(dir, "src/data/atlasStats.js"));
     expect(m.exports.find((e) => e.name === "ATLAS_STATS").value.facilities).toBe(Math.floor(before / 2));
@@ -95,8 +94,8 @@ describe("plant", () => {
 
   it.each(KINDS)("%s is deterministic: planting twice gives byte-identical files", (kind) => {
     const dir = makeRepo();
-    vi.useFakeTimers({ toFake: ["Date"] }); // quiet stamps cachedAt with the current time
-    const files = [...FEEDS.filter((f) => f.kind !== "pdf").map((f) => f.path), "README.md"];
+    vi.useFakeTimers({ toFake: ["Date"] }); // quiet stamps the current date
+    const files = [...FEEDS.map((f) => f.path), "README.md"];
     plant(kind, dir);
     const once = files.map((f) => read(dir, f));
     plant(kind, dir);

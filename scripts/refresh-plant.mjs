@@ -16,14 +16,12 @@ import { FEEDS } from "./refresh-gate.mjs";
 
 export const KINDS = ["quiet", "feed-only", "feed-plus-prose", "facilities-drop"];
 
-const DATA_FEEDS = FEEDS.filter((f) => f.kind !== "pdf");
-
 // Discards any local edits to the feeds and README.md (for the CI runner / temp repos only), so a
 // probe is deterministic and planting the same kind twice gives identical files.
 function resetFeeds(repoDir) {
   execFileSync(
     "git",
-    ["-C", repoDir, "checkout", "HEAD", "--", ...DATA_FEEDS.map((f) => f.path), "README.md"],
+    ["-C", repoDir, "checkout", "HEAD", "--", ...FEEDS.map((f) => f.path), "README.md"],
     { env: { ...process.env, GIT_CONFIG_NOSYSTEM: "1" }, stdio: ["ignore", "pipe", "pipe"] },
   );
 }
@@ -45,8 +43,7 @@ function edit(repoDir, relPath, mutate) {
 }
 
 function plantQuiet(repoDir) {
-  const now = new Date().toISOString();
-  const today = now.slice(0, 10);
+  const today = new Date().toISOString().slice(0, 10);
   edit(repoDir, "src/data/atlasPoints.js", (m) => { m.ATLAS_POINTS.asOf = today; });
   edit(repoDir, "public/atlas-points.json", (v) => { v.asOf = today; });
   edit(repoDir, "src/data/repoFacts.js", (m) => {
@@ -57,7 +54,6 @@ function plantQuiet(repoDir) {
     v.computeAtlas.treeAsOf = today;
     v.computeAtlas.commitsAsOf = today;
   });
-  edit(repoDir, "public/last-known-commits.json", (v) => { v.cachedAt = now; });
 }
 
 function bumpPatch(version) {

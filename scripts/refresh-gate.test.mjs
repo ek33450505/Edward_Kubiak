@@ -27,7 +27,7 @@ function git(dir, ...args) {
 function makeRepo() {
   const dir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "refresh-gate-")));
   cleanups.push(() => fs.rmSync(dir, { recursive: true, force: true }));
-  for (const f of FEEDS.filter((x) => x.kind !== "pdf")) {
+  for (const f of FEEDS) {
     fs.mkdirSync(path.dirname(path.join(dir, f.path)), { recursive: true });
     fs.copyFileSync(path.join(repo, f.path), path.join(dir, f.path));
   }
@@ -53,20 +53,17 @@ function editFeed(dir, relPath, mutate) {
 }
 
 describe("FEEDS / ALLOWLIST", () => {
-  it("lists the 13 allowlisted paths", () => {
-    expect(ALLOWLIST).toHaveLength(13);
-    expect(new Set(ALLOWLIST).size).toBe(13);
-    expect(FEEDS.filter((f) => f.pdf).map((f) => f.path)).toEqual([
-      "src/data/castStats.js",
-      "src/data/atlasStats.js",
-      "src/data/toolStats.js",
-    ]);
+  it("lists the 10 allowlisted paths", () => {
+    expect(ALLOWLIST).toHaveLength(10);
+    expect(new Set(ALLOWLIST).size).toBe(10);
+    expect(ALLOWLIST.filter((p) => p.endsWith(".pdf"))).toEqual([]);
+    expect(FEEDS.map((f) => f.path)).toEqual(ALLOWLIST);
   });
 });
 
 describe("materialCheck", () => {
   it("clean tree is not material", () => {
-    expect(materialCheck(makeRepo())).toEqual({ material: false, pdfs: false, changed: [] });
+    expect(materialCheck(makeRepo())).toEqual({ material: false, changed: [] });
   });
 
   it("moving only ignored date keys is not material", () => {
@@ -81,32 +78,29 @@ describe("materialCheck", () => {
     editFeed(dir, "public/atlas-stats.json", (v) => { v.edition.asOf = "2099-01-01T00:00:00.000Z"; });
     editFeed(dir, "public/repo-facts.json", (v) => { v.computeAtlas.treeAsOf = "2099-01-01"; });
     editFeed(dir, "public/atlas-points.json", (v) => { v.asOf = "2099-01-01"; });
-    editFeed(dir, "public/last-known-commits.json", (v) => { v.cachedAt = "2099-01-01T00:00:00.000Z"; });
     expect(git(dir, "status", "--porcelain")).not.toBe("");
     expect(materialCheck(dir).material).toBe(false);
   });
 
-  it("a last-known-commits change alone is not material", () => {
+  it("a last-known-commits change is outside the allowlist, so material", () => {
     const dir = makeRepo();
-    editFeed(dir, "public/last-known-commits.json", (v) => { v.commits.pop(); });
+    fs.writeFileSync(path.join(dir, "public/last-known-commits.json"), "{}");
     const r = materialCheck(dir);
-    expect(r.material).toBe(false);
-    expect(r.changed.map((c) => c.path)).toEqual(["public/last-known-commits.json"]);
+    expect(r.material).toBe(true);
+    expect(r.changed).toContainEqual({ path: "public/last-known-commits.json", reason: "outside allowlist" });
   });
 
-  it("a tool version bump is material and feeds the PDFs", () => {
+  it("a tool version bump is material", () => {
     const dir = makeRepo();
     editFeed(dir, "src/data/toolStats.js", (m) => { m.TOOL_VERSIONS.attest = "v9.9.9"; });
     editFeed(dir, "public/tool-versions.json", (v) => { v.attest = "v9.9.9"; });
-    const r = materialCheck(dir);
-    expect(r.material).toBe(true);
-    expect(r.pdfs).toBe(true);
+    expect(materialCheck(dir).material).toBe(true);
   });
 
-  it("a repoFacts change is material but does not feed the PDFs", () => {
+  it("a repoFacts change is material", () => {
     const dir = makeRepo();
     editFeed(dir, "src/data/repoFacts.js", (m) => { m.REPO_FACTS.computeAtlas.testFiles += 1; });
-    expect(materialCheck(dir)).toMatchObject({ material: true, pdfs: false });
+    expect(materialCheck(dir)).toMatchObject({ material: true });
   });
 
   it("a stray untracked file is material (outside allowlist)", () => {
@@ -124,11 +118,17 @@ describe("materialCheck", () => {
     expect(materialCheck(dir).changed).toContainEqual({ path: "README.md", reason: "outside allowlist" });
   });
 
-  it("a PDF change alone is not material", () => {
+  it("a tracked PDF that changes is outside the allowlist, so material", () => {
     const dir = makeRepo();
-    fs.mkdirSync(path.join(dir, "public"), { recursive: true });
-    fs.writeFileSync(path.join(dir, "public/Edward_Kubiak_Resume.pdf"), "%PDF");
+    const pdf = path.join(dir, "public/Edward_Kubiak_Resume.pdf");
+    fs.writeFileSync(pdf, "%PDF-1.4\n");
+    git(dir, "add", "-A");
+    git(dir, "commit", "-q", "-m", "pdf");
     expect(materialCheck(dir).material).toBe(false);
+    fs.appendFileSync(pdf, "%%EOF\n");
+    const r = materialCheck(dir);
+    expect(r.material).toBe(true);
+    expect(r.changed).toContainEqual({ path: "public/Edward_Kubiak_Resume.pdf", reason: "outside allowlist" });
   });
 
   it("a missing feed is material", () => {
@@ -219,19 +219,19 @@ describe("materialCheck anomalies", () => {
 describe("CLI", () => {
   const run = (...args) => spawnSync("node", [script, ...args], { encoding: "utf8", env: GIT_ENV });
 
-  it("prints exactly the two output lines", () => {
+  it("prints exactly the one output line", () => {
     const dir = makeRepo();
     editFeed(dir, "src/data/toolStats.js", (m) => { m.TOOL_VERSIONS.attest = "v9.9.9"; });
     const r = run("material", "--repo", dir);
     expect(r.status).toBe(0);
-    expect(r.stdout).toBe("material=true\npdfs=true\n");
+    expect(r.stdout).toBe("material=true\n");
     expect(r.stderr).toContain("src/data/toolStats.js");
   });
 
-  it("prints false/false on a clean tree", () => {
+  it("prints material=false on a clean tree", () => {
     const r = run("material", "--repo", makeRepo());
     expect(r.status).toBe(0);
-    expect(r.stdout).toBe("material=false\npdfs=false\n");
+    expect(r.stdout).toBe("material=false\n");
   });
 
   it("exits 1 with empty stdout on error", () => {
