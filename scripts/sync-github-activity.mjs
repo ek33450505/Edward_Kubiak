@@ -16,7 +16,6 @@
 // (the previous good run) is left untouched; it is only rewritten when at least one
 // commit resolved. No new request is issued once BUDGET_MS has elapsed.
 
-import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
