@@ -1,11 +1,11 @@
 {
   "computeAtlas": {
     "routeHandlers": 20,
-    "testFiles": 374,
+    "testFiles": 385,
     "workflows": 9,
-    "commits": 663,
-    "claudeCoauthored": 505,
-    "treeAsOf": "2026-10-26",
-    "commitsAsOf": "2026-10-26"
+    "commits": 694,
+    "claudeCoauthored": 522,
+    "treeAsOf": "2026-11-02",
+    "commitsAsOf": "2026-11-02"
   }
 }
