@@ -26,19 +26,34 @@ const Contact = () => (
 
       <section className="panel mt-10">
         <div className="panel-head">
-          <Label as="h2" variant="panel">01 / Reach me</Label>
+          <Label as="h2" variant="panel">01 / Email</Label>
         </div>
         <div className="p-6 sm:p-8">
-          <p className="mb-6 text-foreground">
-            The quickest way to reach me is a message on LinkedIn.
-          </p>
+          <p className="mb-3 text-foreground">The quickest way to reach me is email.</p>
+          <p className="mb-6 break-all font-mono text-foreground">{contact.email}</p>
+          <a
+            href={`mailto:${contact.email}?subject=${encodeURIComponent("Hello from edwardkubiak.com")}`}
+            aria-label="Email me (opens your mail app)"
+            className={`${linkBase} bg-primary text-primary-foreground hover:opacity-90`}
+          >
+            Email me
+          </a>
+        </div>
+      </section>
+
+      <section className="panel mt-10">
+        <div className="panel-head">
+          <Label as="h2" variant="panel">02 / Elsewhere</Label>
+        </div>
+        <div className="p-6 sm:p-8">
+          <p className="mb-6 text-foreground">Or reach me on LinkedIn or GitHub.</p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <a
               href={`https://www.${contact.linkedin}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Message me on LinkedIn (opens in new tab)"
-              className={`${linkBase} bg-primary text-primary-foreground hover:opacity-90`}
+              className={`${linkBase} border border-border-strong text-foreground hover:bg-card`}
             >
               Message me on LinkedIn
               <ArrowUpRight size={14} aria-hidden="true" />
