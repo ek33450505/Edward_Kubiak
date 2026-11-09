@@ -3,7 +3,7 @@
 // document meta) and scripts/prerender-routes.mjs (build-time head prerender).
 export const ROUTE_META = {
   "/": {
-    title: "Edward Kubiak — Full Stack Developer & AI Systems Engineer",
+    title: "Edward Kubiak — Full Stack Software Engineer",
     description:
       "Edward Kubiak, full-stack engineer. Built Compute Atlas, a source-cited data product cited by Erin Brockovich's data center map, with CAST, a Claude Code architecture.",
     canonical: "/",
