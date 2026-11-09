@@ -75,22 +75,23 @@ describe('OG card helpers', () => {
 });
 
 describe('datasetJsonLd', () => {
-  it('builds a schema.org Dataset node for compute-atlas from ATLAS_DATASET', () => {
+  it('builds a DOI-free schema.org Dataset node for compute-atlas from ATLAS_DATASET', () => {
     const node = datasetJsonLd(atlas);
     expect(node).toMatchObject({
       '@context': 'https://schema.org',
       '@type': 'Dataset',
       name: ATLAS_DATASET.title,
       description: ATLAS_DATASET.description,
-      identifier: ATLAS_DATASET.doiUrl,
-      url: ATLAS_DATASET.doiUrl,
+      url: ATLAS_DATASET.url,
       license: ATLAS_DATASET.licenseUrl,
       isAccessibleForFree: true,
       creator: { '@type': 'Person', name: 'Edward Kubiak', url: 'https://edwardkubiak.com' },
-      publisher: { '@type': 'Organization', name: 'Zenodo' },
+      publisher: { '@type': 'Organization', name: 'Compute Atlas', url: 'https://www.compute-atlas.com' },
       isBasedOn: atlas.github,
     });
-    expect(node.identifier).toContain(ATLAS_DATASET.doi);
+    expect(node).not.toHaveProperty('identifier');
+    expect(JSON.stringify(node)).not.toMatch(/zenodo/i);
+    expect(JSON.stringify(node)).not.toMatch(/doi\.org/i);
   });
 
   it('returns null for a project without a dataset', () => {

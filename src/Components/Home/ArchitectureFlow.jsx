@@ -149,7 +149,7 @@ export default function ArchitectureFlow() {
                   "Compute Atlas"
                 )}
               </h3>
-              <p className={line}>Open, source-cited census of U.S. grid-scale compute.</p>
+              <p className={line}>Source-cited tracker of U.S. grid-scale compute.</p>
               <Readout items={atlasReadout} />
             </Stage>
 

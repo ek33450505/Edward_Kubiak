@@ -154,18 +154,17 @@ function softwareSourceCodeJsonLd(project) {
 
 export function datasetJsonLd(project) {
   if (!project.dataset) return null;
-  const { title, description, doiUrl, licenseUrl, publisher } = project.dataset;
+  const { title, description, url, licenseUrl, publisher } = project.dataset;
   return {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     name: title,
     description,
-    identifier: doiUrl,
-    url: doiUrl,
+    url,
     license: licenseUrl,
     isAccessibleForFree: true,
     creator: { '@type': 'Person', name: 'Edward Kubiak', url: BASE_URL },
-    publisher: { '@type': 'Organization', name: publisher },
+    publisher: { '@type': 'Organization', name: publisher, url },
     isBasedOn: project.github,
   };
 }
