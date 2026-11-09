@@ -83,7 +83,7 @@ describe("generate-og-image", () => {
 
   it("renders the default subtitle ampersand as a single escape", () => {
     const svg = generateOgSvg("Edward Kubiak");
-    expect(svg).toContain("Developer &amp; AI");
+    expect(svg).toContain("Agent Systems &amp; Developer Tooling");
     expect(svg).not.toContain("&amp;amp;");
   });
 

@@ -1,6 +1,6 @@
 # Edward Kubiak — Portfolio
 
-**[edwardkubiak.com](https://edwardkubiak.com/) — Full Stack Developer & AI Systems Engineer**
+**[edwardkubiak.com](https://edwardkubiak.com/) — Full Stack Software Engineer · Agent Systems & Developer Tooling**
 
 I build production web applications and the tooling that keeps agent-written code
 honest. Agents write most of my code now; that moved the work rather than removing

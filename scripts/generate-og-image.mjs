@@ -17,7 +17,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export const WIDTH = 1200;
 export const HEIGHT = 630;
 
-const DEFAULT_SUBTITLE = "Full Stack Developer & AI Systems Engineer · Columbus, OH";
+const DEFAULT_SUBTITLE = "Full Stack Software Engineer · Agent Systems & Developer Tooling";
 
 // librsvg does not load the bundled Geist faces, so every stack ends in a generic.
 const SANS = "Geist, 'Helvetica Neue', Helvetica, Arial, 'DejaVu Sans', sans-serif";
