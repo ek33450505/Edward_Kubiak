@@ -5,7 +5,7 @@ export const ROUTE_META = {
   "/": {
     title: "Edward Kubiak — Full Stack Developer & AI Systems Engineer",
     description:
-      "Edward Kubiak, full-stack engineer. Built Compute Atlas, an open data product cited by Erin Brockovich's data center map, with CAST, a Claude Code architecture.",
+      "Edward Kubiak, full-stack engineer. Built Compute Atlas, a source-cited data product cited by Erin Brockovich's data center map, with CAST, a Claude Code architecture.",
     canonical: "/",
   },
   "/about": {
@@ -17,7 +17,7 @@ export const ROUTE_META = {
   "/projects": {
     title: "Projects — Edward Kubiak",
     description:
-      "Projects by Edward Kubiak — Compute Atlas, a full-stack open data product, CAST, the agent architecture behind it, plus looptrip, misfire, Attest, and tin-can.",
+      "Projects by Edward Kubiak — Compute Atlas, a full-stack data product, CAST, the agent architecture behind it, plus looptrip, misfire, Attest, and tin-can.",
     canonical: "/projects/",
   },
   "/resume": {

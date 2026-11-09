@@ -14,9 +14,10 @@ it, because the judgment, the verification and the consequences all stayed put.
   control plane for Claude Code. Every agent run lands in a tamper-evident SQLite
   record the system acts on: full-text search (`cast ask`), signed SHA-256 audit
   receipts (`cast ledger --verify`), telemetry-driven cost prediction (`cast predict`).
-- **[Compute Atlas](https://compute-atlas.com)** — an open, source-cited census of the
+- **[Compute Atlas](https://compute-atlas.com)** — a source-cited tracker of the
   U.S. grid-scale compute buildout: data centers, crypto mining, and the dedicated
-  power generation contracted to feed them. Released as open data with a public API.
+  power generation contracted to feed them. Free to browse and cite under CC BY 4.0;
+  journalists, researchers and institutions can request the full dataset.
 - **Agent-reliability tools** — deterministic and zero-LLM: `misfire` asks which of
   your rules agents actually ignore, `attest` checks whether a claimed DONE landed on
   disk, `looptrip` trips coordination loops at iteration 2 rather than on the invoice.

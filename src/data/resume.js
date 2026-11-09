@@ -7,7 +7,6 @@
 
 import { CAST_STATS, CAST_DESKTOP_STATS } from "./castStats.js";
 import { ATLAS_STATS } from "./atlasStats.js";
-import { ATLAS_DATASET } from "./atlasDataset.js";
 import { TOOL_VERSIONS } from "./toolStats.js";
 import practice from "./practice.js";
 
@@ -80,7 +79,7 @@ export const contact = {
   linkedin: "linkedin.com/in/edward-kubiak",
 };
 
-export const summary = `Full stack developer, four years building and owning production React applications across Ohio's K-12 education ecosystem. Agents write most of my code now; that moved the work rather than removing it — the judgment, the verification and the consequences stay put, and building the tooling that enforces that is what my open-source work is about. Hired two weeks out of a full-stack certificate in August 2022 to replace an end-of-life AngularJS platform with React, I shipped that rewrite, opened it to districts in September 2024, and remain its sole architect. Creator of CAST ${CAST_STATS.version}, a local-first multi-agent control plane for Claude Code whose ${CAST_STATS.tables}-table execution record is searchable, signed and predictive, shipped as ${CAST_STATS.packages} Homebrew packages backed by ${CAST_STATS.tests.toLocaleString("en-US")} tests; and of Compute Atlas (compute-atlas.com), an open, source-cited census of the U.S. grid-scale compute buildout — ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, released as open data with a public API.`;
+export const summary = `Full stack developer, four years building and owning production React applications across Ohio's K-12 education ecosystem. Agents write most of my code now; that moved the work rather than removing it — the judgment, the verification and the consequences stay put, and building the tooling that enforces that is what my open-source work is about. Hired two weeks out of a full-stack certificate in August 2022 to replace an end-of-life AngularJS platform with React, I shipped that rewrite, opened it to districts in September 2024, and remain its sole architect. Creator of CAST ${CAST_STATS.version}, a local-first multi-agent control plane for Claude Code whose ${CAST_STATS.tables}-table execution record is searchable, signed and predictive, shipped as ${CAST_STATS.packages} Homebrew packages backed by ${CAST_STATS.tests.toLocaleString("en-US")} tests; and of Compute Atlas (compute-atlas.com), a source-cited tracker of the U.S. grid-scale compute buildout — ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, free to browse and cite under CC BY 4.0.`;
 
 export const experience = [
   {
@@ -153,9 +152,9 @@ export const experience = [
       "Vercel",
     ],
     highlights: [
-      `Built and operate Compute Atlas (${ATLAS_STATS.version}) — an open, source-cited census of the U.S. grid-scale compute buildout covering data centers, crypto-mining sites and the dedicated power generation contracted to feed them: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, ${ATLAS_STATS.operationalGw} GW operational, ${ATLAS_STATS.underConstructionGw} GW under construction and ~${ATLAS_STATS.plannedGw} GW planned, every record carrying at least one public source and an explicit confidence level. Built solo on ${ATLAS_STATS.stack}.`,
-      `Shipped the whole product: an interactive MapLibre GL map with water and geology overlays, sortable tables, per-facility dossiers, reference hubs (rankings, power, operators, metros, states, AI-vs-crypto), a cited /learn tier and a CORS-open JSON API — the dataset released as open data (code MIT, data CC BY 4.0) and archived on Zenodo (doi:${ATLAS_DATASET.doi}), now cited by Erin Brockovich's data center reporting map and by Power To The People.`,
-      "Engineered an autonomous daily discovery pipeline: a bounded `claude -p` run that discovers, enriches and stages candidates behind a fail-closed kill switch, a heartbeat, extraction guards and a self-reverting cap, verifying every candidate source URL before staging, with human approval required before any record goes live. Extended the survey beyond capacity into its civic footprint — community opposition (litigation, moratoria, referendums, and the projects opposition defeated) and named stakeholders tied to specific sites under a mandatory-citation bar.",
+      `Built and operate Compute Atlas (${ATLAS_STATS.version}) — a source-cited tracker of the U.S. grid-scale compute buildout covering data centers, crypto-mining sites and the dedicated power generation contracted to feed them: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, ${ATLAS_STATS.operationalGw} GW operational, ${ATLAS_STATS.underConstructionGw} GW under construction and ~${ATLAS_STATS.plannedGw} GW planned, every record carrying at least one public source and an explicit confidence level. Built solo on ${ATLAS_STATS.stack}.`,
+      `Shipped the whole product: an interactive MapLibre GL map with water and geology overlays, sortable tables, per-facility dossiers, reference hubs (rankings, power, operators, metros, states, AI-vs-crypto), a cited /learn tier and a moderated public intake (code MIT, data CC BY 4.0), now cited by Erin Brockovich's data center reporting map and by Power To The People.`,
+      "Engineered an autonomous scheduled discovery pipeline: a bounded `claude -p` run that discovers, enriches and stages candidates behind a fail-closed kill switch, a heartbeat, extraction guards and a self-reverting cap, verifying every candidate source URL before staging, with human approval required before any record goes live. Extended the survey beyond capacity into its civic footprint — community opposition (litigation, moratoria, referendums, and the projects opposition defeated) and named stakeholders tied to specific sites under a mandatory-citation bar.",
     ],
   },
 ];

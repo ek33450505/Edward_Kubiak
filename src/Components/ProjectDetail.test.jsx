@@ -199,17 +199,10 @@ describe('ProjectDetail — a11y structure (compute-atlas)', () => {
 });
 
 describe('ProjectDetail — dataset DOI link', () => {
-  it('links the Zenodo DOI on compute-atlas with a label-in-name accessible name', () => {
+  it('renders no DOI or Zenodo link on compute-atlas', () => {
     renderProject('compute-atlas');
-    const { doiUrl } = projects.find((p) => p.slug === 'compute-atlas').dataset;
-    const link = screen.getByRole('link', {
-      name: 'Dataset DOI on Zenodo (opens in new tab)',
-    });
-    expect(link).toHaveAttribute('href', doiUrl);
-    expect(link.getAttribute('href')).toMatch(/^https:\/\/doi\.org\/10\./);
-    expect(link).toHaveTextContent('Dataset DOI');
-    expect(link).toHaveAttribute('target', '_blank');
-    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
+    expect(screen.queryByRole('link', { name: /DOI|Zenodo/i })).toBeNull();
+    expect(screen.queryByText(/Dataset DOI/i)).toBeNull();
   });
 
   it('renders no dataset link for a project without the field', () => {
