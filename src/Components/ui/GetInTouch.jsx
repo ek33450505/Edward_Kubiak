@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import { Mail, Heart, ArrowUpRight } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "../BrandIcons";
 import Label from "./Label";
 import Reveal from "./Reveal";
-import { SponsorButton } from "./SponsorDialog";
 
 export default function GetInTouch() {
   return (
@@ -16,7 +15,7 @@ export default function GetInTouch() {
           Open to new opportunities, collaborations, and conversations about developer tooling.
         </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Link
             to="/contact"
             aria-label="Contact: ways to reach Edward"
@@ -53,16 +52,6 @@ export default function GetInTouch() {
               GitHub
             </span>
           </a>
-
-          <SponsorButton
-            aria-label="Sponsor Edward's open source work: choose GitHub Sponsors or Ko-fi"
-            className="group flex flex-col items-center gap-2 p-4 card-interactive min-h-11 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
-            <Heart size={20} className="text-terra group-hover:scale-110 transition-transform" aria-hidden="true" />
-            <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground group-hover:text-foreground uppercase">
-              Sponsor
-            </span>
-          </SponsorButton>
         </div>
 
         <div className="mt-6 pt-6 border-t border-border text-center">

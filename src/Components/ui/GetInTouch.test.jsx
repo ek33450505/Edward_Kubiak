@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import GetInTouch from "./GetInTouch";
 
@@ -20,16 +19,15 @@ describe("GetInTouch", () => {
     expect(container.innerHTML).not.toContain("@");
   });
 
-  it("Sponsor tile is a button that opens the sponsor chooser", async () => {
-    const user = userEvent.setup();
-    render(
+  it("renders no sponsorship button or link", () => {
+    const { container } = render(
       <MemoryRouter>
         <GetInTouch />
       </MemoryRouter>,
     );
-    const tile = screen.getByRole("button", { name: /^sponsor/i });
-    expect(tile).toHaveAttribute("aria-haspopup", "dialog");
-    await user.click(tile);
-    expect(screen.getByRole("dialog", { name: "Support my work" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /sponsor/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /sponsor/i })).not.toBeInTheDocument();
+    expect(container.innerHTML).not.toContain("ko-fi.com");
+    expect(container.innerHTML).not.toContain("github.com/sponsors");
   });
 });

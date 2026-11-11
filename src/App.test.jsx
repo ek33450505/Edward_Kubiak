@@ -136,13 +136,14 @@ describe("footer contact link", () => {
     expect(footer.innerHTML).not.toContain("mail" + "to:");
   });
 
-  it("has a Sponsor button that opens the sponsor chooser", async () => {
-    const user = userEvent.setup();
+  it("renders no sponsorship button or link", async () => {
     const { default: App } = await import("./App");
-    render(<App />);
-    const footer = await screen.findByRole("contentinfo");
-    await user.click(within(footer).getByRole("button", { name: /^sponsor/i }));
-    expect(await screen.findByRole("dialog", { name: "Support my work" })).toBeInTheDocument();
+    const { container } = render(<App />);
+    await screen.findByRole("contentinfo");
+    expect(screen.queryByRole("button", { name: /sponsor/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /sponsor/i })).not.toBeInTheDocument();
+    expect(container.innerHTML).not.toContain("ko-fi.com");
+    expect(container.innerHTML).not.toContain("github.com/sponsors");
   });
 });
 

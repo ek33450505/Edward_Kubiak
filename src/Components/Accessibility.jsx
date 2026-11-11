@@ -74,10 +74,9 @@ const Accessibility = () => {
           </p>
           <p className="mt-4 max-w-prose text-foreground">
             A manual spot check with VoiceOver on macOS (Safari), in October 2026, covered the home
-            page, a project page, this statement and the sponsor dialog, and the same pages were
+            page, a project page and this statement, and the same pages were
             checked in Chrome, through its accessibility tree and by keyboard. Headings, the
-            facility map&apos;s text alternative, new-tab link announcements and the dialog&apos;s
-            focus handling behaved as expected in both, and the Chrome check confirmed the
+            facility map&apos;s text alternative and new-tab link announcements behaved as expected in both, and the Chrome check confirmed the
             banner, navigation, main and footer landmarks.
           </p>
         </section>

@@ -7,7 +7,6 @@ import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { Menu, X, Rss } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "./Components/BrandIcons";
 import IconButton from "./Components/ui/IconButton";
-import { SponsorButton } from "./Components/ui/SponsorDialog";
 import ScrollProgress from "./Components/Effects/ScrollProgress";
 import ErrorBoundary from "./Components/ErrorBoundary";
 import RouteLoader from "./Components/ui/RouteLoader";
@@ -53,8 +52,8 @@ export function NavBar() {
   }
 
   // Escape closes the open menu and returns focus to the toggle. Registered only
-  // while open, and ignores Escape pressed inside a dialog (command palette,
-  // sponsor chooser): those own that keypress and restore focus themselves.
+  // while open, and ignores Escape pressed inside a dialog (command palette):
+  // which owns that keypress and restores focus itself.
   const toggleRef = useRef(null);
   useEffect(() => {
     if (!open) return;
@@ -322,12 +321,6 @@ export function AppShell() {
                 >
                   Accessibility
                 </Link>
-                <SponsorButton
-                  aria-label="Sponsor Edward's open source work: choose GitHub Sponsors or Ko-fi"
-                  className="inline-flex items-center min-h-11 px-2 font-mono text-[11px] uppercase tracking-[0.18em] hover:text-primary transition-colors"
-                >
-                  Sponsor
-                </SponsorButton>
                 <IconButton
                   href="https://github.com/ek33450505"
                   target="_blank"
