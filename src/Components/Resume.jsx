@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
-import { Mail, MapPin, Download, FileText } from "lucide-react";
+import { MapPin, Download, FileText } from "lucide-react";
 import { fadeUp } from "../utils/motion";
 import {
   skills,
@@ -41,9 +41,6 @@ const Resume = () => {
             </h1>
             <div className="mt-4 h-px w-full bg-border" />
             <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-foreground">
-              <a href={`mailto:${contact.email}`} className={contactLinkClass}>
-                <Mail size={14} aria-hidden="true" /> {contact.email}
-              </a>
               <span className="inline-flex items-center gap-1.5">
                 <MapPin size={14} aria-hidden="true" /> {contact.location}
               </span>

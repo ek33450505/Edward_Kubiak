@@ -27,7 +27,7 @@ it, because the judgment, the verification and the consequences all stayed put.
   wasn't.
 
 Résumé: [edwardkubiak.com/resume](https://edwardkubiak.com/resume) ·
-Reach me by email, LinkedIn or GitHub: https://edwardkubiak.com/contact
+Reach me on LinkedIn or GitHub: https://edwardkubiak.com/contact
 
 ---
 
@@ -139,7 +139,7 @@ Single dark graphite theme — **no light mode, no toggle**. Restraint is the ba
 ## Contact
 
 - **GitHub:** [ek33450505](https://github.com/ek33450505)
-- **Contact:** https://edwardkubiak.com/contact (email, LinkedIn and GitHub)
+- **Contact:** https://edwardkubiak.com/contact (LinkedIn and GitHub)
 - **LinkedIn:** [edward-kubiak](https://www.linkedin.com/in/edward-kubiak/)
 
 &copy; 2024–2026 Edward Kubiak
