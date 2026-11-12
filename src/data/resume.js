@@ -73,7 +73,6 @@ export const tagline =
 
 export const contact = {
   location: "Columbus, Ohio",
-  email: "edward.kubiak.dev@gmail.com",
   site: "edwardkubiak.com",
   github: "github.com/ek33450505",
   linkedin: "linkedin.com/in/edward-kubiak",

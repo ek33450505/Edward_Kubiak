@@ -166,7 +166,6 @@ ${bullets(entry)}
   const sep = '<span class="sep">/</span>';
   const metaLine = [
     esc(identity.contact.location),
-    `<a href="mailto:${esc(identity.contact.email)}">${esc(identity.contact.email)}</a>`,
     `<a href="https://${esc(identity.contact.site)}">${esc(identity.contact.site)}</a>`,
     `<a href="https://${esc(identity.contact.github)}">${esc(identity.contact.github)}</a>`,
     `<a href="https://${esc(identity.contact.linkedin)}">${esc(identity.contact.linkedin)}</a>`,
@@ -281,7 +280,6 @@ function renderOnePagerHtml(stats, desktopStats, identity) {
   const sep = '<span class="sep">/</span>';
   const metaLine = [
     esc(identity.contact.location),
-    esc(identity.contact.email),
     esc(identity.contact.site),
     esc(identity.contact.github),
     esc(identity.contact.linkedin),
@@ -381,7 +379,7 @@ ${projects}
     </div>
   </div>
 
-  <div class="footer">${esc(identity.contact.github)} &middot; ${esc(identity.contact.email)} &middot; ${esc(identity.contact.site)}</div>
+  <div class="footer">${esc(identity.contact.github)} &middot; ${esc(identity.contact.site)}</div>
 
 </body>
 </html>`;

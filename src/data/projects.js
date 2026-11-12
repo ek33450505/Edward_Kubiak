@@ -1,4 +1,4 @@
-import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair, Map, Globe, Cable } from "lucide-react";
+import { Network, LayoutDashboard, BarChart3, Terminal, Database, ShoppingBag, DollarSign, ShieldCheck, Repeat, Crosshair, Map, Globe, Cable, Orbit } from "lucide-react";
 import { CAST_STATS, CAST_DESKTOP_STATS, CAST_ECOSYSTEM } from "./castStats.js";
 import { ATLAS_STATS } from "./atlasStats.js";
 import { TOOL_VERSIONS } from "./toolStats.js";
@@ -201,6 +201,24 @@ const projects = [
     github: "https://github.com/ek33450505/tin-can",
     githubRepo: { owner: "ek33450505", repo: "tin-can" },
     stats: ["Bash 3.2+", "Plugin + install.sh", TOOL_VERSIONS["tin-can"]],
+  },
+  {
+    slug: "eridian",
+    dateAdded: "2026-11-11",
+    title: "eridian",
+    description:
+      "Rocky, a typed persona for Claude Code terminal sessions. A SessionStart hook injects the persona only when a session's working directory is under a directory you choose; every other session is untouched. With --work-under, work sessions get the persona plus a work clause that keeps its name and speech out of commits, PRs, tickets, messages and docs. A small personal-only memory keeps short notes (wins, failures, running jokes, facts, moods) across personal sessions, refuses to run inside the work directory, and is injected as background data, not instructions. A status line command prints a one-line mood from the session's git state. Python 3.12+, no runtime dependencies. Apache-2.0.",
+    summary: "A Claude Code persona hook: Rocky in your personal sessions, a work clause for work repos, a small personal-only memory and a git-mood status line.",
+    tech: ["Python", "Claude Code", "Hook Architecture", "unittest"],
+    icon: Orbit,
+    color: "teal",
+    category: "personal",
+    group: "tools",
+    featured: true,
+    aiEngineering: true,
+    github: "https://github.com/ek33450505/eridian",
+    githubRepo: { owner: "ek33450505", repo: "eridian" },
+    stats: ["Python 3.12+", "Zero dependencies", TOOL_VERSIONS.eridian],
   },
   {
     slug: "claude-code-dashboard",

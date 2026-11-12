@@ -185,12 +185,11 @@ describe('Resume — see also nav', () => {
 });
 
 describe("Resume — contact comes from the shared data", () => {
-  it("renders the email, location and LinkedIn from `contact`", () => {
-    renderResume();
-    expect(screen.getByRole("link", { name: new RegExp(contact.email, "i") })).toHaveAttribute(
-      "href",
-      `mailto:${contact.email}`
-    );
+  it("renders the location and LinkedIn from `contact`, and no email", () => {
+    const { container } = renderResume();
+    // Ed removed the public email on 2026-11-11.
+    expect(container.querySelector('a[href^="mailto:"]')).toBeNull();
+    expect(container.textContent).not.toMatch(/@[a-z0-9-]+\.[a-z]/i);
     expect(screen.getByText(contact.location)).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: new RegExp(`${contact.linkedin}.*opens in new tab`, "i") })
@@ -201,7 +200,7 @@ describe("Resume — contact comes from the shared data", () => {
     // The designed PDF export had dropped LinkedIn while this page still showed
     // it. Both now read this object, so the fields cannot disagree.
     expect(Object.keys(contact).sort()).toEqual(
-      ["email", "github", "linkedin", "location", "site"].sort()
+      ["github", "linkedin", "location", "site"].sort()
     );
     Object.values(contact).forEach((v) => expect(v).toBeTruthy());
   });

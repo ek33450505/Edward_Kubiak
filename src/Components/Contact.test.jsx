@@ -18,22 +18,19 @@ describe("Contact", () => {
     expect(screen.getByRole("heading", { level: 1, name: "Get in touch" })).toBeInTheDocument();
   });
 
-  // Ed approved showing his email on /contact on 2026-11-09 (GetInTouch still shows none).
-  it("shows the email address from `contact` as text", () => {
-    renderPage();
-    expect(screen.getByRole("heading", { level: 2, name: "01 / Email" })).toBeInTheDocument();
-    expect(screen.getByText(contact.email)).toBeInTheDocument();
+  // Ed removed the public email address on 2026-11-11 (reverses the 2026-11-09 approval).
+  it("shows no email address and no mailto link", () => {
+    const { container } = renderPage();
+    expect(contact).not.toHaveProperty("email");
+    expect(container.querySelector('a[href^="mailto:"]')).toBeNull();
+    expect(container.textContent).not.toMatch(/@[a-z0-9-]+\.[a-z]/i);
   });
 
-  it("has an Email me link that opens the mail app with a subject", () => {
+  it("has a single LinkedIn and GitHub section", () => {
     renderPage();
-    const link = screen.getByRole("link", { name: /email me.*opens your mail app/i });
-    // WCAG 2.5.3 Label in Name: the accessible name must contain the visible text.
-    expect(link.getAttribute("aria-label").toLowerCase()).toContain(link.textContent.toLowerCase());
-    const href = link.getAttribute("href");
-    expect(href.startsWith(`mailto:${contact.email}?subject=`)).toBe(true);
-    expect(decodeURIComponent(href.split("?subject=")[1])).toBe("Hello from edwardkubiak.com");
-    expect(link).not.toHaveAttribute("target");
+    expect(
+      screen.getByRole("heading", { level: 2, name: "01 / LinkedIn and GitHub" }),
+    ).toBeInTheDocument();
   });
 
   it("links to LinkedIn in a new tab", () => {

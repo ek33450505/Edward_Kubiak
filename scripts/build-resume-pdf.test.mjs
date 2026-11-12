@@ -109,7 +109,7 @@ describe("resume PDF — content", () => {
     // it. Iterating Object.values(contact) alone would NOT catch that — deleting
     // a key just shrinks the loop and the test still passes. Pin the required
     // keys first, then assert each one renders.
-    const REQUIRED = ["location", "email", "site", "github", "linkedin"];
+    const REQUIRED = ["location", "site", "github", "linkedin"];
     expect(Object.keys(contact).sort()).toEqual([...REQUIRED].sort());
 
     const text = textOf(resumeHtml());

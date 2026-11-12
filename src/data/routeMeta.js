@@ -17,7 +17,7 @@ export const ROUTE_META = {
   "/projects": {
     title: "Projects — Edward Kubiak",
     description:
-      "Projects by Edward Kubiak — Compute Atlas, a full-stack data product, CAST, the agent architecture behind it, plus looptrip, misfire, Attest, and tin-can.",
+      "Projects by Edward Kubiak — Compute Atlas, a full-stack data product, CAST, the agent architecture behind it, plus looptrip, misfire, Attest, tin-can, and eridian.",
     canonical: "/projects/",
   },
   "/resume": {
@@ -35,7 +35,7 @@ export const ROUTE_META = {
   "/contact": {
     title: "Contact — Edward Kubiak",
     description:
-      "How to reach Edward Kubiak, full stack developer and AI systems engineer: email, LinkedIn and GitHub.",
+      "How to reach Edward Kubiak, full stack developer and AI systems engineer: LinkedIn and GitHub.",
     canonical: "/contact/",
   },
   "/accessibility": {
