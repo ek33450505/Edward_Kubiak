@@ -156,3 +156,10 @@ describe('FeaturedWork — external link safety', () => {
     });
   });
 });
+
+describe('FeaturedWork — eridian stays off Home', () => {
+  it('is not rendered in the Home featured grid', () => {
+    renderFeaturedWork();
+    expect(screen.queryByRole('link', { name: /View project: eridian/ })).toBeNull();
+  });
+});
