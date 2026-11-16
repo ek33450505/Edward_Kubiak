@@ -1,5 +1,5 @@
 {
-  "count": 2923,
+  "count": 3255,
   "states": 55,
   "includesDc": true,
   "stateCodes": [
@@ -59,17 +59,16 @@
     "WV",
     "WY"
   ],
-  "operationalMw": 62246.5,
-  "plannedMw": 482249.5,
-  "underConstructionMw": 121712.9,
-  "activeCount": 2758,
-  "operationalMwReportingCount": 581,
-  "plannedMwReportingCount": 899,
-  "underConstructionCount": 343,
-  "underConstructionMwReportingCount": 235,
+  "operationalMw": 65916.3,
+  "plannedMw": 539196.5,
+  "underConstructionMw": 136101.1,
+  "activeCount": 3061,
+  "operationalMwReportingCount": 627,
+  "plannedMwReportingCount": 1017,
+  "underConstructionCount": 370,
+  "underConstructionMwReportingCount": 268,
   "edition": {
-    "version": "1.34.1",
-    "asOf": "2026-11-01T14:44:18.590Z",
+    "asOf": "2026-11-16T18:36:19.085Z",
     "schemaVersion": 1
   }
 }

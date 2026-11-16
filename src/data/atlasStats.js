@@ -4,18 +4,18 @@
 // Refresh: run `npm run sync-atlas` or any `npm run build` (prebuild hook).
 
 export const ATLAS_STATS = {
-  "facilities": 2923,
+  "facilities": 3255,
   "states": 50,
   "hasDc": true,
   "territories": 4,
   "jurisdictions": 55,
   "coverage": "50 states, DC and 4 territories",
-  "operationalMw": 62247,
-  "operationalGw": 62.2,
-  "underConstructionMw": 121713,
-  "underConstructionGw": 121.7,
-  "plannedMw": 482250,
-  "plannedGw": 482.2,
+  "operationalMw": 65916,
+  "operationalGw": 65.9,
+  "underConstructionMw": 136101,
+  "underConstructionGw": 136.1,
+  "plannedMw": 539197,
+  "plannedGw": 539.2,
   "version": "v1.34.1",
   "stack": "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel",
   "license": "MIT + CC BY 4.0"
