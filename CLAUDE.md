@@ -51,8 +51,8 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
 
 - `prebuild` runs `sync-cast-stats`, `sync-atlas-stats`, `sync-atlas-points`, `sync-tool-versions`, `sync-repo-facts`, `sync-github-activity`, `generate-sitemap` and `generate-rss` before every `npm run build`.
   - `sync-cast-stats.mjs` fetches canonical CAST stats from the flagship repo over https (with a timeout + graceful fallback to `public/cast-stats.json`). Does NOT require a local `~/Projects/personal/claude-agent-team` clone.
-  - `sync-atlas-stats.mjs` fetches Compute Atlas figures from `compute-atlas.com/api/stats`, producing `src/data/atlasStats.js` (`ATLAS_STATS`) and `public/atlas-stats.json` with graceful fallback.
-  - `sync-atlas-points.mjs` fetches `www.compute-atlas.com/data/hero-points.json` (cache-busted; the Atlas edge has served stale copies), projects it onto a fixed AlbersUsa-style composite and writes `public/atlas-points.json` (fetched at runtime by the hero canvas) plus `src/data/atlasPoints.js` (`ATLAS_POINTS` summary: count, per-status counts, w/h — the hero legend renders from it on first paint). A drift test keeps the two in step.
+  - `sync-atlas-stats.mjs` fetches Compute Atlas figures from `compute-atlas.com/api/stats`, producing `src/data/atlasStats.js` (`ATLAS_STATS`) and `public/atlas-stats.json` with graceful fallback. Compute Atlas retired its dataset version on 2026-11-06 (ek33450505/compute-atlas#541), so `ATLAS_STATS` carries no `version`; do not add a hand-set one back.
+  - `sync-atlas-points.mjs` fetches `www.compute-atlas.com/data/hero-points.json` (cache-busted; the Atlas edge has served stale copies), projects it onto a fixed AlbersUsa-style composite and writes `public/atlas-points.json` (fetched at runtime by the hero canvas) plus `src/data/atlasPoints.js` (`ATLAS_POINTS` summary: count, per-status counts, w/h — the hero sizes its map slot from it on first paint). A drift test keeps the two in step. Since ek33450505/compute-atlas#533 the points are anonymous and merged (2dp, one per `{lat, lon, status}`), so `count` and `byStatus` count map points, not facilities: the hero header shows `ATLAS_STATS.facilities` and its legend has no numbers.
   - `sync-tool-versions.mjs` resolves ecosystem tool versions from GitHub API, producing `src/data/toolStats.js` (`TOOL_VERSIONS`) and `public/tool-versions.json` with graceful fallback.
   - `sync-repo-facts.mjs` counts Compute Atlas route handlers / test files / workflows (git tree) and commits / Claude co-authored commits (paginated list) from the public repo, producing `src/data/repoFacts.js` (`REPO_FACTS`) and `public/repo-facts.json`. Each group is all-or-nothing (truncated tree, failed page or page cap = fall back) and carries its own `treeAsOf`/`commitsAsOf` date. Unauthenticated GitHub allows 60 requests/hour, so a shared-IP build can fall back; set `GITHUB_TOKEN` to avoid it. The monotonic commit floor deliberately freezes the commits group if compute-atlas history is ever rewritten; the exit is to hand-edit `public/repo-facts.json` + `src/data/repoFacts.js` (commits group) in a reviewed PR.
   - `sync-github-activity.mjs` writes `public/github-activity.json` (gitignored) for Home §03. GitHub's Events API dropped `payload.commits` from PushEvents, so each push is resolved through the compare/commit endpoints; only public PushEvents on `ek33450505/*` are kept (a user token can return private events). `public/last-known-commits.json` (tracked) is rewritten only when at least one commit resolves; the browser never calls api.github.com for activity.
@@ -134,6 +134,12 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
   - Modes: `dry-run` (default), `live`, `probe-quiet|feed-only|feed-plus-prose|facilities-drop`
     (plant after the syncs, assert the EXACT reason codes, never push). All modes run from
     `main` only.
+  - Bot-opened refresh PRs always show CI Verification and CAST Stats Drift Check as failed
+    with zero jobs ("likely failed because of a workflow file issue"). GitHub does not start
+    `pull_request` workflows for a PR opened with `GITHUB_TOKEN`: attempt 1 was
+    `action_required` until 2026-10-20 and has been a zero-job failure since 2026-10-26. Nothing
+    ran, so this is not a red result. The run's `build` job already ran the same checks on the
+    exact patch; `gh run rerun <id>` runs them on the PR (both passed on #75).
 - During agent work, never `npm run build` (prebuild churns `src/data/castStats.js` and
   `public/sitemap.xml`) — verify with `npx vite build --outDir /tmp/vite-verify`.
 - Home → Featured Work panel order is deliberate and hardcoded in

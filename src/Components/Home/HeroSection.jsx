@@ -36,7 +36,7 @@ function FacilityFieldSlot() {
     return () => clearTimeout(id);
   }, []);
 
-  const count = ATLAS_POINTS.count.toLocaleString("en-US");
+  const facilities = ATLAS_STATS.facilities.toLocaleString("en-US");
 
   return (
     <motion.div
@@ -48,7 +48,7 @@ function FacilityFieldSlot() {
     >
       <div className="panel-head min-w-0 gap-x-3">
         <span>Compute Atlas · Live registry</span>
-        <span className="whitespace-nowrap tabular-nums text-foreground">{count} sites</span>
+        <span className="whitespace-nowrap tabular-nums text-foreground">{facilities} facilities</span>
       </div>
       {/* Aspect ratio comes from the bundled summary: the canvas mounts without layout shift. */}
       <div
@@ -68,7 +68,7 @@ function FacilityFieldSlot() {
         )}
       </div>
       <p className="sr-only">
-        Map of {count} Compute Atlas facilities, colored by status as listed below.
+        Map of {facilities} Compute Atlas facilities, colored by status as listed below.
       </p>
       {/* role="list" restores list semantics that Safari/VoiceOver drops for list-none. */}
       {/* eslint-disable-next-line jsx-a11y/no-redundant-roles -- list semantics are kept when list-style is none (Safari/VoiceOver) */}
@@ -81,9 +81,6 @@ function FacilityFieldSlot() {
               style={{ backgroundColor: STATUS_STYLE[name].color, opacity: STATUS_STYLE[name].alpha }}
             />
             <span>{statusLabel(name)}</span>
-            <span className="tabular-nums text-foreground">
-              {(ATLAS_POINTS.byStatus[name] ?? 0).toLocaleString("en-US")}
-            </span>
           </li>
         ))}
       </ul>

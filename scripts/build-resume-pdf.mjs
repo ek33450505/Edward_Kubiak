@@ -255,7 +255,7 @@ function renderOnePagerHtml(stats, desktopStats, identity) {
       `${stats.agents} specialist agents with hook-driven dispatch, model-aware routing, hook-enforced quality gates, and per-agent persistent memory. ${stats.version}: the ${stats.tables}-table SQLite execution record is searchable (cast ask), signed (cast ledger --verify), and predictive (cast predict), and every quality gate is mutation-tested against the defect it guards. ${stats.tests.toLocaleString("en-US")} tests, zero cloud dependencies.`,
     ],
     [
-      `Compute Atlas ${ATLAS_STATS.version}`,
+      "Compute Atlas",
       `a source-cited tracker of U.S. grid-scale compute: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, ${ATLAS_STATS.operationalGw} GW operational and ~${ATLAS_STATS.plannedGw} GW planned — data centers, crypto mining, and the dedicated power generation built to feed them. Interactive MapLibre map, per-facility dossiers, a moderated public intake, and an autonomous scheduled discovery pipeline that verifies its own sources. compute-atlas.com`,
     ],
     [

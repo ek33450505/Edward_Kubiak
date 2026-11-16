@@ -6,7 +6,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, act } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import HeroSection, { loadFacilityField } from "./HeroSection";
-import { ATLAS_POINTS } from "../../data/atlasPoints";
+import { ATLAS_STATS } from "../../data/atlasStats";
 
 vi.mock("./FacilityField", () => {
   throw new Error("Failed to fetch dynamically imported module");
@@ -27,7 +27,7 @@ describe("HeroSection — chunk load failure", () => {
       });
       expect(screen.getByRole("heading", { level: 1, name: "Edward Kubiak" })).toBeInTheDocument();
       expect(screen.getByRole("list", { name: "Facility status legend" })).toBeInTheDocument();
-      expect(screen.getByText(`${ATLAS_POINTS.count.toLocaleString("en-US")} sites`)).toBeInTheDocument();
+      expect(screen.getByText(`${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities`)).toBeInTheDocument();
       expect(container.querySelector('[data-slot="facility-field"]')).toBeInTheDocument();
       expect(container.querySelector("canvas")).toBeNull();
     } finally {

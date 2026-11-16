@@ -43,18 +43,23 @@ describe("HeroSection — facility-field slot", () => {
     expect(caption.closest('[aria-hidden="true"]')).toBeNull();
   });
 
-  it("shows the panel count from the points summary", () => {
+  it("shows the facility count from the stats feed", () => {
     renderHero();
-    expect(screen.getByText(`${ATLAS_POINTS.count.toLocaleString("en-US")} sites`)).toBeInTheDocument();
+    expect(screen.getByText(`${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities`)).toBeInTheDocument();
   });
 
-  it("lists all five statuses with their counts", () => {
+  it("does not label the panel with the map-point count", () => {
+    renderHero();
+    expect(screen.queryByText(/\bsites\b/)).toBeNull();
+  });
+
+  it("lists all five statuses without point counts", () => {
     renderHero();
     const items = within(screen.getByRole("list", { name: "Facility status legend" })).getAllByRole("listitem");
     expect(items).toHaveLength(Object.keys(ATLAS_POINTS.byStatus).length);
-    Object.entries(ATLAS_POINTS.byStatus).forEach(([name, n], i) => {
+    Object.keys(ATLAS_POINTS.byStatus).forEach((name, i) => {
       expect(items[i]).toHaveTextContent(statusLabel(name));
-      expect(within(items[i]).getByText(n.toLocaleString("en-US"))).toBeInTheDocument();
+      expect(items[i].textContent).not.toMatch(/\d/);
     });
   });
 
@@ -71,7 +76,7 @@ describe("HeroSection — facility-field slot", () => {
     const slot = container.querySelector('[data-slot="facility-field"]');
     const sentence = screen.getByText(/Map of .* Compute Atlas facilities, colored by status as listed below\./);
     expect(sentence).toHaveClass("sr-only");
-    expect(sentence).toHaveTextContent(ATLAS_POINTS.count.toLocaleString("en-US"));
+    expect(sentence).toHaveTextContent(ATLAS_STATS.facilities.toLocaleString("en-US"));
     expect(slot.contains(sentence)).toBe(false);
   });
 });

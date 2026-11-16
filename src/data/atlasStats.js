@@ -16,7 +16,6 @@ export const ATLAS_STATS = {
   "underConstructionGw": 136.1,
   "plannedMw": 539197,
   "plannedGw": 539.2,
-  "version": "v1.34.1",
   "stack": "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel",
   "license": "MIT + CC BY 4.0"
 };

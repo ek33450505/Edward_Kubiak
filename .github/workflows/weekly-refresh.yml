@@ -401,6 +401,8 @@ jobs:
             echo "**Gate verdict:** $VERDICT"
             jq -r "$REASONS_JQ" "$RUNNER_TEMP/verdict.json"
             echo
+            echo "**PR checks:** GitHub does not start pull_request workflows for a PR opened with GITHUB_TOKEN, so CI Verification and CAST Stats Drift Check show as failed with zero jobs; they did not run. This run's build job already ran lint, vitest, a vite build, the accessibility gate and the CAST drift check on this exact patch. Re-run those checks from the Actions tab to see them here."
+            echo
             echo '```'
             git -C work show --stat --format= HEAD
             echo '```'
