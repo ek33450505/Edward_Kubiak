@@ -5,12 +5,12 @@
 
 export const REPO_FACTS = {
   "computeAtlas": {
-    "routeHandlers": 20,
-    "testFiles": 385,
-    "workflows": 9,
-    "commits": 694,
-    "claudeCoauthored": 522,
-    "treeAsOf": "2026-11-02",
-    "commitsAsOf": "2026-11-02"
+    "routeHandlers": 30,
+    "testFiles": 554,
+    "workflows": 7,
+    "commits": 777,
+    "claudeCoauthored": 593,
+    "treeAsOf": "2026-11-16",
+    "commitsAsOf": "2026-11-16"
   }
 };
