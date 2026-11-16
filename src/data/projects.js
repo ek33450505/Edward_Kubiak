@@ -66,7 +66,6 @@ const projects = [
     heroImage: "/media/compute-atlas.png",
     heroImageWebp: "/media/compute-atlas.webp",
     stats: [
-      ATLAS_STATS.version,
       `${ATLAS_STATS.facilities.toLocaleString("en-US")} Facilities`,
       `${ATLAS_STATS.operationalGw} GW Operational`,
       ATLAS_STATS.states != null && `${ATLAS_STATS.states} States`,

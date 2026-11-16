@@ -79,7 +79,7 @@ export default function ArchitectureFlow() {
   const atlasReadout = [
     { label: "facilities", value: ATLAS_STATS.facilities.toLocaleString("en-US") },
     { label: "GW operational", value: ATLAS_STATS.operationalGw },
-    { label: "release", value: ATLAS_STATS.version },
+    { label: "GW under construction", value: ATLAS_STATS.underConstructionGw },
   ];
 
   const h3 = "font-display text-xl font-semibold tracking-[-0.02em] text-foreground";

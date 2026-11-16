@@ -317,8 +317,6 @@ rule(
   "public/cast-stats.json:versionTag",
   "src/data/castStats.js:CAST_STATS.version",
   "src/data/castStats.js:CAST_DESKTOP_STATS.version",
-  "public/atlas-stats.json:edition.version",
-  "src/data/atlasStats.js:ATLAS_STATS.version",
 );
 rule("pts", "public/atlas-points.json:pts");
 rule("byStatus", "src/data/atlasPoints.js:ATLAS_POINTS.byStatus");

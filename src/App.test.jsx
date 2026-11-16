@@ -18,7 +18,6 @@ import { NavBar, AppShell } from "./App";
 import { CommandPaletteProvider } from "./Components/CommandPaletteContext";
 import { ROUTE_META } from "./data/routeMeta.js";
 import { CAST_STATS } from "./data/castStats";
-import { ATLAS_STATS } from "./data/atlasStats";
 
 const originalResizeObserver = globalThis.ResizeObserver;
 const originalScrollIntoView = Element.prototype.scrollIntoView;
@@ -199,12 +198,12 @@ describe("app shell", () => {
     expect(within(menu).queryByRole("link", { name: "Now" })).toBeNull();
   });
 
-  it("footer shows feed-sourced CAST and Atlas versions", async () => {
+  it("footer shows the feed-sourced CAST version", async () => {
     const { default: App } = await import("./App");
     render(<App />);
     const footer = await screen.findByRole("contentinfo");
     expect(footer.textContent).toContain(`CAST ${CAST_STATS.version}`);
-    expect(footer.textContent).toContain(`Compute Atlas ${ATLAS_STATS.version}`);
+    expect(footer.textContent).not.toContain("Compute Atlas");
     expect(within(footer).getByRole("link", { name: "Now" })).toHaveAttribute("href", "/now");
   });
 

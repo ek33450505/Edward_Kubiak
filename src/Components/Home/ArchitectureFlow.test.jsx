@@ -46,7 +46,8 @@ describe("ArchitectureFlow", () => {
     expect(text).toContain(CAST_STATS.version);
     expect(text).toContain(ATLAS_STATS.facilities.toLocaleString("en-US"));
     expect(text).toContain(String(ATLAS_STATS.operationalGw));
-    expect(text).toContain(ATLAS_STATS.version);
+    const atlas = screen.getByText("GW under construction").parentElement;
+    expect(atlas).toHaveTextContent(String(ATLAS_STATS.underConstructionGw));
   });
 
   it("links the stage titles to their case studies", () => {

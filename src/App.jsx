@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { CAST_STATS } from "./data/castStats";
-import { ATLAS_STATS } from "./data/atlasStats";
 import { useDocumentMeta, SITE_URL } from "./hooks/useDocumentMeta";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
@@ -299,7 +298,7 @@ export function AppShell() {
               <div className="flex flex-col gap-1">
                 <p className="text-sm">&copy; {new Date().getFullYear()} Edward Kubiak</p>
                 <p className="font-mono text-[11px] tracking-wide text-muted-foreground">
-                  CAST {CAST_STATS.version} · Compute Atlas {ATLAS_STATS.version} · stats synced {CAST_STATS.updated}
+                  CAST {CAST_STATS.version} · stats synced {CAST_STATS.updated}
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">

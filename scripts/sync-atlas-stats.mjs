@@ -36,30 +36,14 @@ export const FALLBACK = {
   ],
 };
 
-// VERSION is now a fallback only — the live API returns edition.version,
-// which deriveAtlasStats() prefers when present. STACK/LICENSE are still
-// not returned by the API, so they stay hand-bumped constants (mirrors the
-// cast-desktop version default in sync-cast-stats.mjs).
-const VERSION = "v1.34.1";
+// STACK/LICENSE are not returned by the API, so they stay hand-bumped
+// constants. There is no version: Compute Atlas retired its dataset version
+// on 2026-11-06 (ek33450505/compute-atlas#541), and /api/stats `edition` is now {asOf, schemaVersion}.
 const STACK = "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel";
 const LICENSE = "MIT + CC BY 4.0";
 
 function round1(n) {
   return Math.round(n * 10) / 10;
-}
-
-// Normalizes an edition version string to the site's "vX.Y.Z" format: trims
-// surrounding whitespace, then ensures exactly one lowercase "v" prefix
-// (matched case-insensitively, so "V1.30.0" and "v1.30.0" both normalize to
-// "v1.30.0") without double-prefixing. The rest of the string is left
-// untouched — a version may legitimately carry an uppercase pre-release tag
-// (e.g. "1.30.0-RC1"), and lowercasing the whole string would corrupt it.
-// Returns null for non-string, empty, or whitespace-only input.
-function normalizeVersion(v) {
-  if (typeof v !== "string") return null;
-  const trimmed = v.trim();
-  if (trimmed === "") return null;
-  return /^v/i.test(trimmed) ? `v${trimmed.slice(1)}` : `v${trimmed}`;
 }
 
 const US_STATES = new Set(
@@ -136,7 +120,7 @@ export function selectSource(canonical, base, fallback) {
 }
 
 // Pure — derives the curated bundle baked into src/data/atlasStats.js from the
-// raw API shape (count/states/*Mw[/edition.version]). No side effects; safe to
+// raw API shape (count/states/*Mw). No side effects; safe to
 // import for tests.
 export function deriveAtlasStats(raw) {
   return {
@@ -148,7 +132,6 @@ export function deriveAtlasStats(raw) {
     underConstructionGw: round1(raw.underConstructionMw / 1000),
     plannedMw: Math.round(raw.plannedMw),
     plannedGw: round1(raw.plannedMw / 1000),
-    version: normalizeVersion(raw.edition?.version) ?? VERSION,
     stack: STACK,
     license: LICENSE,
   };
