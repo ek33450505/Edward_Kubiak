@@ -4,10 +4,10 @@
 // fetched at runtime by the canvas (not imported into the JS bundle).
 //
 // Source: https://www.compute-atlas.com/data/hero-points.json
-//   array of { id, lat, lon, status }; override with ATLAS_POINTS_URL.
+//   array of { lat, lon, status } (anonymous since ek33450505/compute-atlas#533); override with ATLAS_POINTS_URL.
 //
 // Also writes src/data/atlasPoints.js (ATLAS_POINTS: asOf, count, w, h, per-status counts)
-// so the legend and counts render on first paint with no runtime fetch.
+// so the hero map slot is sized on first paint with no runtime fetch.
 //
 // Output: { asOf, source, count, dropped, w, h, statuses, pts: [x,y,s, ...] }
 //   x,y are integers in canvas space (y DOWN, 0<=x<=w, 0<=y<=h); s indexes `statuses`.
