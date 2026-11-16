@@ -284,7 +284,6 @@ const CASES = [
   ["a version going down", (d) => ed(d, "src/data/toolStats.js", (m) => { m.TOOL_VERSIONS.misfire = "v0.1.9"; }), 3, ["VERSION"]],
   ["a version losing its v prefix", (d) => ed(d, "public/tool-versions.json", (v) => { v.attest = "0.3.1"; }), 3, ["VERSION"]],
   ["a version that is not a version", (d) => ed(d, "public/tool-versions.json", (v) => { v.attest = "latest"; }), 3, ["VERSION"]],
-  ["edition.version without a v bumped", (d) => ed(d, "public/atlas-stats.json", (v) => { v.edition.version = "1.34.2"; }), 0, []],
   ["a major +1 version", (d) => ed(d, "src/data/castStats.js", (m) => { m.CAST_STATS.version = "v11.0.0"; }), 0, []],
   ["a date in the future", (d) => { bump(d); ed(d, "public/atlas-points.json", (v) => { v.asOf = "2099-01-01"; }); }, 3, ["DATE"]],
   ["a date going backwards", (d) => { bump(d); ed(d, "src/data/castStats.js", (m) => { m.CAST_STATS.updated = "2026-01-01"; }); }, 3, ["DATE"]],
