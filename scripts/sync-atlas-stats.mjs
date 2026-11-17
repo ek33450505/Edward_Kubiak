@@ -40,7 +40,7 @@ export const FALLBACK = {
 // constants. There is no version: Compute Atlas retired its dataset version
 // on 2026-11-06 (ek33450505/compute-atlas#541), and /api/stats `edition` is now {asOf, schemaVersion}.
 const STACK = "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel";
-const LICENSE = "MIT + CC BY 4.0";
+const LICENSE = "CC BY 4.0";
 
 function round1(n) {
   return Math.round(n * 10) / 10;
