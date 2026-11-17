@@ -87,7 +87,6 @@ describe('datasetJsonLd', () => {
       isAccessibleForFree: true,
       creator: { '@type': 'Person', name: 'Edward Kubiak', url: 'https://edwardkubiak.com' },
       publisher: { '@type': 'Organization', name: 'Compute Atlas', url: 'https://www.compute-atlas.com' },
-      isBasedOn: atlas.github,
     });
     expect(node).not.toHaveProperty('identifier');
     expect(JSON.stringify(node)).not.toMatch(/zenodo/i);
@@ -141,6 +140,7 @@ describe('prerender-routes process behaviour', () => {
     expect(fs.existsSync(path.join(dist, 'about', 'index.html'))).toBe(true);
     const atlas = fs.readFileSync(path.join(dist, 'projects', 'compute-atlas', 'index.html'), 'utf8');
     expect(atlas).toContain('"@type":"Dataset"');
+    expect(atlas).not.toContain('SoftwareSourceCode');
   });
 
   it('writes route shells when run through a symlink', () => {

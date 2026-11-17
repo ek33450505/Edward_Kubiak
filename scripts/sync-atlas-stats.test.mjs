@@ -90,7 +90,7 @@ describe("deriveAtlasStats", () => {
     expect(result.stack).toBe(
       "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel",
     );
-    expect(result.license).toBe("MIT + CC BY 4.0");
+    expect(result.license).toBe("CC BY 4.0");
   });
 
   it("ignores edition, even a version the API no longer sends", () => {
@@ -102,7 +102,7 @@ describe("deriveAtlasStats", () => {
     expect(result.stack).toBe(
       "Next.js 16 · React 19 · TypeScript · MapLibre GL · Neon Postgres · Drizzle · Vercel",
     );
-    expect(result.license).toBe("MIT + CC BY 4.0");
+    expect(result.license).toBe("CC BY 4.0");
   });
 });
 

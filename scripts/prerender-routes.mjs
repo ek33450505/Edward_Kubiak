@@ -165,7 +165,6 @@ export function datasetJsonLd(project) {
     isAccessibleForFree: true,
     creator: { '@type': 'Person', name: 'Edward Kubiak', url: BASE_URL },
     publisher: { '@type': 'Organization', name: publisher, url },
-    isBasedOn: project.github,
   };
 }
 

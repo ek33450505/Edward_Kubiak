@@ -138,8 +138,8 @@ export const experience = [
   },
   {
     role: "Creator — Compute Atlas",
-    company: "Open Source · compute-atlas.com",
-    location: "github.com/ek33450505/compute-atlas",
+    company: "Independent",
+    location: "compute-atlas.com",
     period: "2026 — Present",
     tech: [
       "Next.js 16",
@@ -152,7 +152,7 @@ export const experience = [
     ],
     highlights: [
       `Built and operate Compute Atlas — a source-cited tracker of the U.S. grid-scale compute buildout covering data centers, crypto-mining sites and the dedicated power generation contracted to feed them: ${ATLAS_STATS.facilities.toLocaleString("en-US")} facilities across ${ATLAS_STATS.coverage}, ${ATLAS_STATS.operationalGw} GW operational, ${ATLAS_STATS.underConstructionGw} GW under construction and ~${ATLAS_STATS.plannedGw} GW planned, every record carrying at least one public source and an explicit confidence level. Built solo on ${ATLAS_STATS.stack}.`,
-      `Shipped the whole product: an interactive MapLibre GL map with water and geology overlays, sortable tables, per-facility dossiers, reference hubs (rankings, power, operators, metros, states, AI-vs-crypto), a cited /learn tier and a moderated public intake (code MIT, data CC BY 4.0), now cited by Erin Brockovich's data center reporting map and by Power To The People.`,
+      `Shipped the whole product: an interactive MapLibre GL map with water and geology overlays, sortable tables, per-facility dossiers, reference hubs (rankings, power, operators, metros, states, AI-vs-crypto), a cited /learn tier and a moderated public intake (data CC BY 4.0), now cited by Erin Brockovich's data center reporting map and by Power To The People.`,
       "Engineered an autonomous scheduled discovery pipeline: a bounded `claude -p` run that discovers, enriches and stages candidates behind a fail-closed kill switch, a heartbeat, extraction guards and a self-reverting cap, verifying every candidate source URL before staging, with human approval required before any record goes live. Extended the survey beyond capacity into its civic footprint — community opposition (litigation, moratoria, referendums, and the projects opposition defeated) and named stakeholders tied to specific sites under a mandatory-citation bar.",
     ],
   },

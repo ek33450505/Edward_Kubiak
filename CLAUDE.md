@@ -16,7 +16,7 @@ npm run preview   # preview production build locally
 
 ## Build
 ```bash
-npm run build     # prebuild (sync-cast-stats + sync-atlas-stats + sync-atlas-points + sync-tool-versions + sync-repo-facts + sync-github-activity + generate-sitemap + generate-rss) then vite build
+npm run build     # prebuild (sync-cast-stats + sync-atlas-stats + sync-atlas-points + sync-tool-versions + sync-github-activity + generate-sitemap + generate-rss) then vite build
 ```
 Deploys run in CI (`deploy.yml`); there is no local deploy script.
 
@@ -49,14 +49,14 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
 
 ## Non-obvious
 
-- `prebuild` runs `sync-cast-stats`, `sync-atlas-stats`, `sync-atlas-points`, `sync-tool-versions`, `sync-repo-facts`, `sync-github-activity`, `generate-sitemap` and `generate-rss` before every `npm run build`.
+- `prebuild` runs `sync-cast-stats`, `sync-atlas-stats`, `sync-atlas-points`, `sync-tool-versions`, `sync-github-activity`, `generate-sitemap` and `generate-rss` before every `npm run build`.
   - `sync-cast-stats.mjs` fetches canonical CAST stats from the flagship repo over https (with a timeout + graceful fallback to `public/cast-stats.json`). Does NOT require a local `~/Projects/personal/claude-agent-team` clone.
   - `sync-atlas-stats.mjs` fetches Compute Atlas figures from `compute-atlas.com/api/stats`, producing `src/data/atlasStats.js` (`ATLAS_STATS`) and `public/atlas-stats.json` with graceful fallback. Compute Atlas retired its dataset version on 2026-11-06 (ek33450505/compute-atlas#541), so `ATLAS_STATS` carries no `version`; do not add a hand-set one back.
   - `sync-atlas-points.mjs` fetches `www.compute-atlas.com/data/hero-points.json` (cache-busted; the Atlas edge has served stale copies), projects it onto a fixed AlbersUsa-style composite and writes `public/atlas-points.json` (fetched at runtime by the hero canvas) plus `src/data/atlasPoints.js` (`ATLAS_POINTS` summary: count, per-status counts, w/h — the hero sizes its map slot from it on first paint). A drift test keeps the two in step. Since ek33450505/compute-atlas#533 the points are anonymous and merged (2dp, one per `{lat, lon, status}`), so `count` and `byStatus` count map points, not facilities: the hero header shows `ATLAS_STATS.facilities` and its legend has no numbers.
   - `sync-tool-versions.mjs` resolves ecosystem tool versions from GitHub API, producing `src/data/toolStats.js` (`TOOL_VERSIONS`) and `public/tool-versions.json` with graceful fallback.
-  - `sync-repo-facts.mjs` counts Compute Atlas route handlers / test files / workflows (git tree) and commits / Claude co-authored commits (paginated list) from the public repo, producing `src/data/repoFacts.js` (`REPO_FACTS`) and `public/repo-facts.json`. Each group is all-or-nothing (truncated tree, failed page or page cap = fall back) and carries its own `treeAsOf`/`commitsAsOf` date. Unauthenticated GitHub allows 60 requests/hour, so a shared-IP build can fall back; set `GITHUB_TOKEN` to avoid it. The monotonic commit floor deliberately freezes the commits group if compute-atlas history is ever rewritten; the exit is to hand-edit `public/repo-facts.json` + `src/data/repoFacts.js` (commits group) in a reviewed PR.
+  - `src/data/repoFacts.js` / `public/repo-facts.json` are a frozen snapshot, last read from the public compute-atlas repo on 2026-11-17 (UTC), just before the repo was made private (nothing regenerates them; any change is a hand edit in a reviewed PR).
   - `sync-github-activity.mjs` writes `public/github-activity.json` (gitignored) for Home §03. GitHub's Events API dropped `payload.commits` from PushEvents, so each push is resolved through the compare/commit endpoints; only public PushEvents on `ek33450505/*` are kept (a user token can return private events). `public/last-known-commits.json` (tracked) is rewritten only when at least one commit resolves; the browser never calls api.github.com for activity.
-  All six are best-effort with graceful fallback, share the hardened `scripts/lib/fetch-json.mjs` (single settle, deadline, byte cap — a truncated body must never fail the build), and re-run at deploy time for self-healing.
+  All five are best-effort with graceful fallback, share the hardened `scripts/lib/fetch-json.mjs` (single settle, deadline, byte cap — a truncated body must never fail the build), and re-run at deploy time for self-healing.
 - `npm run drift-report` (`scripts/repo-drift-report.mjs`, NOT in prebuild) prints a markdown report of what changed across the public repos that the site may need to reflect: new repos not on the site (30d), site repos gone/renamed/archived, releases in the last 7d, and literal "as of" anchors older than 60 days. It never edits site content (claims stay Ed-approved), always exits 0, caps itself at 60 API calls, and shows "unavailable (GitHub API error)" for a failed section. `--json` for machine output; set `GITHUB_TOKEN` to avoid the 60/hr unauthenticated limit.
 - PDFs: `npm run build-pdfs` (`build-resume-pdf.mjs`, puppeteer) regenerates
   `public/Edward_Kubiak_Resume.pdf` (2 pages) and `public/CAST_Portfolio_OnePager.pdf`

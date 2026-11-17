@@ -191,10 +191,15 @@ describe('ProjectDetail — a11y structure (compute-atlas)', () => {
   });
 
   it('names the GitHub link with its visible word order', () => {
-    renderProject('compute-atlas');
+    renderProject('cast-claude-agent-team');
     expect(
       screen.getByRole('link', { name: 'Source on GitHub (opens in new tab)' })
     ).toHaveTextContent('Source');
+  });
+
+  it('renders no GitHub source link on compute-atlas (repo is private)', () => {
+    renderProject('compute-atlas');
+    expect(screen.queryByRole('link', { name: /Source on GitHub/ })).toBeNull();
   });
 });
 

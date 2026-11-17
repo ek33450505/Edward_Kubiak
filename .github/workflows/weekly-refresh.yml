@@ -97,7 +97,6 @@ jobs:
           node scripts/sync-atlas-stats.mjs
           node scripts/sync-atlas-points.mjs
           node scripts/sync-tool-versions.mjs
-          node scripts/sync-repo-facts.mjs
 
       - name: Plant probe data
         if: startsWith(env.MODE, 'probe-')

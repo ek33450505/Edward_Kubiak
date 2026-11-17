@@ -77,7 +77,7 @@ npm run preview    # preview production build
 
 ### Build & deploy
 ```bash
-npm run build      # production build (auto-runs prebuild: sync-cast-stats + sync-atlas-stats + sync-atlas-points + sync-tool-versions + sync-repo-facts + sync-github-activity + sitemap + RSS)
+npm run build      # production build (auto-runs prebuild: sync-cast-stats + sync-atlas-stats + sync-atlas-points + sync-tool-versions + sync-github-activity + sitemap + RSS)
 ```
 Deploys are automatic: `.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every push to `main` and on a daily cron.
 
