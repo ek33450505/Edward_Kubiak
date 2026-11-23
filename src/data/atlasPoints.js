@@ -4,15 +4,15 @@
 // Refresh: run `npm run sync-points` or any `npm run build` (prebuild hook).
 
 export const ATLAS_POINTS = {
-  "asOf": "2026-11-16",
-  "count": 2958,
+  "asOf": "2026-11-23",
+  "count": 3113,
   "w": 2000,
   "h": 1302,
   "byStatus": {
-    "operational": 1315,
-    "under_construction": 354,
-    "permitted": 269,
-    "proposed": 829,
-    "cancelled": 191
+    "operational": 1393,
+    "under_construction": 361,
+    "permitted": 292,
+    "proposed": 863,
+    "cancelled": 204
   }
 };
