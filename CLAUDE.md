@@ -113,6 +113,13 @@ The previous identity (Night Survey) is preserved at git tag `era/night-survey`.
 - Deploys are AUTOMATIC: `deploy.yml` runs on every push to `main` and on a daily 08:00 UTC
   cron (or `workflow_dispatch`). It fetches canonical CAST stats fresh at deploy time, so the
   live site self-heals stats.
+- `deploy.yml` retries `deploy-pages` twice (after 60s, then 120s), because GitHub's artifact
+  listing can lag the upload ("Found 0 artifact(s)"; failed run #414, #79). A run that retried is
+  green with a "Deploy retry" warning. **Remove the retry** (both waits, both retries,
+  `continue-on-error`, and the chained `environment.url`) once actions/deploy-pages#455 is merged and
+  released, and the warning has stopped appearing. Check:
+  `gh api repos/actions/deploy-pages/pulls/455 --jq .merged`. Issues are disabled here, so this is
+  the tracker.
 - CI drift gate (`cast-stats-check.yml`): committed `public/cast-stats.json` must match
   canonical `claude-agent-team/main/cast-stats.json` (a moving target when that repo is
   active). Fix: `npm run sync-stats` (now pulls canonical), then commit the updated
