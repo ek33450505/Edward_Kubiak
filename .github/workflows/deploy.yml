@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # Full history: generate-sitemap.mjs derives <lastmod> from the last
           # commit touching each route's sources. A shallow clone answers
@@ -41,7 +41,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: npm
@@ -432,10 +432,10 @@ jobs:
           fi
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
 
@@ -449,7 +449,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         continue-on-error: true
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       - name: Wait before retrying the deploy
         if: steps.deployment.outcome == 'failure'
@@ -461,7 +461,7 @@ jobs:
         id: deployment_retry
         if: steps.deployment.outcome == 'failure'
         continue-on-error: true
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       - name: Wait before the last deploy attempt
         if: steps.deployment_retry.outcome == 'failure'
@@ -472,7 +472,7 @@ jobs:
       - name: Deploy to GitHub Pages (retry 2)
         id: deployment_retry2
         if: steps.deployment_retry.outcome == 'failure'
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       # On 2026-09-09 this workflow reported success for three consecutive runs
       # while edwardkubiak.com served GitHub's "Site not found" page: the repo had
